@@ -1,0 +1,206 @@
+{
+  "schema": "ai4instruments.capabilities/1",
+  "model_id": "gaussian-coupling-with-first-order-motion/1",
+  "mode": "simulation",
+  "abstraction_level": "two-axis position and detector acquisition",
+  "coverage": {
+    "claim": "Complete for the controls and observations implemented by this model.",
+    "controls": [
+      "x target",
+      "y target",
+      "detector exposure"
+    ],
+    "observations": [
+      "x position",
+      "y position",
+      "detector exposure",
+      "optical power"
+    ],
+    "excluded": [
+      "electronics",
+      "firmware",
+      "optical polarization",
+      "real hardware"
+    ]
+  },
+  "state": {
+    "axes": "Commanded target and observed position are separate.",
+    "detector": "Exposure readback precedes acquisition."
+  },
+  "concurrency": "Independent x and y operations may overlap. Calls on the same device are serialized by the workflow.",
+  "operations": [
+    {
+      "id": "detector.acquire",
+      "layer": "Basic Operations",
+      "description": "Measure optical power at the current positions and exposure.",
+      "parameters": {},
+      "timing": "Consumes the configured exposure in detector model time.",
+      "result_fields": {
+        "observed.power": "uW",
+        "observed.exposure": "ms",
+        "measurement_id": "string",
+        "device_time_ms": "ms",
+        "model_id": "string"
+      }
+    },
+    {
+      "id": "detector.capture",
+      "layer": "Standard Operations",
+      "description": "Configure exposure, verify its readback, and acquire one measurement.",
+      "parameters": {
+        "exposure": {
+          "unit": "ms",
+          "minimum": 1.0,
+          "maximum": 100.0
+        }
+      },
+      "timing": "One exposure plus configuration and readback.",
+      "result_fields": {
+        "observed.power": "uW",
+        "measurement_id": "string"
+      }
+    },
+    {
+      "id": "detector.read_exposure",
+      "layer": "Basic Operations",
+      "description": "Read back the active detector exposure.",
+      "parameters": {},
+      "timing": "Immediate simulated readback.",
+      "result_fields": {
+        "observed.exposure": "ms"
+      }
+    },
+    {
+      "id": "detector.write_exposure",
+      "layer": "Basic Operations",
+      "description": "Set detector exposure.",
+      "parameters": {
+        "exposure": {
+          "unit": "ms",
+          "minimum": 1.0,
+          "maximum": 100.0
+        }
+      },
+      "timing": "Acknowledgment; no modeled elapsed time.",
+      "result_fields": {
+        "commanded.exposure": "ms"
+      }
+    },
+    {
+      "id": "optics.measure_at",
+      "layer": "Workflow Operations",
+      "description": "Position independent axes concurrently; capture after both converge.",
+      "parameters": {
+        "x": {
+          "unit": "mm",
+          "minimum": -2.0,
+          "maximum": 2.0
+        },
+        "y": {
+          "unit": "mm",
+          "minimum": -2.0,
+          "maximum": 2.0
+        },
+        "exposure": {
+          "unit": "ms",
+          "minimum": 1.0,
+          "maximum": 100.0
+        }
+      },
+      "timing": "Dependency ordering; no real-time scheduling guarantee.",
+      "result_fields": {
+        "positions.x": "mm",
+        "positions.y": "mm",
+        "measurement": "detector result"
+      }
+    },
+    {
+      "id": "x.position",
+      "layer": "Standard Operations",
+      "description": "Set x and observe convergence to within 0.001 mm.",
+      "parameters": {
+        "target": {
+          "unit": "mm",
+          "minimum": -2.0,
+          "maximum": 2.0
+        }
+      },
+      "timing": "Up to 16 position samples.",
+      "result_fields": {
+        "observed.position": "mm"
+      }
+    },
+    {
+      "id": "x.read_position",
+      "layer": "Basic Operations",
+      "description": "Sample the x-axis position after one modeled servo step.",
+      "parameters": {},
+      "timing": "1 ms of local model time per sample; not wall-clock timing.",
+      "result_fields": {
+        "observed.position": "mm",
+        "sample_index": "integer",
+        "device_time_ms": "ms"
+      }
+    },
+    {
+      "id": "x.write_target",
+      "layer": "Basic Operations",
+      "description": "Set the x-axis target; acknowledgment does not establish position.",
+      "parameters": {
+        "target": {
+          "unit": "mm",
+          "minimum": -2.0,
+          "maximum": 2.0
+        }
+      },
+      "timing": "Acknowledgment; no modeled elapsed time.",
+      "result_fields": {
+        "commanded.target": "mm"
+      }
+    },
+    {
+      "id": "y.position",
+      "layer": "Standard Operations",
+      "description": "Set y and observe convergence to within 0.001 mm.",
+      "parameters": {
+        "target": {
+          "unit": "mm",
+          "minimum": -2.0,
+          "maximum": 2.0
+        }
+      },
+      "timing": "Up to 16 position samples.",
+      "result_fields": {
+        "observed.position": "mm"
+      }
+    },
+    {
+      "id": "y.read_position",
+      "layer": "Basic Operations",
+      "description": "Sample the y-axis position after one modeled servo step.",
+      "parameters": {},
+      "timing": "1 ms of local model time per sample; not wall-clock timing.",
+      "result_fields": {
+        "observed.position": "mm",
+        "sample_index": "integer",
+        "device_time_ms": "ms"
+      }
+    },
+    {
+      "id": "y.write_target",
+      "layer": "Basic Operations",
+      "description": "Set the y-axis target; acknowledgment does not establish position.",
+      "parameters": {
+        "target": {
+          "unit": "mm",
+          "minimum": -2.0,
+          "maximum": 2.0
+        }
+      },
+      "timing": "Acknowledgment; no modeled elapsed time.",
+      "result_fields": {
+        "commanded.target": "mm"
+      }
+    }
+  ]
+}

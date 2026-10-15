@@ -1,0 +1,121 @@
+[
+  {
+    "id": "yang2026optical",
+    "number": 1,
+    "title": "End-to-end autonomous scientific discovery on a real optical platform",
+    "authors": "Shuxing Yang et al.",
+    "year": 2026,
+    "venue": "arXiv:2604.27092",
+    "url": "https://arxiv.org/abs/2604.27092",
+    "doi": "10.48550/arXiv.2604.27092"
+  },
+  {
+    "id": "boiko2023coscientist",
+    "number": 2,
+    "title": "Autonomous chemical research with large language models",
+    "authors": "Daniil A. Boiko, Robert MacKnight, Ben Kline and Gabe Gomes",
+    "year": 2023,
+    "venue": "Nature 624, 570-578",
+    "url": "https://www.nature.com/articles/s41586-023-06792-0",
+    "doi": "10.1038/s41586-023-06792-0"
+  },
+  {
+    "id": "sila2",
+    "number": 3,
+    "title": "SiLA 2 Standards",
+    "authors": "SiLA Consortium",
+    "year": "n.d.",
+    "venue": "Official standards documentation",
+    "url": "https://sila-standard.com/standards/",
+    "accessed": "2026-10-15"
+  },
+  {
+    "id": "opcua_lads",
+    "number": 4,
+    "title": "OPC UA for Laboratory & Analytical Device Standard (LADS), Part 1: Basics",
+    "authors": "OPC Foundation, SPECTARIS and VDMA",
+    "year": "n.d.",
+    "venue": "OPC 30500-1, version 1.0.0",
+    "url": "https://reference.opcfoundation.org/specs/OPC-30500-1/full",
+    "accessed": "2026-10-15"
+  },
+  {
+    "id": "epics",
+    "number": 5,
+    "title": "About EPICS",
+    "authors": "EPICS Collaboration",
+    "year": "n.d.",
+    "venue": "Official project documentation",
+    "url": "https://epics-controls.org/about-epics/",
+    "accessed": "2026-10-15"
+  },
+  {
+    "id": "bluesky",
+    "number": 6,
+    "title": "Bluesky Data Collection Framework",
+    "authors": "Bluesky Project",
+    "year": "n.d.",
+    "venue": "Version 1.13.1 documentation",
+    "url": "https://blueskyproject.io/bluesky/v1.13.1/index.html",
+    "accessed": "2026-10-15"
+  },
+  {
+    "id": "ophyd",
+    "number": 7,
+    "title": "Ophyd",
+    "authors": "Bluesky Project",
+    "year": "n.d.",
+    "venue": "Official project documentation",
+    "url": "https://blueskyproject.io/ophyd/",
+    "accessed": "2026-10-15"
+  },
+  {
+    "id": "genicam",
+    "number": 8,
+    "title": "GenICam Standard: Generic Interface for Cameras",
+    "authors": "European Machine Vision Association",
+    "year": 2016,
+    "venue": "GenApi standard, version 2.1.1",
+    "url": "https://www.emva.org/wp-content/uploads/GenICam_Standard_v2_1_1.pdf"
+  },
+  {
+    "id": "artiq",
+    "number": 9,
+    "title": "ARTIQ Real-Time I/O Concepts",
+    "authors": "M-Labs and ARTIQ contributors",
+    "year": "n.d.",
+    "venue": "Official ARTIQ manual",
+    "url": "https://m-labs.hk/artiq/manual/rtio.html",
+    "accessed": "2026-10-15"
+  },
+  {
+    "id": "mhs2026",
+    "number": 10,
+    "title": "Previewing the Model Hardware Standard",
+    "authors": "Anthropic",
+    "year": 2026,
+    "venue": "Research preview announcement, 27 August",
+    "url": "https://www.anthropic.com/news/model-hardware-standard-research-preview"
+  },
+  {
+    "id": "szymanski2023alab",
+    "number": 11,
+    "title": "An autonomous laboratory for the accelerated synthesis of inorganic materials",
+    "authors": "Nathan J. Szymanski et al.",
+    "year": 2023,
+    "venue": "Nature 624, 86-91; corrected 2026",
+    "url": "https://www.nature.com/articles/s41586-023-06734-w",
+    "doi": "10.1038/s41586-023-06734-w",
+    "correction_url": "https://www.nature.com/articles/s41586-025-09992-y"
+  },
+  {
+    "id": "burger2020chemist",
+    "number": 12,
+    "title": "A mobile robotic chemist",
+    "authors": "Benjamin Burger et al.",
+    "year": 2020,
+    "venue": "Nature 583, 237-241",
+    "url": "https://www.nature.com/articles/s41586-020-2442-2",
+    "doi": "10.1038/s41586-020-2442-2"
+  }
+]

@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "Please cite the paper when referring to the AI4Instruments design framework."
+type: software
+title: "AI4Instruments"
+authors:
+  - family-names: Yang
+    given-names: Shuxing
+version: 0.1.0
+date-released: 2026-10-15
+url: "https://github.com/Cherish0925/AI4Instruments"
+repository-code: "https://github.com/Cherish0925/AI4Instruments"
+license: MIT
+preferred-citation:
+  type: article
+  title: "AI4Instruments: Instruments as programmable partners in scientific discovery"
+  authors:
+    - family-names: Yang
+      given-names: Shuxing
+  year: 2026
+  url: "https://github.com/Cherish0925/AI4Instruments/blob/main/paper/AI4Instruments.pdf"

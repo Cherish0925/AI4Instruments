@@ -60,16 +60,6 @@ Experimental trajectories connect questions, apparatus revisions, interventions,
 
 The repository keeps the argument in `paper/`, technical development in `docs/`, and executable illustrations in `src/` and `examples/`. The examples can grow independently of the scope of the proposal.
 
-## Author's note
-
-This repository presents my personal thinking about AI and scientific instruments. My undergraduate background is in applied physics and optoelectronic information science and engineering. I worked on optoelectronic automation and system design through experiments, projects and competitions involving optical micro- and nanofabrication, optical communication, optical sensing, precision optical measurement, machine vision, robotics and automation.
-
-During my doctoral research, I have worked on physical optics, free-space optical experiments, information optics and the intersection of physics and AI. I independently developed Qiushi Engine, a substantial AI research system designed for proactive, self-directed, long-horizon autonomous research and self-assessment. I have used it in real-world experimental science, natural-science and engineering tasks, as well as extended investigations, literature research and professional writing.
-
-These ideas began taking shape in **late 2025**. They are my own reflections, intuitions, judgments and predictions, informed by that experience. Their usefulness and long-term validity remain questions to be explored through further research and practice.
-
-— **Shuxing Yang**
-
 ## Run the reference
 
 The executable example is a small simulated optical experiment that makes commands, observations, serial and parallel composition, and feedback inspectable. It illustrates the operation model; new implementations can use different apparatus and computational methods.
@@ -97,3 +87,5 @@ For HTML alone, `python scripts/build_paper.py --html-only` uses only the Python
 Contributions can include ideas, instrument descriptions, physical designs, controller implementations, new operations, experiments and datasets. The [contribution guide](CONTRIBUTING.md) explains how to connect a contribution to its physical meaning and evidence.
 
 Software is licensed under [MIT](LICENSE); the paper, prose documentation and original figures use [CC BY 4.0](LICENSE-docs.md). See [CITATION.cff](CITATION.cff) for citation information.
+
+[Author's note](docs/author-note.md)

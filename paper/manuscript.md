@@ -94,6 +94,8 @@ The layers are recursive in use. A workflow developed in one project may later b
 
 ### 4.4 A common description with room for physical difference
 
+**Table 1. Shared elements of an operation description.**
+
 | Common element | Meaning carried between implementations |
 | --- | --- |
 | Physical capability | The intervention or observation made possible, including its abstraction level. |
@@ -126,6 +128,8 @@ The lifecycle view begins before a driver exists. A design brief asks which phen
 During physical design, AI can contribute to the selection and arrangement of mechanisms, transducers, materials, circuits and controllers. During implementation, it can develop firmware, control programmes, signal processing, simulation models and host software. During manufacturing and assembly, it can help connect design choices to tolerances, component variation, test procedures and the behaviour of individual units. During use, it can characterise the resulting apparatus, discover couplings and build new operations.
 
 The value of participation lies in the connections between these stages. A timing requirement should influence the clock and controller architecture. A need to distinguish two physical hypotheses should influence what is measured. A recurring alignment difficulty may influence the mechanical design. Variation between manufactured units should appear in characterisation and calibration. The instrument becomes more useful when information can pass through the whole lifecycle.
+
+**Table 2. Instrument development across the lifecycle.**
 
 | Stage | Central question | Information carried forward |
 | --- | --- | --- |
@@ -192,6 +196,8 @@ The repository provides a starting framework: operation descriptions, instrument
 Development should proceed along connected questions. Can a system discover and use an instrument's capabilities without relying on a manually chosen workflow? Can it create a new procedure from elementary operations? Can that procedure be adapted to a different implementation? Can the system sustain an investigation while conditions change? Can it identify when a scientific limitation requires better software, additional measurement or different hardware? Can the resulting experience improve a later model or experiment?
 
 The evaluation should reflect these ambitions. Capability coverage concerns the richness and accessibility of the physical inventory. Composition concerns the range of new experiments that can be expressed. Transfer concerns how physical meaning survives a change of apparatus or setting. Sustained operation concerns useful observations and scientific progress over time. Instrument improvement concerns measured changes in experimental ability. Learning concerns improved performance on new questions and conditions.
+
+**Table 3. Research directions and substantive demonstrations.**
 
 | Direction | A substantive demonstration |
 | --- | --- |

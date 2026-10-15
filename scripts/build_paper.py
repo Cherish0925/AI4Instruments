@@ -15,7 +15,7 @@ INK = '#172b3a'
 TEAL = '#126b71'
 PALE = '#eef6f5'
 AUTHOR = 'Shuxing Yang'
-VERSION = '0.2.0'
+VERSION = '0.2.1'
 
 
 def inline(text):
@@ -63,22 +63,22 @@ def figure_spec(kind):
     a sequence of points; only its last segment carries an arrowhead.
     """
     if kind == 'design-transition':
-        return 490, 338, [
+        return 490, 307, [
             (12, 30, 142, 57, 'Existing instruments', 'Inherited hardware\nand software interfaces'),
             (174, 30, 142, 57, 'Integration', 'Drivers, documentation\nand tool interfaces'),
             (336, 30, 142, 57, 'AI use', 'Experiments within\nexposed capabilities'),
-            (18, 158, 204, 57, 'Research questions', 'What should become possible?'),
-            (268, 158, 204, 57, 'Instrument design', 'Mechanics / circuits / firmware'),
-            (268, 267, 204, 57, 'Experimental use', 'Program / act / observe / infer'),
-            (18, 267, 204, 57, 'Evidence', 'Results / trajectories / limitations'),
+            (18, 136, 204, 57, 'Research questions', 'What should become possible?'),
+            (268, 136, 204, 57, 'Instrument design', 'Mechanics / circuits / firmware'),
+            (268, 236, 204, 57, 'Experimental use', 'Program / act / observe / infer'),
+            (18, 236, 204, 57, 'Evidence', 'Results / trajectories / limitations'),
         ], [
             [(154, 58), (174, 58)], [(316, 58), (336, 58)],
-            [(222, 186), (268, 186)], [(370, 215), (370, 267)],
-            [(268, 295), (222, 295)], [(120, 267), (120, 215)],
-            [(222, 279), (268, 203)],
+            [(222, 164), (268, 164)], [(370, 193), (370, 236)],
+            [(268, 264), (222, 264)], [(120, 236), (120, 193)],
+            [(222, 248), (268, 181)],
         ], [
             (12, 14, 'Instruments4AI: adaptation after design'),
-            (18, 139, 'AI4Instruments: design and use evolve together'),
+            (18, 119, 'AI4Instruments: design and use evolve together'),
         ]
     if kind == 'operation-hierarchy':
         return 490, 349, [
@@ -178,15 +178,18 @@ def reference_text(ref, pdf=False):
 
 
 CSS = '''
-:root{--ink:#172b3a;--teal:#126b71;--paper:#fff;--muted:#536875}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#edf1f2;color:var(--ink);font:18px/1.75 Georgia,'Times New Roman',serif}
-main{max-width:1040px;margin:40px auto;background:var(--paper);padding:64px 88px;box-shadow:0 8px 35px #2339470d}
-header{border-top:5px solid var(--teal);padding-top:30px;margin-bottom:32px}header .eyebrow{font:12px/1.5 Arial,sans-serif;letter-spacing:.15em;text-transform:uppercase;color:var(--teal)}
-h1{font-size:49px;line-height:1.13;letter-spacing:-.035em;margin:18px 0 24px}header .author{font:17px/1.5 Arial,sans-serif;margin:18px 0}
-a{color:var(--teal);text-decoration-thickness:1px;text-underline-offset:3px}.downloads{font:13px/1.6 Arial,sans-serif}nav{border:1px solid #dae5e6;padding:20px 26px;background:#f6f9f9;margin-bottom:36px;font:14px/1.6 Arial,sans-serif}nav ol{margin:8px 0 0;padding-left:22px;columns:2;column-gap:35px}nav li{padding:3px 0;break-inside:avoid}
-h2{font:700 27px/1.3 Georgia,serif;margin:42px 0 18px;scroll-margin-top:20px}h3{font:700 20px/1.4 Georgia,serif;margin:28px 0 14px}p{margin:0 0 17px}figure{margin:30px 0;padding:18px 15px 12px;background:#fafcfc;border:1px solid #e2eaea}svg{display:block;width:100%;height:auto}figcaption{font:13px/1.55 Arial,sans-serif;color:var(--muted);margin:14px 8px 0}table{border-collapse:collapse;width:100%;font:14px/1.5 Arial,sans-serif;margin:24px 0}th,td{border-bottom:1px solid #d5e0e3;padding:12px 14px;text-align:left;vertical-align:top}th{background:var(--ink);color:white}td:first-child{width:32%;font-weight:600}tr:nth-child(even){background:#f2f7f7}.references{font:14px/1.6 Arial,sans-serif}.references p{margin-bottom:16px;overflow-wrap:anywhere}footer{border-top:1px solid #d5e0e3;margin-top:42px;padding-top:18px;font:12px/1.6 Arial,sans-serif;color:var(--muted)}
-@media(max-width:750px){body{font-size:17px}main{margin:0;padding:30px 22px;box-shadow:none}h1{font-size:clamp(29px,6.7vw,42px)}nav ol{columns:1}th,td{padding:9px 7px}figure{padding:12px 3px}figcaption{margin-left:3px;margin-right:3px}}
-@media print{body{background:white;font-size:11pt}main{max-width:none;margin:0;padding:0;box-shadow:none}nav,.downloads{display:none}h2,h3{break-after:avoid}figure,table{break-inside:avoid}a{color:inherit}}
+:root{--ink:#20242a;--teal:#126b71;--muted:#50565b}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#fff;color:var(--ink);font:17px/1.65 Georgia,'Times New Roman',serif}
+main{max-width:880px;margin:0 auto;padding:64px 48px 40px}
+header{text-align:center;margin:0 0 36px}h1{font-size:32px;line-height:1.25;font-weight:700;margin:0 0 22px}header .author{font-size:18px;margin:0;text-align:center}
+a{color:var(--teal);text-decoration-thickness:1px;text-underline-offset:3px}p{margin:0 0 15px;text-align:justify;hyphens:auto}
+.abstract{margin:0 28px 26px;font-size:15.5px;line-height:1.6}.abstract h2{font-size:17px;text-align:center;margin:0 0 12px}
+details.contents{font-size:14px;line-height:1.5;margin:0 0 32px;color:var(--muted)}details.contents summary{cursor:pointer;width:max-content;margin:auto}nav ol{list-style:none;padding:0;margin:14px 0;columns:2;column-gap:28px}nav li{margin-bottom:6px;break-inside:avoid}
+h2{font-size:21px;line-height:1.35;margin:32px 0 14px;scroll-margin-top:20px}h3{font-size:18px;line-height:1.4;margin:25px 0 12px}figure{margin:25px 0 28px}svg{display:block;width:100%;height:auto}figcaption,.table-caption{font-size:14px;line-height:1.5;text-align:left;margin:12px 0 0}p.table-caption{margin:22px 0 8px}
+table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.5;margin:0 0 22px;border-top:1.3px solid #333;border-bottom:1.3px solid #333}th,td{padding:9px 10px;text-align:left;vertical-align:top}th{font-weight:700;border-bottom:.8px solid #555}td{border-bottom:.4px solid #ddd}td:first-child{width:32%}table.three-columns td:first-child{width:24%}table.three-columns td:nth-child(2){width:33%}table.three-columns td:nth-child(3){width:43%}
+.references{font-size:14px;line-height:1.55}.references p{margin:0 0 12px 25px;text-indent:-25px;text-align:left;overflow-wrap:anywhere}footer{border-top:1px solid #ddd;margin-top:35px;padding-top:16px;font-size:12px;line-height:1.65;color:var(--muted);text-align:center}footer a{margin:0 6px}
+@media(max-width:650px){body{font-size:16px}main{padding:36px 22px 28px}h1{font-size:clamp(24px,5.8vw,32px)}header{margin-bottom:28px}.abstract{margin-left:5px;margin-right:5px;font-size:14.5px}p{text-align:left}nav ol{columns:1}h2{font-size:20px}h3{font-size:17px}th,td{padding:8px 6px}table{font-size:12px}figcaption,.table-caption{font-size:13px}}
+@media print{@page{size:A4;margin:20mm}body{font-size:10.5pt;line-height:1.4}main{max-width:none;margin:0;padding:0}header{margin-bottom:20pt}h1{font-size:22pt}.abstract{font-size:9.5pt}.abstract h2{font-size:10.5pt}h2{font-size:12.5pt}h3{font-size:11pt}details.contents,footer{display:none}h2,h3,.table-caption{break-after:avoid}figure,table{break-inside:avoid}a{color:inherit;text-decoration:none}figcaption,.table-caption,table,.references{font-size:9pt}}
 '''
 
 
@@ -199,20 +202,28 @@ def build_html(items, refs):
            f'<title>{html.escape(title)}</title>',
            f'<meta name="author" content="{AUTHOR}">',
            '<meta name="description" content="A perspective on AI participation in instrument design, experimental use and the development of new physical capabilities.">',
-           f'<style>{CSS}</style></head><body><main><header><div class="eyebrow">Perspective · October 2026</div>',
+           f'<style>{CSS}</style></head><body><main><header>',
            f'<h1>{title_display}</h1><p class="author">{AUTHOR}</p>',
-           '<div class="downloads"><a href="https://github.com/Cherish0925/AI4Instruments">Project repository</a> &nbsp; / &nbsp; <a href="https://github.com/Cherish0925/AI4Instruments/raw/refs/heads/main/paper/AI4Instruments.pdf">Download PDF</a></div></header>',
-           '<nav aria-label="Contents"><b>Contents</b><ol>']
-    out += [f'<li><a href="#{anchor}">{html.escape(title)}</a></li>' for anchor,title in toc]
-    out.append('</ol></nav>')
+           '</header>']
+    in_abstract = False
     for i,(kind,data) in enumerate(body):
         if kind == 'heading':
             level,title = data
+            if in_abstract:
+                out.append('</section><details class="contents"><summary>Contents</summary><nav aria-label="Contents"><ol>')
+                out += [f'<li><a href="#{anchor}">{html.escape(entry)}</a></li>' for anchor,entry in toc if entry != 'Abstract']
+                out.append('</ol></nav></details>')
+                in_abstract = False
+            if title == 'Abstract':
+                out.append('<section class="abstract" aria-label="Abstract">')
+                in_abstract = True
             out.append(f'<h{level} id="section-{i}">{inline(title)}</h{level}>')
         elif kind == 'paragraph':
-            out.append(f'<p>{inline(data)}</p>')
+            css_class = ' class="table-caption"' if data.startswith('**Table ') else ''
+            out.append(f'<p{css_class}>{inline(data)}</p>')
         elif kind == 'table':
-            out.append('<table><thead><tr>' + ''.join(f'<th>{inline(c)}</th>' for c in data[0]) + '</tr></thead><tbody>')
+            css_class = ' class="three-columns"' if len(data[0]) == 3 else ''
+            out.append(f'<table{css_class}><thead><tr>' + ''.join(f'<th scope="col">{inline(c)}</th>' for c in data[0]) + '</tr></thead><tbody>')
             out += ['<tr>'+''.join(f'<td>{inline(c)}</td>' for c in row)+'</tr>' for row in data[1:]]
             out.append('</tbody></table>')
         elif kind == 'figure':
@@ -220,7 +231,7 @@ def build_html(items, refs):
             out.append('<figure>' + svg_figure(Path(path).stem) + f'<figcaption>{inline(caption)}</figcaption></figure>')
     out.append('<div class="references">')
     out += [f'<p id="ref-{r["number"]}">{reference_text(r)}</p>' for r in refs]
-    out.append(f'</div><footer>© 2026 {AUTHOR}. Text and original figures: CC BY 4.0. Version {VERSION}.</footer></main></body></html>')
+    out.append(f'</div><footer><a href="https://github.com/Cherish0925/AI4Instruments">Repository</a> · <a href="https://github.com/Cherish0925/AI4Instruments/raw/refs/heads/main/paper/AI4Instruments.pdf">PDF</a><br>© 2026 {AUTHOR}. Text and original figures: CC BY 4.0. Version {VERSION}.</footer></main></body></html>')
     (PAPER/'AI4Instruments.html').write_text('\n'.join(out),encoding='utf-8')
     for kind in ['design-transition','operation-hierarchy','experimental-learning','experimental-loop']:
         (ROOT/'assets'/f'{kind}.svg').write_text(svg_figure(kind),encoding='utf-8')
@@ -229,7 +240,7 @@ def build_html(items, refs):
 def build_pdf(items, refs):
     from reportlab.lib import colors
     from reportlab.lib.styles import ParagraphStyle
-    from reportlab.lib.enums import TA_LEFT
+    from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_JUSTIFY
     from reportlab.pdfbase import pdfmetrics
     from reportlab.pdfbase.ttfonts import TTFont
     from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, KeepTogether
@@ -246,15 +257,19 @@ def build_pdf(items, refs):
         pdfmetrics.registerFont(pdfmetrics.Font('BodyBold','Times-Bold','WinAnsiEncoding'))
     c = colors.HexColor
     styles = {
-        'body':ParagraphStyle('body',fontName='Body',fontSize=10.2,leading=15.6,textColor=c(INK),spaceAfter=9,alignment=TA_LEFT),
-        'h2':ParagraphStyle('h2',fontName='BodyBold',fontSize=15,leading=19.8,textColor=c(INK),spaceBefore=21,spaceAfter=10,keepWithNext=True),
-        'h3':ParagraphStyle('h3',fontName='BodyBold',fontSize=11.5,leading=16,textColor=c(TEAL),spaceBefore=13,spaceAfter=7,keepWithNext=True),
-        'caption':ParagraphStyle('caption',fontName='Helvetica',fontSize=8.2,leading=11.8,textColor=c('#47606c'),spaceAfter=15),
-        'table':ParagraphStyle('table',fontName='Helvetica',fontSize=8.6,leading=12,textColor=c(INK)),
-        'thead':ParagraphStyle('thead',fontName='Helvetica-Bold',fontSize=8.6,leading=12,textColor=colors.white),
-        'ref':ParagraphStyle('ref',fontName='Helvetica',fontSize=8.3,leading=12,spaceAfter=8,textColor=c(INK)),
+        'body':ParagraphStyle('body',fontName='Body',fontSize=10.5,leading=14.7,textColor=c('#20242a'),spaceAfter=8,alignment=TA_JUSTIFY,allowWidows=0,allowOrphans=0),
+        'abstract':ParagraphStyle('abstract',fontName='Body',fontSize=9.5,leading=13.5,leftIndent=20,rightIndent=20,textColor=c('#20242a'),spaceAfter=12,alignment=TA_JUSTIFY),
+        'abstract_heading':ParagraphStyle('abstract_heading',fontName='BodyBold',fontSize=10.5,leading=14,alignment=TA_CENTER,spaceBefore=6,spaceAfter=8,keepWithNext=True),
+        'h2':ParagraphStyle('h2',fontName='BodyBold',fontSize=12.5,leading=17,textColor=c('#20242a'),spaceBefore=17,spaceAfter=9,keepWithNext=True),
+        'h3':ParagraphStyle('h3',fontName='BodyBold',fontSize=11,leading=15,textColor=c('#20242a'),spaceBefore=13,spaceAfter=7,keepWithNext=True),
+        'caption':ParagraphStyle('caption',fontName='Body',fontSize=8.8,leading=12,textColor=c('#20242a'),spaceAfter=13),
+        'table_caption':ParagraphStyle('table_caption',fontName='Body',fontSize=8.8,leading=12,textColor=c('#20242a'),spaceBefore=9,spaceAfter=7,keepWithNext=True),
+        'table':ParagraphStyle('table',fontName='Body',fontSize=8.7,leading=12,textColor=c('#20242a')),
+        'thead':ParagraphStyle('thead',fontName='BodyBold',fontSize=8.7,leading=12,textColor=c('#20242a')),
+        'ref':ParagraphStyle('ref',fontName='Body',fontSize=8.6,leading=12.2,leftIndent=20,firstLineIndent=-20,spaceAfter=8,textColor=c('#20242a')),
     }
-    width = 483.28
+    # ReportLab's content frame has a six-point inset on both sides.
+    width = 467.28
     def diagram(kind):
         w,h,boxes,arrows,labels = figure_spec(kind)
         d = Drawing(w,h)
@@ -281,39 +296,44 @@ def build_pdf(items, refs):
     document_title,body = document_parts(items)
     title_display = inline(document_title).replace(' to AI4Instruments', '<br/>to AI4Instruments')
     story=[]
-    story += [Paragraph('PERSPECTIVE  /  OCTOBER 2026',ParagraphStyle('label',fontName='Helvetica-Bold',fontSize=8.6,leading=12,textColor=c(TEAL))),Spacer(1,15),
-              Paragraph(title_display,ParagraphStyle('title',fontName='BodyBold',fontSize=31,leading=38,textColor=c(INK))),Spacer(1,17),
-              Paragraph(AUTHOR,ParagraphStyle('author',fontName='Helvetica',fontSize=11,leading=16)),Spacer(1,14)]
+    story += [Paragraph(title_display,ParagraphStyle('title',fontName='BodyBold',fontSize=22,leading=28,textColor=c('#20242a'),alignment=TA_CENTER)),Spacer(1,16),
+              Paragraph(AUTHOR,ParagraphStyle('author',fontName='Body',fontSize=11.5,leading=16,alignment=TA_CENTER)),Spacer(1,22)]
+    in_abstract = False
     for kind,data in body:
         if kind == 'heading':
             level,title=data
-            story.append(Paragraph(inline(title),styles['h2' if level==2 else 'h3']))
+            in_abstract = title == 'Abstract'
+            style_name = 'abstract_heading' if in_abstract else ('h2' if level==2 else 'h3')
+            story.append(Paragraph(inline(title),styles[style_name]))
         elif kind=='paragraph':
-            story.append(Paragraph(inline(data),styles['body']))
+            style_name = 'table_caption' if data.startswith('**Table ') else ('abstract' if in_abstract else 'body')
+            story.append(Paragraph(inline(data),styles[style_name]))
         elif kind=='figure':
             caption,path=data
             story.append(KeepTogether([Spacer(1,8),diagram(Path(path).stem),Spacer(1,8),Paragraph(inline(caption),styles['caption'])]))
         elif kind=='table':
             rows=[[Paragraph(inline(cell),styles['thead' if r==0 else 'table']) for cell in row] for r,row in enumerate(data)]
             columns=len(data[0])
-            column_widths = [width*.32,width*.68] if columns==2 else [width/columns]*columns
+            if columns == 2:
+                column_widths = [width*.32,width*.68]
+            elif columns == 3:
+                column_widths = [width*.24,width*.33,width*.43]
+            else:
+                column_widths = [width/columns]*columns
             if any(len(row)!=columns for row in data):
                 raise ValueError('Every row of a table must have the same column count.')
             table=Table(rows,colWidths=column_widths,repeatRows=1,hAlign='LEFT')
-            table.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),c(INK)),('ROWBACKGROUNDS',(0,1),(-1,-1),[colors.white,c(PALE)]),('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,-1),10),('RIGHTPADDING',(0,0),(-1,-1),10),('TOPPADDING',(0,0),(-1,-1),9),('BOTTOMPADDING',(0,0),(-1,-1),9),('LINEBELOW',(0,0),(-1,-1),.3,c('#c8d7db'))]))
-            story += [Spacer(1,7),table,Spacer(1,12)]
+            table.setStyle(TableStyle([('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,-1),7),('RIGHTPADDING',(0,0),(-1,-1),7),('TOPPADDING',(0,0),(-1,-1),7),('BOTTOMPADDING',(0,0),(-1,-1),7),('LINEABOVE',(0,0),(-1,0),.9,c('#333333')),('LINEBELOW',(0,0),(-1,0),.6,c('#333333')),('LINEBELOW',(0,-1),(-1,-1),.9,c('#333333'))]))
+            # Keep the caption and complete table on one page.
+            caption = story.pop() if story and isinstance(story[-1],Paragraph) and story[-1].style.name == 'table_caption' else None
+            story.append(KeepTogether(([caption] if caption else []) + [table,Spacer(1,12)]))
     story += [Paragraph(reference_text(r,True),styles['ref']) for r in refs]
     def furniture(canvas,doc):
         canvas.saveState()
-        canvas.setStrokeColor(c('#c8d7db'));canvas.setLineWidth(.5)
-        canvas.line(56,45,539.28,45)
-        canvas.setFont('Helvetica',7.6);canvas.setFillColor(c('#536875'))
-        canvas.drawString(56,32,f'AI4Instruments  |  {AUTHOR}  |  {VERSION}')
-        canvas.drawRightString(539.28,32,str(doc.page))
-        if doc.page>1:
-            canvas.drawString(56,812,document_title.upper())
+        canvas.setFont('Body',9);canvas.setFillColor(c('#50565b'))
+        canvas.drawCentredString(595.28/2,30,str(doc.page))
         canvas.restoreState()
-    doc=SimpleDocTemplate(str(PAPER/'AI4Instruments.pdf'),pagesize=(595.28,841.89),leftMargin=56,rightMargin=56,topMargin=50,bottomMargin=62,title=document_title,author=AUTHOR,subject='AI participation in instrument design, experimental use and the development of physical capabilities')
+    doc=SimpleDocTemplate(str(PAPER/'AI4Instruments.pdf'),pagesize=(595.28,841.89),leftMargin=58,rightMargin=58,topMargin=57,bottomMargin=55,title=document_title,author=AUTHOR,subject='AI participation in instrument design, experimental use and the development of physical capabilities')
     doc.build(story,onFirstPage=furniture,onLaterPages=furniture)
 
 

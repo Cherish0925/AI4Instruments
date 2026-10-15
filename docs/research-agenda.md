@@ -1,59 +1,41 @@
 # Research agenda
 
-The central research question is whether instruments designed for inspectable, extensible programmatic use enable more capable and more transferable experimental work. The ambition includes experiments beyond sustained manual operation. It should be evaluated through demonstrated tasks and measurements.
+AI4Instruments asks how instruments and computational research methods can develop together, so that each expands what the other can accomplish. The ambition includes experiments beyond the duration, coordination, precision, and exploratory capacity of sustained manual work. Progress should connect new capabilities to the scientific or engineering questions they make tractable.
 
-## 1. Establish what is actually exposed
+## Make experimental capability explicit
 
-Build capability inventories for a small but varied set of instruments, such as a camera, motion controller, source, pump, and temperature controller. Map each declared control and observation to its Basic Operations.
+The first problem is to describe what an instrument enables without reducing it to its current application software. Map physical mechanisms to controls, observations, timing relationships, and accessible combinations. Compare the resulting description with what the instrument actually does.
 
-Report coverage by capability class, including inaccessible functions and unsupported state combinations. A single percentage can conceal the difference between many minor settings and one missing experimental degree of freedom. Measure both individual operations and combinations that expose interactions.
+Completeness is a research question about this mapping. Counting commands is insufficient: one missing synchronized control or independent observation can exclude an entire class of experiments. Study which capability gaps matter, how they arise across hardware and software layers, and how new designs remove them.
 
-**Deliverable:** a versioned inventory, operation definitions, and characterization records that another developer can inspect and repeat.
+## Establish what transfers
 
-## 2. Test transfer across implementations
+Transfer can concern a single method, a multi-instrument experiment, an interpretation of data, or an instrument design. Test these separately across different implementations, tasks, physical systems, and laboratories. The relevant invariant may be a measured quantity or causal relationship, while numerical parameters and apparatus must change.
 
-Implement a shared operation profile on devices with different controllers or vendors. Transfer a Standard Operation, then a multi-device workflow. Record which changes concern syntax, units, timing, calibration, sample handling, or genuinely different capabilities.
+Measure the adaptation required and whether the resulting experiment retains its intended meaning. A universal framework should make differences explicit and support new scientific types. It should not achieve apparent generality by removing the information that distinguishes one measurement from another.
 
-Useful measures include adapter changes, workflow edits, characterization effort, and the resulting experimental equivalence. Equivalent method names do not establish equivalent measurements. Compare results within stated uncertainty and under matched conditions.
+## Expand capability through deeper development
 
-**Deliverable:** one procedure executed across distinct implementations, with an explicit account of what transferred and what required revision.
+Investigate when access to Basic Operations, controllers, firmware, circuits, and physical design makes a scientific difference. Compare alternative implementations of the same experimental objective. Useful outcomes include a new measurable regime, improved resolution, reduced dead time, more reliable inference, or a previously inaccessible combination of interventions.
 
-## 3. Evaluate sustained experimental execution
+Hardware and software should be considered jointly. A new controller sequence may exploit an existing capability; an added sensor may reveal the state needed for better control; a mechanical or circuit redesign may enable a fundamentally different method. Account for development and characterization effort alongside the resulting benefit.
 
-Run sequences long enough to expose drift, buffer limits, synchronization errors, communication interruption, and changes in sample state. Record completed measurements, invalid or missing observations, interruption duration, and the physical state before and after continuation.
+## Sustain research while revising its methods
 
-Report latency distributions, timing jitter, data completeness, and time spent producing usable observations. Count retries and repeat measurements separately. A command log that looks complete can still conceal an experiment that produced little interpretable data.
+Long-duration autonomy requires an evolving account of instrument and sample state. Examine drift, changing calibration, interruptions, resource contention, and observations that contradict the current model. Measure the production of interpretable evidence over time, not merely the fraction of commands that return successfully.
 
-**Deliverable:** a reproducible endurance experiment with a timeline of requested actions, observed events, and usable results.
+Research also changes its own procedures. Evaluate tasks that require constructing or revising Standard Operations and Workflow Operations, rather than selecting an unchanged example. Compare methods by how well they resolve the scientific objective under a stated resource budget. Novelty can appear in measurement design, intervention, interpretation, or the instrument itself.
 
-## 4. Measure the value of deeper access
+## Turn experimental experience into transferable learning
 
-Compare a fixed high-level interface with an interface that also permits changes to Basic Operations, device-local sequences, or firmware. Choose a task for which the deeper access has a plausible physical benefit: synchronized acquisition, adaptive sampling, reduced dead time, or a new measurement mode.
+Real-world trajectories connect decisions to consequences that cannot be obtained from text alone. Record the objective, evidence available at each decision, operation and instrument versions, requested actions, observed conditions, raw data, analyses, and outcomes. Failed and inconclusive attempts can reveal dynamics or assumptions absent from successful runs.
 
-Hold the scientific objective and evaluation budget constant. Measure the resulting precision, throughput, information gained, or accessible parameter range. Include the effort required to develop and characterize the change. Deeper access is valuable when it improves experimental capability, not simply because it produces more code.
+Different learning questions need different targets: predicting device behavior, estimating physical state, designing informative measurements, composing methods, improving code, or reasoning about mechanisms. Evaluate improvement on new experiments, apparatus, or laboratories; adjacent observations from one run cannot establish broad transfer.
 
-**Deliverable:** a measured example connecting a low-level modification to a scientific or engineering outcome.
+The same evidence can improve an instrument's design and the system that uses it. Study this interaction explicitly: a learned model proposes a revised method or instrument, measurements assess its effect, and the resulting experience informs the next revision. The goal is cumulative experimental competence, demonstrated through subsequent work.
 
-## 5. Test open-ended composition
+## Build a shared experimental ecosystem
 
-Compare reuse of existing Standard Operations with the ability to inspect, modify, and compose them for a new objective. Use tasks whose solution cannot be obtained by selecting an unchanged example workflow.
+Develop exchange around meaningful capabilities, physical entities, methods, designs, and evidence. Preserve local specialization while making interfaces and results understandable elsewhere. A new participant should be able to inspect an existing contribution, reproduce its relevant behavior, extend it, and return a result that others can use.
 
-Evaluate whether the new procedure answers the intended question, preserves interpretable observations, and performs well under equal resource budgets. Novel code alone is not a scientific contribution; a useful new measurement or experimentally supported finding is.
-
-**Deliverable:** a new experiment with an explicit account of which established assumptions or procedures needed to change.
-
-## 6. Connect experimental traces to learning
-
-Represent trajectories with the objective, available evidence, operation versions, requested actions, observed states, raw data references, analysis versions, and outcome. Preserve failed and inconclusive attempts with their actual context. Retrospective explanations should be distinguishable from information available at the time of a decision.
-
-Investigate separate uses: learning device dynamics, predicting operation outcomes, selecting informative measurements, composing procedures, and improving scientific reasoning. Each requires a different target and evaluation.
-
-Split evaluation by experimental campaign, device instance, laboratory, or task family where appropriate, rather than randomly separating adjacent frames from one run. Compare with models that lack the added trajectories, and test on held-out tasks. Evaluate successful experimental behavior and sample efficiency as well as prediction accuracy.
-
-**Deliverable:** a documented dataset and controlled evaluation showing whether experimental experience improves subsequent performance.
-
-## 7. Connect laboratories through reproducible meaning
-
-Extend exchange beyond operation names to sample identity, preparation history, measurement context, calibration, and result formats. Begin with one transferable experiment between two laboratories. Record the adaptations needed and the sources of disagreement.
-
-The long-term objective is a growing body of instruments, operations, and evidence that different laboratories can use and improve. Progress is visible when a new participant can reproduce a meaningful measurement, extend it, and return an interpretable result to the shared body of knowledge.
+Useful milestones are connected demonstrations: an instrument exposes a previously hidden degree of freedom; a method transfers between distinct implementations; an investigation creates a new operation; experimental experience improves later decisions; or laboratories combine capabilities to answer a question none could address alone. Together these advances move from isolated automation toward a growing, collaborative capacity for research.

@@ -1,59 +1,59 @@
 # Operations
 
-An instrument should expose what it can do and what it can observe in a form that a program can inspect, execute, and extend. AI4Instruments organizes this interface into **Basic Operations**, **Standard Operations**, and **Workflow Operations**. These names describe levels of composition, not competing control protocols.
+An instrument makes a part of the physical world accessible to deliberate intervention and observation. Its programmable interface should express that access: what can change, what can be measured, where and when an interaction occurs, and how the resulting evidence is obtained. This definition applies to individual components, complete instruments, assemblies, and distributed experimental facilities. It does not depend on a discipline, vendor, control protocol, or particular kind of AI.
 
-## Basic Operations
+AI4Instruments uses **Basic Operations**, **Standard Operations**, and **Workflow Operations** to describe three roles in constructing experiments. They are compositional roles, not a fixed catalogue of scientific actions. A procedure can become a constituent of another procedure; a new instrument can introduce controls and observations for which no existing operation name is suitable.
 
-A Basic Operation is an elementary, explicitly defined control or observation at a declared abstraction level. Examples include setting a controller output, reading a sensor channel, selecting a camera trigger source, or reading a completed frame. An instrument's **complete set of basic operations** is its declared foundation for programmable use.
+## Basic Operations: access to experimental degrees of freedom
 
-“Complete” needs a boundary. For each device version, enumerate its controllable degrees of freedom, observable quantities, timing capabilities, and accessible states. A complete interface covers that inventory directly or through a documented composition that preserves the required behavior. Coverage of a published inventory does not establish access to undisclosed hardware capabilities.
+A Basic Operation exposes an elementary control or observation at a specified interface. Examples are selecting a controller output, reading a sensor channel, setting a trigger condition, or retrieving an acquired record. The defining property is an explicit, independently usable meaning at that interface, rather than a particular command size or duration.
 
-“Basic” is also relative to a boundary. A camera's acquisition interface may expose `arm`, `trigger`, and `read_frame`; its sensor-development interface may additionally expose readout timing and register fields. Both can be useful. Neither should pretend that an exposure is physically instantaneous or that one API call corresponds to one transistor-level event.
+**A complete set of basic operations** gives access to all controllable and observable degrees of freedom within a stated instrument configuration and abstraction level, including their valid combinations. Establishing completeness requires an inventory of controls, observations, modes, timing relationships, and combinations. An interface that exposes every individual setting but prevents their meaningful simultaneous use may still conceal a substantial part of the instrument's capability.
 
-Prefer distinct meanings and avoid duplicate operations whose differences cannot be explained. Do not require all operations to be mutually nonconflicting. Moving a stage and changing its velocity may affect the same controller; triggering an exposure and changing a readout mode may interact. Those relationships belong in the interface.
+The inventory should connect each exposed operation to the physical mechanism it controls or observes. It should also identify what is available only through a deeper interface, what requires a hardware modification, and what remains uncharacterized. This makes the boundary a subject of instrument development rather than a permanent restriction imposed by the original software.
 
-## The operation contract
+At a camera acquisition interface, `arm`, `trigger`, and `read_frame` can be basic. At a sensor-development interface, readout timing, register fields, and signal-processing stages may also be exposed. Neither level eliminates the other. Basic does not mean instantaneous, indivisible in nature, or guaranteed to execute without interruption.
 
-Each operation needs enough information to construct a valid experiment and interpret what happened.
+Prefer distinct meanings and avoid unexplained duplication. Physical independence cannot be assumed: two controls may share a power supply, change the same sample, or alter one another's effect. Represent these couplings instead of requiring every operation to be mutually nonoverlapping or nonconflicting.
 
-| Field | Question it answers |
+## Describe relations, preserve physical meaning
+
+A common description needs to express the relations that experiments depend on without replacing the language of each science.
+
+| Relation | Information needed for composition |
 | --- | --- |
-| Identity and version | Which device, firmware, interface, and operation definition is this? |
-| Inputs | What are the types, units, ranges, reference frames, and defaults? |
-| State | In which states is the operation defined, and what state changes follow? |
-| Effect and readback | What does a request change, and how is the resulting condition observed? |
-| Timing | When is it accepted, started, and completed; which clock timestamps each event? |
-| Resources | Which channels, axes, buffers, and shared controllers does it use? |
-| Result | What data, status, measured condition, or completion handle is returned? |
-| Exceptions | What does an interrupted, partial, unsupported, or indeterminate result mean? |
-| Measurement context | Which calibration, uncertainty description, and acquisition settings apply? |
+| Intervention and target | The affected entity, controlled quantity, units, reference frame, and intended change. |
+| Observation and source | The measured quantity, sensing location, acquisition conditions, calibration, and uncertainty. |
+| State and history | Preconditions, persistent changes, preparation history, and whether a repetition creates a new event. |
+| Space and connectivity | Coordinate transforms, physical connections, sample locations, and routes of transfer. |
+| Time and dependency | Duration, completion criteria, clocks, synchronization, and ordering requirements. |
+| Resources and coupling | Shared channels, actuators, buffers, environments, specimens, and concurrent-use relationships. |
+| Result and evidence | Requested values, observed values, execution status, raw data, and interpretation. |
 
-A requested temperature is not a measured temperature. An accepted move is not a completed move. An empty data buffer is not necessarily a zero signal. Interfaces must preserve these distinctions.
+The vocabulary can be extended. A waveform, composition, image, stress field, and cell lineage retain their own structures. Generality comes from making these structures discoverable and composable, rather than forcing them into a universal numerical setpoint.
 
-Reissuing an operation also has a meaning: a repeated setpoint may replace an earlier value, while a repeated trigger may create another measurement. Each definition should state that behavior. Device-local scheduling should be available when host communication cannot deliver the required timing.
+An operation definition includes its identity and version, parameter types, relevant relations, and result semantics. An accepted command, an electrically generated signal, and an observed physical change are different events. Likewise, an empty buffer, a zero measurement, and a missing measurement have different meanings. A delayed or partial result must remain distinguishable from completed execution.
 
-## Standard Operations
+## Standard Operations: reusable experimental methods
 
-A Standard Operation is a reusable procedure with an experimentally meaningful result. It composes Basic Operations and states the conditions under which the procedure has that meaning.
+A Standard Operation combines controls and observations into a method with an experimentally meaningful outcome. Image acquisition, calibrated dispensing, a temperature profile, an impedance measurement, and a centrifugation cycle are examples. Each method states the conditions under which its result has the claimed meaning.
 
-For example, `acquire_image` may select exposure and readout settings, arm the camera, trigger acquisition, wait for completion, and return a frame with its actual settings and timestamps. Its useful contract includes pixel encoding, dimensions, region of interest, saturation indicators, and the meaning of any correction applied to the data.
+For instance, acquiring an image involves more than returning an array: exposure, illumination, timing, pixel encoding, geometry, and any corrections determine what the array represents. A dispensing procedure relates actuator motion to delivered material through calibration and observations. The meaningful abstraction is established through this physical relationship.
 
-Other examples are dispensing a specified volume, performing a centrifugation cycle, recording an electrochemical sweep, and depositing a film under a defined process profile. “Standard” means a documented reusable procedure within a declared profile; it does not imply universal standardization or experimental validity on every device.
+“Standard” means a reusable, documented method; it does not mean compulsory, universally standardized, or optimal for every experiment. Its implementation and assumptions should be inspectable. A researcher or AI can replace a constituent operation, introduce a different measurement, revise a method, or create a new one. The definition need not privilege procedures that happened to be implemented first.
 
-The composition should remain inspectable. A caller may need to replace a timing sequence, add a measurement, or work directly with Basic Operations when the existing procedure hides a relevant variable.
+## Workflow Operations: experimental organization
 
-## Workflow Operations
+A Workflow Operation organizes methods, physical entities, instruments, and decisions over time. It can include serial and parallel execution, branching, iteration, transfer, and feedback. Its scope may be a short measurement, a prolonged investigation, or a coordinated experiment across facilities.
 
-A Workflow Operation coordinates procedures across devices, samples, and time. It expresses serial dependencies, parallel activity, transfers, feedback, and completion conditions.
+Composition requires more than matching input and output types. A transferred specimen must actually reach the next apparatus in the required condition; a measurement may depend on an earlier intervention having settled; two nominally separate branches may modify a shared environment. These relationships belong to the experimental program.
 
-An optical workflow can illuminate a sample, adjust a stage, collect an image, estimate a response, and choose the next setting. A materials workflow can connect formulation, synthesis, processing, characterization, and model revision. Parallel branches require explicit shared resources and synchronization points; visual proximity in a diagram does not establish that two actions can run together.
+Workflows should retain access to their constituents and support revision during research. Existing workflows are useful accumulated knowledge. They do not define the space of permissible scientific questions or require every future experiment to follow the same decomposition.
 
-Workflow composition should preserve the original observations and the identity of each sample or specimen. A result becomes much less useful if its preparation history cannot be reconstructed.
+## Capability, objective, and experience
 
-## Reuse without prescribing a research direction
+Keep three meanings distinct. **Capability descriptions** explain what an instrument or procedure does. **Study objectives** explain what the current investigation seeks and how its choices are evaluated. **Evidence records** explain what happened under specified conditions.
 
-Operation descriptions explain capabilities. Experimental objectives specify what a study seeks. Evaluation records describe what previous uses achieved. Keep these three things separate.
+Capability descriptions should contain no promotional instructions, hidden incentives, or preferred research conclusions. Measured performance, calibration, failures, and prior results remain valuable evidence, with their conditions and provenance. Their relevance to a new objective is a scientific judgment, not a preference embedded in an operation name.
 
-Descriptions should not contain promotional instructions, hidden rewards, or assertions that an established workflow is always preferable. Retain factual evidence: a calibration result, measured latency, failed attempt, or reproducibility estimate can matter greatly to a new experiment. Such evidence needs its conditions and provenance rather than a universal preference score.
-
-The interface should let a researcher or AI inspect an existing operation, compose it differently, revise it, or develop a new one. Novel experiments still need well-defined actions and interpretable observations. Open-ended research depends on that foundation.
+The same operations can serve a language-model agent, a learned controller, Bayesian optimization, an evolutionary search, or a conventional experimental program. Each can choose and revise methods through its own reasoning or optimization process. Interoperability concerns what can be done and learned from the result, not how the next action is selected.

@@ -1,7 +1,8 @@
 # Paper
 
-**AI4Instruments: Instruments as programmable partners in scientific discovery**  
-**Shuxing Yang** · Version 0.1.0 · October 2026
+**From Instruments4AI to AI4Instruments**
+
+**Shuxing Yang** · Version 0.2.0 · October 2026
 
 - [PDF](AI4Instruments.pdf): typeset A4 article.
 - [HTML](AI4Instruments.html): self-contained article with embedded figures, navigation and responsive styling. Download and open in a browser to read offline.

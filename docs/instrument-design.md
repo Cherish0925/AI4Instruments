@@ -1,56 +1,51 @@
-# Designing instruments for programmable research
+# Instrument design and development
 
-AI4Instruments treats an instrument as something that can be designed, understood, programmed, measured, and improved through a continuous research process. The central idea is **AI design and implementation + AI development and use**. The same experimental evidence that informs a scientific question can also reveal how the instrument should change.
+The organizing idea of AI4Instruments is **AI design and implementation + AI development and use**. AI participates both in making instruments and in investigating the world through them. Experimental use reveals limitations and possibilities that return to design; improved instruments make new experiments possible. This relationship spans the complete instrument lifecycle.
 
-## Start with experimental possibilities
+## From adapting a device to developing a capability
 
-The initial design brief should describe what the instrument must make possible: accessible inputs, observable responses, spatial and temporal scales, resolution, stability, sample conditions, and interaction with other equipment. A list of familiar workflows is useful, but insufficient. Future experiments may require combinations of controls that the original workflow never used.
+Instruments4AI begins with available equipment: establish programmable control, connect interfaces, assemble documentation and software, expose usable tools, integrate representative experiments, and write new workflows. This remains a practical route for existing apparatus. Its limitation appears when the research requires a control, observation, timing relation, or physical arrangement that the original product never exposed.
 
-Maintain a capability inventory alongside the physical design. For each degree of freedom, record its physical mechanism, control path, available readback, constraints, and calibration method. Record missing observations as well: an actuator command without an independent measurement leaves a different experimental uncertainty from a closed measurement loop.
+AI4Instruments carries those requirements upstream. The design brief describes the effects and observations the instrument should make possible, including their spatial and temporal scales, resolution, stability, and combinations. Familiar applications inform this brief without exhausting it. An instrument can be designed to admit experiments that its designers have not enumerated.
 
-## Design across the whole lifecycle
+The user of this interface may be a human, a language-model system, a learned controller, or another computational research method. The relevant requirement is explicit access to physical capabilities and their meaning.
 
-| Stage | Design artifact | Question carried forward |
-| --- | --- | --- |
-| Concept | Experimental requirements and capability inventory | Which effects and observations should be possible? |
-| Physical design | Mechanical, optical, fluidic, thermal, and electrical models | Which couplings determine achievable behavior? |
-| Implementation | Schematics, component choices, firmware, and host interfaces | Can the intended behavior be generated and measured? |
-| Manufacturing and assembly | Revision records, tolerances, assembly procedures, and test fixtures | How does the built unit differ from the design? |
-| Characterization and calibration | Response measurements, uncertainty, drift, and operating envelopes | What does this particular unit actually do? |
-| Experimental use | Programs, readbacks, raw observations, and sample histories | Which behaviors help or limit the research? |
-| Redesign | Traced changes to hardware, firmware, and operations | Does the modification improve the measured capability? |
+## One development process across physical and software layers
 
-AI participation can occur at every stage, but evidence must connect the stages. A simulation predicts behavior; fabrication and measurement establish the behavior of the realized instrument.
+| Stage | Connected design information |
+| --- | --- |
+| Conception | Scientific questions, intended interactions, accessible degrees of freedom, and missing observations. |
+| Physical design | Geometry, materials, mechanics, fields, transport, sensing, and their couplings. |
+| Implementation | Electronics, components, controllers, firmware, signal processing, and programmable interfaces. |
+| Manufacture and assembly | Tolerances, component variation, assembly procedures, test fixtures, and revision records. |
+| Characterization | Measured responses, calibration, uncertainty, drift, and differences between individual units. |
+| Experimental use | Programs, actual conditions, raw observations, sample histories, and limiting behaviors. |
+| Revision | Changes to the design and measurements establishing their effect on experimental capability. |
 
-## Electrical control connects programs to physical processes
+These stages should share a traceable description of the instrument. A component substitution may alter noise or bandwidth; an assembly tolerance may change alignment; firmware may change acquisition timing. Software cannot interpret the resulting observations reliably if those changes disappear from the instrument's history.
 
-Programmable electronics provide a practical bridge between software and many actuators and sensors. A useful design exposes this bridge clearly: controller commands, electrical outputs, physical effects, sensing, digitization, and returned data.
+Manufacturability matters to scientific openness. A design that can be fabricated, assembled, calibrated, and repaired by another group has a different reach from a single expert-built apparatus. Published models, schematics, build information, and characterization procedures make improvement transferable between instruments and laboratories.
 
-Electronics do not exhaust the instrument's physics. Geometry, friction, fluid transport, optical alignment, thermal inertia, materials, and sample history may dominate performance. An electrical interface can command a valve; it does not by itself establish the delivered volume. Programmability and observability should therefore be designed together.
+## Circuits and programs as connected representations
 
-For existing equipment, the bridge may pass through a vendor API, serial commands, an acquisition card, or a mechanical retrofit. For new equipment, the design can make these paths explicit from the beginning.
+Electrical control is a practical bridge between computation and many physical actuators and sensors. The useful correspondence is explicit: a program changes controller behavior; circuitry generates a signal; a physical process responds; a sensor and acquisition path return an observation. Coding and circuit understanding allow AI to reason across this chain rather than treat the instrument as an unexplained command endpoint.
 
-## Expose meaningful depth
+The physical system also includes geometry, material properties, friction, diffusion, thermal inertia, and sample history. A valve signal is not itself a delivered quantity, just as a position command is not a measured displacement. Designing observation together with actuation connects software intent to physical effect.
 
-A useful instrument can provide several connected entry points:
+Existing instruments may need vendor interfaces, acquisition cards, replacement controllers, or mechanical mediation. New instruments can expose these relationships from the outset. Both routes contribute to the same development process.
 
-- Experiment procedures for common tasks.
-- Basic Operations for independently addressable controls and observations.
-- Controller and firmware interfaces for timing, buffering, signal processing, and new operating modes.
-- Hardware design information for modifications to electronics and the physical apparatus.
+## Access below the customary software interface
 
-The deeper interfaces need machine-readable register definitions where applicable, units and signal scaling, clock relationships, memory layouts, build instructions, revision identifiers, and characterization procedures. Merely exposing an undocumented register bank does not make an instrument understandable.
+Experiment procedures, Basic Operations, firmware, controller logic, chip interfaces, and circuit designs should form connected levels of access. A high-level method provides convenient reuse; deeper access permits new timing, buffering, readout, processing, and control strategies. Hardware development extends the physical possibilities themselves.
 
-The analogy to GPU kernel optimization is productive: access below a high-level library can reveal useful combinations and remove unnecessary overhead. Instrument optimization additionally changes a physical process. A faster command sequence may still be limited by settling, diffusion, exposure, or signal-to-noise requirements. Improvements should be demonstrated in the relevant observable, not inferred from fewer software calls.
+The analogy with GPU kernel optimization is useful: access below a library can uncover useful behavior and remove inherited software limitations. In instruments, an improvement may involve a new FPGA acquisition sequence, a different sensor readout, coordinated triggering, or a redesigned analog front end. These changes can alter which phenomena can be resolved, not merely how rapidly a command returns.
 
-## Put execution at the appropriate timescale
+Useful depth requires explanations of registers, signal scaling, clocks, memory layouts, interfaces, build processes, and measured behavior. A register dump alone is not an adequate development interface. The aim is for another developer or AI to understand a proposed change, implement it, and determine its physical effect.
 
-Host programs are appropriate for experiment planning, analysis, and many device commands. Tightly timed sequences may belong in a microcontroller, FPGA, camera sequencer, or other local controller. The host should be able to define such sequences, start them, and retrieve both data and execution records.
+Execution belongs at the timescale of the process. Host programs can organize research and analysis; deterministic sequences may run on local controllers. Both should expose how requested timing relates to electrical events and measured phenomena. The choice follows experimental requirements rather than an assumption that every operation must pass through a remote agent.
 
-Specify whether timing refers to command dispatch, device acceptance, electrical output, or a measured physical event. Where instruments use different clocks, document how their timestamps can be compared and the uncertainty of that comparison. This turns synchronization from an assumption into an experimental quantity.
+## Let use improve the instrument
 
-## Make improvement cumulative
+An experiment may reveal an unobserved variable, a restricted control combination, a drifting response, or a useful operating mode absent from the original design. Trace the limitation to its source and revise the appropriate layer. Sometimes a new program is sufficient; sometimes the controller, sensor, mechanical arrangement, or manufacturing process must change.
 
-Publish enough design and characterization information for another laboratory to reproduce an interface and assess a result. A common operation vocabulary can coexist with device-specific extensions; capability discovery should make the distinction explicit.
-
-When an experiment reveals a limitation, trace it to a layer: insufficient observation, controller behavior, software composition, physical design, or sample variability. Then change the relevant layer and repeat the measurement. This is how AI4Instruments can become more than a collection of drivers: instrument development and scientific use become a shared, inspectable cycle.
+This creates a shared body of design knowledge and experimental evidence. Different laboratories can contribute alternative implementations without adopting identical hardware. What should transfer is an intelligible relationship between intended capability, realized instrument, measured behavior, and resulting scientific work.

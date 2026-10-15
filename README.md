@@ -1,92 +1,99 @@
 # AI4Instruments
 
-### Instruments as programmable partners in scientific discovery
+### From Instruments4AI to AI4Instruments
 
 **AI design and implementation + AI development and use.**
 
-AI4Instruments explores how scientific instruments can be designed, developed and operated with AI as a continuing participant. The aim is to expand what experiments can be performed: expose useful hardware capabilities, make observations interpretable, compose operations across instruments, and turn experimental experience into better apparatus and better research.
+An instrument determines which interventions a researcher can make and which observations can be obtained. AI4Instruments asks how those possibilities can expand when AI participates in the conception, creation, development and use of the apparatus itself.
 
-**By Shuxing Yang** · [中文介绍](README.zh-CN.md) · [Paper: PDF](paper/AI4Instruments.pdf) · [Paper: HTML](paper/AI4Instruments.html) · [Readable manuscript](paper/manuscript.md)
+The project connects three forms of progress: **scientific discovery, better instruments, and learning from real experimental experience**. Its scope is any scientific or engineering setting in which computational systems can act on physical systems or control how they are observed, and receive feedback. Specific instruments and disciplines provide examples; the common foundation is the relationship between physical capability, programming, observation and continued development.
 
-## Why this project exists
+**Shuxing Yang** · [中文介绍](README.zh-CN.md) · [Paper: PDF](paper/AI4Instruments.pdf) · [Paper: HTML](paper/AI4Instruments.html) · [Read the manuscript](paper/manuscript.md)
 
-An instrument's hardware may support more than its application exposes. A laboratory may have every device needed for an experiment, yet lack compatible interfaces, synchronised timing, reliable readback or a coherent record of what happened. Researchers spend time repairing these gaps instead of testing ideas.
+## The change in perspective
 
-Connecting existing equipment to an AI system is an essential first step. AI4Instruments carries the question through the whole instrument lifecycle: **what should be built, what should be programmable, what should be observable, and what should change after the next experiment?**
+**Instruments4AI** starts with available equipment: establish programmable control, prepare manuals and SDKs, expose tools and knowledge, integrate serial and parallel experiments, and write programmes for new tasks.
 
-| Perspective | Starting point | Main question |
-| --- | --- | --- |
-| **Instruments4AI** | Available instruments, manuals, SDKs and interfaces | How can AI use this apparatus to conduct an experiment? |
-| **AI4Instruments** | Scientific questions and the design of the apparatus itself | How can AI help create, develop and use better experimental capabilities? |
+**AI4Instruments** carries the question into the apparatus itself: which physical variables should become controllable, which consequences should become observable, and which changes to mechanics, circuits, controllers, firmware or software would enable better experiments?
 
-These perspectives work together. Existing equipment provides a practical starting point; experimental evidence guides deeper changes to software, firmware, circuits and mechanics.
+The connection matters. Experimental use reveals new requirements; instrument development creates new experimental possibilities. AI can participate throughout this cycle, from planning and design to manufacturing, characterisation, research and redesign.
 
-## Three levels, open to development
+![From instrument integration to continuing development](assets/design-transition.svg)
 
-![Operation hierarchy](assets/operation-hierarchy.svg)
+## A general method, an expanding set of capabilities
 
-| Level | Meaning | Example |
-| --- | --- | --- |
-| **Basic Operations** | Elementary control and observation at a declared hardware abstraction level | Set an exposure, read an axis position, acquire a signal. |
-| **Standard Operations** | Reusable experimental procedures with explicit assumptions and observations | Capture an image, transfer liquid, execute a thermal programme. |
-| **Workflow Operations** | Serial, parallel and adaptive composition across an experiment | Synthesis → processing → characterisation → next experiment. |
+The common structure is **intervention → physical response → observation → the next experimental decision**. It applies at the scale of a component, an instrument, an integrated platform or a collaboration between laboratories. Each scale retains the physical details needed to understand what its operations mean.
 
-The foundation is **a complete set of basic operations**. Completeness is checked against a declared capability inventory, including adjustable quantities, observations, modes and timing. Missing capabilities remain visible. The goal is clear, nonredundant meaning; valid operations can still compete for the same physical resource.
+AI can take different forms within this structure: language-model agents, perception systems, learned controllers, optimisation methods and combinations of them. The interface should preserve meaning across models and execution environments, while allowing each instrument's capabilities to remain specific and rich.
 
-A reusable procedure remains inspectable and replaceable. Capability descriptions say what an instrument can do. Evidence records say what has been observed. The current research objective decides what is worth doing next. An established workflow should help a new investigation without defining its limits.
+Three operation roles connect hardware to research:
 
-## Start here
-
-| If you want to… | Read or run |
+| Role | What it makes possible |
 | --- | --- |
-| Understand the argument | [Paper manuscript](paper/manuscript.md), [PDF](paper/AI4Instruments.pdf), or [standalone HTML](paper/AI4Instruments.html) |
-| Design an operation interface | [Operation model](docs/operations.md) |
-| Develop an instrument from the hardware upward | [Instrument lifecycle](docs/instrument-design.md) |
-| Explore optics, chemistry, biology and materials examples | [Experimental designs](docs/examples.md) |
-| Inspect a working software example | [Simulated optical alignment](examples/README.md) |
-| Compare established standards and research | [Related work](docs/related-work.md) |
-| Choose a concrete contribution | [Research agenda](docs/research-agenda.md) and [contribution guide](CONTRIBUTING.md) |
+| **Basic Operations** | Elementary control and observation: a complete, inspectable expression of the capabilities at a stated hardware abstraction level. |
+| **Standard Operations** | Reusable experimental procedures with accessible implementations, conditions and evidence. |
+| **Workflow Operations** | Serial, parallel, continuous and adaptive composition across physical entities, devices, places and times. |
+
+The foundation is **a complete set of basic operations**. An inventory links programmable capabilities to the hardware that implements them and the measurements that characterise them. Research can expand that inventory by revealing unused degrees of freedom, missing observations and opportunities for new hardware.
+
+The roles support direct composition and inspection. A new investigation can reuse, alter or replace an existing procedure, work directly with elementary capabilities, or motivate a different instrument. Capability descriptions state behaviour; evidence records state what was observed; the current research objective supplies the criteria for choosing an experiment. Established workflows remain resources for inquiry.
+
+## From low-level access to cumulative research
+
+Circuits provide a physical route to control and sensing; programmes express how those capabilities are used. Access to controllers, chips, firmware and circuit descriptions lets a research system develop timing, acquisition, actuation and processing beyond the modes anticipated by an earlier application. Mechanics, materials and physical interactions remain part of the same design problem.
+
+Experimental trajectories connect questions, apparatus revisions, interventions, observations, analysis and decisions. They can improve scientific understanding, instrument design, physical models and research strategies. Shared descriptions and evidence can let different laboratories adapt procedures, compare results and combine complementary capabilities.
+
+![Experiments, knowledge, models and instruments](assets/experimental-learning.svg)
+
+## Explore the project
+
+| Question | Starting point |
+| --- | --- |
+| What is the central argument? | [From Instruments4AI to AI4Instruments](paper/manuscript.md), [PDF](paper/AI4Instruments.pdf), [HTML](paper/AI4Instruments.html) |
+| How can capabilities be described and composed? | [Operations](docs/operations.md) |
+| How does AI participate throughout instrument development? | [Instrument design](docs/instrument-design.md) |
+| How do the principles appear in different experiments? | [Illustrative experimental relationships](docs/examples.md) |
+| How does this connect to existing research and standards? | [Related work](docs/related-work.md) |
+| What would constitute substantive progress? | [Research agenda](docs/research-agenda.md) |
+| How can I examine an implementation? | [Executable reference](examples/README.md) |
+
+The repository keeps the argument in `paper/`, technical development in `docs/`, and executable illustrations in `src/` and `examples/`. The examples can grow independently of the scope of the proposal.
+
+## Author's note
+
+This repository presents my personal thinking about AI and scientific instruments. My undergraduate background is in applied physics and optoelectronic information science and engineering. I worked on optoelectronic automation and system design through experiments, projects and competitions involving optical micro- and nanofabrication, optical communication, optical sensing, precision optical measurement, machine vision, robotics and automation.
+
+During my doctoral research, I have worked on physical optics, free-space optical experiments, information optics and the intersection of physics and AI. I independently developed Qiushi Engine, a substantial AI research system designed for proactive, self-directed, long-horizon autonomous research and self-assessment. I have used it in real-world experimental science, natural-science and engineering tasks, as well as extended investigations, literature research and professional writing.
+
+These ideas began taking shape in **late 2025**. They are my own reflections, intuitions, judgments and predictions, informed by that experience. Their usefulness and long-term validity remain questions to be explored through further research and practice.
+
+— **Shuxing Yang**
 
 ## Run the reference
 
-Python 3.10 or newer; no runtime dependencies or installation required.
+The executable example is a small simulated optical experiment that makes commands, observations, serial and parallel composition, and feedback inspectable. It illustrates the operation model; new implementations can use different apparatus and computational methods.
+
+Python 3.10 or newer is sufficient, with no runtime dependencies or installation:
 
 ```bash
 python examples/optical_alignment.py --output runs/optical-alignment
 python -m unittest discover -s tests -v
 ```
 
-The simulated bench has two positioning axes and a detector. Seven Basic Operations compose into three Standard Operations and one Workflow Operation. The axes move concurrently; acquisition waits for both observed positions. An external search objective selects the next setting from measured feedback.
+The run writes a capability manifest, a JSONL trajectory and a result summary. The [example documentation](examples/README.md) explains the model and implementation.
 
-Each run writes a capability manifest, a JSONL trajectory and a summary. With the default seed, the demonstration performs 22 evaluations and changes simulated measured power from 23.734040 to 99.979081 µW. The [example documentation](examples/README.md) explains the model, clocks, provenance, assumptions and extension points.
+## Build, contribute and reuse
 
-## What this repository contains
-
-```text
-paper/       Manuscript, bibliography, standalone HTML and typeset PDF
-assets/      Original diagrams used in the paper and documentation
-docs/        Operation model, instrument design, examples and research agenda
-src/         Small Python reference for operations, traces and composition
-examples/    Executable simulated optical experiment and capability manifest
-tests/       Behavioural tests for the reference implementation
-scripts/     Reproducible paper build
-```
-
-Version 0.1.0 establishes the design framework and a simulated executable reference. The next experimental milestone is to characterise real-device adapters against explicit capability inventories and demonstrate a procedure transferred across apparatus. Progress is measured by experimental capability and evidence, as described in the [research agenda](docs/research-agenda.md).
-
-## Build and share the paper
-
-The PDF and HTML contain the same manuscript. The HTML is self-contained, including its figures and styles; download it and open it in a browser. Its text, references and figures remain available offline. The PDF is ready to share or print. Both list **Shuxing Yang** as the sole author, without an affiliation.
+The paper's PDF and HTML are generated from the same manuscript and bibliography. Download the self-contained HTML to read it offline, or share the typeset PDF.
 
 ```bash
 python -m pip install -r requirements-paper.txt
 python scripts/build_paper.py
 ```
 
-For HTML alone, run `python scripts/build_paper.py --html-only`; this uses only the Python standard library. The PDF uses ReportLab and embeds DejaVu Serif when available, with a built-in serif fallback.
+For HTML alone, `python scripts/build_paper.py --html-only` uses only the Python standard library.
 
-## Contribute and reuse
+Contributions can include ideas, instrument descriptions, physical designs, controller implementations, new operations, experiments and datasets. The [contribution guide](CONTRIBUTING.md) explains how to connect a contribution to its physical meaning and evidence.
 
-A useful contribution may be one documented instrument capability, an adapter, a controller implementation, an experimental procedure, an informative trajectory or a measured instrument improvement. Begin with the scientific question, identify what is implemented, and provide the evidence another researcher needs to use it.
-
-Code is available under the [MIT License](LICENSE). The paper, documentation and original figures are licensed under [CC BY 4.0](LICENSE-docs.md). Citation metadata is in [CITATION.cff](CITATION.cff).
+Software is licensed under [MIT](LICENSE); the paper, prose documentation and original figures use [CC BY 4.0](LICENSE-docs.md). See [CITATION.cff](CITATION.cff) for citation information.

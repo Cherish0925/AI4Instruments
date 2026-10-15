@@ -5,14 +5,14 @@ title: "AI4Instruments"
 authors:
   - family-names: Yang
     given-names: Shuxing
-version: 0.1.0
+version: 0.2.0
 date-released: 2026-10-15
 url: "https://github.com/Cherish0925/AI4Instruments"
 repository-code: "https://github.com/Cherish0925/AI4Instruments"
 license: MIT
 preferred-citation:
   type: article
-  title: "AI4Instruments: Instruments as programmable partners in scientific discovery"
+  title: "From Instruments4AI to AI4Instruments"
   authors:
     - family-names: Yang
       given-names: Shuxing

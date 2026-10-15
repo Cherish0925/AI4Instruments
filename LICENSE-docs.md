@@ -8,6 +8,6 @@ License terms: https://creativecommons.org/licenses/by/4.0/
 
 Legal text: https://creativecommons.org/licenses/by/4.0/legalcode
 
-Suggested attribution: Shuxing Yang, *AI4Instruments: Instruments as programmable partners in scientific discovery*, 2026, https://github.com/Cherish0925/AI4Instruments.
+Suggested attribution: Shuxing Yang, *From Instruments4AI to AI4Instruments*, 2026, https://github.com/Cherish0925/AI4Instruments.
 
 Referenced works remain subject to their respective licenses. Repository software is licensed under [MIT](LICENSE).

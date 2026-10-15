@@ -1,61 +1,43 @@
-# Experimental designs
+# Experimental relations and examples
 
-These examples describe how the three operation levels can support different forms of experimental work. They are proposed designs. The [runnable optical simulation](../examples/README.md) demonstrates software composition and feedback; it does not establish hardware performance or validate the other procedures below.
+An experimental architecture should extend when a new question introduces a new instrument or physical interaction. The examples below are organized around relations that recur across research, rather than a list of supported disciplines. Each relation can appear within many fields, and an experiment can combine several. These are design examples; the [runnable reference](../examples/README.md) is a software simulation of optical alignment.
 
-## Optics: measurement and adaptive alignment
+## Produce an interaction and observe its response
 
-**Research question:** How does a sample's response depend on illumination and alignment, and which measurement should follow?
+An experiment establishes a source, a path of interaction, a target, and an observation. In optics, light is generated, propagates through free space, fiber, or a chip, interacts with matter, and reaches a detector. Electrical excitation and readout, acoustic scattering, and mechanical loading share aspects of this organization while retaining different physical models.
 
-| Level | Representative content |
-| --- | --- |
-| Basic Operations | Set a source parameter; request an axis position; read position; configure exposure; arm and trigger acquisition; retrieve a frame. |
-| Standard Operations | Acquire an image with recorded settings; measure a background; move and verify settling; estimate a signal statistic. |
-| Workflow Operations | Generate light, propagate it through the apparatus, interact with a sample, acquire a response, analyze it, and choose the next condition. |
+Basic Operations expose source controls, switching, positioning, detector configuration, triggering, and readout. Standard Operations create an interpretable measurement: for a CMOS camera, this includes exposure, gain, region of interest, timing, pixel encoding, and the identity of corrections. Workflow Operations coordinate excitation and acquisition, compare observations with a hypothesis, and choose the next condition.
 
-The apparatus has state beyond its latest command: source output, stage position, camera configuration, background, and sample condition. Store the requested and observed conditions together. Separate raw frames from background corrections and derived scores so an alternative analysis can revisit the same measurements.
+The essential relations include geometry, propagation, delay, bandwidth, background, and the connection between the applied stimulus and measured response. Changing a detector setting may alter the interpretation of the data; changing a sample may alter the entire response model. Preserve raw observations and actual settings so that new interpretations can be tested.
 
-A high signal score is useful for alignment, but may not answer a scientific question. A research workflow can instead choose measurements that distinguish competing response models or estimate an uncertain parameter. The objective belongs to that study, not to the definition of `acquire_image`.
+A reused alignment method may improve collection efficiency, but maximizing intensity need not answer the research question. The same measurement operations can instead investigate a response law, discriminate between mechanisms, or find a previously unobserved regime. That choice belongs to the investigation.
 
-**Research value:** continuous measurement over a space too large or time-consuming for manual exploration, with a trace connecting each chosen condition to its evidence.
+## Transform matter and connect preparation to properties
 
-## Chemistry: formulation and reaction response
+Many experiments relate a material's history to its later behavior. Reagent addition, stirring, and heating; precursor synthesis and controlled-atmosphere processing; thin-film deposition; electrochemical sequences; and solid-state synthesis or sintering all instantiate parts of this relation.
 
-**Research question:** Which formulation and process conditions explain a measured reaction response?
+Basic Operations expose the relevant actuators and observations: material delivery, motion, temperature, pressure, atmosphere, electrical stimulus, and sensing. Standard Operations express measured dispensing, mixing, a process profile, a deposition step, or a characterization method. Workflow Operations connect formulation, transformation, transfer, measurement, and the next design decision.
 
-Basic Operations expose pump motion or flow settings, valve selection, stirring control, temperature settings, sensor readings, and sampling actions. Standard Operations convert these into experimentally meaningful procedures such as dispensing a measured amount, mixing, applying a thermal profile, and acquiring an analytical measurement.
+A materials investigation might proceed from a proposed formulation to precursor synthesis, precision shaping under vacuum or a specified atmosphere, and X-ray diffraction or electron microscopy, then relate structure to performance. The transferable structure is the connection between preparation, realized state, and observation. It does not require every experiment to use that sequence or those techniques.
 
-A workflow prepares a formulation, carries out a reaction sequence, collects measurements, and updates the next experimental choice. Some phases can overlap across vessels; others compete for a shared dispensing head or analytical instrument. Represent these dependencies explicitly.
+Nominal recipes are insufficient when delivery, mixing, thermal lag, or processing history affects the result. Keep measured profiles and sample identity, including division into specimens and later combination. Characterization geometry and preparation are part of the evidence. A result then describes a particular material with a recoverable history rather than an isolated number.
 
-The state record should include vessel identity, additions and their order, actual temperatures, elapsed times, and sampling history. A nominal recipe alone cannot explain differences caused by delivery error, mixing, thermal lag, or carryover. Calibration measurements connect actuator commands to delivered quantities.
+## Intervene in a system that changes over time
 
-**Research value:** relating observed outcomes to preparation and process history, then choosing experiments that resolve uncertainty about that relationship.
+Living samples, aging materials, cycling devices, and evolving environments continue changing between commands. An operation's effect depends on when it occurs and on the accumulated history. Long-duration research therefore requires a model of continuity, not just a sequence of independent tasks.
 
-## Biology: longitudinal observation with adaptive handling
+A biological example begins with visual assessment of a sample, followed by handling such as aspiration, enzymatic treatment, or dosing, then controlled environmental maintenance and repeated imaging. Centrifugation, cell passage and inoculation, precision pipetting, and gradient dilution can become Standard Operations with explicit specimen-dependent conditions. Workflow Operations connect assessment, standardized dispensing, intervention, time-lapse observation, and phenotype analysis with the next experimental choice.
 
-**Research question:** How does a sample's measured phenotype evolve under controlled conditions?
+The same organizational problem appears when studying fatigue or device degradation: loading and measurement histories belong to the object under study, and earlier interventions affect later responses. Shared descriptions of time, identity, state, and intervention can transfer; biological lineage and mechanical damage still need their respective scientific meanings.
 
-Basic Operations include positioning, image acquisition, fluid handling controls, environmental setpoints, and sensor readback. Standard Operations can provide measured dispensing, dilution, sample transfer, centrifugation cycles, or a defined passage procedure when the apparatus and specimen permit it.
+Preserve observations separately from segmentation, phenotype estimates, fitted parameters, or other analysis. Record which estimate informed each action. Later models can then revisit earlier data without turning retrospective knowledge into evidence that was available during the experiment.
 
-A workflow begins with visual assessment, performs an appropriate handling procedure, maintains the environment, and returns to repeated observation. Imaging and handling histories remain linked to the same sample and its descendants. Time-lapse measurements require explicit time references and a record of interruptions.
+## Coordinate physical work across instruments and locations
 
-Keep acquired images distinct from segmentation, tracking, and phenotype estimates. An updated analysis model should be able to reprocess earlier observations without rewriting the acquisition record. When an assessment changes the next action, preserve the estimate and uncertainty used at that decision point.
+Some experiments are limited by the availability and arrangement of apparatus rather than by any individual operation. Preparation may occur at one station, specialized characterization at another, and analysis elsewhere. Parallel experiments may share a source, environment, manipulator, or measurement device.
 
-**Research value:** linking temporal behavior to documented interventions while making it possible to revise the analysis as the scientific question develops.
+Workflow composition must represent both information flow and physical flow. A dataset can be copied while a specimen must be transported; a measurement can consume or modify a specimen; queueing can change its condition before the next procedure. Execution requires explicit dependencies, identity, transfer conditions, and meaningful completion observations.
 
-## Materials: synthesis, processing, and characterization
+Across laboratories, a common operation name is a starting point. Transfer also needs compatible physical quantities, units, calibration, specimen preparation, timing, and result interpretation. Where instruments differ, capability descriptions should expose the difference so that the method can be adapted deliberately.
 
-**Research question:** How do composition and processing history determine structure and performance?
-
-Basic Operations expose dispensing or weighing measurements, atmosphere and pressure control, thermal control, motion, and characterization acquisition. Standard Operations may include precursor preparation, film deposition, an electrochemical sequence, a thermal treatment, or a characterization scan.
-
-A workflow proposes a formulation, prepares precursors, processes the material under recorded conditions, transfers it to characterization, and connects measured structure and performance to the next design. A sample may be split into several specimens; preserve that relationship rather than treating each measurement as an unrelated row.
-
-Store measured process profiles alongside nominal recipes. Record mounting, orientation, geometry, and preparation where they affect characterization. Raw diffraction patterns, microscopy data, or electrical measurements should remain available alongside derived descriptors.
-
-**Research value:** learning from the full composition-process-structure-property relationship, including outcomes that challenge the current model.
-
-## What transfers between domains
-
-The common foundation is not a universal experimental recipe. It is a consistent way to describe actions, observations, timing, resources, composition, and evidence. Domain meaning remains essential: an image, a delivered volume, a cell lineage, and a processed specimen require different models.
-
-An extensible interface preserves these differences while allowing each field to reuse the machinery of programmable experiments. New Standard Operations and Workflow Operations can then grow from the same inspectable foundation without restricting future research to today's examples.
+This permits collaboration without making every laboratory identical. One facility can contribute a new measurement method, another a different instrument implementation, and another a replicated result. The accumulated resource is an expanding set of methods, designs, observations, and explanations. None of these examples is intended to close that set.

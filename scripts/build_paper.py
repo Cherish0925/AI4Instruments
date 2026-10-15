@@ -14,6 +14,8 @@ PAPER = ROOT / 'paper'
 INK = '#172b3a'
 TEAL = '#126b71'
 PALE = '#eef6f5'
+AUTHOR = 'Shuxing Yang'
+VERSION = '0.2.0'
 
 
 def inline(text):
@@ -55,39 +57,108 @@ def blocks(text):
 
 
 def figure_spec(kind):
+    """Native-vector figures share geometry between the HTML and PDF editions.
+
+    Coordinates use the SVG convention (origin at the upper left). An arrow is
+    a sequence of points; only its last segment carries an arrowhead.
+    """
+    if kind == 'design-transition':
+        return 490, 338, [
+            (12, 30, 142, 57, 'Existing instruments', 'Inherited hardware\nand software interfaces'),
+            (174, 30, 142, 57, 'Integration', 'Drivers, documentation\nand tool interfaces'),
+            (336, 30, 142, 57, 'AI use', 'Experiments within\nexposed capabilities'),
+            (18, 158, 204, 57, 'Research questions', 'What should become possible?'),
+            (268, 158, 204, 57, 'Instrument design', 'Mechanics / circuits / firmware'),
+            (268, 267, 204, 57, 'Experimental use', 'Program / act / observe / infer'),
+            (18, 267, 204, 57, 'Evidence', 'Results / trajectories / limitations'),
+        ], [
+            [(154, 58), (174, 58)], [(316, 58), (336, 58)],
+            [(222, 186), (268, 186)], [(370, 215), (370, 267)],
+            [(268, 295), (222, 295)], [(120, 267), (120, 215)],
+            [(222, 279), (268, 203)],
+        ], [
+            (12, 14, 'Instruments4AI: adaptation after design'),
+            (18, 139, 'AI4Instruments: design and use evolve together'),
+        ]
     if kind == 'operation-hierarchy':
-        return 490, 248, [
-            (18, 14, 250, 44, 'Research question', 'Objectives and evaluation'),
-            (18, 76, 250, 44, 'Workflow Operations', 'Devices, samples and analysis'),
-            (18, 138, 250, 44, 'Standard Operations', 'Reusable experimental procedures'),
-            (18, 200, 250, 38, 'Basic Operations', 'Elementary control and observation'),
-            (308, 76, 162, 62, 'Instrument development', 'Mechanics / circuits / firmware'),
-            (308, 174, 162, 64, 'Physical apparatus', 'Actuators / sensors / samples')
-        ], [(143,58,143,76),(143,120,143,138),(143,182,143,200),
-             (268,219,308,219),(389,174,389,138),(308,107,268,107)]
+        return 490, 349, [
+            (18, 12, 256, 48, 'Research objective', 'Question, evidence and evaluation'),
+            (18, 92, 256, 48, 'Workflow Operations', 'Composition across resources and time'),
+            (18, 171, 256, 48, 'Standard Operations', 'Reusable experimental procedures'),
+            (18, 250, 256, 48, 'Basic Operations', 'Elementary control and observation'),
+            (321, 92, 151, 69, 'Development', 'Change procedures,\ncontrollers and apparatus'),
+            (321, 250, 151, 69, 'Physical apparatus', 'Actuation, sensing\nand material processes'),
+        ], [
+            [(135, 60), (135, 92)],
+            [(135, 140), (135, 171)], [(157, 171), (157, 140)],
+            [(135, 219), (135, 250)], [(157, 250), (157, 219)],
+            [(18, 116), (4, 116), (4, 274), (18, 274)],
+            [(274, 265), (321, 265)], [(321, 291), (274, 291)],
+            [(274, 116), (321, 116)],
+            [(397, 161), (397, 250)],
+            [(472, 284), (486, 284), (486, 36), (274, 36)],
+        ], [
+            (18, 339, 'Any level may be inspected and recomposed'),
+        ]
+    if kind == 'experimental-learning':
+        return 490, 306, [
+            (18, 15, 202, 58, 'Experimental capability', 'What can be controlled,\nmeasured and constructed'),
+            (270, 15, 202, 58, 'Experiments', 'Questions, actions\nand physical observations'),
+            (270, 121, 202, 58, 'Linked evidence', 'Conditions, trajectories,\nresults and uncertainty'),
+            (18, 121, 202, 58, 'Scientific knowledge', 'Findings, explanations\nand new research questions'),
+            (270, 229, 202, 58, 'Model learning', 'Training and evaluation\non new experiments'),
+            (18, 229, 202, 58, 'Instrument development', 'New access, performance\nand observable degrees of freedom'),
+        ], [
+            [(220, 44), (270, 44)], [(371, 73), (371, 121)],
+            [(270, 150), (220, 150)], [(270, 166), (220, 244)],
+            [(371, 179), (371, 229)],
+            [(18, 258), (4, 258), (4, 44), (18, 44)],
+            [(472, 258), (486, 258), (486, 44), (472, 44)],
+        ], []
+    if kind != 'experimental-loop':
+        raise ValueError(f'Unknown figure: {kind}')
     return 490, 300, [
         (148, 8, 194, 42, 'Select target positions', 'Research objective and search'),
         (18, 82, 194, 44, 'x.position', 'Set target and observe convergence'),
         (278, 82, 194, 44, 'y.position', 'Set target and observe convergence'),
         (148, 160, 194, 46, 'detector.capture', 'Configure / read back / acquire'),
         (148, 242, 194, 46, 'Evaluate observation', 'Record evidence and update search')
-    ], [(200,50,115,82),(290,50,375,82),(115,126,200,160),
-         (375,126,290,160),(245,206,245,242),(342,265,482,265),
-         (482,265,482,29),(482,29,342,29)]
+    ], [[(200,50),(115,82)],[(290,50),(375,82)],[(115,126),(200,160)],
+         [(375,126),(290,160)],[(245,206),(245,242)],
+         [(342,265),(482,265),(482,29),(342,29)]], []
 
 
 def svg_figure(kind):
-    w,h,boxes,arrows = figure_spec(kind)
+    w,h,boxes,arrows,labels = figure_spec(kind)
+    marker_id = f'{kind}-arrow'
     parts = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" role="img" aria-label="{kind.replace("-", " ")}">',
-             '<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#126b71"/></marker></defs>']
+             f'<defs><marker id="{marker_id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#126b71"/></marker></defs>']
     for x,y,bw,bh,title,sub in boxes:
         parts += [f'<rect x="{x}" y="{y}" width="{bw}" height="{bh}" rx="6" fill="{PALE}" stroke="#b9d4d3"/>',
-                  f'<text x="{x+bw/2}" y="{y+19}" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="{INK}">{html.escape(title)}</text>',
-                  f'<text x="{x+bw/2}" y="{y+34}" text-anchor="middle" font-family="sans-serif" font-size="8" fill="#47606c">{html.escape(sub)}</text>']
-    for x1,y1,x2,y2 in arrows:
-        parts.append(f'<line x1="{x1}" y1="{y1}" x2="{x2}" y2="{y2}" stroke="{TEAL}" stroke-width="1.4" marker-end="url(#arrow)"/>')
+                  f'<text x="{x+bw/2}" y="{y+19}" text-anchor="middle" font-family="sans-serif" font-size="11" font-weight="600" fill="{INK}">{html.escape(title)}</text>']
+        for line_no,line in enumerate(sub.splitlines()):
+            parts.append(f'<text x="{x+bw/2}" y="{y+34+line_no*11}" text-anchor="middle" font-family="sans-serif" font-size="8.2" fill="#47606c">{html.escape(line)}</text>')
+    for points in arrows:
+        coordinates = ' '.join(f'{x},{y}' for x,y in points)
+        parts.append(f'<polyline points="{coordinates}" fill="none" stroke="{TEAL}" stroke-width="1.3" marker-end="url(#{marker_id})"/>')
+    for x,y,label in labels:
+        parts.append(f'<text x="{x}" y="{y}" font-family="sans-serif" font-size="9" font-weight="600" fill="{TEAL}">{html.escape(label)}</text>')
     parts.append('</svg>')
     return ''.join(parts)
+
+
+def document_parts(items):
+    """Separate the sole title and author from the manuscript body."""
+    if not items or items[0][0] != 'heading' or items[0][1][0] != 1:
+        raise ValueError('The manuscript must begin with one level-one title.')
+    title = items[0][1][1]
+    body_start = 1
+    if len(items) > 1 and items[1] == ('paragraph', f'**{AUTHOR}**'):
+        body_start = 2
+    body = items[body_start:]
+    if any(kind == 'heading' and data[0] == 1 for kind,data in body):
+        raise ValueError('Only one level-one title is permitted.')
+    return title,body
 
 
 def references():
@@ -111,30 +182,30 @@ CSS = '''
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#edf1f2;color:var(--ink);font:18px/1.75 Georgia,'Times New Roman',serif}
 main{max-width:1040px;margin:40px auto;background:var(--paper);padding:64px 88px;box-shadow:0 8px 35px #2339470d}
 header{border-top:5px solid var(--teal);padding-top:30px;margin-bottom:32px}header .eyebrow{font:12px/1.5 Arial,sans-serif;letter-spacing:.15em;text-transform:uppercase;color:var(--teal)}
-h1{font-size:54px;line-height:1.1;letter-spacing:-.04em;margin:18px 0}header h2{font:26px/1.35 Georgia,serif;font-weight:normal;margin:0 0 22px}header .author{font:17px/1.5 Arial,sans-serif;margin:18px 0}
+h1{font-size:49px;line-height:1.13;letter-spacing:-.035em;margin:18px 0 24px}header .author{font:17px/1.5 Arial,sans-serif;margin:18px 0}
 a{color:var(--teal);text-decoration-thickness:1px;text-underline-offset:3px}.downloads{font:13px/1.6 Arial,sans-serif}nav{border:1px solid #dae5e6;padding:20px 26px;background:#f6f9f9;margin-bottom:36px;font:14px/1.6 Arial,sans-serif}nav ol{margin:8px 0 0;padding-left:22px;columns:2;column-gap:35px}nav li{padding:3px 0;break-inside:avoid}
 h2{font:700 27px/1.3 Georgia,serif;margin:42px 0 18px;scroll-margin-top:20px}h3{font:700 20px/1.4 Georgia,serif;margin:28px 0 14px}p{margin:0 0 17px}figure{margin:30px 0;padding:18px 15px 12px;background:#fafcfc;border:1px solid #e2eaea}svg{display:block;width:100%;height:auto}figcaption{font:13px/1.55 Arial,sans-serif;color:var(--muted);margin:14px 8px 0}table{border-collapse:collapse;width:100%;font:14px/1.5 Arial,sans-serif;margin:24px 0}th,td{border-bottom:1px solid #d5e0e3;padding:12px 14px;text-align:left;vertical-align:top}th{background:var(--ink);color:white}td:first-child{width:32%;font-weight:600}tr:nth-child(even){background:#f2f7f7}.references{font:14px/1.6 Arial,sans-serif}.references p{margin-bottom:16px;overflow-wrap:anywhere}footer{border-top:1px solid #d5e0e3;margin-top:42px;padding-top:18px;font:12px/1.6 Arial,sans-serif;color:var(--muted)}
-@media(max-width:750px){body{font-size:17px}main{margin:0;padding:30px 22px;box-shadow:none}h1{font-size:40px}header h2{font-size:23px}nav ol{columns:1}th,td{padding:9px 7px}}
+@media(max-width:750px){body{font-size:17px}main{margin:0;padding:30px 22px;box-shadow:none}h1{font-size:clamp(29px,6.7vw,42px)}nav ol{columns:1}th,td{padding:9px 7px}figure{padding:12px 3px}figcaption{margin-left:3px;margin-right:3px}}
 @media print{body{background:white;font-size:11pt}main{max-width:none;margin:0;padding:0;box-shadow:none}nav,.downloads{display:none}h2,h3{break-after:avoid}figure,table{break-inside:avoid}a{color:inherit}}
 '''
 
 
 def build_html(items, refs):
-    title = items[0][1][1]
-    subtitle = items[1][1][1]
-    toc = [(f'section-{i}', data[1]) for i,(kind,data) in enumerate(items)
-           if kind == 'heading' and data[0] == 2 and i > 1]
+    title,body = document_parts(items)
+    title_display = html.escape(title).replace(' to AI4Instruments', '<br>to AI4Instruments')
+    toc = [(f'section-{i}', data[1]) for i,(kind,data) in enumerate(body)
+           if kind == 'heading' and data[0] == 2]
     out = ['<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">',
-           f'<title>{title}: {subtitle} — Shuxing Yang</title>',
-           '<meta name="author" content="Shuxing Yang">',
-           '<meta name="description" content="A design framework for AI participation in instrument engineering and experimental science.">',
+           f'<title>{html.escape(title)}</title>',
+           f'<meta name="author" content="{AUTHOR}">',
+           '<meta name="description" content="A perspective on AI participation in instrument design, experimental use and the development of new physical capabilities.">',
            f'<style>{CSS}</style></head><body><main><header><div class="eyebrow">Perspective · October 2026</div>',
-           f'<h1>{title}</h1><h2>{subtitle}</h2><p class="author">Shuxing Yang</p>',
+           f'<h1>{title_display}</h1><p class="author">{AUTHOR}</p>',
            '<div class="downloads"><a href="https://github.com/Cherish0925/AI4Instruments">Project repository</a> &nbsp; / &nbsp; <a href="https://github.com/Cherish0925/AI4Instruments/raw/refs/heads/main/paper/AI4Instruments.pdf">Download PDF</a></div></header>',
            '<nav aria-label="Contents"><b>Contents</b><ol>']
     out += [f'<li><a href="#{anchor}">{html.escape(title)}</a></li>' for anchor,title in toc]
     out.append('</ol></nav>')
-    for i,(kind,data) in enumerate(items[3:],3):
+    for i,(kind,data) in enumerate(body):
         if kind == 'heading':
             level,title = data
             out.append(f'<h{level} id="section-{i}">{inline(title)}</h{level}>')
@@ -149,9 +220,9 @@ def build_html(items, refs):
             out.append('<figure>' + svg_figure(Path(path).stem) + f'<figcaption>{inline(caption)}</figcaption></figure>')
     out.append('<div class="references">')
     out += [f'<p id="ref-{r["number"]}">{reference_text(r)}</p>' for r in refs]
-    out.append('</div><footer>© 2026 Shuxing Yang. Text and original figures: CC BY 4.0. Version 0.1.0.</footer></main></body></html>')
+    out.append(f'</div><footer>© 2026 {AUTHOR}. Text and original figures: CC BY 4.0. Version {VERSION}.</footer></main></body></html>')
     (PAPER/'AI4Instruments.html').write_text('\n'.join(out),encoding='utf-8')
-    for kind in ['operation-hierarchy','experimental-loop']:
+    for kind in ['design-transition','operation-hierarchy','experimental-learning','experimental-loop']:
         (ROOT/'assets'/f'{kind}.svg').write_text(svg_figure(kind),encoding='utf-8')
 
 
@@ -185,29 +256,35 @@ def build_pdf(items, refs):
     }
     width = 483.28
     def diagram(kind):
-        w,h,boxes,arrows = figure_spec(kind)
+        w,h,boxes,arrows,labels = figure_spec(kind)
         d = Drawing(w,h)
         for x,y,bw,bh,title,sub in boxes:
             d.add(Rect(x,h-y-bh,bw,bh,rx=6,ry=6,fillColor=c(PALE),strokeColor=c('#b9d4d3'),strokeWidth=.7))
             d.add(String(x+bw/2,h-y-19,title,fontName='Helvetica-Bold',fontSize=11,fillColor=c(INK),textAnchor='middle'))
-            d.add(String(x+bw/2,h-y-34,sub,fontName='Helvetica',fontSize=7.9,fillColor=c('#47606c'),textAnchor='middle'))
+            for line_no,line in enumerate(sub.splitlines()):
+                d.add(String(x+bw/2,h-y-34-line_no*11,line,fontName='Helvetica',fontSize=8.2,fillColor=c('#47606c'),textAnchor='middle'))
         import math
-        for x1,y1,x2,y2 in arrows:
+        for points in arrows:
+            for (x1,y1),(x2,y2) in zip(points,points[1:]):
+                d.add(Line(x1,h-y1,x2,h-y2,strokeColor=c(TEAL),strokeWidth=1.2))
+            (x1,y1),(x2,y2)=points[-2:]
             y1,y2=h-y1,h-y2
-            d.add(Line(x1,y1,x2,y2,strokeColor=c(TEAL),strokeWidth=1.2))
             theta=math.atan2(y2-y1,x2-x1)
             p=[x2,y2,x2-5*math.cos(theta)+2.3*math.sin(theta),y2-5*math.sin(theta)-2.3*math.cos(theta),x2-5*math.cos(theta)-2.3*math.sin(theta),y2-5*math.sin(theta)+2.3*math.cos(theta)]
             d.add(Polygon(p,fillColor=c(TEAL),strokeColor=c(TEAL)))
+        for x,y,label in labels:
+            d.add(String(x,h-y,label,fontName='Helvetica-Bold',fontSize=9,fillColor=c(TEAL)))
         scale=width/w
         d.scale(scale,scale)
         d.width=width;d.height=h*scale
         return d
+    document_title,body = document_parts(items)
+    title_display = inline(document_title).replace(' to AI4Instruments', '<br/>to AI4Instruments')
     story=[]
     story += [Paragraph('PERSPECTIVE  /  OCTOBER 2026',ParagraphStyle('label',fontName='Helvetica-Bold',fontSize=8.6,leading=12,textColor=c(TEAL))),Spacer(1,15),
-              Paragraph(items[0][1][1],ParagraphStyle('title',fontName='BodyBold',fontSize=32,leading=39,textColor=c(INK))),Spacer(1,8),
-              Paragraph(items[1][1][1],ParagraphStyle('subtitle',fontName='Body',fontSize=17.5,leading=23,textColor=c(INK))),Spacer(1,15),
-              Paragraph('Shuxing Yang',ParagraphStyle('author',fontName='Helvetica',fontSize=11,leading=16)),Spacer(1,14)]
-    for kind,data in items[3:]:
+              Paragraph(title_display,ParagraphStyle('title',fontName='BodyBold',fontSize=31,leading=38,textColor=c(INK))),Spacer(1,17),
+              Paragraph(AUTHOR,ParagraphStyle('author',fontName='Helvetica',fontSize=11,leading=16)),Spacer(1,14)]
+    for kind,data in body:
         if kind == 'heading':
             level,title=data
             story.append(Paragraph(inline(title),styles['h2' if level==2 else 'h3']))
@@ -218,7 +295,11 @@ def build_pdf(items, refs):
             story.append(KeepTogether([Spacer(1,8),diagram(Path(path).stem),Spacer(1,8),Paragraph(inline(caption),styles['caption'])]))
         elif kind=='table':
             rows=[[Paragraph(inline(cell),styles['thead' if r==0 else 'table']) for cell in row] for r,row in enumerate(data)]
-            table=Table(rows,colWidths=[width*.32,width*.68],repeatRows=1,hAlign='LEFT')
+            columns=len(data[0])
+            column_widths = [width*.32,width*.68] if columns==2 else [width/columns]*columns
+            if any(len(row)!=columns for row in data):
+                raise ValueError('Every row of a table must have the same column count.')
+            table=Table(rows,colWidths=column_widths,repeatRows=1,hAlign='LEFT')
             table.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),c(INK)),('ROWBACKGROUNDS',(0,1),(-1,-1),[colors.white,c(PALE)]),('VALIGN',(0,0),(-1,-1),'TOP'),('LEFTPADDING',(0,0),(-1,-1),10),('RIGHTPADDING',(0,0),(-1,-1),10),('TOPPADDING',(0,0),(-1,-1),9),('BOTTOMPADDING',(0,0),(-1,-1),9),('LINEBELOW',(0,0),(-1,-1),.3,c('#c8d7db'))]))
             story += [Spacer(1,7),table,Spacer(1,12)]
     story += [Paragraph(reference_text(r,True),styles['ref']) for r in refs]
@@ -227,12 +308,12 @@ def build_pdf(items, refs):
         canvas.setStrokeColor(c('#c8d7db'));canvas.setLineWidth(.5)
         canvas.line(56,45,539.28,45)
         canvas.setFont('Helvetica',7.6);canvas.setFillColor(c('#536875'))
-        canvas.drawString(56,32,'AI4Instruments  |  Shuxing Yang')
+        canvas.drawString(56,32,f'AI4Instruments  |  {AUTHOR}  |  {VERSION}')
         canvas.drawRightString(539.28,32,str(doc.page))
         if doc.page>1:
-            canvas.drawString(56,812,'INSTRUMENTS AS PROGRAMMABLE PARTNERS IN SCIENTIFIC DISCOVERY')
+            canvas.drawString(56,812,document_title.upper())
         canvas.restoreState()
-    doc=SimpleDocTemplate(str(PAPER/'AI4Instruments.pdf'),pagesize=(595.28,841.89),leftMargin=56,rightMargin=56,topMargin=50,bottomMargin=62,title='AI4Instruments: Instruments as programmable partners in scientific discovery',author='Shuxing Yang',subject='Instrument design, experimental operations and autonomous scientific research')
+    doc=SimpleDocTemplate(str(PAPER/'AI4Instruments.pdf'),pagesize=(595.28,841.89),leftMargin=56,rightMargin=56,topMargin=50,bottomMargin=62,title=document_title,author=AUTHOR,subject='AI participation in instrument design, experimental use and the development of physical capabilities')
     doc.build(story,onFirstPage=furniture,onLaterPages=furniture)
 
 

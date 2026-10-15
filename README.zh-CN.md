@@ -1,7 +1,6 @@
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme-header-dark.svg">
-  <img src="assets/readme-header.svg" alt="AI4Instruments — From Instruments4AI to AI4Instruments" width="1280">
-</picture>
+<p>
+  <img src="assets/readme-header.png" alt="From Instruments4AI to AI4Instruments — AI design and implementation + AI development and use." width="1280">
+</p>
 
 [阅读论文](paper/manuscript.md) · [PDF](paper/AI4Instruments.pdf) · [Operations](docs/operations.md) · [运行示例](examples/README.md) · [English](README.md)
 

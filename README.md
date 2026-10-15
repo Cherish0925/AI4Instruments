@@ -1,16 +1,15 @@
-# AI4Instruments
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme-header-dark.svg">
+  <img src="assets/readme-header.svg" alt="AI4Instruments — From Instruments4AI to AI4Instruments" width="1280">
+</picture>
 
-### From Instruments4AI to AI4Instruments
+[Read the paper](paper/manuscript.md) · [PDF](paper/AI4Instruments.pdf) · [Operations](docs/operations.md) · [Try the example](examples/README.md) · [中文](README.zh-CN.md)
 
-**AI design and implementation + AI development and use.**
+AI4Instruments develops a methodology and an open design framework for AI to participate throughout the life of scientific and engineering instruments: their conception, physical design, manufacture, software development, experimental use and continued improvement.
 
-An instrument determines which interventions a researcher can make and which observations can be obtained. AI4Instruments asks how those possibilities can expand when AI participates in the conception, creation, development and use of the apparatus itself.
+The purpose is to expand what can be investigated in the physical world, support sustained autonomous research, and make experimental knowledge and capabilities usable across laboratories. **Scientific discovery, the development of instruments, and AI learning from real experimental experience** can advance together. The principles extend across scientific and engineering disciplines, instrument types and computational approaches.
 
-The project connects three forms of progress: **scientific discovery, better instruments, and learning from real experimental experience**. Its scope is any scientific or engineering setting in which computational systems can act on physical systems or control how they are observed, and receive feedback. Specific instruments and disciplines provide examples; the common foundation is the relationship between physical capability, programming, observation and continued development.
-
-**Shuxing Yang** · [中文介绍](README.zh-CN.md) · [Paper: PDF](paper/AI4Instruments.pdf) · [Paper: HTML](paper/AI4Instruments.html) · [Read the manuscript](paper/manuscript.md)
-
-## The change in perspective
+## From using instruments to expanding what can be done
 
 **Instruments4AI** starts with available equipment: establish programmable control, prepare manuals and SDKs, expose tools and knowledge, integrate serial and parallel experiments, and write programmes for new tasks.
 
@@ -18,7 +17,12 @@ The project connects three forms of progress: **scientific discovery, better ins
 
 The connection matters. Experimental use reveals new requirements; instrument development creates new experimental possibilities. AI can participate throughout this cycle, from planning and design to manufacturing, characterisation, research and redesign.
 
+<details>
+<summary>Illustration: instrument design and experimental use evolve together</summary>
+
 ![From instrument integration to continuing development](assets/design-transition.svg)
+
+</details>
 
 ## A general method, an expanding set of capabilities
 
@@ -44,13 +48,18 @@ Circuits provide a physical route to control and sensing; programmes express how
 
 Experimental trajectories connect questions, apparatus revisions, interventions, observations, analysis and decisions. They can improve scientific understanding, instrument design, physical models and research strategies. Shared descriptions and evidence can let different laboratories adapt procedures, compare results and combine complementary capabilities.
 
+<details>
+<summary>Illustration: how experimental experience develops science, instruments and models</summary>
+
 ![Experiments, knowledge, models and instruments](assets/experimental-learning.svg)
 
-## Explore the project
+</details>
+
+## Find your starting point
 
 | Question | Starting point |
 | --- | --- |
-| What is the central argument? | [From Instruments4AI to AI4Instruments](paper/manuscript.md), [PDF](paper/AI4Instruments.pdf), [HTML](paper/AI4Instruments.html) |
+| What is the central argument? | [From Instruments4AI to AI4Instruments](paper/manuscript.md), [PDF](paper/AI4Instruments.pdf), [Download HTML](paper/AI4Instruments.html?raw=1) |
 | How can capabilities be described and composed? | [Operations](docs/operations.md) |
 | How does AI participate throughout instrument development? | [Instrument design](docs/instrument-design.md) |
 | How do the principles appear in different experiments? | [Illustrative experimental relationships](docs/examples.md) |
@@ -73,7 +82,10 @@ python -m unittest discover -s tests -v
 
 The run writes a capability manifest, a JSONL trajectory and a result summary. The [example documentation](examples/README.md) explains the model and implementation.
 
-## Build, contribute and reuse
+## Develop the project
+
+<details>
+<summary>Build the PDF and standalone HTML</summary>
 
 The paper's PDF and HTML are generated from the same manuscript and bibliography. Download the self-contained HTML to read it offline, or share the typeset PDF.
 
@@ -84,8 +96,12 @@ python scripts/build_paper.py
 
 For HTML alone, `python scripts/build_paper.py --html-only` uses only the Python standard library.
 
+</details>
+
 Contributions can include ideas, instrument descriptions, physical designs, controller implementations, new operations, experiments and datasets. The [contribution guide](CONTRIBUTING.md) explains how to connect a contribution to its physical meaning and evidence.
 
 Software is licensed under [MIT](LICENSE); the paper, prose documentation and original figures use [CC BY 4.0](LICENSE-docs.md). See [CITATION.cff](CITATION.cff) for citation information.
 
-[Author's note](docs/author-note.md)
+---
+
+<sub>Shuxing Yang · [Author’s note](docs/author-note.md) · [Cite](CITATION.cff) · [中文](README.zh-CN.md)</sub>

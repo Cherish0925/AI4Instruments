@@ -1,16 +1,15 @@
-# AI4Instruments
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme-header-dark.svg">
+  <img src="assets/readme-header.svg" alt="AI4Instruments — From Instruments4AI to AI4Instruments" width="1280">
+</picture>
 
-### From Instruments4AI to AI4Instruments
+[阅读论文](paper/manuscript.md) · [PDF](paper/AI4Instruments.pdf) · [Operations](docs/operations.md) · [运行示例](examples/README.md) · [English](README.md)
 
-**AI 设计与实现 + AI 开发和使用。**
+AI4Instruments 探索一套面向 AI 的仪器方法论、设计规范与开放生态，让 AI 参与科学与工程仪器的构思、规划设计、生产制造、软硬件开发、实验使用与持续改进，贯穿仪器的整个生命周期。
 
-仪器决定研究者能够进行什么干预、获取什么观察，以及哪些问题可以真正通过实验回答。AI4Instruments 关注的是：当 AI 参与仪器的构思、创造、开发和使用时，这些实验可能性如何持续扩展。
+目标是扩展真实物理世界中可以开展的研究，支持长期自主与自治实验，让不同实验室的知识与能力能够互通、积累和发展。**科学研究的进步、仪器能力的发展，以及 AI 从真实实验经验中学习和改进**，可以在这个过程中相互促进。这些原则面向不同科学与工程领域、不同仪器形态，以及不同类型的 AI 系统。
 
-项目连接三个相互促进的方向：**科学研究的进步、仪器能力的发展，以及 AI 从真实实验经验中学习和改进。** 它面向计算系统能够作用于物理系统、控制观察方式并获取反馈的科学与工程环境。各类仪器与学科提供具体实例，共同基础是物理能力、编程、观察与持续开发之间的关系。
-
-**Shuxing Yang** · [English](README.md) · [PDF 论文](paper/AI4Instruments.pdf) · [HTML 论文](paper/AI4Instruments.html) · [论文正文](paper/manuscript.md)
-
-## 从适配已有仪器，到参与仪器的创造与发展
+## 从使用仪器，到创造实验的可能性
 
 **Instruments4AI** 从现有设备出发：建立电控与编程路径，准备手册、SDK 和例程，组织工具与知识，将设备连接成串并行实验，再为不同课题编写程序和工作流。
 
@@ -18,7 +17,12 @@
 
 两者可以衔接。实验使用暴露新的需求，仪器开发创造新的实验可能性。AI 可以贯穿立项、规划设计、制造实现、软硬件协同、表征校准、实验研究和下一轮改进。
 
+<details>
+<summary>图解：从适配已有仪器，到设计与实验共同演进</summary>
+
 ![从仪器适配到持续开发](assets/design-transition.svg)
+
+</details>
 
 ## 通用性来自共同结构
 
@@ -44,13 +48,18 @@
 
 真实实验轨迹连接问题、仪器版本、干预、原始观察、分析与决策。这些信息既可以推进科学认识，也可以用于仪器改进、物理建模、感知、编程和研究策略的学习。兼容的能力描述与可理解的证据，还可以支持不同实验室迁移过程、比较结果、结合彼此的专长开展研究。
 
+<details>
+<summary>图解：实验经验如何推进科学、仪器与模型</summary>
+
 ![实验、知识、模型与仪器之间的关系](assets/experimental-learning.svg)
 
-## 阅读与使用
+</details>
+
+## 从这里开始
 
 | 想了解的问题 | 对应内容 |
 | --- | --- |
-| 整体思想与论证 | [论文正文](paper/manuscript.md)、[PDF](paper/AI4Instruments.pdf)、[HTML](paper/AI4Instruments.html) |
+| 整体思想与论证 | [论文正文](paper/manuscript.md)、[PDF](paper/AI4Instruments.pdf)、[下载 HTML](paper/AI4Instruments.html?raw=1) |
 | 如何描述、组合和扩展操作 | [Operations](docs/operations.md) |
 | AI 如何参与仪器全生命周期 | [仪器设计](docs/instrument-design.md) |
 | 通用原则如何落到实际实验 | [实验关系与实例](docs/examples.md) |
@@ -73,4 +82,6 @@ python -m unittest discover -s tests -v
 
 欢迎围绕思想、仪器描述、物理设计、控制程序、新操作、实验与数据开展贡献，见[贡献指南](CONTRIBUTING.md)。软件采用 [MIT](LICENSE) 许可，论文、文字文档与原创图示采用 [CC BY 4.0](LICENSE-docs.md) 许可。
 
-[作者说明](docs/author-note.md#中文)
+---
+
+<sub>Shuxing Yang · [作者说明](docs/author-note.md#中文) · [引用](CITATION.cff) · [English](README.md)</sub>

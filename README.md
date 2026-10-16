@@ -2,7 +2,7 @@
   <img src="assets/readme-header.png" alt="From Instruments4AI to AI4Instruments — AI design and implementation + AI development and use." width="1280">
 </p>
 
-[Read the paper](paper/manuscript.md) · [PDF](paper/AI4Instruments.pdf) · [Operations](docs/operations.md) · [Try the example](examples/README.md) · [中文](README.zh-CN.md)
+[Read the paper](paper/manuscript.md) · [PDF](paper/AI4Instruments.pdf) · [Operations](docs/operations.md) · [Try the example](examples/README.md) · [Discuss](https://github.com/Cherish0925/AI4Instruments/discussions/1) · [中文](README.zh-CN.md)
 
 AI4Instruments develops a methodology and an open design framework for AI to participate throughout the life of scientific and engineering instruments: their conception, physical design, manufacture, software development, experimental use and continued improvement.
 

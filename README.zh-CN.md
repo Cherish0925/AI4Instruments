@@ -2,7 +2,7 @@
   <img src="assets/readme-header.png" alt="From Instruments4AI to AI4Instruments — AI design and implementation + AI development and use." width="1280">
 </p>
 
-[阅读论文](paper/manuscript.md) · [PDF](paper/AI4Instruments.pdf) · [Operations](docs/operations.md) · [运行示例](examples/README.md) · [English](README.md)
+[阅读论文](paper/manuscript.md) · [PDF](paper/AI4Instruments.pdf) · [Operations](docs/operations.md) · [运行示例](examples/README.md) · [参与讨论](https://github.com/Cherish0925/AI4Instruments/discussions/1) · [English](README.md)
 
 AI4Instruments 探索一套面向 AI 的仪器方法论、设计规范与开放生态，让 AI 参与科学与工程仪器的构思、规划设计、生产制造、软硬件开发、实验使用与持续改进，贯穿仪器的整个生命周期。
 

@@ -62,6 +62,7 @@ AI4Instruments 探索一套面向 AI 的仪器方法论、设计规范与开放�
 | 如何描述、组合和扩展操作 | [Operations](docs/operations.md) |
 | AI 如何参与仪器全生命周期 | [仪器设计](docs/instrument-design.md) |
 | 通用原则如何落到实际实验 | [实验关系与实例](docs/examples.md) |
+| Agent 怎样连接与操作真实仪器 | [协议与工程研究](docs/agent-instruments/README.zh-CN.md) · [中文 HTML](docs/agent-instruments/index.zh-CN.html?raw=1) · [English HTML](docs/agent-instruments/index.en.html?raw=1) |
 | 与已有标准和研究的联系 | [相关工作](docs/related-work.md) |
 | 哪些进展值得推进与验证 | [研究议程](docs/research-agenda.md) |
 | 如何查看可执行实现 | [模拟光学示例](examples/README.md) |

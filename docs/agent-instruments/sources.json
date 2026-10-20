@@ -1,0 +1,2585 @@
+{
+  "reviewed": "2026-10-20",
+  "sources": [
+    {
+      "url": "https://github.com/kushalsinha/openmhp/blob/main/README.md",
+      "subjects": [
+        "openmhp"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kushalsinha/openmhp/blob/main/LICENSE",
+      "subjects": [
+        "openmhp"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kushalsinha/openmhp/blob/main/SPEC.md",
+      "subjects": [
+        "openmhp"
+      ],
+      "roles": [
+        "implementation"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kushalsinha/openmhp/blob/main/supported-devices/README.md",
+      "subjects": [
+        "openmhp"
+      ],
+      "roles": [
+        "implementation"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kushalsinha/openmhp/blob/main/supported-devices/biologic-sp300/driver.py",
+      "subjects": [
+        "openmhp"
+      ],
+      "roles": [
+        "implementation"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/Abenor-Labs/Open-MHS/blob/main/README.md",
+      "subjects": [
+        "open-mhs-abenor"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/Abenor-Labs/Open-MHS/blob/main/LICENSE",
+      "subjects": [
+        "open-mhs-abenor"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/Abenor-Labs/Open-MHS/blob/main/open_mhs/drivers/serial_robotic_arm.py",
+      "subjects": [
+        "open-mhs-abenor"
+      ],
+      "roles": [
+        "implementation"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/Abenor-Labs/Open-MHS/blob/main/schema/capability_schema.json",
+      "subjects": [
+        "open-mhs-abenor"
+      ],
+      "roles": [
+        "implementation"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/tongriyaotxt/open-mhs/blob/main/README.md",
+      "subjects": [
+        "open-mhs-tong"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/tongriyaotxt/open-mhs/blob/main/LICENSE",
+      "subjects": [
+        "open-mhs-tong"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/tongriyaotxt/open-mhs/blob/main/src/openmhs/mcp/server.py",
+      "subjects": [
+        "open-mhs-tong"
+      ],
+      "roles": [
+        "implementation"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/SCUT-ESA/open-mhs/blob/main/README.md",
+      "subjects": [
+        "open-mhs-scut"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/SCUT-ESA/open-mhs/blob/main/LICENSE",
+      "subjects": [
+        "open-mhs-scut"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/SCUT-ESA/open-mhs/blob/main/src/openmhs/core/backend.py",
+      "subjects": [
+        "open-mhs-scut"
+      ],
+      "roles": [
+        "implementation"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/Cuntinum/model-hardware-protocol/blob/main/README.md",
+      "subjects": [
+        "mhp-cuntinum"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/Cuntinum/model-hardware-protocol/blob/main/LICENSE",
+      "subjects": [
+        "mhp-cuntinum"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/fredabila/oahl/blob/main/README.md",
+      "subjects": [
+        "oahl"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/fredabila/oahl/blob/main/LICENSE",
+      "subjects": [
+        "oahl"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/caidish/instrMCP/blob/main/README.md",
+      "subjects": [
+        "instrmcp"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/caidish/instrMCP/blob/main/LICENSE",
+      "subjects": [
+        "instrmcp"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/caidish/instrMCP/blob/main/instrmcp/servers/jupyter_qcodes/backend/qcodes.py",
+      "subjects": [
+        "instrmcp"
+      ],
+      "roles": [
+        "implementation"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/PUDAP/puda/blob/main/README.md",
+      "subjects": [
+        "puda"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/PUDAP/puda/blob/main/LICENSE",
+      "subjects": [
+        "puda"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/PUDAP/puda/blob/main/apps/cli/internal/cli/protocol-run.go",
+      "subjects": [
+        "puda"
+      ],
+      "roles": [
+        "implementation"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://arxiv.org/abs/2607.26464",
+      "subjects": [
+        "puda"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/README.md",
+      "subjects": [
+        "unilabos"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/LICENSE",
+      "subjects": [
+        "unilabos"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/NOTICE",
+      "subjects": [
+        "unilabos"
+      ],
+      "roles": [
+        "implementation"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/unilabos/devices/LICENSE",
+      "subjects": [
+        "unilabos"
+      ],
+      "roles": [
+        "implementation"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/docs/developer_guide/add_device.md",
+      "subjects": [
+        "unilabos"
+      ],
+      "roles": [
+        "implementation"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://arxiv.org/abs/2512.21766",
+      "subjects": [
+        "unilabos"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/als-apg/osprey/blob/main/README.md",
+      "subjects": [
+        "osprey"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/als-apg/osprey/blob/main/LICENSE.txt",
+      "subjects": [
+        "osprey"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/als-apg/osprey/blob/main/docs/source/architecture/mcp-servers.rst",
+      "subjects": [
+        "osprey"
+      ],
+      "roles": [
+        "implementation"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://doi.org/10.1063/5.0306302",
+      "subjects": [
+        "osprey"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/ivoryos-ai/IvoryOS/blob/main/README.md",
+      "subjects": [
+        "ivoryos"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/ivoryos-ai/IvoryOS/blob/main/LICENSE",
+      "subjects": [
+        "ivoryos"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/ivoryos-ai/IvoryOS/blob/main/ivoryos/parsers/introspection.py",
+      "subjects": [
+        "ivoryos"
+      ],
+      "roles": [
+        "implementation"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://www.nature.com/articles/s41467-025-60514-w",
+      "subjects": [
+        "ivoryos"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/jumpstarter-dev/jumpstarter/blob/main/README.md",
+      "subjects": [
+        "jumpstarter"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/jumpstarter-dev/jumpstarter/blob/main/LICENSE",
+      "subjects": [
+        "jumpstarter"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/lagerdata/lager/blob/main/README.md",
+      "subjects": [
+        "lager"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/lagerdata/lager/blob/main/LICENSE",
+      "subjects": [
+        "lager"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/AdvancedPhotonSource/EAA/blob/main/README.md",
+      "subjects": [
+        "eaa"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13633048/",
+      "subjects": [
+        "eaa"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/AdvancedPhotonSource/EAA-Pi/blob/main/README.md",
+      "subjects": [
+        "eaa-pi"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/AdvancedPhotonSource/pi-experiment-ops/blob/main/README.md",
+      "subjects": [
+        "pi-experiment-ops"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/README.md",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/LICENSE",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/packages/labmcp/src/labmcp/catalog.json",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "implementation"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/techmanual-ai/lablink-mcp/blob/main/README.md",
+      "subjects": [
+        "lablink"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/techmanual-ai/lablink-mcp/blob/main/LICENSE",
+      "subjects": [
+        "lablink"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/armchairdeity/mcp-server-scpi/blob/main/README.md",
+      "subjects": [
+        "scpi-mcp"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/armchairdeity/mcp-server-scpi/blob/main/LICENSE",
+      "subjects": [
+        "scpi-mcp"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/masahiro-999/oscilloscope-mcp/blob/main/README.md",
+      "subjects": [
+        "oscilloscope-mcp"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/masahiro-999/oscilloscope-mcp/blob/main/LICENSE",
+      "subjects": [
+        "oscilloscope-mcp"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/lucasgerads/lecroy-mcp/blob/main/README.md",
+      "subjects": [
+        "lecroy"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/lucasgerads/lecroy-mcp/blob/main/LICENSE",
+      "subjects": [
+        "lecroy"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/mp911de/siglent-scpi-mcp/blob/main/README.md",
+      "subjects": [
+        "siglent"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/mp911de/siglent-scpi-mcp/blob/main/LICENSE",
+      "subjects": [
+        "siglent"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/Netlist-Studio/scope-mcp/blob/main/README.md",
+      "subjects": [
+        "scope-mcp"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/Netlist-Studio/scope-mcp/blob/main/LICENSE",
+      "subjects": [
+        "scope-mcp"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/KenosInc/dwf-mcp-server/blob/main/README.md",
+      "subjects": [
+        "dwf"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/KenosInc/dwf-mcp-server/blob/main/LICENSE",
+      "subjects": [
+        "dwf"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/zeng-andrew/instrument-mcp/blob/main/README.md",
+      "subjects": [
+        "instrument-mcp"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/BrianDavidCouch/daqmx-mcp/blob/main/README.md",
+      "subjects": [
+        "daqmx"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/BrianDavidCouch/daqmx-mcp/blob/main/LICENSE",
+      "subjects": [
+        "daqmx"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/daqifi/daqifi-core/blob/main/README.md",
+      "subjects": [
+        "daqifi"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/daqifi/daqifi-core/blob/main/LICENSE",
+      "subjects": [
+        "daqifi"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/daqifi/daqifi-core/tree/main/src/Daqifi.Mcp",
+      "subjects": [
+        "daqifi"
+      ],
+      "roles": [
+        "implementation"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/JanGoebel/LabVIEW-MCP-Server-Toolkit/blob/main/readme.md",
+      "subjects": [
+        "labview-toolkit"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/JanGoebel/LabVIEW-MCP-Server-Toolkit/blob/main/LICENSE",
+      "subjects": [
+        "labview-toolkit"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/Zuehlke/labview-mcp/blob/main/README.md",
+      "subjects": [
+        "labview-dev"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/Zuehlke/labview-mcp/blob/main/LICENSE",
+      "subjects": [
+        "labview-dev"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/GSIBabu/OpenFlexure-MCP/blob/main/README.md",
+      "subjects": [
+        "openflexure"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/GSIBabu/OpenFlexure-MCP/blob/main/LICENSE",
+      "subjects": [
+        "openflexure"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/BioNanomics/microscope-agent/blob/main/README.md",
+      "subjects": [
+        "microscope-agent"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/BioNanomics/microscope-agent/blob/main/LICENSE",
+      "subjects": [
+        "microscope-agent"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/aicell-lab/agent-lens/blob/main/README.md",
+      "subjects": [
+        "agent-lens"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/aicell-lab/agent-lens/blob/main/LICENSE",
+      "subjects": [
+        "agent-lens"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/aicell-lab/agent-lens/blob/main/agent_lens/register_tools_service.py",
+      "subjects": [
+        "agent-lens"
+      ],
+      "roles": [
+        "implementation"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kyu-softmatter/agentic-microscope/blob/main/README.md",
+      "subjects": [
+        "agentic-microscope"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kyu-softmatter/agentic-microscope/blob/main/LICENSE",
+      "subjects": [
+        "agentic-microscope"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kyu-softmatter/agentic-microscope/blob/main/hardware/microscope.py",
+      "subjects": [
+        "agentic-microscope"
+      ],
+      "roles": [
+        "implementation"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kyu-softmatter/soft-matter-agents/blob/main/README.md",
+      "subjects": [
+        "soft-matter-agents"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kyu-softmatter/soft-matter-agents/blob/main/LICENSE",
+      "subjects": [
+        "soft-matter-agents"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/M3RG-IITD/AILA/blob/main/README.md",
+      "subjects": [
+        "aila"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/M3RG-IITD/AILA/blob/main/LICENSE.md",
+      "subjects": [
+        "aila"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://www.nature.com/articles/s41467-025-64105-7",
+      "subjects": [
+        "aila"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/DIAOZHUO/LLM-directed-SPM/blob/main/readme.md",
+      "subjects": [
+        "llm-spm"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://arxiv.org/abs/2602.20669",
+      "subjects": [
+        "llm-spm"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/BB-84C/quailbot-pi/blob/main/README.md",
+      "subjects": [
+        "quailbot"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/BB-84C/quailbot-pi/blob/main/LICENSE",
+      "subjects": [
+        "quailbot"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://arxiv.org/abs/2609.27302",
+      "subjects": [
+        "quailbot"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/CFN-softbio/VISION/blob/main/README.md",
+      "subjects": [
+        "vision"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://doi.org/10.1088/2632-2153/add9e4",
+      "subjects": [
+        "vision"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/ShuxiangCao/LeeQ/blob/main/README.md",
+      "subjects": [
+        "leeq"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/ShuxiangCao/LeeQ/blob/main/LICENSE",
+      "subjects": [
+        "leeq"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://doi.org/10.1016/j.patter.2025.101372",
+      "subjects": [
+        "leeq"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/EvoEvolver/k_agents/blob/main/README.md",
+      "subjects": [
+        "k-agents"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://arxiv.org/abs/2412.07978",
+      "subjects": [
+        "k-agents"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/NVIDIA/Quantum-Calibration-Agent-Blueprint/blob/main/README.md",
+      "subjects": [
+        "nvidia-qca"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/NVIDIA/Quantum-Calibration-Agent-Blueprint/blob/main/LICENSE",
+      "subjects": [
+        "nvidia-qca"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/mcherukara/CALMS/blob/main/README.md",
+      "subjects": [
+        "calms"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/mcherukara/CALMS/blob/main/LICENSE",
+      "subjects": [
+        "calms"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/AdvancedPhotonSource/CALMS/blob/main/README.md",
+      "subjects": [
+        "calms-aps"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://doi.org/10.1038/s41524-026-02005-0",
+      "subjects": [
+        "calms-aps"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/yerbymatey/opentrons-mcp/blob/main/README.md",
+      "subjects": [
+        "opentrons"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/yerbymatey/opentrons-mcp/blob/main/LICENSE",
+      "subjects": [
+        "opentrons"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/di-omics/plr-mcp/blob/main/README.md",
+      "subjects": [
+        "plr-mcp"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/di-omics/plr-mcp/blob/main/LICENSE",
+      "subjects": [
+        "plr-mcp"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/nygmeta/OpenLabAI/blob/main/README.md",
+      "subjects": [
+        "openlabai"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/nygmeta/OpenLabAI/blob/main/LICENSE",
+      "subjects": [
+        "openlabai"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/KRATSZ/labscriptai-ot/blob/main/README.md",
+      "subjects": [
+        "labscriptai"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/KRATSZ/labscriptai-ot/blob/main/LICENSE",
+      "subjects": [
+        "labscriptai"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://doi.org/10.1101/2025.09.30.679666",
+      "subjects": [
+        "labscriptai"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/gomesgroup/coscientist/blob/main/README.md",
+      "subjects": [
+        "coscientist"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/gomesgroup/coscientist/blob/main/LICENSE",
+      "subjects": [
+        "coscientist"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://doi.org/10.1038/s41586-023-06792-0",
+      "subjects": [
+        "coscientist"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/pic-ai-robotic-chemistry/ChemAgents/blob/main/README.md",
+      "subjects": [
+        "chemagents"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://doi.org/10.1021/jacs.4c17738",
+      "subjects": [
+        "chemagents"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/ac-rad/organa/blob/main/README.md",
+      "subjects": [
+        "organa"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://arxiv.org/abs/2401.06949",
+      "subjects": [
+        "organa"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/ac-rad/xdl-generation/blob/master/README.md",
+      "subjects": [
+        "clairify"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/ac-rad/xdl-generation/blob/master/LICENSE",
+      "subjects": [
+        "clairify"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://arxiv.org/abs/2303.14100",
+      "subjects": [
+        "clairify"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/ac-rad/clairify-chemspeed/blob/master/README.md",
+      "subjects": [
+        "clairify-chemspeed"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://doi.org/10.1039/D4DD00046C",
+      "subjects": [
+        "clairify-chemspeed"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/izumitkhr/synagent/blob/main/README.md",
+      "subjects": [
+        "synagent"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/izumitkhr/synagent/blob/main/LICENSE",
+      "subjects": [
+        "synagent"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://arxiv.org/abs/2609.18598",
+      "subjects": [
+        "synagent"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/pnnl/autolabs/blob/master/README.md",
+      "subjects": [
+        "autolabs"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/pnnl/autolabs/blob/master/LICENSE.md",
+      "subjects": [
+        "autolabs"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://arxiv.org/abs/2509.25651",
+      "subjects": [
+        "autolabs"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kukapay/opcua-mcp/blob/main/README.md",
+      "subjects": [
+        "opcua-kuka"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kukapay/opcua-mcp/blob/main/LICENSE",
+      "subjects": [
+        "opcua-kuka"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/IndustriAgents/OPCUA-MCP/blob/main/README.md",
+      "subjects": [
+        "opcua-industrial"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/IndustriAgents/OPCUA-MCP/blob/main/LICENSE",
+      "subjects": [
+        "opcua-industrial"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kukapay/modbus-mcp/blob/main/README.md",
+      "subjects": [
+        "modbus"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kukapay/modbus-mcp/blob/main/LICENSE",
+      "subjects": [
+        "modbus"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/abogani/tango-mcp/blob/main/README.md",
+      "subjects": [
+        "tango"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/abogani/tango-mcp/blob/main/LICENSE",
+      "subjects": [
+        "tango"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/sryu81/mcp-server-for-epics/blob/main/README.md",
+      "subjects": [
+        "epics-mcp"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/mcp2everything/mcp2serial/blob/main/README.md",
+      "subjects": [
+        "mcp2serial"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/mcp2everything/mcp2serial/blob/main/LICENSE",
+      "subjects": [
+        "mcp2serial"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/golioth/tinymcp/blob/main/README.md",
+      "subjects": [
+        "tinymcp"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/golioth/tinymcp/blob/main/LICENSE",
+      "subjects": [
+        "tinymcp"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/Adancurusul/embedded-debugger-mcp/blob/main/README.md",
+      "subjects": [
+        "embedded-debugger"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/Adancurusul/embedded-debugger-mcp/blob/main/LICENSE",
+      "subjects": [
+        "embedded-debugger"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/hsoffar/saleae-logic2-mcp/blob/main/README.md",
+      "subjects": [
+        "saleae"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/hsoffar/saleae-logic2-mcp/blob/main/LICENSE",
+      "subjects": [
+        "saleae"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/SWITCHSCIENCE/mcp-micropython-bridge/blob/main/README.md",
+      "subjects": [
+        "micropython"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/robotmcp/ros-mcp-server/blob/main/README.md",
+      "subjects": [
+        "ros-mcp"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/robotmcp/ros-mcp-server/blob/main/LICENSE",
+      "subjects": [
+        "ros-mcp"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/nasa-jpl/rosa/blob/main/README.md",
+      "subjects": [
+        "rosa"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/nasa-jpl/rosa/blob/main/LICENSE",
+      "subjects": [
+        "rosa"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://arxiv.org/abs/2410.06472",
+      "subjects": [
+        "rosa"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/labclaw/device-use/blob/main/README.md",
+      "subjects": [
+        "device-use"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/labclaw/device-use/blob/main/LICENSE",
+      "subjects": [
+        "device-use"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/labclaw/device-use/blob/main/src/device_use/integrations/mcp_server.py",
+      "subjects": [
+        "device-use"
+      ],
+      "roles": [
+        "implementation"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/labclaw/device-skills/blob/main/README.md",
+      "subjects": [
+        "device-skills"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/labclaw/device-skills/blob/main/LICENSE",
+      "subjects": [
+        "device-skills"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/fastly/edge-mhs/blob/main/README.md",
+      "subjects": [
+        "edge-mhs"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/fastly/edge-mhs/blob/main/LICENSE",
+      "subjects": [
+        "edge-mhs"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/neogyk/Agent2Device-Protocol/blob/main/README.md",
+      "subjects": [
+        "agent2device"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/neogyk/Agent2Device-Protocol/blob/main/LICENSE",
+      "subjects": [
+        "agent2device"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/ur-whitelab/chemcrow-public/blob/main/README.md",
+      "subjects": [
+        "chemcrow"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/ur-whitelab/chemcrow-public/blob/main/LICENSE",
+      "subjects": [
+        "chemcrow"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://doi.org/10.1038/s42256-024-00832-8",
+      "subjects": [
+        "chemcrow"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/takuyaisogawa/nv-autonomous-experiments/blob/main/README.md",
+      "subjects": [
+        "nvagent"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/takuyaisogawa/nv-autonomous-experiments/blob/main/LICENSE",
+      "subjects": [
+        "nvagent"
+      ],
+      "roles": [
+        "license"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://arxiv.org/abs/2607.25145",
+      "subjects": [
+        "nvagent"
+      ],
+      "roles": [
+        "paper"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/openUC2/Hackathon-UC2-LLM/blob/main/README.md",
+      "subjects": [
+        "uc2-hackathon"
+      ],
+      "roles": [
+        "overview"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://www.anthropic.com/news/model-hardware-standard-research-preview",
+      "subjects": [
+        "mhs"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://modelhardwarestandard.com/",
+      "subjects": [
+        "mhs"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://arxiv.org/abs/2606.03755",
+      "subjects": [
+        "lap"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://arxiv.org/html/2606.03755v1",
+      "subjects": [
+        "lap"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://modelcontextprotocol.io/docs/learn/architecture",
+      "subjects": [
+        "mcp"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://tasks.extensions.modelcontextprotocol.io/",
+      "subjects": [
+        "mcp"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://tasks.extensions.modelcontextprotocol.io/specification/draft/tasks",
+      "subjects": [
+        "mcp"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://sila2.gitlab.io/sila_python/",
+      "subjects": [
+        "sila"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://sila2.gitlab.io/sila_python/content/api/framework/index.html",
+      "subjects": [
+        "sila"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://reference.opcfoundation.org/specs/OPC-30500-1/4.1.2.2",
+      "subjects": [
+        "lads"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://reference.opcfoundation.org/specs/OPC-30500-1/7.2",
+      "subjects": [
+        "lads"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://www.w3.org/TR/wot-thing-description/",
+      "subjects": [
+        "wot"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/als-apg/osprey",
+      "subjects": [
+        "facility"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/abogani/tango-mcp",
+      "subjects": [
+        "facility"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/sryu81/mcp-server-for-epics",
+      "subjects": [
+        "facility"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://microsoft.github.io/Qcodes/",
+      "subjects": [
+        "qcodes"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/caidish/instrMCP",
+      "subjects": [
+        "qcodes"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://blueskyproject.io/bluesky/",
+      "subjects": [
+        "bluesky"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/CFN-softbio/VISION",
+      "subjects": [
+        "bluesky"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://pylabrobot.org/",
+      "subjects": [
+        "liquid"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/di-omics/plr-mcp",
+      "subjects": [
+        "liquid"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/yerbymatey/opentrons-mcp",
+      "subjects": [
+        "liquid"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/robotmcp/ros-mcp-server",
+      "subjects": [
+        "ros"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/nasa-jpl/rosa",
+      "subjects": [
+        "ros"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/techmanual-ai/lablink-mcp",
+      "subjects": [
+        "bench"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/mp911de/siglent-scpi-mcp",
+      "subjects": [
+        "bench"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/Netlist-Studio/scope-mcp",
+      "subjects": [
+        "bench"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kyu-softmatter/agentic-microscope",
+      "subjects": [
+        "microscopy-access"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/BioNanomics/microscope-agent",
+      "subjects": [
+        "microscopy-access"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/openUC2/Hackathon-UC2-LLM",
+      "subjects": [
+        "microscopy-access"
+      ],
+      "roles": [
+        "standard-or-ecosystem"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/biology/atlas-ezo-sensors",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/biology/micro-manager",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/biology/new-era-syringe-pump",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/biology/opentrons",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/biology/tecan-cavro-pump",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/chemistry/ika-stirrer",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/chemistry/julabo-circulator",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/chemistry/mettler-toledo-balance",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/chemistry/ms-data",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/chemistry/ms-worklist",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/chemistry/ocean-spectrometer",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/chemistry/palmsens-potentiostat",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/chemistry/sartorius-balance",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/chemistry/thermo-iapi",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/engineering/alicat-flow-controller",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/engineering/bench-power-supply",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/engineering/labjack",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/engineering/ni-daqmx",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/engineering/rigol-oscilloscope",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/health/astm-lis-analyzer",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/health/ble-health-sensors",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/health/brainflow-biosensors",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/physics/keithley-smu",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/physics/lakeshore-temperature",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/physics/pfeiffer-vacuum-gauge",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/physics/srs-lockin",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/physics/srs-rga",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/physics/thorlabs-power-meter",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/protocols/epics",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/protocols/modbus",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/protocols/scpi-instrument",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/protocols/sila2",
+      "subjects": [
+        "labmcp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kushalsinha/openmhp/tree/main/supported-devices/ika-c-mag-hs7",
+      "subjects": [
+        "openmhp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kushalsinha/openmhp/tree/main/supported-devices/opentrons-flex",
+      "subjects": [
+        "openmhp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kushalsinha/openmhp/tree/main/supported-devices/manual-benchtop-centrifuge",
+      "subjects": [
+        "openmhp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kushalsinha/openmhp/tree/main/supported-devices/elveflow-ob1",
+      "subjects": [
+        "openmhp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kushalsinha/openmhp/tree/main/supported-devices/elveflow-mux-distributor",
+      "subjects": [
+        "openmhp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kushalsinha/openmhp/tree/main/supported-devices/biologic-sp300",
+      "subjects": [
+        "openmhp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kushalsinha/openmhp/tree/main/supported-devices/wasatch-raman-blaze",
+      "subjects": [
+        "openmhp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kushalsinha/openmhp/tree/main/supported-devices/sri-8610c-gc",
+      "subjects": [
+        "openmhp"
+      ],
+      "roles": [
+        "component"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://docs.harborframework.com/",
+      "subjects": [
+        "Harbor"
+      ],
+      "roles": [
+        "scope-boundary"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://arxiv.org/abs/2609.17439",
+      "subjects": [
+        "Quantum-Harbor"
+      ],
+      "roles": [
+        "scope-boundary"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/OPCFoundation/UA-for-AI-Prototype",
+      "subjects": [
+        "OPC UA for AI Prototype"
+      ],
+      "roles": [
+        "scope-boundary"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/ScienceOne-AI/Agent-Interaction-Protocol",
+      "subjects": [
+        "Agent Interaction Protocol"
+      ],
+      "roles": [
+        "scope-boundary"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/openagentidentityprotocol/agentidentityprotocol",
+      "subjects": [
+        "Agent Identity Protocol"
+      ],
+      "roles": [
+        "scope-boundary"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/ishaanko/labmcp",
+      "subjects": [
+        "LabMCP · ishaanko"
+      ],
+      "roles": [
+        "scope-boundary"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/ziatdinovmax/SciLink",
+      "subjects": [
+        "SciLink"
+      ],
+      "roles": [
+        "scope-boundary"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/OpenOwlab/AuraID",
+      "subjects": [
+        "AuraID · OpenOwlab"
+      ],
+      "roles": [
+        "scope-boundary"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/wu-yc/LabClaw",
+      "subjects": [
+        "LabClaw · wu-yc"
+      ],
+      "roles": [
+        "scope-boundary"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/GaugeForge/instrMCP",
+      "subjects": [
+        "GaugeForge/instrMCP"
+      ],
+      "roles": [
+        "scope-boundary"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://zenodo.org/records/14051590",
+      "subjects": [
+        "LLMicroscopilot"
+      ],
+      "roles": [
+        "scope-boundary"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/ningxu1995/OPERA",
+      "subjects": [
+        "OPERA"
+      ],
+      "roles": [
+        "scope-boundary"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/gunkaynar/awesome-lab-agents",
+      "subjects": [
+        "discovery-index"
+      ],
+      "roles": [
+        "discovery-only"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/beriberikix/awesome-mcp-hardware",
+      "subjects": [
+        "discovery-index"
+      ],
+      "roles": [
+        "discovery-only"
+      ],
+      "reviewed": "2026-10-20"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "schema_version": "illustrative-0.1",
+  "example": true,
+  "data_origin": "synthetic",
+  "device": {
+    "id": "example:optical-bench/power-meter-1",
+    "class_profile": "example:optical-power-meter/0.1",
+    "capability_revision": "1",
+    "transport": "existing-driver-adapter",
+    "capabilities": {
+      "power.read": {"operation_role": "Basic", "unit": "W", "readback": "reported"},
+      "wavelength.set": {"operation_role": "Basic", "unit": "nm", "readback": "tracked"},
+      "power.acquire": {"operation_role": "Standard", "execution": "local-job", "resource": "measurement-channel"}
+    }
+  },
+  "request": {
+    "request_id": "example-request-001",
+    "operation": "power.acquire",
+    "parameters": {"sample_count": 100, "interval": {"value": 0.01, "unit": "s"}},
+    "required_capability_revision": "1"
+  },
+  "accepted": {"job_id": "example-job-001", "execution_state": "queued", "physical_outcome": "not_yet_observed"},
+  "observation": {
+    "device_id": "example:optical-bench/power-meter-1",
+    "quantity": "optical_power",
+    "value": 0.00231,
+    "unit": "W",
+    "observed_at": "2026-10-20T00:00:01Z",
+    "provenance": "reported",
+    "validity": "valid",
+    "calibration": {"status": "unknown", "reference": null},
+    "uncertainty": {"status": "not_provided", "value": null},
+    "configuration": {"wavelength": {"value": 532, "unit": "nm", "provenance": "tracked"}},
+    "job_id": "example-job-001"
+  },
+  "completion": {
+    "job_id": "example-job-001",
+    "execution_state": "completed",
+    "termination_reason": "sample_count_reached",
+    "samples_recorded": 100,
+    "goal_assessment": "not_evaluated",
+    "artifacts": [{"id": "example-dataset-001", "format": "application/vnd.apache.arrow.file", "uri": "example://datasets/power-scan-001", "integrity": {"status": "illustration_only"}}]
+  }
+}

@@ -1,0 +1,3256 @@
+{
+  "schema_version": "1.0",
+  "reviewed": "2026-10-20",
+  "projects": [
+    {
+      "id": "openmhp",
+      "name": "OpenMHP",
+      "repository": "kushalsinha/openmhp",
+      "url": "https://github.com/kushalsinha/openmhp",
+      "category": "protocol",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "CLI",
+        "Python SDK",
+        "JSON-RPC",
+        "HTTP/SSE"
+      ],
+      "mcp": "documented",
+      "skills": "documented",
+      "license": "Apache-2.0",
+      "license_class": "open",
+      "description": {
+        "zh": "设备描述、读写、动作、任务、租约与实验记录组成统一接口；可通过已有驱动生态接入。适合研究精简设备契约与按需发现。",
+        "en": "A device contract covering descriptors, reads, writes, actions, jobs, leases and run records, with bridges to existing drivers. Useful for studying a compact device interface and on-demand discovery."
+      },
+      "evidence": {
+        "kind": "simulation",
+        "zh": "公开规范与实现；supported-devices 的 7 个设备包标为 twin tested，另有 1 个人工操作模板。维护者明确尚未确认这些驱动的实机运行。",
+        "en": "Published specification and implementation. Seven supported-device packages are marked twin tested, plus one manual-operation template; maintainers explicitly distinguish these from hardware-tested drivers."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/kushalsinha/openmhp/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/kushalsinha/openmhp/blob/main/LICENSE"
+        },
+        {
+          "role": "implementation",
+          "url": "https://github.com/kushalsinha/openmhp/blob/main/SPEC.md"
+        },
+        {
+          "role": "implementation",
+          "url": "https://github.com/kushalsinha/openmhp/blob/main/supported-devices/README.md"
+        },
+        {
+          "role": "implementation",
+          "url": "https://github.com/kushalsinha/openmhp/blob/main/supported-devices/biologic-sp300/driver.py"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "058e1df30a1bee9ac38709f3eb6018bfb2b70719da9b1debdf0ef0cfb14d7824",
+        "LICENSE.txt": "035511d50eecf9cc7e71e3d8364d2d58f28418e9c218366211f57f1486fed303",
+        "tree.json": "4e4c16cc1a67ba4a836225164c684611c39a7c09f09117efce693d2eb9fd7492"
+      }
+    },
+    {
+      "id": "open-mhs-abenor",
+      "name": "Open-MHS · Abenor Labs",
+      "repository": "Abenor-Labs/Open-MHS",
+      "url": "https://github.com/Abenor-Labs/Open-MHS",
+      "category": "protocol",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "REST",
+        "CLI",
+        "Python",
+        "Serial"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "Apache-2.0",
+      "license_class": "open",
+      "description": {
+        "zh": "以 capability tag 和设备基类统一传感器、执行器及状态；提供串口机械臂适配示例。独立社区实现。",
+        "en": "Capability tags and a device base class describe sensors, actuators and state, with a serial robotic-arm adapter. An independent community implementation."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "源码包含 mock 设备和串口驱动；本次材料未提供具体实机验证记录。",
+        "en": "Source includes mock devices and a serial driver; the reviewed material does not document a named hardware validation run."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/Abenor-Labs/Open-MHS/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/Abenor-Labs/Open-MHS/blob/main/LICENSE"
+        },
+        {
+          "role": "implementation",
+          "url": "https://github.com/Abenor-Labs/Open-MHS/blob/main/open_mhs/drivers/serial_robotic_arm.py"
+        },
+        {
+          "role": "implementation",
+          "url": "https://github.com/Abenor-Labs/Open-MHS/blob/main/schema/capability_schema.json"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "477727ada473fbb8471df08ffea422885f8f93412ade952e9c9f73e9d8d48694",
+        "LICENSE.txt": "4de69553e474d422f053ad05b0e520612f6c8808e5fed9abd8001adfbc7b3ab3",
+        "tree.json": "7ec530038b678e7a25fba28f2c1c17c7e295ce5e5be41b229d6df447ab6d8823"
+      }
+    },
+    {
+      "id": "open-mhs-tong",
+      "name": "Open MHS · tongriyaotxt",
+      "repository": "tongriyaotxt/open-mhs",
+      "url": "https://github.com/tongriyaotxt/open-mhs",
+      "category": "protocol",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "REST",
+        "CLI",
+        "Python"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "设备注册、统一命令和 MCP 工具；包含机器人动作与技能执行扩展。与同名项目分别维护。",
+        "en": "Device registration, common commands and MCP tools, extended with robot motion and skill execution. Maintained separately from other similarly named projects."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "已读 MCP 调用分派代码；物理设备与 MuJoCo 示例需按各自后端区分。",
+        "en": "MCP dispatch code reviewed. Physical-device and MuJoCo examples must be assessed by their individual backends."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/tongriyaotxt/open-mhs/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/tongriyaotxt/open-mhs/blob/main/LICENSE"
+        },
+        {
+          "role": "implementation",
+          "url": "https://github.com/tongriyaotxt/open-mhs/blob/main/src/openmhs/mcp/server.py"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "031041247afb8cd1780586dab90d62adb10cd19f3e837d81b355d398c2655dfc",
+        "LICENSE.txt": "7afc572dc8093af09f23c978a3f9fea7467982e7ef2565da95c322fdd46aff37",
+        "tree.json": "dda7a412a4ca8542888985e7b096fec63bec94d930b48ceec4703efd5dceda88"
+      }
+    },
+    {
+      "id": "open-mhs-scut",
+      "name": "Open MHS · SCUT-ESA",
+      "repository": "SCUT-ESA/open-mhs",
+      "url": "https://github.com/SCUT-ESA/open-mhs",
+      "category": "protocol",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "REST",
+        "CLI",
+        "PyVISA"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "统一设备接口加显式后端策略，覆盖 VISA 仪器、嵌入式 I/O 与模拟设备。属于受 MHS 启发的社区工程。",
+        "en": "A common device interface with explicit backend policies for VISA instruments, embedded I/O and simulators. A community project inspired by MHS."
+      },
+      "evidence": {
+        "kind": "hardware",
+        "zh": "维护者列出 UNI-T UPO6102N 与 UTG2062X 的实机验证；其余摄像头、GPIO 等条目仍分别标为实验性或模拟。",
+        "en": "Maintainers report real-hardware verification for UNI-T UPO6102N and UTG2062X; other camera and GPIO adapters have separate experimental or simulation status."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/SCUT-ESA/open-mhs/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/SCUT-ESA/open-mhs/blob/main/LICENSE"
+        },
+        {
+          "role": "implementation",
+          "url": "https://github.com/SCUT-ESA/open-mhs/blob/main/src/openmhs/core/backend.py"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "8125953354191757de95efeb9b0a5d3dc879d3fcab8ec4120abee6e714fa20a2",
+        "LICENSE.txt": "7afc572dc8093af09f23c978a3f9fea7467982e7ef2565da95c322fdd46aff37",
+        "tree.json": "73246dbdd6c253f2827a14c3f7e8f907e2f571311b834fbec5358bced74c956b"
+      }
+    },
+    {
+      "id": "mhp-cuntinum",
+      "name": "Model Hardware Protocol · Cuntinum",
+      "repository": "Cuntinum/model-hardware-protocol",
+      "url": "https://github.com/Cuntinum/model-hardware-protocol",
+      "category": "protocol",
+      "scope": "implementation",
+      "interfaces": [
+        "Python SDK",
+        "TypeScript SDK",
+        "MCP",
+        "CLI"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "Apache-2.0",
+      "license_class": "open",
+      "description": {
+        "zh": "以 discover、read、write、execute 组织设备驱动和共享状态。包名 khp，与 OpenMHP 不是同一项目。",
+        "en": "Organizes drivers and shared state around discover, read, write and execute. Distributed as khp; distinct from OpenMHP."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "公开规范、SDK 与驱动目录；README 的 production grade 定位没有在本次材料中形成跨设备实测依据。",
+        "en": "Public specification, SDKs and driver directory. The README’s production-grade description is not treated as evidence of cross-device validation."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/Cuntinum/model-hardware-protocol/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/Cuntinum/model-hardware-protocol/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "35aa984403d4b62709a08d9270f329eb5e8cd46f29821772b1b11e64e2af2329",
+        "LICENSE.txt": "1f1e4478418d8c0431b2ae161552a3f63c6eb0f914e16872783e96c91abbfc5f"
+      }
+    },
+    {
+      "id": "oahl",
+      "name": "Open Agent Hardware Layer",
+      "repository": "fredabila/oahl",
+      "url": "https://github.com/fredabila/oahl",
+      "category": "protocol",
+      "scope": "implementation",
+      "interfaces": [
+        "JavaScript SDK",
+        "Python SDK",
+        "WebSocket",
+        "Serial",
+        "ADB",
+        "MQTT",
+        "TCP"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "discover–reserve–execute–release 生命周期；节点、适配器与传输插件分离，可本地运行或使用可选注册与中继服务。",
+        "en": "A discover–reserve–execute–release lifecycle separating nodes, adapters and transports, with local operation or optional registry and relay services."
+      },
+      "evidence": {
+        "kind": "hardware",
+        "zh": "README 展示 Android 手机 ADB 操作；不能由此推定科研仪器的校准、长任务或读数语义已统一。",
+        "en": "README demonstrates Android phone operation through ADB; this does not establish a shared scientific calibration, long-job or measurement model."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/fredabila/oahl/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/fredabila/oahl/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "7aa4bf9329fb46b76afbc1613a970852086a658231f08f6fa56961748d07e96c",
+        "LICENSE.txt": "1ea423615d8b2d01cb58e006b472310c4d76c90273aca9e535f534eab6a7b339"
+      }
+    },
+    {
+      "id": "instrmcp",
+      "name": "instrMCP",
+      "repository": "caidish/instrMCP",
+      "url": "https://github.com/caidish/instrMCP",
+      "category": "runtime",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "Jupyter",
+        "QCoDeS",
+        "Python",
+        "MeasureIt"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "把现有 Jupyter 内核中的 QCoDeS Station 暴露给 Agent，复用参数、仪器快照、数据库与测量工作流。适合已使用 QCoDeS 的实验室。",
+        "en": "Exposes a QCoDeS Station inside an existing Jupyter kernel, reusing parameters, snapshots, databases and measurement workflows. A direct route for QCoDeS laboratories."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "已读参数发现、缓存与 fresh 读取路径；真实连接由运行中的内核及 QCoDeS 驱动持有。",
+        "en": "Parameter discovery, caching and fresh-read code reviewed. The running kernel and QCoDeS drivers own the actual device connections."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/caidish/instrMCP/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/caidish/instrMCP/blob/main/LICENSE"
+        },
+        {
+          "role": "implementation",
+          "url": "https://github.com/caidish/instrMCP/blob/main/instrmcp/servers/jupyter_qcodes/backend/qcodes.py"
+        }
+      ],
+      "related": [
+        "quailbot"
+      ],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "f5aa643e745479c3dd7fd1859d5fc2ac3ed47e41eb38487111aa3b4eca0952ec",
+        "LICENSE.txt": "11639ac0c386e8f7d2af4b1b51e48b19def8519f7bde723587cade66ee1dcfdf",
+        "tree.json": "cd7ca5af094f597e9020ed27a1bec8f769d55b0ee931dca7e57347361ae67702"
+      }
+    },
+    {
+      "id": "puda",
+      "name": "PUDA",
+      "repository": "PUDAP/puda",
+      "url": "https://github.com/PUDAP/puda",
+      "category": "runtime",
+      "scope": "implementation",
+      "interfaces": [
+        "CLI",
+        "NATS",
+        "Python drivers",
+        "Agent Skills"
+      ],
+      "mcp": "not_documented",
+      "skills": "documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "无头物理设备执行平台：消息层、分层驱动、协议运行与结果记录分离。Agent 通过 CLI 和技能编写、验证、运行实验。",
+        "en": "A headless physical-device runtime separating messaging, layered drivers, protocol execution and result records. Agents author, validate and run experiments through a CLI and skills."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "已读 CLI 协议执行路径：运行前读取机器命令目录，经 NATS 分发；仓库含边缘驱动示例。",
+        "en": "CLI execution path reviewed: it obtains the machine command catalogue before dispatch through NATS; the repository includes an edge-driver example."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/PUDAP/puda/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/PUDAP/puda/blob/main/LICENSE"
+        },
+        {
+          "role": "implementation",
+          "url": "https://github.com/PUDAP/puda/blob/main/apps/cli/internal/cli/protocol-run.go"
+        },
+        {
+          "role": "paper",
+          "url": "https://arxiv.org/abs/2607.26464"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "2651a89f135406ca2f7ae60085f8d1094c2a0839cb0d2fa5386a9abdf28f0582",
+        "LICENSE.txt": "27cb2b2fc3ee2472b775b11e9662ec66cd4f6995a3606959aea28ba13bcf49b0",
+        "tree.json": "2bea044bd0f4dc9b1c2f94fcc9f0eb6b74df42ea57f8da959d984cd78b916d6c"
+      }
+    },
+    {
+      "id": "unilabos",
+      "name": "Uni-Lab-OS",
+      "repository": "deepmodeling/Uni-Lab-OS",
+      "url": "https://github.com/deepmodeling/Uni-Lab-OS",
+      "category": "runtime",
+      "scope": "implementation",
+      "interfaces": [
+        "Python",
+        "ROS 2",
+        "Action/Resource model",
+        "Workflow compiler"
+      ],
+      "mcp": "not_documented",
+      "skills": "documented",
+      "license": "GPL-3.0 framework + proprietary drivers",
+      "license_class": "mixed",
+      "description": {
+        "zh": "跨设备实验室编排，结合动作、资源和实验室拓扑。框架、设备适配与工作流编译的分工值得比较。",
+        "en": "Cross-device laboratory orchestration combining actions, resources and laboratory topology. Useful for comparing framework, adapter and workflow-compiler responsibilities."
+      },
+      "evidence": {
+        "kind": "experiment",
+        "zh": "论文与驱动目录展示物理实验路径。主框架 GPL-3.0；unilabos/devices/ 单独采用 DP Technology 专有许可。",
+        "en": "The paper and driver tree describe physical laboratory operation. The framework is GPL-3.0; unilabos/devices/ is separately covered by a DP Technology proprietary license."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/LICENSE"
+        },
+        {
+          "role": "implementation",
+          "url": "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/NOTICE"
+        },
+        {
+          "role": "implementation",
+          "url": "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/unilabos/devices/LICENSE"
+        },
+        {
+          "role": "implementation",
+          "url": "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/docs/developer_guide/add_device.md"
+        },
+        {
+          "role": "paper",
+          "url": "https://arxiv.org/abs/2512.21766"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "25ea4e29eb1b8d0aeb1893c54871a95138f51a6d98c3a8c34c206bf0f4b49df8",
+        "LICENSE.txt": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+        "tree.json": "466d55a9ff6a9f32f0f2ea8945d1644499c3a3cf5902fc1f7f8b343e449bbf15"
+      }
+    },
+    {
+      "id": "osprey",
+      "name": "Osprey",
+      "repository": "als-apg/osprey",
+      "url": "https://github.com/als-apg/osprey",
+      "category": "runtime",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "CLI",
+        "Agent Skills",
+        "EPICS",
+        "DOOCS",
+        "TANGO"
+      ],
+      "mcp": "documented",
+      "skills": "documented",
+      "license": "BSD-3-Clause",
+      "license_class": "open",
+      "description": {
+        "zh": "面向大型科学设施的 Agent 接口，处理通道语义寻址、设施知识、控制连接与操作过程。已有 EPICS、DOOCS、TANGO 连接器。",
+        "en": "An agent interface for large scientific facilities: semantic channel addressing, facility knowledge, control connectors and operational workflows. Includes EPICS, DOOCS and TANGO connectors."
+      },
+      "evidence": {
+        "kind": "experiment",
+        "zh": "项目论文与设施应用提供实验背景；当前实现要求每次硬件写入经人工批准。",
+        "en": "Project publications and facility applications supply experimental context; the current implementation requires human approval for every hardware write."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/als-apg/osprey/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/als-apg/osprey/blob/main/LICENSE.txt"
+        },
+        {
+          "role": "implementation",
+          "url": "https://github.com/als-apg/osprey/blob/main/docs/source/architecture/mcp-servers.rst"
+        },
+        {
+          "role": "paper",
+          "url": "https://doi.org/10.1063/5.0306302"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "05369c86803dba85dbef52c18a87f7f0a11b7aba013fb92b04fb9b13028d202c",
+        "LICENSE.txt": "6bf34958b70af0606c7e3c41a6002899b3a20810367ec9468714a3e8b8000a81",
+        "tree.json": "2b8d657a4c3420df87f70322551efe647857d71eb5170d85c8ff378c5f5d8dc0"
+      }
+    },
+    {
+      "id": "ivoryos",
+      "name": "IvoryOS",
+      "repository": "ivoryos-ai/IvoryOS",
+      "url": "https://github.com/ivoryos-ai/IvoryOS",
+      "category": "runtime",
+      "scope": "implementation",
+      "interfaces": [
+        "Python introspection",
+        "Web application",
+        "LLM workflow design"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "从已有 Python 自动化对象生成控制界面和工作流，包含可选的自然语言工作流设计功能。适合逐步接管已有设备代码。",
+        "en": "Turns existing Python automation objects into controls and workflows, with optional natural-language workflow design. Useful for progressively exposing existing device code."
+      },
+      "evidence": {
+        "kind": "experiment",
+        "zh": "有实验室编排论文；当前 README 未声明原生 MCP 服务，不能把 Python API 自动等同于 MCP。",
+        "en": "A laboratory-orchestration paper is available. The current README does not document a native MCP server; a Python API is recorded separately."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/ivoryos-ai/IvoryOS/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/ivoryos-ai/IvoryOS/blob/main/LICENSE"
+        },
+        {
+          "role": "implementation",
+          "url": "https://github.com/ivoryos-ai/IvoryOS/blob/main/ivoryos/parsers/introspection.py"
+        },
+        {
+          "role": "paper",
+          "url": "https://www.nature.com/articles/s41467-025-60514-w"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "1f55090f878808243c231ef3af73f38fa878aa2b4b513cf555786ddb83512232",
+        "LICENSE.txt": "a7673c4bc8bef18a8ca590899da74bcf5fa87f19d13082f3cfa342308ca945a8",
+        "tree.json": "d91ffea5fbb6c0e15a3bc5dc665e67b5733f293b7a6fd5e42a4473de999445c6"
+      }
+    },
+    {
+      "id": "jumpstarter",
+      "name": "Jumpstarter",
+      "repository": "jumpstarter-dev/jumpstarter",
+      "url": "https://github.com/jumpstarter-dev/jumpstarter",
+      "category": "runtime",
+      "scope": "implementation",
+      "interfaces": [
+        "CLI",
+        "Python API",
+        "gRPC",
+        "Hardware leases"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "Apache-2.0",
+      "license_class": "open",
+      "description": {
+        "zh": "共享和租用真实或虚拟被测硬件，统一电源、串口、CAN、SPI、GPIO 与 USB 控制。Agent 可沿用测试脚本的接口。",
+        "en": "Shares and leases physical or virtual devices under test, with power, UART, CAN, SPI, GPIO and USB drivers. Agents can use the same interfaces as test scripts."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "公开驱动、Python 客户端、gRPC 定义与控制器；属于可被 Agent 使用的硬件基础设施，不是专门的科学语言模型。",
+        "en": "Public drivers, Python client, gRPC definitions and controller. Agent-accessible hardware infrastructure rather than a specialized scientific language model."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/jumpstarter-dev/jumpstarter/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/jumpstarter-dev/jumpstarter/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "b3f3583e3ac9ba537d3c49c6a57b547716bdb5d1078cd061025cb3d708a955e8",
+        "LICENSE.txt": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+      }
+    },
+    {
+      "id": "lager",
+      "name": "Lager",
+      "repository": "lagerdata/lager",
+      "url": "https://github.com/lagerdata/lager",
+      "category": "runtime",
+      "scope": "implementation",
+      "interfaces": [
+        "CLI",
+        "Python Net API",
+        "Network bench control"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "Apache-2.0",
+      "license_class": "open",
+      "description": {
+        "zh": "用台架 Linux 主机集中连接电源、示波器、调试探针和总线；统一 CLI 可由 Agent、人工或 CI 使用，程序可在设备旁执行。",
+        "en": "A bench Linux host connects supplies, scopes, debug probes and buses. A common CLI serves agents, humans and CI; programs can execute next to the devices."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "README 与文档提供具体仪器和台架部署路径；可复用的是台架执行层。",
+        "en": "README and documentation describe concrete instruments and bench deployment. The reusable contribution is the bench execution layer."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/lagerdata/lager/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/lagerdata/lager/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "b0b22632eed05a198f6c0b9a315d128679e3c4cc54f1a55be8d09841e908d947",
+        "LICENSE.txt": "0759baf8222889048400ef07199767b7e3fb9ae702e5dd65d75987685e0c6d5c"
+      }
+    },
+    {
+      "id": "eaa",
+      "name": "Experiment Automation Agents",
+      "repository": "AdvancedPhotonSource/EAA",
+      "url": "https://github.com/AdvancedPhotonSource/EAA",
+      "category": "runtime",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP client",
+        "HTTP tools",
+        "Python",
+        "Agent Skills"
+      ],
+      "mcp": "documented",
+      "skills": "documented",
+      "license": "Unspecified",
+      "license_class": "unspecified",
+      "description": {
+        "zh": "面向需要视觉反馈的科学实验 Agent 运行环境；支持图像工具结果、确定性工作流及实验任务管理。",
+        "en": "An experiment-agent runtime emphasizing visual feedback, image tool results, deterministic workflows and experiment task management."
+      },
+      "evidence": {
+        "kind": "experiment",
+        "zh": "有显微实验论文；README 已宣布迁移到 EAA-Pi。当前仓库未识别到顶层许可证。",
+        "en": "A microscopy experiment publication is available; the README announces migration to EAA-Pi. No top-level license was identified."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/AdvancedPhotonSource/EAA/blob/main/README.md"
+        },
+        {
+          "role": "paper",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13633048/"
+        }
+      ],
+      "related": [
+        "eaa-pi",
+        "pi-experiment-ops"
+      ],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "dc5daaaf71a833bae4f24744702253aead61b83fa99be1ea8e447cad58e50bd6"
+      }
+    },
+    {
+      "id": "eaa-pi",
+      "name": "EAA-Pi",
+      "repository": "AdvancedPhotonSource/EAA-Pi",
+      "url": "https://github.com/AdvancedPhotonSource/EAA-Pi",
+      "category": "runtime",
+      "scope": "implementation",
+      "interfaces": [
+        "CLI",
+        "Web UI",
+        "MCP instruments",
+        "Agent Skills"
+      ],
+      "mcp": "documented",
+      "skills": "documented",
+      "license": "Unspecified",
+      "license_class": "unspecified",
+      "description": {
+        "zh": "基于 pi-experiment-ops 的实验助手界面，终端与网页共享工作区、工具配置和实验会话。",
+        "en": "An experiment-assistant interface built on pi-experiment-ops; terminal and web views share workspaces, tools and experiment sessions."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "作为 EAA 后继工程公开；实际仪器能力取决于接入的 MCP 服务，不能继承旧论文全部验证范围。",
+        "en": "Published as EAA’s successor. Instrument capability depends on connected MCP servers; validation from the earlier paper is not automatically transferred."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/AdvancedPhotonSource/EAA-Pi/blob/main/README.md"
+        }
+      ],
+      "related": [
+        "eaa",
+        "pi-experiment-ops"
+      ],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "69d422148536b2bf3969a99a226a85067f50b7e5f02d0ec8352fefd352cc91d4"
+      }
+    },
+    {
+      "id": "pi-experiment-ops",
+      "name": "pi-experiment-ops",
+      "repository": "AdvancedPhotonSource/pi-experiment-ops",
+      "url": "https://github.com/AdvancedPhotonSource/pi-experiment-ops",
+      "category": "runtime",
+      "scope": "implementation",
+      "interfaces": [
+        "Pi extension",
+        "MCP",
+        "CodeMode",
+        "CLI",
+        "Agent Skills"
+      ],
+      "mcp": "documented",
+      "skills": "documented",
+      "license": "Unspecified",
+      "license_class": "unspecified",
+      "description": {
+        "zh": "组合实验工具、后台执行、持久终端和会话检索，为实验应用提供可复用 Agent 执行环境。",
+        "en": "Combines experiment tools, background execution, persistent terminals and transcript search into a reusable agent runtime for experiment applications."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "MCP 适配器连接独立仪器服务；运行环境本身不提供通用设备驱动。",
+        "en": "Its MCP adapter connects separate instrument services; the runtime itself does not provide universal device drivers."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/AdvancedPhotonSource/pi-experiment-ops/blob/main/README.md"
+        }
+      ],
+      "related": [
+        "eaa-pi"
+      ],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "f89964bd33fb5b647209b9dbf9f117a1b1c0d5addd7024291e8a3142440779a8"
+      }
+    },
+    {
+      "id": "labmcp",
+      "name": "LabMCP · K-Dense",
+      "repository": "K-Dense-AI/lab-instrument-mcps",
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps",
+      "category": "measurement",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "CLI",
+        "VISA",
+        "TCP",
+        "Serial",
+        "Vendor APIs"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "Apache-2.0",
+      "license_class": "open",
+      "description": {
+        "zh": "单仓库仪器适配集合，覆盖电子测量、光谱、温控、泵、显微、液体处理和设施协议。组件清单单列，避免把服务器数量当作独立项目数量。",
+        "en": "A monorepo of instrument adapters spanning electronic measurement, spectroscopy, temperature control, pumps, microscopy, liquid handling and facility protocols. Components are listed separately."
+      },
+      "evidence": {
+        "kind": "simulation",
+        "zh": "当前机器可读目录含 32 个服务器、411 个工具，全部标为 simulated；其中质谱数据和工作单工具不是直接设备控制。",
+        "en": "The machine-readable catalogue lists 32 servers and 411 tools, all marked simulated. Mass-spectrometry data and worklist tools are not direct device control."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/LICENSE"
+        },
+        {
+          "role": "implementation",
+          "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/packages/labmcp/src/labmcp/catalog.json"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "694aeeb5a8eeee1533f0036170b024e63e54e9eef5142390a3b69df7d68fceca",
+        "LICENSE.txt": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "tree.json": "857b06ffb52f18bf632c2a4f59d247c96ab2efb1063c02b1c1bfc056c72b7fdc"
+      }
+    },
+    {
+      "id": "lablink",
+      "name": "LabLink",
+      "repository": "techmanual-ai/lablink-mcp",
+      "url": "https://github.com/techmanual-ai/lablink-mcp",
+      "category": "measurement",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "VISA/SCPI",
+        "SSH",
+        "REST",
+        "Serial",
+        "Python"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "多种传输接口汇入同一 MCP 服务，便于把已有指令和脚本接给 Agent。设备语义主要仍由配置和驱动表达。",
+        "en": "Brings several transports into one MCP server so agents can use existing commands and scripts. Device semantics remain primarily in configuration and drivers."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "提供五类连接驱动与配置示例；通用通信能力不代表任意设备已经适配。",
+        "en": "Five connection-driver families and configuration examples are documented; generic connectivity does not imply support for every device."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/techmanual-ai/lablink-mcp/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/techmanual-ai/lablink-mcp/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "80e1b5eab37c14e3f0c69394d335a04f04024c9a7bc1551ab2a4edea286d5edf",
+        "LICENSE.txt": "a2be8034e5a109713db3ab2a6e407ffd63ab9679d09ab0d3155a37a301d4ccbe"
+      }
+    },
+    {
+      "id": "scpi-mcp",
+      "name": "scpi-mcp",
+      "repository": "armchairdeity/mcp-server-scpi",
+      "url": "https://github.com/armchairdeity/mcp-server-scpi",
+      "category": "measurement",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "PyVISA",
+        "SCPI",
+        "USB/LAN"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "将示波器采集与测量目标封装为工具，仪器后端负责具体 SCPI。首个目标是 Rigol DS1054Z。",
+        "en": "Wraps oscilloscope capture and measurement goals as tools, leaving SCPI details to instrument backends. The first target is the Rigol DS1054Z."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "有 Rigol 与 mock 后端；README 明确不暴露任意原始 SCPI，且没有信号源或逻辑分析仪功能。",
+        "en": "Rigol and mock backends are documented; the README explicitly excludes arbitrary raw SCPI, waveform-generator and logic-analyzer functions."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/armchairdeity/mcp-server-scpi/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/armchairdeity/mcp-server-scpi/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "99b7dc6cc8cae04a69a342e7814388b3e4b9e89dcd90fbcafe332f1e656f1bb4",
+        "LICENSE.txt": "c35c610bb8809654b65448c3513fae3e58f119a2d4da4a8fb51a598c536c5383"
+      }
+    },
+    {
+      "id": "oscilloscope-mcp",
+      "name": "oscilloscope-mcp",
+      "repository": "masahiro-999/oscilloscope-mcp",
+      "url": "https://github.com/masahiro-999/oscilloscope-mcp",
+      "category": "measurement",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "SCPI",
+        "TCP"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "网络示波器设置、触发、波形读取和测量反馈；返回结构化数据、图像及可独立查看的波形页面。",
+        "en": "Network oscilloscope configuration, triggering, waveform acquisition and measurement feedback, returning structured data, images and standalone waveform views."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "README 描述实际台架与 FPGA 调试路径；设备兼容性仍按项目列出的型号确认。",
+        "en": "The README describes bench operation and FPGA debugging workflows; compatibility remains model-specific."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/masahiro-999/oscilloscope-mcp/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/masahiro-999/oscilloscope-mcp/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "e4630cd82ec22a70bcf6fd58ee2b4321097e8d13312660c9c20e9e4580b2c39d",
+        "LICENSE.txt": "52bb540bc53cfbbefce020d8654aac2c480a52481a64417cb5e7d8869783b170"
+      }
+    },
+    {
+      "id": "lecroy",
+      "name": "lecroy-mcp",
+      "repository": "lucasgerads/lecroy-mcp",
+      "url": "https://github.com/lucasgerads/lecroy-mcp",
+      "category": "measurement",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "SCPI",
+        "VXI-11",
+        "USB"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "AGPL-3.0",
+      "license_class": "open",
+      "description": {
+        "zh": "LeCroy 示波器控制与波形采集，使用 LAN VXI-11 或 USB。",
+        "en": "LeCroy oscilloscope control and waveform acquisition over LAN VXI-11 or USB."
+      },
+      "evidence": {
+        "kind": "hardware",
+        "zh": "仓库附运行演示；LAN 路径要求 VXI-11，README 明确不支持 LeCroy VICP 模式。",
+        "en": "A running demonstration is included. The documented LAN path requires VXI-11 and explicitly excludes LeCroy VICP."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/lucasgerads/lecroy-mcp/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/lucasgerads/lecroy-mcp/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "b21afe87ce4695df2db3c6732c2c4dd452c92d2767b9c87be12b5de1a972a15d",
+        "LICENSE.txt": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef"
+      }
+    },
+    {
+      "id": "siglent",
+      "name": "siglent-scpi-mcp",
+      "repository": "mp911de/siglent-scpi-mcp",
+      "url": "https://github.com/mp911de/siglent-scpi-mcp",
+      "category": "measurement",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "SCPI",
+        "TCP"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "Apache-2.0",
+      "license_class": "open",
+      "description": {
+        "zh": "Siglent 示波器和电源的类型化工具，记录实际发送的 SCPI 命令。",
+        "en": "Typed tools for Siglent oscilloscopes and supplies, recording the SCPI commands applied."
+      },
+      "evidence": {
+        "kind": "hardware",
+        "zh": "维护者报告一次 SDS1204X HD 与 SPD3303X-E 台架验证，包括波形缩放链；其余列出型号不能一并视为实测。",
+        "en": "Maintainers report one SDS1204X HD and SPD3303X-E bench session, including waveform scaling; other listed models are not all hardware-tested."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/mp911de/siglent-scpi-mcp/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/mp911de/siglent-scpi-mcp/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "7c0b34e8ec78c473dee0eeb37fb9bcdc276ea34385c808f9d6677aeedbf5b226",
+        "LICENSE.txt": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      }
+    },
+    {
+      "id": "scope-mcp",
+      "name": "scope-mcp",
+      "repository": "Netlist-Studio/scope-mcp",
+      "url": "https://github.com/Netlist-Studio/scope-mcp",
+      "category": "measurement",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "PyVISA",
+        "Ethernet",
+        "SCPI"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "Keysight/Agilent 示波器的设置、截图、波形下载、测量与串行解码。",
+        "en": "Configuration, screenshots, waveform download, measurements and serial decoding for Keysight/Agilent oscilloscopes."
+      },
+      "evidence": {
+        "kind": "hardware",
+        "zh": "README 指明实测 Agilent MSOX2024A，固件 02.43.2018020635。",
+        "en": "README identifies testing on an Agilent MSOX2024A with firmware 02.43.2018020635."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/Netlist-Studio/scope-mcp/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/Netlist-Studio/scope-mcp/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "535abb49a0d799540c54a5b947069dfd1cea52364d46dfd56d5225e219efc8f0",
+        "LICENSE.txt": "cf42a41e15bb876cbdd1dc6229a9aea6b44c01ffb4e2c7c7a9b346a4f27aa03a"
+      }
+    },
+    {
+      "id": "dwf",
+      "name": "dwf-mcp-server",
+      "repository": "KenosInc/dwf-mcp-server",
+      "url": "https://github.com/KenosInc/dwf-mcp-server",
+      "category": "measurement",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "dwfpy",
+        "WaveForms SDK",
+        "USB"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "Digilent WaveForms 设备的示波器、任意波形与逻辑分析接口。",
+        "en": "Oscilloscope, arbitrary-waveform and logic-analysis interfaces for Digilent WaveForms devices."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "开源服务依赖单独取得的专有 libdwf/运行库；不能把服务端 MIT 许可理解为整个 SDK 开源。",
+        "en": "The open server depends on separately obtained proprietary libdwf/runtime components; its MIT license does not cover the vendor SDK."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/KenosInc/dwf-mcp-server/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/KenosInc/dwf-mcp-server/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "63fa6044ba5e9a17a3f7d487a93c79612a8fe4a6e24c129ddc4d7d47881388ba",
+        "LICENSE.txt": "cc5d0e0aa4adb79cb8dfc532ff6adb8e4ec40eabf486cf45dbc182bbece53c7a"
+      }
+    },
+    {
+      "id": "instrument-mcp",
+      "name": "Instrument MCP",
+      "repository": "zeng-andrew/instrument-mcp",
+      "url": "https://github.com/zeng-andrew/instrument-mcp",
+      "category": "measurement",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "SCPI",
+        "Modbus RTU",
+        "USB",
+        "YAML commands"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "Unspecified",
+      "license_class": "unspecified",
+      "description": {
+        "zh": "集成频谱分析仪、无线综测仪、电源、温箱及逻辑分析仪，使用 YAML 描述命令并管理多仪器会话。",
+        "en": "Combines spectrum analyzers, radio testers, supplies, chambers and a logic analyzer using YAML command definitions and multi-instrument sessions."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "列出 Keysight MXA/EXA、R&S CMW500 与 DSLogic 等适配目标；未识别到许可证。",
+        "en": "Lists targets including Keysight MXA/EXA, R&S CMW500 and DSLogic; no license was identified."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/zeng-andrew/instrument-mcp/blob/main/README.md"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "99fde7c7a53f94e5a3733c44c31d8ed0afc9d91f88d00ae35357d8cf620a7e21"
+      }
+    },
+    {
+      "id": "daqmx",
+      "name": "daqmx-mcp",
+      "repository": "BrianDavidCouch/daqmx-mcp",
+      "url": "https://github.com/BrianDavidCouch/daqmx-mcp",
+      "category": "measurement",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "Codex plugin",
+        "NI nidaqmx"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "Apache-2.0",
+      "license_class": "open",
+      "description": {
+        "zh": "发现 NI DAQ 设备并执行有限长度的模拟电压和数字输入采集。",
+        "en": "Discovers NI DAQ devices and performs finite analog-voltage and digital-input acquisition."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "社区项目；当前版本没有输出、连续采集或任意属性写入。NI 驱动独立安装。",
+        "en": "A community project. The current version has no outputs, continuous acquisition or arbitrary property writes; NI drivers are installed separately."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/BrianDavidCouch/daqmx-mcp/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/BrianDavidCouch/daqmx-mcp/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "067188e8d080eb914c37fa7122574e20168e7240b40998c74f14b785e82076bf",
+        "LICENSE.txt": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+      }
+    },
+    {
+      "id": "daqifi",
+      "name": "DAQiFi Core",
+      "repository": "daqifi/daqifi-core",
+      "url": "https://github.com/daqifi/daqifi-core",
+      "category": "measurement",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        ".NET API",
+        "Wi-Fi",
+        "USB"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "厂商公开的无线采集 SDK 与 MCP 服务，涵盖通道配置、采样、数字 I/O、PWM、模拟输出和 SD 卡记录。",
+        "en": "Vendor-published wireless DAQ SDK and MCP server covering channels, sampling, digital I/O, PWM, analog outputs and SD-card logging."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "README 将采集控制和记录下载连成完整路径；具体能力取决于 DAQiFi 设备型号。",
+        "en": "The README connects acquisition control to recorded-data retrieval; capabilities depend on the DAQiFi device model."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/daqifi/daqifi-core/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/daqifi/daqifi-core/blob/main/LICENSE"
+        },
+        {
+          "role": "implementation",
+          "url": "https://github.com/daqifi/daqifi-core/tree/main/src/Daqifi.Mcp"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "96a755c36641d5af14c9ba96477c91857f01b65fb73572c4a21cd489e6e91b6a",
+        "LICENSE.txt": "d57215cb79947f27154bd1b0f80de39deab6d673072250466a0b3f77dc4f6e0a"
+      }
+    },
+    {
+      "id": "labview-toolkit",
+      "name": "LabVIEW MCP Server Toolkit",
+      "repository": "JanGoebel/LabVIEW-MCP-Server-Toolkit",
+      "url": "https://github.com/JanGoebel/LabVIEW-MCP-Server-Toolkit",
+      "category": "measurement",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "HTTP",
+        "LabVIEW VIs"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "让已有 LabVIEW 应用以工具、资源和提示的方式暴露 VI。适合直接包装实验室现有控制程序。",
+        "en": "Exposes VIs in existing LabVIEW applications as tools, resources and prompts. A direct way to wrap established laboratory control programs."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "开源工具包；LabVIEW 本体与仪器 VI 的依赖、许可分别存在。",
+        "en": "The toolkit is open source; LabVIEW itself and instrument VI dependencies have separate licensing."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/JanGoebel/LabVIEW-MCP-Server-Toolkit/blob/main/readme.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/JanGoebel/LabVIEW-MCP-Server-Toolkit/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "a44fcc2b7240e6814be08fffc4884690704aae92bb74b754415d70f05d193051",
+        "LICENSE.txt": "d80d40e5c9845d7f11c2f021c0137976a676709d719aea0890ca13706d77aebb"
+      }
+    },
+    {
+      "id": "labview-dev",
+      "name": "LabVIEW MCP · Zühlke",
+      "repository": "Zuehlke/labview-mcp",
+      "url": "https://github.com/Zuehlke/labview-mcp",
+      "category": "measurement",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "gRPC",
+        "LabVIEW scripting"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "Agent 可读取、修改和运行 LabVIEW 程序，主要处于开发工具层；能否控制设备取决于所运行 VI。",
+        "en": "Lets agents read, modify and run LabVIEW programs. Primarily a development interface; physical control depends on the invoked VI."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "依赖 LabVIEW 内部 lvai.LVAI 服务，README 明确它不是已发布、稳定承诺的 NI API。",
+        "en": "Depends on the internal lvai.LVAI service, which the README identifies as an unpublished NI API without a stability commitment."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/Zuehlke/labview-mcp/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/Zuehlke/labview-mcp/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "29d6356bd1e700677c6e5aadfdff2ad73e32c35b5fdc8fdd22963b6d993398a5",
+        "LICENSE.txt": "bfbcc794ee6ee9bc8de9b3dffb4c6e86fbc6d277cbbf9140f7794aba05e667ff"
+      }
+    },
+    {
+      "id": "openflexure",
+      "name": "OpenFlexure-MCP",
+      "repository": "GSIBabu/OpenFlexure-MCP",
+      "url": "https://github.com/GSIBabu/OpenFlexure-MCP",
+      "category": "microscopy",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "OpenFlexure Python client",
+        "HTTP"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "GPL-3.0",
+      "license_class": "open",
+      "description": {
+        "zh": "通过 OpenFlexure 客户端操作载物台、拍照、自动对焦、Z-stack 与扩展功能。",
+        "en": "Uses the OpenFlexure client for stage motion, capture, autofocus, z-stacks and extension calls."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "接入路径指向同一网络的真实 OpenFlexure 显微镜；仓库未给出系统化实测矩阵。",
+        "en": "Targets an OpenFlexure microscope on the local network; the repository does not supply a systematic hardware test matrix."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/GSIBabu/OpenFlexure-MCP/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/GSIBabu/OpenFlexure-MCP/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "4e02a14656fa11d46f542eec162fa561be40566160b9228c8c0a4a4e31888d6b",
+        "LICENSE.txt": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+      }
+    },
+    {
+      "id": "microscope-agent",
+      "name": "microscope-agent",
+      "repository": "BioNanomics/microscope-agent",
+      "url": "https://github.com/BioNanomics/microscope-agent",
+      "category": "microscopy",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "Nikon SDK",
+        "GenICam camera"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "面向 Nikon Ti2-E 与 Baumer 相机的紧凑接口，读位置、移动 XY、采图；图像与实际位置及状态修订号关联。",
+        "en": "A compact interface for Nikon Ti2-E and a Baumer camera: position reads, XY motion and imaging, linking frames to actual stage position and revision counters."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "提供 SDK 与 mock 路径；返回图像预览及完整文件。当前工具刻意不开放绝对 Z 移动。",
+        "en": "SDK and mock paths return image previews and full files. Absolute Z motion is deliberately absent from the exposed tools."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/BioNanomics/microscope-agent/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/BioNanomics/microscope-agent/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "7f3c4682d9837e9ca375684a9e65b7968258d7f0ce2c6482ccc9c7c9745b9835",
+        "LICENSE.txt": "2fe996ba1a6fcfd30aaeba49fc7f35afc0e341b03488811863d5e0c326c8a2e0"
+      }
+    },
+    {
+      "id": "agent-lens",
+      "name": "Agent-Lens",
+      "repository": "aicell-lab/agent-lens",
+      "url": "https://github.com/aicell-lab/agent-lens",
+      "category": "microscopy",
+      "scope": "implementation",
+      "interfaces": [
+        "Hypha RPC",
+        "Python",
+        "Web UI",
+        "BioEngine"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "将显微镜控制、机器人样本转移、图像分割、相似搜索和 OME-Zarr 数据组织在一起。",
+        "en": "Combines microscope control, robotic sample transfer, segmentation, similarity search and OME-Zarr data handling."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "公开服务注册代码与在线演示入口；主要设备调用经 Hypha 服务，未将原生 MCP 标作已确认接口。",
+        "en": "Public service-registration code and a live-demo entry point; device calls primarily use Hypha services. Native MCP is not recorded as verified."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/aicell-lab/agent-lens/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/aicell-lab/agent-lens/blob/main/LICENSE"
+        },
+        {
+          "role": "implementation",
+          "url": "https://github.com/aicell-lab/agent-lens/blob/main/agent_lens/register_tools_service.py"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "f900ced073a57260987b182a201dbe6dc94945ec57c419521d4966d73d32748d",
+        "LICENSE.txt": "8cd2383703f547852eefbd9027a459f2b1e9b6e9eea59b904fd90ab7853f63a9",
+        "tree.json": "e9acaef4ae71fc9455f17060139de16d8bfb8dd83c70557889d489dc1c166bf2"
+      }
+    },
+    {
+      "id": "agentic-microscope",
+      "name": "Agentic microscope",
+      "repository": "kyu-softmatter/agentic-microscope",
+      "url": "https://github.com/kyu-softmatter/agentic-microscope",
+      "category": "microscopy",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "Python",
+        "Micro-Manager",
+        "Vendor SDK/TCP"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "将研究目标转为有硬件边界与校准依据的显微镜配置，涵盖显微镜、光镊与压电平台。",
+        "en": "Translates research goals into microscope configurations grounded in hardware limits and calibrations, spanning microscopy, optical tweezers and piezo stages."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "已读设置、应用与回读代码。README 提醒光镊 TCP 接口的接受回执不等于动作完成，并宣布向 soft-matter-agents 迁移。",
+        "en": "Configuration, application and readback code reviewed. The README distinguishes tweezers command acceptance from physical completion and announces migration to soft-matter-agents."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/kyu-softmatter/agentic-microscope/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/kyu-softmatter/agentic-microscope/blob/main/LICENSE"
+        },
+        {
+          "role": "implementation",
+          "url": "https://github.com/kyu-softmatter/agentic-microscope/blob/main/hardware/microscope.py"
+        }
+      ],
+      "related": [
+        "soft-matter-agents"
+      ],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "40bf1c8ba963468778e24ceb949722b7314480bf8e4298ef8b54628f42ff242f",
+        "LICENSE.txt": "0a3a8b8b042e8421109fcc8f659888454cf6a0eb45ae9a546ee227cf7c668e84",
+        "tree.json": "6c7c21fc56c59d9f18996fa29e3003ddb152b7d96d8389620d2c33db0267960a"
+      }
+    },
+    {
+      "id": "soft-matter-agents",
+      "name": "soft-matter-agents",
+      "repository": "kyu-softmatter/soft-matter-agents",
+      "url": "https://github.com/kyu-softmatter/soft-matter-agents",
+      "category": "microscopy",
+      "scope": "reference",
+      "interfaces": [
+        "Python",
+        "Microscope agent",
+        "Agent workflows"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "显微镜、模拟、文献与桥接 Agent 的组合工程；显微镜模块是旧 Agentic microscope 的后继位置。",
+        "en": "Combines microscope, simulation, literature and bridge agents; the microscope module is the successor location for Agentic microscope."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "作为迁移入口收录；各模块不都连接物理设备，具体硬件能力仍需查 microscope_agent。",
+        "en": "Included as a migration target; not every module operates physical devices. Inspect microscope_agent for hardware capabilities."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/kyu-softmatter/soft-matter-agents/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/kyu-softmatter/soft-matter-agents/blob/main/LICENSE"
+        }
+      ],
+      "related": [
+        "agentic-microscope"
+      ],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "e29f06ec5ae8b3372897e3fc6458dff2cd9aa0031b28e86e06f5a42350b61f10",
+        "LICENSE.txt": "0a3a8b8b042e8421109fcc8f659888454cf6a0eb45ae9a546ee227cf7c668e84"
+      }
+    },
+    {
+      "id": "aila",
+      "name": "AILA",
+      "repository": "M3RG-IITD/AILA",
+      "url": "https://github.com/M3RG-IITD/AILA",
+      "category": "microscopy",
+      "scope": "implementation",
+      "interfaces": [
+        "Python tools",
+        "LLM agents",
+        "Instrument control software"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "原子力显微镜实验中的语言模型助手，结合任务分解、工具调用和反馈。",
+        "en": "A language-model assistant for atomic-force-microscope experiments, combining task decomposition, tools and feedback."
+      },
+      "evidence": {
+        "kind": "experiment",
+        "zh": "Nature Communications 论文报告实机 AFM 实验；代码与基准公开，重用需匹配论文的仪器控制环境。",
+        "en": "The Nature Communications paper reports physical AFM experiments. Code and benchmarks are public; reuse requires a matching instrument-control environment."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/M3RG-IITD/AILA/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/M3RG-IITD/AILA/blob/main/LICENSE.md"
+        },
+        {
+          "role": "paper",
+          "url": "https://www.nature.com/articles/s41467-025-64105-7"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "422881ed8a6538025776e98760f5d6aece39b426d27ab17f36f198aed6675e86",
+        "LICENSE.txt": "2168018018af6189867b204796968f60fa1bc43aa726b9223c6a93d45c28fad2"
+      }
+    },
+    {
+      "id": "llm-spm",
+      "name": "LLM-directed-SPM",
+      "repository": "DIAOZHUO/LLM-directed-SPM",
+      "url": "https://github.com/DIAOZHUO/LLM-directed-SPM",
+      "category": "microscopy",
+      "scope": "implementation",
+      "interfaces": [
+        "Python",
+        "WebSocket",
+        "Small language models",
+        "spmutil"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "Unspecified",
+      "license_class": "unspecified",
+      "description": {
+        "zh": "扫描探针显微实验中的命令生成、知识库和专门小模型；包含本地模型服务与模型训练材料。",
+        "en": "Command generation, knowledge retrieval and specialized small models for scanning-probe experiments, with local model services and training material."
+      },
+      "evidence": {
+        "kind": "experiment",
+        "zh": "论文描述物理扫描探针实验；仓库未识别到顶层许可证，模型训练代码与完整设备接入应分别评估。",
+        "en": "The paper describes physical scanning-probe experiments. No top-level license was identified; model-training code and complete device integration should be assessed separately."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/DIAOZHUO/LLM-directed-SPM/blob/main/readme.md"
+        },
+        {
+          "role": "paper",
+          "url": "https://arxiv.org/abs/2602.20669"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "c038a4febf83999ad80e2656d1653c9614db7b0ddb4d2cf6fe16b53710987fbb"
+      }
+    },
+    {
+      "id": "quailbot",
+      "name": "Quailbot Pi",
+      "repository": "BB-84C/quailbot-pi",
+      "url": "https://github.com/BB-84C/quailbot-pi",
+      "category": "microscopy",
+      "scope": "implementation",
+      "interfaces": [
+        "Pi extension",
+        "CLI driver contract",
+        "Workspace JSON",
+        "Image readback"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "ISC",
+      "license_class": "open",
+      "description": {
+        "zh": "将仪器工作区变为参数、动作、图像回读与多步程序的固定工具接口；操作与后续观察分别记录。Nanonis 路径依赖外部 nqctl。",
+        "en": "Turns instrument workspaces into a fixed tool surface for parameters, actions, image readbacks and multi-step programs. Actions and subsequent observations are recorded separately; Nanonis uses an external nqctl driver."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "公开 Pi 扩展与工作区契约；STM 论文是相关实验背景，不据此宣称该扩展独立包含全部硬件驱动。",
+        "en": "Public Pi extension and workspace contract. The STM paper supplies related experimental context, not evidence that this extension includes every hardware driver."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/BB-84C/quailbot-pi/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/BB-84C/quailbot-pi/blob/main/LICENSE"
+        },
+        {
+          "role": "paper",
+          "url": "https://arxiv.org/abs/2609.27302"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "14539b4a2ddb684e1c57b0db2a3ba3a1f71c754b8d6a6892c9411d19d9f74295",
+        "LICENSE.txt": "c350f7294dadb82346bd24f67be6e28fca511f878331762db39472f2e936e569"
+      }
+    },
+    {
+      "id": "vision",
+      "name": "VISION",
+      "repository": "CFN-softbio/VISION",
+      "url": "https://github.com/CFN-softbio/VISION",
+      "category": "microscopy",
+      "scope": "implementation",
+      "interfaces": [
+        "Voice/text",
+        "Python code generation",
+        "Bluesky workstation"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "Unspecified",
+      "license_class": "unspecified",
+      "description": {
+        "zh": "以语音或文字把用户意图转为束线操作代码，模块化处理转录、分类、编程与分析。",
+        "en": "Translates spoken or written requests into beamline-operation code, with modules for transcription, classification, programming and analysis."
+      },
+      "evidence": {
+        "kind": "experiment",
+        "zh": "项目展示 NSLS-II 11-BM CMS 工作站部署和用户确认后执行；不是无人闭环的通用仪器协议。未识别到许可证。",
+        "en": "The project shows deployment at NSLS-II 11-BM CMS, executing after user confirmation. It is not a universal unattended instrument protocol; no license was identified."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/CFN-softbio/VISION/blob/main/README.md"
+        },
+        {
+          "role": "paper",
+          "url": "https://doi.org/10.1088/2632-2153/add9e4"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "13f13591148fa5817e4b1a713580a33da5ea31af685b289b8eb957cdbb44f590"
+      }
+    },
+    {
+      "id": "leeq",
+      "name": "LeeQ",
+      "repository": "ShuxiangCao/LeeQ",
+      "url": "https://github.com/ShuxiangCao/LeeQ",
+      "category": "quantum",
+      "scope": "implementation",
+      "interfaces": [
+        "Python experiment API",
+        "Pulse control",
+        "k-agents integration"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "BSD-3-Clause",
+      "license_class": "open",
+      "description": {
+        "zh": "超导量子器件的脉冲实验、扫描、校准状态与分析框架；可向 Agent 提供实验描述及图文检查接口。",
+        "en": "Pulse experiments, sweeps, calibration state and analysis for superconducting devices, with experiment descriptions and text/visual inspection hooks for agents."
+      },
+      "evidence": {
+        "kind": "experiment",
+        "zh": "k-agents 论文报告量子校准实验；仓库同时提供模拟路径，应按后端识别实验来源。",
+        "en": "The k-agents paper reports quantum-calibration experiments. The repository also offers simulation, so experimental provenance depends on the backend."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/ShuxiangCao/LeeQ/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/ShuxiangCao/LeeQ/blob/main/LICENSE"
+        },
+        {
+          "role": "paper",
+          "url": "https://doi.org/10.1016/j.patter.2025.101372"
+        }
+      ],
+      "related": [
+        "k-agents",
+        "nvidia-qca"
+      ],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "9de116cb3584f7f3936c9b03fd4577041e988268f3af5418dea3058a8690410c",
+        "LICENSE.txt": "f5274b3e48843044ce82057e9853883631122c933623d8dc486c88c481ba047c"
+      }
+    },
+    {
+      "id": "k-agents",
+      "name": "k-agents",
+      "repository": "EvoEvolver/k_agents",
+      "url": "https://github.com/EvoEvolver/k_agents",
+      "category": "quantum",
+      "scope": "implementation",
+      "interfaces": [
+        "Python",
+        "Experiment agents",
+        "LeeQ"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "Unspecified",
+      "license_class": "unspecified",
+      "description": {
+        "zh": "围绕已有实验库发现、执行和判断校准实验，保留实验知识与视觉结果。",
+        "en": "Discovers, executes and evaluates calibration experiments through existing experiment libraries, retaining experimental knowledge and visual results."
+      },
+      "evidence": {
+        "kind": "experiment",
+        "zh": "论文有实机量子校准；README 已指向 NVIDIA Quantum Calibration Agent Blueprint。当前仓库未识别到许可证。",
+        "en": "The paper reports physical quantum calibration. The README now points to NVIDIA’s Quantum Calibration Agent Blueprint; no license was identified in this repository."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/EvoEvolver/k_agents/blob/main/README.md"
+        },
+        {
+          "role": "paper",
+          "url": "https://arxiv.org/abs/2412.07978"
+        }
+      ],
+      "related": [
+        "leeq",
+        "nvidia-qca"
+      ],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "5e350960900b0e1e81ffff7f0a454e6e772016dcfc265f6a24ef8750cd54d79e"
+      }
+    },
+    {
+      "id": "nvidia-qca",
+      "name": "Quantum Calibration Agent Blueprint",
+      "repository": "NVIDIA/Quantum-Calibration-Agent-Blueprint",
+      "url": "https://github.com/NVIDIA/Quantum-Calibration-Agent-Blueprint",
+      "category": "quantum",
+      "scope": "implementation",
+      "interfaces": [
+        "Python experiment scripts",
+        "CLI",
+        "Web UI",
+        "HDF5",
+        "SQLite"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "Apache-2.0",
+      "license_class": "open",
+      "description": {
+        "zh": "量子器件校准 Agent 参考工程，包含实验发现、执行、图像分析、工作流和结果存储。",
+        "en": "A quantum-device calibration agent reference implementation with experiment discovery, execution, visual analysis, workflows and result storage."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "NVIDIA 公开 Apache-2.0 工程，实验通过用户提供的 Python 脚本接入；不能把参考界面视为已覆盖所有量子控制器。",
+        "en": "An NVIDIA Apache-2.0 project; experiments integrate through supplied Python scripts. The reference interface does not imply support for every quantum controller."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/NVIDIA/Quantum-Calibration-Agent-Blueprint/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/NVIDIA/Quantum-Calibration-Agent-Blueprint/blob/main/LICENSE"
+        }
+      ],
+      "related": [
+        "k-agents",
+        "leeq"
+      ],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "fa09952db6769b2e6600fceaabc733538771f49982640dfb6d19d55e192d81d5",
+        "LICENSE.txt": "468f5b50c970b3d62f97045870141b14854ee3a808dc38f13fa42aefeb457b25"
+      }
+    },
+    {
+      "id": "calms",
+      "name": "CALMS",
+      "repository": "mcherukara/CALMS",
+      "url": "https://github.com/mcherukara/CALMS",
+      "category": "microscopy",
+      "scope": "implementation",
+      "interfaces": [
+        "Python tools",
+        "Retrieval",
+        "Instrument commands"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "BSD-3-Clause",
+      "license_class": "open",
+      "description": {
+        "zh": "上下文与工具增强的科学设施助手，将仪器知识和操作函数纳入交互。",
+        "en": "A context- and tool-augmented facility assistant integrating instrument knowledge with operational functions."
+      },
+      "evidence": {
+        "kind": "hardware",
+        "zh": "早期公开实现附演示；许可文本为三条款 BSD。后续机器人与束线工作另见 APS 仓库。",
+        "en": "An earlier public implementation with a demonstration and a three-clause BSD license. Later robot and beamline work appears in the APS repository."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/mcherukara/CALMS/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/mcherukara/CALMS/blob/main/LICENSE"
+        }
+      ],
+      "related": [
+        "calms-aps"
+      ],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "4c4b3246a945849f19fe4c3e32b4184ad2da33b78a9b15f4723abe542bca3ed7",
+        "LICENSE.txt": "fc215d2ae5f4fdc56f4172e108e251b1e2bb1f25ca173c612204786b6ef45993"
+      }
+    },
+    {
+      "id": "calms-aps",
+      "name": "CALMS · APS experimental agents",
+      "repository": "AdvancedPhotonSource/CALMS",
+      "url": "https://github.com/AdvancedPhotonSource/CALMS",
+      "category": "microscopy",
+      "scope": "implementation",
+      "interfaces": [
+        "Python",
+        "Robot command functions",
+        "Beamline tools"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "Unspecified",
+      "license_class": "unspecified",
+      "description": {
+        "zh": "面向 North N9 机器人与 X-ray nanoprobe 的可教学实验 Agent 工作流。",
+        "en": "Teachable experiment-agent workflows for a North N9 robotic station and an X-ray nanoprobe."
+      },
+      "evidence": {
+        "kind": "experiment",
+        "zh": "README 列出机器人、纳米探针命令模块及运行视频；许可证未识别，分支以仓库当前默认分支为准。",
+        "en": "README names robot and nanoprobe command modules and demonstration videos; no license was identified. Sources use the repository’s current default branch."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/AdvancedPhotonSource/CALMS/blob/main/README.md"
+        },
+        {
+          "role": "paper",
+          "url": "https://doi.org/10.1038/s41524-026-02005-0"
+        }
+      ],
+      "related": [
+        "calms"
+      ],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "7969778077e4c59ddbdff58a0431cd66ef6b9071b34375fc819a173c254e6ae5"
+      }
+    },
+    {
+      "id": "opentrons",
+      "name": "Opentrons MCP",
+      "repository": "yerbymatey/opentrons-mcp",
+      "url": "https://github.com/yerbymatey/opentrons-mcp",
+      "category": "chemistry",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "Opentrons HTTP API"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "结合 API 文档检索与机器人协议上传、运行管理、归位及状态读取，面向 OT-2/Flex。",
+        "en": "Combines API-documentation search with protocol upload, run management, homing and status access for OT-2/Flex."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "设备调用走机器人 HTTP API；文档查询工具与会驱动机器人动作的工具分别存在。",
+        "en": "Device calls use the robot HTTP API; documentation queries and physical-action tools are distinct."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/yerbymatey/opentrons-mcp/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/yerbymatey/opentrons-mcp/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "09d3240df40d9a9fa115c813edf0e54bbb615b5f40123ffa5903bf386d92384c",
+        "LICENSE.txt": "a538fe86eb284cb71ff7336bcd945d9f13dde31d58af567b9685fec6d9201688"
+      }
+    },
+    {
+      "id": "plr-mcp",
+      "name": "plr-mcp",
+      "repository": "di-omics/plr-mcp",
+      "url": "https://github.com/di-omics/plr-mcp",
+      "category": "chemistry",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "PyLabRobot"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "将液体处理、酶标仪、热循环仪和加热振荡器操作暴露为 MCP，复用 PyLabRobot 后端。",
+        "en": "Exposes liquid handling, plate reading, thermocycling and heater-shaker operations through MCP using PyLabRobot backends."
+      },
+      "evidence": {
+        "kind": "simulation",
+        "zh": "默认以 chatterbox 模拟器端到端验证；有真实 STAR 后端入口与接机说明，不能把模拟验证等同于实机验证。",
+        "en": "End-to-end checks use the chatterbox simulator by default. A real STAR backend and bring-up guide are provided, separately from simulation verification."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/di-omics/plr-mcp/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/di-omics/plr-mcp/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "90ce18cdc9a45f158021c267af42fd8830fdaab6d5d834bbfe290f277c1c9039",
+        "LICENSE.txt": "48a6c139da01d23b7de67cf0a078a24d2a70cc2d11f5429d6c774366d88574cb"
+      }
+    },
+    {
+      "id": "openlabai",
+      "name": "OpenLabAI",
+      "repository": "nygmeta/OpenLabAI",
+      "url": "https://github.com/nygmeta/OpenLabAI",
+      "category": "chemistry",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "Opentrons HTTP",
+        "Biomek COM",
+        "PyLabRobot"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "自然语言液体处理工作流，包含 Opentrons、Biomek、Hamilton 与实验记录连接。",
+        "en": "Natural-language liquid-handling workflows spanning Opentrons, Biomek, Hamilton and experiment-record integrations."
+      },
+      "evidence": {
+        "kind": "hardware",
+        "zh": "维护者报告 OT-2 读取、状态、归位与协议生成已接实机，上传/启动等执行工具尚未实机运行；Hamilton 和台式设备层为模拟。",
+        "en": "Maintainers report physical OT-2 reads, status, homing and protocol generation; upload/start execution tools have not yet run on hardware. Hamilton and benchtop layers remain simulated."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/nygmeta/OpenLabAI/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/nygmeta/OpenLabAI/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "05aa8dabd828904bcce171161037ab9189773d8bc9efff3791029bc6ecdffd42",
+        "LICENSE.txt": "4f3d1723608ac35ce32837536fa8b3579182a3219f1acaf6e6715e543754b0c9"
+      }
+    },
+    {
+      "id": "labscriptai",
+      "name": "LabscriptAI OT",
+      "repository": "KRATSZ/labscriptai-ot",
+      "url": "https://github.com/KRATSZ/labscriptai-ot",
+      "category": "chemistry",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "Agent Skills",
+        "Opentrons",
+        "Local simulation"
+      ],
+      "mcp": "documented",
+      "skills": "documented",
+      "license": "LabscriptAI Research Citation License v1.0",
+      "license_class": "restricted",
+      "description": {
+        "zh": "面向 Opentrons 的 Agent 插件，集成协议编写、模拟、技能和实时运行辅助。",
+        "en": "An Opentrons agent plugin combining protocol authoring, simulation, skills and live-runtime assistance."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "当前采用 LabscriptAI Research Citation License，商业使用须另行许可；不列入标准开源许可组。",
+        "en": "Currently uses the LabscriptAI Research Citation License, requiring separate permission for commercial use; listed outside the standard open-source-license group."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/KRATSZ/labscriptai-ot/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/KRATSZ/labscriptai-ot/blob/main/LICENSE"
+        },
+        {
+          "role": "paper",
+          "url": "https://doi.org/10.1101/2025.09.30.679666"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "4a87b08b3749e8a8dadbf88697096e64bcbf26db4544838d7af1aa79de0cbc5e",
+        "LICENSE.txt": "1800d57a7d3b077904236e9f6134eb0bd1d9d508456723822c5db86885b0f4ac"
+      }
+    },
+    {
+      "id": "coscientist",
+      "name": "Coscientist",
+      "repository": "gomesgroup/coscientist",
+      "url": "https://github.com/gomesgroup/coscientist",
+      "category": "chemistry",
+      "scope": "implementation",
+      "interfaces": [
+        "Python tools",
+        "Opentrons",
+        "Laboratory APIs"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "Apache-2.0 + Commons Clause",
+      "license_class": "restricted",
+      "description": {
+        "zh": "语言模型组织文献、程序和实验工具完成化学研究；是早期真实实验的重要案例。",
+        "en": "A language model coordinates literature, code and experimental tools for chemical research; an important early physical-experiment case study."
+      },
+      "evidence": {
+        "kind": "experiment",
+        "zh": "论文报告机器人化学实验；公开代码不等于论文的完整可部署实验室。许可为 Apache-2.0 加 Commons Clause。",
+        "en": "The paper reports robotic chemistry. Public code is not the complete deployable laboratory from the paper. License: Apache-2.0 with Commons Clause."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/gomesgroup/coscientist/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/gomesgroup/coscientist/blob/main/LICENSE"
+        },
+        {
+          "role": "paper",
+          "url": "https://doi.org/10.1038/s41586-023-06792-0"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "66080f93527f586f5a8c55e52000cd183eaa8ec40f0b1897e6a40edde3cb2bbd",
+        "LICENSE.txt": "dd4b8214f2ce82a640eb17b2a9df968c5c7430d00e3a67561d414bb14315523f"
+      }
+    },
+    {
+      "id": "chemagents",
+      "name": "ChemAgents",
+      "repository": "pic-ai-robotic-chemistry/ChemAgents",
+      "url": "https://github.com/pic-ai-robotic-chemistry/ChemAgents",
+      "category": "chemistry",
+      "scope": "implementation",
+      "interfaces": [
+        "LangGraph tools",
+        "Robot instruction set",
+        "ROS drivers"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "Unspecified",
+      "license_class": "unspecified",
+      "description": {
+        "zh": "多 Agent 化学研究系统，连接实验协议、机器人工作站与实验数据。",
+        "en": "A multi-agent chemical-research system connecting experimental protocols, a robotic workcell and experiment data."
+      },
+      "evidence": {
+        "kind": "experiment",
+        "zh": "仓库提供论文代码和实验数据，并把机器人指令与 AGV 驱动链接到其他仓库；本仓库未识别到许可证。",
+        "en": "The repository provides paper code and experimental data, linking robot instructions and AGV drivers separately; no license was identified here."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/pic-ai-robotic-chemistry/ChemAgents/blob/main/README.md"
+        },
+        {
+          "role": "paper",
+          "url": "https://doi.org/10.1021/jacs.4c17738"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "b34242ad654eb04eef2ffe4fab66a9297954ccdd2ed512d0d54fe0a531a3297f"
+      }
+    },
+    {
+      "id": "organa",
+      "name": "ORGANA",
+      "repository": "ac-rad/organa",
+      "url": "https://github.com/ac-rad/organa",
+      "category": "chemistry",
+      "scope": "implementation",
+      "interfaces": [
+        "Task planning",
+        "Robot perception",
+        "Laboratory operations"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "Unspecified",
+      "license_class": "unspecified",
+      "description": {
+        "zh": "化学机器人助手结合用户目标、场景感知与实验进度，安排多步实验并生成报告。",
+        "en": "A chemistry robot assistant combines user goals, scene perception and experiment progress to organize multi-step experiments and reporting."
+      },
+      "evidence": {
+        "kind": "experiment",
+        "zh": "项目与论文展示真实机器人实验；仓库内容和外部部署环境需要分开理解，未识别到许可证。",
+        "en": "The project and paper demonstrate physical robot experiments; repository contents and the external deployment environment are distinct. No license was identified."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/ac-rad/organa/blob/main/README.md"
+        },
+        {
+          "role": "paper",
+          "url": "https://arxiv.org/abs/2401.06949"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "5903e89a8b0eca841b2d5ac5c04fc1653ed1bdbea0c692ed826d1df2b6710349"
+      }
+    },
+    {
+      "id": "clairify",
+      "name": "CLAIRify",
+      "repository": "ac-rad/xdl-generation",
+      "url": "https://github.com/ac-rad/xdl-generation",
+      "category": "chemistry",
+      "scope": "implementation",
+      "interfaces": [
+        "Natural language to XDL",
+        "Verifier loop",
+        "Python"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "把自然语言实验步骤转换为可检查的 XDL 过程，验证错误反馈给模型进行修订。",
+        "en": "Translates natural-language experiment steps into verifiable XDL procedures, feeding verification errors back to the model for revision."
+      },
+      "evidence": {
+        "kind": "experiment",
+        "zh": "论文含机器人执行；本仓库主要发布生成器与数据。README 指明旧代码接口已过时，更新版本在 develop 分支。",
+        "en": "The paper includes robot execution; this repository mainly releases the generator and data. The README directs users to develop for updated API compatibility."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/ac-rad/xdl-generation/blob/master/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/ac-rad/xdl-generation/blob/master/LICENSE"
+        },
+        {
+          "role": "paper",
+          "url": "https://arxiv.org/abs/2303.14100"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "4323c69d3dfcec007690ed76cc4832e3ddc25f46cea6e2d0ee6aebfe7cf3bdd3",
+        "LICENSE.txt": "f542f21f41131f0da502c51e23da987918bf3a7dfddd19eb6da7dc0e0cf2a027"
+      }
+    },
+    {
+      "id": "clairify-chemspeed",
+      "name": "CLAIRify-Chemspeed",
+      "repository": "ac-rad/clairify-chemspeed",
+      "url": "https://github.com/ac-rad/clairify-chemspeed",
+      "category": "chemistry",
+      "scope": "implementation",
+      "interfaces": [
+        "Python generation",
+        "Chemspyd",
+        "Chemspeed"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "Unspecified",
+      "license_class": "unspecified",
+      "description": {
+        "zh": "自然语言生成 Chemspyd 程序，把协议生成连接到 Chemspeed 自动化平台。",
+        "en": "Generates Chemspyd programs from natural language, connecting protocol generation to Chemspeed automation."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "Chemspyd 论文链接的接口示例；未识别到本仓库许可证。",
+        "en": "An interface example linked by the Chemspyd paper; no license was identified for this repository."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/ac-rad/clairify-chemspeed/blob/master/README.md"
+        },
+        {
+          "role": "paper",
+          "url": "https://doi.org/10.1039/D4DD00046C"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "c807a0934ae0acddd6af80eddc3ca1fc231090712a2f608f655135beb9711e84"
+      }
+    },
+    {
+      "id": "synagent",
+      "name": "SynAgent · thin-film synthesis",
+      "repository": "izumitkhr/synagent",
+      "url": "https://github.com/izumitkhr/synagent",
+      "category": "chemistry",
+      "scope": "implementation",
+      "interfaces": [
+        "Python iteration runner",
+        "MaiML",
+        "File-based platform interface",
+        "Generated skills"
+      ],
+      "mcp": "not_documented",
+      "skills": "documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "薄膜合成闭环中的多模态规划与假设检验，读取 XRD/SEM 数据，为下一次实验写出条件。",
+        "en": "Multimodal planning and hypothesis testing in a thin-film synthesis loop, reading XRD/SEM data and writing conditions for the next experiment."
+      },
+      "evidence": {
+        "kind": "experiment",
+        "zh": "论文报告 18 次物理实验；公开程序通过 MaiML 输入与 output.txt 对接 dLab，未打包整套沉积、搬运与测量驱动。",
+        "en": "The paper reports 18 physical experiments. Public code connects to dLab through MaiML input and output.txt, without packaging the complete deposition, transport and measurement stack."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/izumitkhr/synagent/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/izumitkhr/synagent/blob/main/LICENSE"
+        },
+        {
+          "role": "paper",
+          "url": "https://arxiv.org/abs/2609.18598"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "c01e2a0d8e6dbbc74df6f844097bf485c7e244fd2983458c2281ac11dd2cc3bf",
+        "LICENSE.txt": "e79a355c3bef0603322dedc99ef3c0b1d3fafd5d17218f85cb4e318293d44119"
+      }
+    },
+    {
+      "id": "autolabs",
+      "name": "AutoLabs",
+      "repository": "pnnl/autolabs",
+      "url": "https://github.com/pnnl/autolabs",
+      "category": "chemistry",
+      "scope": "reference",
+      "interfaces": [
+        "Python",
+        "LSR export",
+        "Agent planning"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "BSD-2-Clause",
+      "license_class": "open",
+      "description": {
+        "zh": "生成实验步骤与 Lab Step Representation，支持多 Agent 修订和实验设计评估。",
+        "en": "Generates experiment steps and Lab Step Representation, supporting multi-agent revision and experiment-design evaluation."
+      },
+      "evidence": {
+        "kind": "artifact",
+        "zh": "公开应用重点是设计、模拟和评估；不能仅凭论文的物理实验将此仓库当作完整硬件执行系统。",
+        "en": "The public application emphasizes design, simulation and evaluation; physical experiments in the paper do not make this repository a complete hardware runtime."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/pnnl/autolabs/blob/master/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/pnnl/autolabs/blob/master/LICENSE.md"
+        },
+        {
+          "role": "paper",
+          "url": "https://arxiv.org/abs/2509.25651"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "8b9e67479d05f5400fc345d253a4e8b52d266a8112bf26b6edddefb50d5cbe47",
+        "LICENSE.txt": "aecc0c4116528fd7356f1a08de7f95a6d5825ea59b2f7b6ae5646ea0ab33c73c"
+      }
+    },
+    {
+      "id": "opcua-kuka",
+      "name": "opcua-mcp · kukapay",
+      "repository": "kukapay/opcua-mcp",
+      "url": "https://github.com/kukapay/opcua-mcp",
+      "category": "industrial",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "OPC UA"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "把 OPC UA 节点浏览、单点与批量读写接到 Agent，保留已有工业设备服务端。",
+        "en": "Connects OPC UA browsing and single-node or batch reads/writes to agents while retaining existing industrial servers."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "是 OPC UA 到 MCP 的适配层；设备意义取决于服务端地址空间和信息模型。",
+        "en": "An OPC UA-to-MCP adapter; physical meaning depends on the server address space and information model."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/kukapay/opcua-mcp/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/kukapay/opcua-mcp/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "158dc132dfa4d11a6a18399ce3db6d3496bffa9be0150f1296ab62043d77df8b",
+        "LICENSE.txt": "7dfb9156510c0132292113fc07d98247babd865275585d916102b973e4cf1c30"
+      }
+    },
+    {
+      "id": "opcua-industrial",
+      "name": "OPC UA MCP · IndustriAgents",
+      "repository": "IndustriAgents/OPCUA-MCP",
+      "url": "https://github.com/IndustriAgents/OPCUA-MCP",
+      "category": "industrial",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "OPC UA",
+        "Subscriptions",
+        "History"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "浏览、读数、历史、订阅、告警与受配置约束的写入及方法调用；一个本地进程连接一个 OPC UA 端点。",
+        "en": "Browsing, reads, history, subscriptions, alarms and configured writes/method calls, with one local process per OPC UA endpoint."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "README 当前已包含写入能力，但默认只读；远程共享多客户端运行仍有单独设计约束。",
+        "en": "The current README includes writes but defaults to read-only operation; shared remote multi-client deployment has separate design constraints."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/IndustriAgents/OPCUA-MCP/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/IndustriAgents/OPCUA-MCP/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "e34bf735b3b31961df5e32afb3916e228283ed90d4c73383f3adae8a833ccd7e",
+        "LICENSE.txt": "3043c4a782eaf7f0410c731871f35e572921a03ec8486c0af58d9457cd0553fc"
+      }
+    },
+    {
+      "id": "modbus",
+      "name": "modbus-mcp",
+      "repository": "kukapay/modbus-mcp",
+      "url": "https://github.com/kukapay/modbus-mcp",
+      "category": "industrial",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "Modbus TCP/UDP/Serial"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "把寄存器和线圈读写暴露为工具，是连接已有 PLC、传感器与控制器的底层入口。",
+        "en": "Exposes register and coil reads/writes, providing a low-level route to existing PLCs, sensors and controllers."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "具备通信调用接口；寄存器单位、比例、设备模式与副作用仍需设备映射表表达。",
+        "en": "Communication calls are exposed; units, scaling, modes and side effects still require a device-specific register map."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/kukapay/modbus-mcp/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/kukapay/modbus-mcp/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "bdd69ce906a8f625c79bf1e09a08346843dc342795d65ca542f73c1d5e12a040",
+        "LICENSE.txt": "7dfb9156510c0132292113fc07d98247babd865275585d916102b973e4cf1c30"
+      }
+    },
+    {
+      "id": "tango",
+      "name": "TANGO MCP",
+      "repository": "abogani/tango-mcp",
+      "url": "https://github.com/abogani/tango-mcp",
+      "category": "industrial",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "PyTango",
+        "Streamable HTTP"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "Apache-2.0",
+      "license_class": "open",
+      "description": {
+        "zh": "从 TANGO 数据库发现设备，将属性、状态和命令映射为 MCP 资源与工具，支持批量读取。",
+        "en": "Discovers devices through a TANGO database and maps attributes, state and commands to MCP resources and tools, including bulk reads."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "提供具体 TANGO_HOST 部署与属性/命令路径；实际可操作范围由设施已有设备服务器决定。",
+        "en": "Provides TANGO_HOST deployment and attribute/command paths; available operations depend on the facility’s existing device servers."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/abogani/tango-mcp/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/abogani/tango-mcp/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "3a1a145ca4845098e6e294ebbffb7fc7344715fa05541c1f289580ffb4392286",
+        "LICENSE.txt": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+      }
+    },
+    {
+      "id": "epics-mcp",
+      "name": "MCP Server for EPICS",
+      "repository": "sryu81/mcp-server-for-epics",
+      "url": "https://github.com/sryu81/mcp-server-for-epics",
+      "category": "industrial",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "EPICS CA/PVA",
+        "IOC",
+        "stdio/HTTP"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "Unspecified",
+      "license_class": "unspecified",
+      "description": {
+        "zh": "提供独立进程和 IOC 内嵌两种入口，把 EPICS PV 和控制命令暴露给 Agent。",
+        "en": "Offers standalone-process and IOC-embedded entry points exposing EPICS PVs and control commands to agents."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "C++ 共享库和协议分派结构公开；未识别到许可证。",
+        "en": "C++ shared-library and protocol-dispatch structure is public; no license was identified."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/sryu81/mcp-server-for-epics/blob/main/README.md"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "a5bee27fd5c6fe4859ec02c09bcf2ba070e77a1430c3ffecc214b37a2ee588c5"
+      }
+    },
+    {
+      "id": "mcp2serial",
+      "name": "MCP2Serial",
+      "repository": "mcp2everything/mcp2serial",
+      "url": "https://github.com/mcp2everything/mcp2serial",
+      "category": "embedded",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "Serial",
+        "Raspberry Pi Pico"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "通过串口连接 MCU 与 Agent，适合作为自制仪器的基础通信桥。",
+        "en": "Connects microcontrollers to agents through serial communication, useful as a basic bridge for custom instruments."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "README 给出 Pico 等接入流程；串口传输本身不定义仪器的量纲、状态或完成条件。",
+        "en": "The README provides Pico integration workflows; serial transport alone does not define units, device state or completion conditions."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/mcp2everything/mcp2serial/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/mcp2everything/mcp2serial/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "b802a43086a6b9a4e687f4fad0f6f75bae5a1659e39e4fef93bdaa4bd26e943a",
+        "LICENSE.txt": "21ce53d2f59ba05deea45be82144bcaa0ce209362199f9ff541d91745fcefdb0"
+      }
+    },
+    {
+      "id": "tinymcp",
+      "name": "tinymcp",
+      "repository": "golioth/tinymcp",
+      "url": "https://github.com/golioth/tinymcp",
+      "category": "embedded",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "Golioth management API",
+        "Device RPC"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "Apache-2.0",
+      "license_class": "open",
+      "description": {
+        "zh": "将 Golioth 设备 RPC 及其描述动态暴露为 MCP 工具，已有设备可通过状态服务发布工具 schema。",
+        "en": "Exposes Golioth device RPCs as MCP tools; existing devices can publish tool schemas through the state service."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "包含 Zephyr LED 控制示例；服务代码开源，但运行依赖 Golioth 平台，不能当作纯离线通用设备协议。",
+        "en": "Includes a Zephyr LED-control example. Server code is open source, while operation depends on the Golioth platform."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/golioth/tinymcp/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/golioth/tinymcp/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "5bf0eb661180308dc541a79a937c9dc324652a3337993c1b056028f14bfecd45",
+        "LICENSE.txt": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+      }
+    },
+    {
+      "id": "embedded-debugger",
+      "name": "Embedded Debugger MCP",
+      "repository": "Adancurusul/embedded-debugger-mcp",
+      "url": "https://github.com/Adancurusul/embedded-debugger-mcp",
+      "category": "embedded",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "CLI",
+        "Agent Skills",
+        "probe-rs",
+        "OpenOCD/GDB"
+      ],
+      "mcp": "documented",
+      "skills": "documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "让 Agent 连接调试探针、控制目标、读写内存、设断点、刷写与检查故障，为仪器固件开发提供物理反馈。",
+        "en": "Connects agents to debug probes for target control, memory access, breakpoints, flashing and fault inspection, supplying physical feedback during instrument-firmware development."
+      },
+      "evidence": {
+        "kind": "hardware",
+        "zh": "维护者声明在真实 ESP32-S3 上验证；原生 probe-rs 和 OpenOCD 后端分开配置。",
+        "en": "Maintainers report validation on a physical ESP32-S3; native probe-rs and OpenOCD backends are configured separately."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/Adancurusul/embedded-debugger-mcp/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/Adancurusul/embedded-debugger-mcp/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "db11644d978d93f8c2bacd1cf23b922e6eda5d1a822657070a8798f7d6041f99",
+        "LICENSE.txt": "3c4d853d8856fa83f736e290ea5b723a23912fb9171fa8944bd1fa127332260b"
+      }
+    },
+    {
+      "id": "saleae",
+      "name": "Saleae Logic 2 MCP",
+      "repository": "hsoffar/saleae-logic2-mcp",
+      "url": "https://github.com/hsoffar/saleae-logic2-mcp",
+      "category": "embedded",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "Logic 2 automation API"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "Apache-2.0",
+      "license_class": "open",
+      "description": {
+        "zh": "逻辑分析仪的采集、协议解码、时序测量和导出接口，用于固件与真实总线调试。",
+        "en": "Logic-analyzer capture, protocol decoding, timing measurement and export for firmware and physical-bus debugging."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "依赖已开启自动化接口的 Saleae Logic 2；该软件和硬件不随开源服务提供。",
+        "en": "Requires Saleae Logic 2 with automation enabled; the application and hardware are not supplied by the open server."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/hsoffar/saleae-logic2-mcp/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/hsoffar/saleae-logic2-mcp/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "1b1c3445e6cfad333e6da41df075248623f87ea60424a6f2bff42b53284ea25c",
+        "LICENSE.txt": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+      }
+    },
+    {
+      "id": "micropython",
+      "name": "MicroPython MCP Bridge",
+      "repository": "SWITCHSCIENCE/mcp-micropython-bridge",
+      "url": "https://github.com/SWITCHSCIENCE/mcp-micropython-bridge",
+      "category": "embedded",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "USB Serial",
+        "WebREPL",
+        "MicroPython"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "Unspecified",
+      "license_class": "unspecified",
+      "description": {
+        "zh": "通过串口或 WebREPL 操作 ESP32/RP2040 等，利用设备侧 helper 模块和 HARDWARE.md 保存板级知识。",
+        "en": "Operates ESP32/RP2040-class boards through serial or WebREPL, using device-side helper modules and HARDWARE.md for board-specific knowledge."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "提供实机测试 CLI 和固件接入说明；未识别到顶层许可证。",
+        "en": "Provides a hardware-test CLI and firmware setup instructions; no top-level license was identified."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/SWITCHSCIENCE/mcp-micropython-bridge/blob/main/README.md"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "fb7211512f78fca12957bae7e3ef11d7f0382b2a225de1b68a1f21964839d3bc"
+      }
+    },
+    {
+      "id": "ros-mcp",
+      "name": "ROS MCP Server",
+      "repository": "robotmcp/ros-mcp-server",
+      "url": "https://github.com/robotmcp/ros-mcp-server",
+      "category": "robotics",
+      "scope": "implementation",
+      "interfaces": [
+        "MCP",
+        "rosbridge",
+        "ROS 1",
+        "ROS 2"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "Apache-2.0",
+      "license_class": "open",
+      "description": {
+        "zh": "经 rosbridge 发现主题、服务、动作与消息类型，发布控制消息并读取机器人传感器反馈。",
+        "en": "Uses rosbridge to discover topics, services, actions and message types, publish control messages and read robot-sensor feedback."
+      },
+      "evidence": {
+        "kind": "hardware",
+        "zh": "仓库附机器人演示；适配覆盖 ROS 通信层，具体运动能力和控制器仍在机器人自身系统中。",
+        "en": "Robot demonstrations are included. The bridge covers ROS communication; motion capabilities and controllers remain in the robot stack."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/robotmcp/ros-mcp-server/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/robotmcp/ros-mcp-server/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "b9d36be96e8a12b6a8120bb3ab4a486be7d5042ed64047f711469d7ce6163bcd",
+        "LICENSE.txt": "5413a174223449188a1d2d516bb76fb38775ccc2d4f1fa37d5fc4a67d41dbeae"
+      }
+    },
+    {
+      "id": "rosa",
+      "name": "ROSA",
+      "repository": "nasa-jpl/rosa",
+      "url": "https://github.com/nasa-jpl/rosa",
+      "category": "robotics",
+      "scope": "implementation",
+      "interfaces": [
+        "LangChain tools",
+        "ROS 1",
+        "ROS 2"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "Apache-2.0",
+      "license_class": "open",
+      "description": {
+        "zh": "JPL 的 ROS 自然语言助手，结合系统诊断、状态查询与可扩展机器人操作工具。",
+        "en": "JPL’s natural-language ROS assistant combines system diagnostics, state queries and extensible robot-operation tools."
+      },
+      "evidence": {
+        "kind": "experiment",
+        "zh": "论文与示例覆盖机器人应用；ROSA 是 Agent 工具框架，不能由名称推断具有原生 MCP。",
+        "en": "The paper and examples cover robotic applications. ROSA is an agent/tool framework; native MCP is not inferred from its purpose."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/nasa-jpl/rosa/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/nasa-jpl/rosa/blob/main/LICENSE"
+        },
+        {
+          "role": "paper",
+          "url": "https://arxiv.org/abs/2410.06472"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "e8645d3d4c0fe22f9b7335537c02f2bd01b137594b774861f0601b19a84f5f95",
+        "LICENSE.txt": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+      }
+    },
+    {
+      "id": "device-use",
+      "name": "device-use",
+      "repository": "labclaw/device-use",
+      "url": "https://github.com/labclaw/device-use",
+      "category": "gui",
+      "scope": "implementation",
+      "interfaces": [
+        "Python",
+        "GUI automation",
+        "MCP",
+        "VLM backends"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "Apache-2.0",
+      "license_class": "open",
+      "description": {
+        "zh": "用屏幕观察、规划和鼠标键盘操作包装仪器软件，配套设备 profile。适用于 API 缺失时的替代接入研究。",
+        "en": "Wraps instrument software through screen observation, planning and mouse/keyboard actions with device profiles. Relevant when an API is unavailable."
+      },
+      "evidence": {
+        "kind": "adapter",
+        "zh": "公开实现含 NMR 数据处理与酶标仪模块；MCP 工具存在不等于全部列出的商业仪器都已完成物理控制验证。",
+        "en": "Public implementation includes NMR-data and plate-reader modules. MCP tools do not establish physical-control validation for every named commercial instrument."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/labclaw/device-use/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/labclaw/device-use/blob/main/LICENSE"
+        },
+        {
+          "role": "implementation",
+          "url": "https://github.com/labclaw/device-use/blob/main/src/device_use/integrations/mcp_server.py"
+        }
+      ],
+      "related": [
+        "device-skills"
+      ],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "5220b9e042eefd506736242a068e7489b47d0c5a9f0fe6e0f35f78eea2bf6684",
+        "LICENSE.txt": "5a0b8d6eb25b80203ed286f282739fcc359df34ccdc38814d0b11450de9c3298",
+        "tree.json": "fa632f46fdc610fd8fc33331aa8eb475e352a8cf16645e76def4275e906afb82"
+      }
+    },
+    {
+      "id": "device-skills",
+      "name": "device-skills",
+      "repository": "labclaw/device-skills",
+      "url": "https://github.com/labclaw/device-skills",
+      "category": "gui",
+      "scope": "reference",
+      "interfaces": [
+        "Agent Skills",
+        "Device operating knowledge"
+      ],
+      "mcp": "not_documented",
+      "skills": "documented",
+      "license": "Apache-2.0",
+      "license_class": "open",
+      "description": {
+        "zh": "仪器操作知识与技能材料，与 device-use 的执行接口配套。",
+        "en": "Instrument operating knowledge and skill material accompanying device-use execution interfaces."
+      },
+      "evidence": {
+        "kind": "artifact",
+        "zh": "技能是知识与操作说明；独立收录为配套资料，不计作设备驱动或独立实机系统。",
+        "en": "Skills contain knowledge and operating instructions; listed as supporting material rather than device drivers or an independently validated hardware system."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/labclaw/device-skills/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/labclaw/device-skills/blob/main/LICENSE"
+        }
+      ],
+      "related": [
+        "device-use"
+      ],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "1995813e042778b8fb9425b43a30d193c6ba2fc7602bc769222f916d3180667d",
+        "LICENSE.txt": "5a0b8d6eb25b80203ed286f282739fcc359df34ccdc38814d0b11450de9c3298"
+      }
+    },
+    {
+      "id": "edge-mhs",
+      "name": "edge-mhs",
+      "repository": "fastly/edge-mhs",
+      "url": "https://github.com/fastly/edge-mhs",
+      "category": "protocol",
+      "scope": "reference",
+      "interfaces": [
+        "MCP gateway",
+        "Fastly Compute"
+      ],
+      "mcp": "documented",
+      "skills": "not_documented",
+      "license": "Apache-2.0",
+      "license_class": "open",
+      "description": {
+        "zh": "在 Agent 与设备服务之间加入边缘网关，处理身份、参数约束、配额与审计。",
+        "en": "An edge gateway between agents and device services for identity, parameter constraints, quotas and audit records."
+      },
+      "evidence": {
+        "kind": "simulation",
+        "zh": "README 将其定位为参考实现并使用 mock 后端；不是 Anthropic 官方 MHS 服务端。",
+        "en": "The README identifies a reference implementation with mock backends, not an official Anthropic MHS server."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/fastly/edge-mhs/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/fastly/edge-mhs/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "8b0be0060209ca8befa2aa51a95b3daaef55cd5a9b5eccb7a126ca60ccd06fe0",
+        "LICENSE.txt": "f3013ebc049820a10d4b5da7cb36feff766314f09fa61fb3ff0c2d2511f566fa"
+      }
+    },
+    {
+      "id": "agent2device",
+      "name": "Agent2Device Protocol",
+      "repository": "neogyk/Agent2Device-Protocol",
+      "url": "https://github.com/neogyk/Agent2Device-Protocol",
+      "category": "protocol",
+      "scope": "reference",
+      "interfaces": [
+        "Design notes"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "讨论 Agent 与实验设备连接的协议构想。",
+        "en": "A protocol concept for connecting agents to laboratory devices."
+      },
+      "evidence": {
+        "kind": "proposal",
+        "zh": "核查仓库树只有 README、LICENSE 与忽略文件，没有协议实现或设备驱动。",
+        "en": "The reviewed tree contains only README, LICENSE and an ignore file, with no protocol implementation or device driver."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/neogyk/Agent2Device-Protocol/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/neogyk/Agent2Device-Protocol/blob/main/LICENSE"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "fa7950ff57688a48b9a6103d39e5e2acfd107644f29665febe9618d3c7c3e6a7",
+        "LICENSE.txt": "a764a4e9077862e66bd3bec047153246c16f5e70d3ba8bd6b4fc11c6adbd10e3",
+        "tree.json": "46167c6b1e828185d2c60d7b6cd666cc215d98e85d8f7c9ea34fc85e05bbb60c"
+      }
+    },
+    {
+      "id": "chemcrow",
+      "name": "ChemCrow public release",
+      "repository": "ur-whitelab/chemcrow-public",
+      "url": "https://github.com/ur-whitelab/chemcrow-public",
+      "category": "chemistry",
+      "scope": "reference",
+      "interfaces": [
+        "Python",
+        "LangChain tools"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "MIT",
+      "license_class": "open",
+      "description": {
+        "zh": "化学工具增强 Agent 的重要案例，可用于理解工具编排和实验服务边界。",
+        "en": "An important chemistry tool-augmented agent case for understanding orchestration and experimental-service boundaries."
+      },
+      "evidence": {
+        "kind": "artifact",
+        "zh": "论文有实验执行，但 README 明确公共包因 API 限制不包含论文所有工具；不据论文补写未公开的硬件接口。",
+        "en": "The paper includes experimental execution, but the README explicitly says API restrictions exclude some paper tools from the public package."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/ur-whitelab/chemcrow-public/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/ur-whitelab/chemcrow-public/blob/main/LICENSE"
+        },
+        {
+          "role": "paper",
+          "url": "https://doi.org/10.1038/s42256-024-00832-8"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "3b0c1fe5d2b905aa4a56ffee4371ba284f7d8b896db49e658dcc0a09590ca873",
+        "LICENSE.txt": "80761ffdd150f7efbad6d80c98c1b1ade4aa07fd4eb091caa3bc2ec2bb374ed3"
+      }
+    },
+    {
+      "id": "nvagent",
+      "name": "NV autonomous experiments",
+      "repository": "takuyaisogawa/nv-autonomous-experiments",
+      "url": "https://github.com/takuyaisogawa/nv-autonomous-experiments",
+      "category": "quantum",
+      "scope": "reference",
+      "interfaces": [
+        "Python",
+        "MATLAB",
+        "Case-study artifacts"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "MIT code / CC BY-4.0 artifacts",
+      "license_class": "open",
+      "description": {
+        "zh": "NV 中心自主实验的公共案例、分析代码与实验资料。",
+        "en": "Public case studies, analysis code and experimental artifacts for autonomous NV-center experiments."
+      },
+      "evidence": {
+        "kind": "artifact",
+        "zh": "许可和发布说明明确未包含 live-laboratory backend；可研究实验轨迹，不能直接当作完整 NV 设备控制软件。",
+        "en": "Release and license notes explicitly omit the live-laboratory backend. Useful for experimental trajectories, not a complete NV-device control release."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/takuyaisogawa/nv-autonomous-experiments/blob/main/README.md"
+        },
+        {
+          "role": "license",
+          "url": "https://github.com/takuyaisogawa/nv-autonomous-experiments/blob/main/LICENSE"
+        },
+        {
+          "role": "paper",
+          "url": "https://arxiv.org/abs/2607.25145"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "3665e217278a9228a32e2b6842100c5dc06539dc399a767a08e4e6d0b67c19a3",
+        "LICENSE.txt": "91971e2e3f04924ed5ca727cc9a11f6242bb1921bc9a5754681bd6d030f8f7f6"
+      }
+    },
+    {
+      "id": "uc2-hackathon",
+      "name": "UC2 LLM microscopy workshop",
+      "repository": "openUC2/Hackathon-UC2-LLM",
+      "url": "https://github.com/openUC2/Hackathon-UC2-LLM",
+      "category": "microscopy",
+      "scope": "reference",
+      "interfaces": [
+        "ImSwitch FastAPI",
+        "Python"
+      ],
+      "mcp": "not_documented",
+      "skills": "not_documented",
+      "license": "Unspecified",
+      "license_class": "unspecified",
+      "description": {
+        "zh": "围绕真实 UC2 显微镜和 ImSwitch API 的教学入口，包括设备构成、接入与实验挑战。",
+        "en": "A teaching entry point for physical UC2 microscopes and the ImSwitch API, covering hardware, access and experimental challenges."
+      },
+      "evidence": {
+        "kind": "artifact",
+        "zh": "是课程与示例资料，不是独立完整的 Agent 平台；未识别到许可证。",
+        "en": "Workshop and example material rather than a complete independent agent platform; no license was identified."
+      },
+      "sources": [
+        {
+          "role": "overview",
+          "url": "https://github.com/openUC2/Hackathon-UC2-LLM/blob/main/README.md"
+        }
+      ],
+      "related": [],
+      "reviewed": "2026-10-20",
+      "snapshot_sha256": {
+        "README.txt": "8a409a114a8f6c74ebb7f65772216c750b82a27a5ebbfe34c0abe7786e48d135"
+      }
+    }
+  ]
+}

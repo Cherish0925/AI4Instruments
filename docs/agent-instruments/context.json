@@ -1,0 +1,1242 @@
+{
+  "reviewed": "2026-10-20",
+  "standards": [
+    {
+      "id": "mhs",
+      "name": "Model Hardware Standard (MHS)",
+      "kind": "research-preview",
+      "role": {
+        "zh": "设备驱动、能力描述与 Agent 接入",
+        "en": "Device drivers, capability descriptions and agent access"
+      },
+      "status": {
+        "zh": "Anthropic 研究预览；官网仍提供申请入口，公开公告表述为计划开源。",
+        "en": "Anthropic research preview; the website retains an application entry point and the announcement describes open sourcing as forthcoming."
+      },
+      "detail": {
+        "zh": "公开材料说明统一驱动、读写原语、设备发现与物理说明标签，并提供 MCP、CLI、API 三种入口。精确兼容性应以正式发布的规范和实现为准。",
+        "en": "Public material describes common drivers, read/write primitives, discovery and physical-description tags, accessible through MCP, CLI and APIs. Exact compatibility requires the released specification and implementation."
+      },
+      "sources": [
+        "https://www.anthropic.com/news/model-hardware-standard-research-preview",
+        "https://modelhardwarestandard.com/"
+      ]
+    },
+    {
+      "id": "aip",
+      "name": "Agent–Instrument Protocol (AIP)",
+      "kind": "design-reference",
+      "role": {
+        "zh": "持久设备执行服务与实验契约",
+        "en": "Persistent device execution service and experimental contracts"
+      },
+      "status": {
+        "zh": "本项目讨论所用 AIP PRD v1.1，2026-10-18；用户提供的设计材料，未核实到对应公开实现。",
+        "en": "AIP PRD v1.1, dated 2026-10-18, supplied for this project; a corresponding public implementation has not been verified."
+      },
+      "detail": {
+        "zh": "设计包含 Rust 常驻服务、类型化物理量、动作与长活动、类 profile、状态来源、资源冲突和事件恢复；gRPC 控制与 Arrow Flight 数据分开。PRD 未把 MCP 设为产品组成部分。",
+        "en": "The design includes a persistent Rust service, typed quantities, actions and long activities, class profiles, state provenance, resource conflicts and event recovery, separating gRPC control from Arrow Flight data. MCP is not a product component in the PRD."
+      },
+      "sources": [],
+      "source_note": "User-supplied AIP PRD v1.1 (2026-10-18); design reference, not a public software release."
+    },
+    {
+      "id": "lap",
+      "name": "Lab Agent Protocol (LAP)",
+      "kind": "design-paper",
+      "role": {
+        "zh": "Agent 到仪器的契约提案",
+        "en": "A proposed agent-to-instrument contract"
+      },
+      "status": {
+        "zh": "arXiv:2606.03755 的 LAP v0.1 设计；论文明确尚非规范性标准或实现报告。",
+        "en": "LAP v0.1 design in arXiv:2606.03755; the paper explicitly distinguishes it from a normative standard or implementation report."
+      },
+      "detail": {
+        "zh": "InstrumentCard、资源预留、任务生命周期和测量结果对象值得比较；单位、校准与不确定度属于契约的实验含义。",
+        "en": "InstrumentCard, reservations, task lifecycle and measurement-result objects offer useful comparisons, especially units, calibration and uncertainty."
+      },
+      "sources": [
+        "https://arxiv.org/abs/2606.03755",
+        "https://arxiv.org/html/2606.03755v1"
+      ]
+    },
+    {
+      "id": "mcp",
+      "name": "Model Context Protocol (MCP)",
+      "kind": "agent-interface",
+      "role": {
+        "zh": "Agent 与工具、资源之间的通用交互",
+        "en": "General interaction between agents, tools and resources"
+      },
+      "status": {
+        "zh": "公开协议、SDK 与扩展生态。",
+        "en": "Public protocol, SDKs and extension ecosystem."
+      },
+      "detail": {
+        "zh": "JSON Schema 可携带单位和设备约束；Tasks 扩展提供可持久查询的任务句柄。真正缺少的往往是跨设备一致的物理语义与执行实现，而非 JSON 无法表达这些字段。",
+        "en": "JSON Schema can carry units and device constraints; the Tasks extension provides durable task handles. The remaining work is shared physical semantics and execution implementations, not an inability to represent those fields in JSON."
+      },
+      "sources": [
+        "https://modelcontextprotocol.io/docs/learn/architecture",
+        "https://tasks.extensions.modelcontextprotocol.io/",
+        "https://tasks.extensions.modelcontextprotocol.io/specification/draft/tasks"
+      ]
+    },
+    {
+      "id": "sila",
+      "name": "SiLA 2",
+      "kind": "device-standard",
+      "role": {
+        "zh": "实验室服务、Feature、Command 与 Property",
+        "en": "Laboratory services, features, commands and properties"
+      },
+      "status": {
+        "zh": "已有标准与多语言实现；旧 sila_python 文档已标为不维护并指向后继库。",
+        "en": "An established standard with implementations in several languages; the older sila_python documentation marks that implementation unmaintained and points to successors."
+      },
+      "detail": {
+        "zh": "可观测命令、执行状态和中间结果适合映射为 Agent 长任务。LabMCP 的 SiLA 2 桥可作为适配代码参考，当前仍是模拟验证。",
+        "en": "Observable commands, execution states and intermediate responses map naturally to agent jobs. LabMCP’s SiLA 2 bridge is an adapter-code reference, currently simulation-verified."
+      },
+      "sources": [
+        "https://sila2.gitlab.io/sila_python/",
+        "https://sila2.gitlab.io/sila_python/content/api/framework/index.html"
+      ],
+      "projects": [
+        "labmcp"
+      ]
+    },
+    {
+      "id": "lads",
+      "name": "OPC UA / LADS",
+      "kind": "device-standard",
+      "role": {
+        "zh": "设备信息模型、功能单元与程序管理",
+        "en": "Device information models, functional units and program management"
+      },
+      "status": {
+        "zh": "OPC UA Companion Specification，LADS Part 1。",
+        "en": "OPC UA Companion Specification, LADS Part 1."
+      },
+      "detail": {
+        "zh": "功能单元可暴露状态机；Program Manager 管理程序模板、执行与结果。通用 OPC UA-MCP 连接器不会自动理解所有 LADS 业务语义。",
+        "en": "Functional units can expose state machines; a Program Manager manages templates, execution and results. A generic OPC UA-MCP connector does not automatically interpret all LADS semantics."
+      },
+      "sources": [
+        "https://reference.opcfoundation.org/specs/OPC-30500-1/4.1.2.2",
+        "https://reference.opcfoundation.org/specs/OPC-30500-1/7.2"
+      ],
+      "projects": [
+        "opcua-industrial",
+        "opcua-kuka"
+      ]
+    },
+    {
+      "id": "wot",
+      "name": "W3C Web of Things",
+      "kind": "device-description",
+      "role": {
+        "zh": "跨传输的设备描述",
+        "en": "Device descriptions across transports"
+      },
+      "status": {
+        "zh": "Thing Description 1.1 推荐标准；2.0 另有草案轨道。",
+        "en": "Thing Description 1.1 Recommendation, with a separate 2.0 draft track."
+      },
+      "detail": {
+        "zh": "Properties、Actions、Events 以及交互表单，将能力语义与具体协议绑定分开。可借鉴到仪器描述，无需替换底层设备总线。",
+        "en": "Properties, Actions, Events and interaction forms separate capability semantics from protocol bindings. Useful for instrument descriptions without replacing device buses."
+      },
+      "sources": [
+        "https://www.w3.org/TR/wot-thing-description/"
+      ],
+      "projects": [
+        "oahl"
+      ]
+    },
+    {
+      "id": "facility",
+      "name": "EPICS / TANGO / DOOCS",
+      "kind": "control-stack",
+      "role": {
+        "zh": "科学设施设备与控制通道",
+        "en": "Scientific-facility devices and control channels"
+      },
+      "status": {
+        "zh": "保留已有控制系统，通过 Agent 适配层接入。",
+        "en": "Retain the control system and connect an agent adapter."
+      },
+      "detail": {
+        "zh": "Osprey 提供三者连接器；TANGO MCP 和 EPICS MCP 提供更直接的桥。需要保留通道名、单位、时间与质量信息。",
+        "en": "Osprey supplies connectors for all three; TANGO MCP and EPICS MCP offer more direct bridges. Preserve channel identity, units, timestamps and quality."
+      },
+      "sources": [
+        "https://github.com/als-apg/osprey",
+        "https://github.com/abogani/tango-mcp",
+        "https://github.com/sryu81/mcp-server-for-epics"
+      ],
+      "projects": [
+        "osprey",
+        "tango",
+        "epics-mcp"
+      ]
+    },
+    {
+      "id": "qcodes",
+      "name": "QCoDeS",
+      "kind": "driver-ecosystem",
+      "role": {
+        "zh": "参数、Station、仪器驱动与测量数据",
+        "en": "Parameters, stations, instrument drivers and measurement data"
+      },
+      "status": {
+        "zh": "Python 测量生态，可由 instrMCP 直接复用。",
+        "en": "Python measurement ecosystem directly reused by instrMCP."
+      },
+      "detail": {
+        "zh": "重用参数验证、单位、快照和数据集；区分 cached 值与 fresh 查询。",
+        "en": "Reuse parameter validation, units, snapshots and datasets; distinguish cached values from fresh queries."
+      },
+      "sources": [
+        "https://microsoft.github.io/Qcodes/",
+        "https://github.com/caidish/instrMCP"
+      ],
+      "projects": [
+        "instrmcp"
+      ]
+    },
+    {
+      "id": "bluesky",
+      "name": "Bluesky / ophyd",
+      "kind": "execution-ecosystem",
+      "role": {
+        "zh": "设备抽象、实验计划与执行",
+        "en": "Device abstractions, experiment plans and execution"
+      },
+      "status": {
+        "zh": "已有束线使用路径；VISION 在其上提供自然语言入口。",
+        "en": "An established beamline execution route, with VISION providing a natural-language entry point."
+      },
+      "detail": {
+        "zh": "Agent 可以选择和参数化实验计划，由 RunEngine 执行；不必逐个低层调用穿过模型推理。",
+        "en": "Agents can select and parameterize plans for a RunEngine to execute instead of routing each low-level call through model reasoning."
+      },
+      "sources": [
+        "https://blueskyproject.io/bluesky/",
+        "https://github.com/CFN-softbio/VISION"
+      ],
+      "projects": [
+        "vision"
+      ]
+    },
+    {
+      "id": "liquid",
+      "name": "PyLabRobot / Opentrons API",
+      "kind": "driver-ecosystem",
+      "role": {
+        "zh": "液体处理的设备、资源和执行接口",
+        "en": "Device, resource and execution interfaces for liquid handling"
+      },
+      "status": {
+        "zh": "多个独立 MCP 服务复用的底层。",
+        "en": "Underlying interfaces reused by several independent MCP servers."
+      },
+      "detail": {
+        "zh": "PyLabRobot backend、机器人 HTTP run 与上层 Agent 工具是不同层；模拟器通过不代表真实甲板、液体与吸头行为相同。",
+        "en": "PyLabRobot backends, robot HTTP runs and agent tools are distinct layers. Simulator success does not establish equivalent deck, liquid and tip behavior."
+      },
+      "sources": [
+        "https://pylabrobot.org/",
+        "https://github.com/di-omics/plr-mcp",
+        "https://github.com/yerbymatey/opentrons-mcp"
+      ],
+      "projects": [
+        "plr-mcp",
+        "opentrons",
+        "openlabai"
+      ]
+    },
+    {
+      "id": "ros",
+      "name": "ROS / rosbridge",
+      "kind": "robot-ecosystem",
+      "role": {
+        "zh": "机器人主题、服务、动作与传感器",
+        "en": "Robot topics, services, actions and sensors"
+      },
+      "status": {
+        "zh": "ROS MCP 与 ROSA 的既有机器人接入基础。",
+        "en": "Existing robot integration foundation for ROS MCP and ROSA."
+      },
+      "detail": {
+        "zh": "机器人导航、规划和实时控制留在机器人软件栈；Agent 发目标、调用动作并检查反馈。",
+        "en": "Navigation, planning and real-time control remain in the robot stack; agents submit goals, call actions and inspect feedback."
+      },
+      "sources": [
+        "https://github.com/robotmcp/ros-mcp-server",
+        "https://github.com/nasa-jpl/rosa"
+      ],
+      "projects": [
+        "ros-mcp",
+        "rosa"
+      ]
+    },
+    {
+      "id": "bench",
+      "name": "SCPI / VISA / vendor SDK",
+      "kind": "device-access",
+      "role": {
+        "zh": "已有台式仪器的可编程入口",
+        "en": "Programmable access to existing bench instruments"
+      },
+      "status": {
+        "zh": "MCP 桥接最密集的一类接入路径。",
+        "en": "A prominent integration route among instrument MCP bridges."
+      },
+      "detail": {
+        "zh": "VISA 是访问抽象，SCPI 是指令体系；接口一致不保证不同型号的触发、波形编码、缓冲与错误行为一致。",
+        "en": "VISA is an access abstraction; SCPI is a command system. Similar interfaces do not guarantee identical triggering, waveform encoding, buffering or error behavior across models."
+      },
+      "sources": [
+        "https://github.com/techmanual-ai/lablink-mcp",
+        "https://github.com/mp911de/siglent-scpi-mcp",
+        "https://github.com/Netlist-Studio/scope-mcp"
+      ],
+      "projects": [
+        "lablink",
+        "siglent",
+        "scope-mcp"
+      ]
+    },
+    {
+      "id": "microscopy-access",
+      "name": "Micro-Manager / GenICam / ImSwitch",
+      "kind": "device-access",
+      "role": {
+        "zh": "显微镜、相机与光机部件",
+        "en": "Microscopes, cameras and optomechanical components"
+      },
+      "status": {
+        "zh": "Agent 复用已有显微与相机设备适配。",
+        "en": "Agent integration reuses existing microscopy and camera adapters."
+      },
+      "detail": {
+        "zh": "图像需要与曝光、位置、通道、像素尺寸和校准版本关联；一次返回图片不等于完整测量记录。",
+        "en": "Images should be linked to exposure, position, channel, pixel size and calibration revision; an image response alone is not a complete measurement record."
+      },
+      "sources": [
+        "https://github.com/kyu-softmatter/agentic-microscope",
+        "https://github.com/BioNanomics/microscope-agent",
+        "https://github.com/openUC2/Hackathon-UC2-LLM"
+      ],
+      "projects": [
+        "agentic-microscope",
+        "microscope-agent",
+        "uc2-hackathon"
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "name": "Harbor",
+      "url": "https://docs.harborframework.com/",
+      "reason": {
+        "zh": "Agent 评测与环境运行框架，不是物理仪器协议。",
+        "en": "An agent evaluation and environment framework, not a physical-instrument protocol."
+      }
+    },
+    {
+      "name": "Quantum-Harbor",
+      "url": "https://arxiv.org/abs/2609.17439",
+      "reason": {
+        "zh": "虚拟量子实验基准；可供测试 Agent，不能作为实机驱动证据。",
+        "en": "A virtual quantum-experiment benchmark; useful for agent evaluation, not evidence of hardware drivers."
+      }
+    },
+    {
+      "name": "OPC UA for AI Prototype",
+      "url": "https://github.com/OPCFoundation/UA-for-AI-Prototype",
+      "reason": {
+        "zh": "公开 MCP 主要检索规范、节点定义和术语；应归入知识接口。",
+        "en": "Its public MCP searches specifications, node definitions and terminology: a knowledge interface."
+      }
+    },
+    {
+      "name": "Agent Interaction Protocol",
+      "url": "https://github.com/ScienceOne-AI/Agent-Interaction-Protocol",
+      "reason": {
+        "zh": "同缩写 AIP，研究 Agent 间交互；不是这里的 Agent–Instrument Protocol。",
+        "en": "Another AIP acronym, addressing interaction among agents rather than the Agent–Instrument Protocol discussed here."
+      }
+    },
+    {
+      "name": "Agent Identity Protocol",
+      "url": "https://github.com/openagentidentityprotocol/agentidentityprotocol",
+      "reason": {
+        "zh": "同缩写 AIP，研究身份与授权；不是仪器契约。",
+        "en": "Another AIP acronym, addressing identity and authorization rather than instrument contracts."
+      }
+    },
+    {
+      "name": "LabMCP · ishaanko",
+      "url": "https://github.com/ishaanko/labmcp",
+      "reason": {
+        "zh": "WebMCP 虚拟化学实验，与 K-Dense 的仪器适配集合不同。",
+        "en": "A virtual chemistry lab using WebMCP, distinct from K-Dense’s instrument adapter collection."
+      }
+    },
+    {
+      "name": "SciLink",
+      "url": "https://github.com/ziatdinovmax/SciLink",
+      "reason": {
+        "zh": "分析、规划与模拟系统；本次未核实可独立复用的完整实机接口链，保留为研究线索。",
+        "en": "Analysis, planning and simulation system; a complete reusable physical-device path was not verified in this review, so retained as a research lead."
+      }
+    },
+    {
+      "name": "AuraID · OpenOwlab",
+      "url": "https://github.com/OpenOwlab/AuraID",
+      "reason": {
+        "zh": "当前仓库是文献、工作区与计算任务助手，不能因同名资料归为仪器 GUI Agent。",
+        "en": "The current repository is a literature, workspace and compute-task assistant, not evidence for a similarly named instrument GUI agent."
+      }
+    },
+    {
+      "name": "LabClaw · wu-yc",
+      "url": "https://github.com/wu-yc/LabClaw",
+      "reason": {
+        "zh": "技能集合与实验工作层；与 labclaw/device-use 分属不同工程，未据名称合并。",
+        "en": "A skills collection and laboratory operating layer, distinct from labclaw/device-use; names alone do not establish a shared implementation."
+      }
+    },
+    {
+      "name": "GaugeForge/instrMCP",
+      "url": "https://github.com/GaugeForge/instrMCP",
+      "reason": {
+        "zh": "caidish/instrMCP 的 fork；保留上游主记录，避免重复计数。",
+        "en": "A fork of caidish/instrMCP; the upstream entry is retained to avoid duplicate counting."
+      }
+    },
+    {
+      "name": "LLMicroscopilot",
+      "url": "https://zenodo.org/records/14051590",
+      "reason": {
+        "zh": "原始海报说明操作的是 TEM / STM 图像模拟后端，并提供 GitLab 地址；不作为真实显微镜控制案例。",
+        "en": "The original poster describes TEM/STM image-simulation backends and links a GitLab repository; it is not counted as physical microscope control."
+      }
+    },
+    {
+      "name": "OPERA",
+      "url": "https://github.com/ningxu1995/OPERA",
+      "reason": {
+        "zh": "MIT 研究代码包含光学数字孪生、算子与残差接口、固定实验记录及重放验证；README 明确不含在线仪器控制或硬件专用 API。可借鉴实验反馈表示，不计为公开实机驱动。",
+        "en": "The MIT research release provides optical twins, operator/residual interfaces, frozen records and replay validation. Its README explicitly excludes live instrument control and hardware-specific APIs; it informs feedback design, rather than supplying a public hardware driver."
+      }
+    }
+  ],
+  "components": [
+    {
+      "parent": "labmcp",
+      "name": "Atlas Scientific EZO Sensors",
+      "models": [
+        "EZO-pH",
+        "EZO-ORP",
+        "EZO-DO",
+        "EZO-EC",
+        "EZO-RTD",
+        "EZO-HUM",
+        "EZO-CO2",
+        "EZO-PRS"
+      ],
+      "interfaces": [
+        "UART (USB-serial adapter)",
+        "Ethernet (serial bridge)"
+      ],
+      "protocol": "Atlas Scientific EZO UART command set",
+      "status": "simulated",
+      "tool_count": 13,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/biology/atlas-ezo-sensors"
+    },
+    {
+      "parent": "labmcp",
+      "name": "Micro-Manager Microscope",
+      "models": [
+        "Any microscope with a Micro-Manager hardware configuration (.cfg)",
+        "Micro-Manager demo configuration"
+      ],
+      "interfaces": [
+        "USB",
+        "Serial",
+        "Camera Link / CoaXPress / GigE (through Micro-Manager device adapters)"
+      ],
+      "protocol": "Micro-Manager MMCore API via pymmcore-plus",
+      "status": "simulated",
+      "tool_count": 19,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/biology/micro-manager"
+    },
+    {
+      "parent": "labmcp",
+      "name": "New Era Syringe Pump",
+      "models": [
+        "NE-1000",
+        "NE-1002X",
+        "NE-1010",
+        "NE-4000",
+        "NE-500 OEM",
+        "NE-8000",
+        "other NE-1000-series pumps with RS-232"
+      ],
+      "interfaces": [
+        "RS-232",
+        "USB (RS-232 adapter)",
+        "Serial-to-Ethernet"
+      ],
+      "protocol": "New Era RS-232 Basic mode",
+      "status": "simulated",
+      "tool_count": 11,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/biology/new-era-syringe-pump"
+    },
+    {
+      "parent": "labmcp",
+      "name": "Opentrons OT-2 / Flex",
+      "models": [
+        "Flex",
+        "OT-2"
+      ],
+      "interfaces": [
+        "Ethernet",
+        "Wi-Fi",
+        "USB (network over USB)"
+      ],
+      "protocol": "Opentrons robot-server HTTP API (port 31950)",
+      "status": "simulated",
+      "tool_count": 18,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/biology/opentrons"
+    },
+    {
+      "parent": "labmcp",
+      "name": "Tecan Cavro Syringe Pump",
+      "models": [
+        "Cavro XLP 6000",
+        "Cavro XMP 6000",
+        "Cavro XCalibur"
+      ],
+      "interfaces": [
+        "RS-232",
+        "RS-485 (via adapter)",
+        "Serial-to-Ethernet"
+      ],
+      "protocol": "Cavro Data Terminal (DT) protocol",
+      "status": "simulated",
+      "tool_count": 9,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/biology/tecan-cavro-pump"
+    },
+    {
+      "parent": "labmcp",
+      "name": "IKA Hotplate & Overhead Stirrer",
+      "models": [
+        "C-MAG HS 7 control",
+        "IKA Plate (RCT digital)",
+        "EUROSTAR 60 control",
+        "EUROSTAR 100 control"
+      ],
+      "interfaces": [
+        "RS-232",
+        "USB (virtual COM)"
+      ],
+      "protocol": "IKA NAMUR command set",
+      "status": "simulated",
+      "tool_count": 14,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/chemistry/ika-stirrer"
+    },
+    {
+      "parent": "labmcp",
+      "name": "JULABO Circulator",
+      "models": [
+        "CORIO CD",
+        "CORIO CP",
+        "MAGIO MS",
+        "DYNEO DD"
+      ],
+      "interfaces": [
+        "USB (virtual COM)",
+        "RS-232"
+      ],
+      "protocol": "JULABO interface commands (in_/out_/status/version)",
+      "status": "simulated",
+      "tool_count": 10,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/chemistry/julabo-circulator"
+    },
+    {
+      "parent": "labmcp",
+      "name": "Mettler Toledo Balance",
+      "models": [
+        "Excellence XPR/XSR",
+        "XP/XS",
+        "XA/XE",
+        "MS/ML",
+        "NewClassic ME/MS",
+        "MT-SICS weighing terminals"
+      ],
+      "interfaces": [
+        "RS-232",
+        "USB (virtual COM)",
+        "Ethernet"
+      ],
+      "protocol": "MT-SICS (levels 0-2)",
+      "status": "simulated",
+      "tool_count": 17,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/chemistry/mettler-toledo-balance"
+    },
+    {
+      "parent": "labmcp",
+      "name": "Mass Spectrometry Data (mzML, Bruker TDF, vendor conversion)",
+      "models": [
+        "Any LC-MS run in mzML/mzMLb",
+        "Bruker timsTOF (TDF .d)",
+        "Thermo .raw, Waters .raw, Agilent .d, SCIEX .wiff/.wiff2, Shimadzu .lcd, Bruker BAF (via conversion)"
+      ],
+      "interfaces": [
+        "File"
+      ],
+      "protocol": "mzML / mzMLb (pyteomics) / Bruker TDF (SQLite + timsrust) / msconvert & ThermoRawFileParser",
+      "status": "simulated",
+      "tool_count": 12,
+      "device_path": false,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/chemistry/ms-data"
+    },
+    {
+      "parent": "labmcp",
+      "name": "LC-MS Worklist Builder",
+      "models": [
+        "Waters MassLynx 4.x",
+        "SCIEX OS",
+        "Agilent MassHunter Acquisition",
+        "Thermo Xcalibur"
+      ],
+      "interfaces": [
+        "File"
+      ],
+      "protocol": "Sample-list import files: MassLynx worksheet CSV, SCIEX OS batch CSV/TXT, MassHunter worklist CSV, Xcalibur sequence CSV",
+      "status": "simulated",
+      "tool_count": 12,
+      "device_path": false,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/chemistry/ms-worklist"
+    },
+    {
+      "parent": "labmcp",
+      "name": "Ocean Insight Spectrometer",
+      "models": [
+        "USB2000+",
+        "USB2000",
+        "USB4000",
+        "USB650",
+        "Flame-S",
+        "Flame-NIR",
+        "Flame-X",
+        "HR2000/HR2000+",
+        "HR4000",
+        "Maya2000/Maya2000 Pro/Maya LSL",
+        "QE65000",
+        "QE Pro",
+        "STS",
+        "NIRQuest256/512",
+        "Jaz",
+        "Torus",
+        "Spark",
+        "Apex",
+        "Ventana",
+        "HDX",
+        "ADC1000-USB",
+        "HR2/HR4/HR6",
+        "SR2/SR4/SR6",
+        "ST-VIS"
+      ],
+      "interfaces": [
+        "USB"
+      ],
+      "protocol": "python-seabreeze (SeaBreeze / OOI and OBP protocols)",
+      "status": "simulated",
+      "tool_count": 16,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/chemistry/ocean-spectrometer"
+    },
+    {
+      "parent": "labmcp",
+      "name": "PalmSens Potentiostat",
+      "models": [
+        "EmStat Pico",
+        "EmStat4 LR/HR (incl. EmStat4S/4M/4X)",
+        "Sensit Wearable / Sensit BT",
+        "Nexus"
+      ],
+      "interfaces": [
+        "USB (virtual COM port)",
+        "UART / RS-232"
+      ],
+      "protocol": "MethodSCRIPT v1.x + PalmSens online communication protocol",
+      "status": "simulated",
+      "tool_count": 10,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/chemistry/palmsens-potentiostat"
+    },
+    {
+      "parent": "labmcp",
+      "name": "Sartorius Balance",
+      "models": [
+        "Cubis MSE",
+        "Cubis II MCA",
+        "Secura",
+        "Quintix",
+        "Practum",
+        "Entris II",
+        "CP/CPA (legacy)"
+      ],
+      "interfaces": [
+        "RS-232",
+        "USB (virtual COM)",
+        "Ethernet (Cubis II)"
+      ],
+      "protocol": "SBI (Sartorius Balance Interface)",
+      "status": "simulated",
+      "tool_count": 10,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/chemistry/sartorius-balance"
+    },
+    {
+      "parent": "labmcp",
+      "name": "Thermo Orbitrap (Instrument API)",
+      "models": [
+        "Orbitrap Fusion",
+        "Orbitrap Fusion Lumos",
+        "Orbitrap Eclipse",
+        "Orbitrap Ascend",
+        "Orbitrap Exploris 240",
+        "Orbitrap Exploris 480",
+        "Q Exactive family"
+      ],
+      "interfaces": [
+        ".NET API (Windows)"
+      ],
+      "protocol": "Thermo Fisher Instrument API (IAPI)",
+      "status": "simulated",
+      "tool_count": 15,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/chemistry/thermo-iapi"
+    },
+    {
+      "parent": "labmcp",
+      "name": "Alicat Mass Flow & Pressure Controller",
+      "models": [
+        "MC/MCR/MCS/MCE/MCV/MCW mass flow controllers",
+        "M/MS/MW mass flow meters",
+        "PC/PCD pressure controllers",
+        "P pressure gauges",
+        "L/LC liquid flow devices"
+      ],
+      "interfaces": [
+        "RS-232",
+        "RS-485",
+        "USB (virtual COM)",
+        "Ethernet (serial bridge)"
+      ],
+      "protocol": "Alicat ASCII serial (Serial Communications Primer)",
+      "status": "simulated",
+      "tool_count": 14,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/engineering/alicat-flow-controller"
+    },
+    {
+      "parent": "labmcp",
+      "name": "Bench DC Power Supply",
+      "models": [
+        "Rigol DP832/DP831/DP822/DP821/DP811/DP813",
+        "Rigol DP711/DP712",
+        "Rigol DP932A/U/E",
+        "Siglent SPD3303X/X-E",
+        "Siglent SPD1168X/SPD1305X",
+        "Aim-TTi CPX400D/DP",
+        "Aim-TTi MX100TP/MX180TP",
+        "Aim-TTi QL355/QL564 (P/TP)",
+        "Aim-TTi PL-P"
+      ],
+      "interfaces": [
+        "USB (USB-TMC / virtual COM)",
+        "LAN (VISA / raw socket)",
+        "RS-232",
+        "GPIB (via VISA)"
+      ],
+      "protocol": "SCPI (Rigol, Siglent) and Aim-TTi remote commands",
+      "status": "simulated",
+      "tool_count": 12,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/engineering/bench-power-supply"
+    },
+    {
+      "parent": "labmcp",
+      "name": "LabJack T-series DAQ",
+      "models": [
+        "T4",
+        "T7",
+        "T7-Pro",
+        "T8"
+      ],
+      "interfaces": [
+        "USB",
+        "Ethernet",
+        "WiFi (T7-Pro)"
+      ],
+      "protocol": "LJM library (Modbus TCP register map)",
+      "status": "simulated",
+      "tool_count": 12,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/engineering/labjack"
+    },
+    {
+      "parent": "labmcp",
+      "name": "NI-DAQmx DAQ Devices",
+      "models": [
+        "USB-6001/6002/6003",
+        "USB-6008/6009",
+        "USB-621x",
+        "USB/PCIe-63xx (M/X series)",
+        "CompactDAQ C Series modules",
+        "NI MAX simulated devices"
+      ],
+      "interfaces": [
+        "USB",
+        "PCI/PCIe",
+        "PXI",
+        "Ethernet (cDAQ)"
+      ],
+      "protocol": "NI-DAQmx driver via the nidaqmx Python API",
+      "status": "simulated",
+      "tool_count": 11,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/engineering/ni-daqmx"
+    },
+    {
+      "parent": "labmcp",
+      "name": "Rigol Oscilloscope",
+      "models": [
+        "DS1000Z / MSO1000Z (DS1054Z, DS1104Z...)",
+        "DS1000Z-E (DS1202Z-E)",
+        "MSO5000",
+        "DHO800 / DHO900",
+        "DHO1000 / DHO4000"
+      ],
+      "interfaces": [
+        "USB (USB-TMC)",
+        "LAN (VXI-11 / raw socket)"
+      ],
+      "protocol": "SCPI (Rigol programming guides)",
+      "status": "simulated",
+      "tool_count": 16,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/engineering/rigol-oscilloscope"
+    },
+    {
+      "parent": "labmcp",
+      "name": "ASTM LIS Analyzer Receiver",
+      "models": [
+        "Hematology analyzers",
+        "Clinical chemistry analyzers",
+        "Immunoassay analyzers",
+        "Urinalysis and coagulation analyzers",
+        "e.g. Sysmex, Roche cobas, Abbott, Beckman Coulter, Mindray models with an ASTM host interface"
+      ],
+      "interfaces": [
+        "RS-232",
+        "TCP/IP (client)",
+        "TCP/IP (listener)"
+      ],
+      "protocol": "ASTM E1381 / CLSI LIS1-A low-level protocol + ASTM E1394 / CLSI LIS2-A2 records (receive-only)",
+      "status": "simulated",
+      "tool_count": 8,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/health/astm-lis-analyzer"
+    },
+    {
+      "parent": "labmcp",
+      "name": "Bluetooth LE Health Sensors",
+      "models": [
+        "Heart-rate chest straps and armbands (Heart Rate Service)",
+        "Pulse oximeters (Pulse Oximeter Service)",
+        "Blood pressure monitors (Blood Pressure Service)",
+        "Thermometers (Health Thermometer Service)",
+        "Weight scales (Weight Scale Service)"
+      ],
+      "interfaces": [
+        "Bluetooth Low Energy"
+      ],
+      "protocol": "Bluetooth SIG GATT: HRS, PLXS, BLS, HTS, WSS, BAS, DIS (IEEE 11073-20601 SFLOAT/FLOAT)",
+      "status": "simulated",
+      "tool_count": 11,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/health/ble-health-sensors"
+    },
+    {
+      "parent": "labmcp",
+      "name": "BrainFlow Biosensing Boards",
+      "models": [
+        "OpenBCI Cyton / Cyton+Daisy / Ganglion / Galea (USB, BLE, WiFi Shield)",
+        "Muse 2 / Muse S / Muse S Athena / Muse 2016",
+        "Neurosity Crown / Notion 1 / Notion 2",
+        "g.tec Unicorn Hybrid Black",
+        "BrainBit, Callibri, Enophone, Mentalab Explore, EmotiBit, FreeEEG32/128, NeuroPawn Knight, Shimmer3",
+        "Any other board in BrainFlow's BoardIds"
+      ],
+      "interfaces": [
+        "USB (serial dongle)",
+        "Bluetooth LE",
+        "WiFi",
+        "Vendor SDK (via BrainFlow)"
+      ],
+      "protocol": "BrainFlow SDK (BoardShim / DataFilter)",
+      "status": "simulated",
+      "tool_count": 12,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/health/brainflow-biosensors"
+    },
+    {
+      "parent": "labmcp",
+      "name": "Keithley SourceMeter SMU",
+      "models": [
+        "2400",
+        "2401",
+        "2410",
+        "2420",
+        "2425",
+        "2430",
+        "2440",
+        "2450",
+        "2460",
+        "2461",
+        "2470",
+        "2601B",
+        "2602B",
+        "2604B",
+        "2611B",
+        "2612B",
+        "2614B",
+        "2634B",
+        "2635B",
+        "2636B"
+      ],
+      "interfaces": [
+        "GPIB",
+        "USB (USBTMC)",
+        "Ethernet (LXI / raw socket)",
+        "RS-232"
+      ],
+      "protocol": "SCPI (2400 series, 2450 family) and TSP (2600B)",
+      "status": "simulated",
+      "tool_count": 12,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/physics/keithley-smu"
+    },
+    {
+      "parent": "labmcp",
+      "name": "Lake Shore Temperature Controller",
+      "models": [
+        "Model 335",
+        "Model 336",
+        "Model 350"
+      ],
+      "interfaces": [
+        "USB (virtual COM)",
+        "Ethernet (TCP 7777, 336/350)",
+        "IEEE-488 (GPIB)"
+      ],
+      "protocol": "Lake Shore ASCII command set (IEEE-488.2 style)",
+      "status": "simulated",
+      "tool_count": 11,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/physics/lakeshore-temperature"
+    },
+    {
+      "parent": "labmcp",
+      "name": "Pfeiffer Vacuum Gauge Controller",
+      "models": [
+        "TPG 361",
+        "TPG 362",
+        "TPG 366 MaxiGauge",
+        "TPG 261",
+        "TPG 262"
+      ],
+      "interfaces": [
+        "USB (virtual COM)",
+        "Ethernet (TCP 8000)",
+        "RS-232 (TPG 26x)"
+      ],
+      "protocol": "Pfeiffer mnemonics protocol (ACK/NAK + ENQ)",
+      "status": "simulated",
+      "tool_count": 11,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/physics/pfeiffer-vacuum-gauge"
+    },
+    {
+      "parent": "labmcp",
+      "name": "SRS Lock-in Amplifier",
+      "models": [
+        "SR830",
+        "SR810",
+        "SR860",
+        "SR865A"
+      ],
+      "interfaces": [
+        "GPIB",
+        "RS-232",
+        "USB (USBTMC)",
+        "Ethernet (VXI-11)"
+      ],
+      "protocol": "SRS remote command set (IEEE-488.2 style ASCII)",
+      "status": "simulated",
+      "tool_count": 15,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/physics/srs-lockin"
+    },
+    {
+      "parent": "labmcp",
+      "name": "SRS Residual Gas Analyzer",
+      "models": [
+        "RGA100",
+        "RGA200",
+        "RGA300"
+      ],
+      "interfaces": [
+        "RS-232",
+        "TCP"
+      ],
+      "protocol": "SRS RGA command set (ASCII commands, binary ion currents)",
+      "status": "simulated",
+      "tool_count": 18,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/physics/srs-rga"
+    },
+    {
+      "parent": "labmcp",
+      "name": "Thorlabs Optical Power Meter",
+      "models": [
+        "PM100D",
+        "PM100A",
+        "PM100USB",
+        "PM400",
+        "PM101 (unverified)",
+        "PM5020 (unverified)"
+      ],
+      "interfaces": [
+        "USB (USBTMC / VISA)"
+      ],
+      "protocol": "SCPI (Thorlabs PM100 / PM400 command set)",
+      "status": "simulated",
+      "tool_count": 11,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/physics/thorlabs-power-meter"
+    },
+    {
+      "parent": "labmcp",
+      "name": "EPICS Channel Access",
+      "models": [
+        "Any EPICS IOC serving Channel Access (EPICS Base 3.14-7.x, areaDetector, motor, asyn, PyDevice, caproto IOCs)",
+        "CA gateways"
+      ],
+      "interfaces": [
+        "Ethernet (CA over UDP/TCP 5064/5065)"
+      ],
+      "protocol": "EPICS Channel Access v4.13 (caproto)",
+      "status": "simulated",
+      "tool_count": 10,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/protocols/epics"
+    },
+    {
+      "parent": "labmcp",
+      "name": "Modbus TCP/RTU Device",
+      "models": [
+        "PID temperature controllers (e.g. Watlow, Eurotherm, Omega, Autonics)",
+        "Recirculating chillers and thermostats",
+        "PLCs and remote I/O",
+        "Process sensors and transmitters",
+        "Variable-frequency drives",
+        "Data loggers and power meters",
+        "Any other Modbus TCP / RTU / ASCII device"
+      ],
+      "interfaces": [
+        "Ethernet (Modbus TCP)",
+        "RS-485 / RS-232 (Modbus RTU, ASCII)",
+        "Serial-to-Ethernet gateways"
+      ],
+      "protocol": "Modbus Application Protocol V1.1b3 (TCP, RTU, ASCII)",
+      "status": "simulated",
+      "tool_count": 13,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/protocols/modbus"
+    },
+    {
+      "parent": "labmcp",
+      "name": "Generic SCPI Instrument",
+      "models": [
+        "Digital multimeters",
+        "Oscilloscopes",
+        "Source-measure units",
+        "DC power supplies and electronic loads",
+        "Function / arbitrary waveform generators",
+        "Spectrum and network analyzers",
+        "Frequency counters",
+        "Any other SCPI or IEEE 488.2 instrument"
+      ],
+      "interfaces": [
+        "GPIB (VISA)",
+        "USBTMC (VISA)",
+        "LAN VXI-11 / HiSLIP (VISA)",
+        "LAN raw socket (e.g. port 5025)",
+        "RS-232 / USB-serial"
+      ],
+      "protocol": "SCPI-99 / IEEE 488.2",
+      "status": "simulated",
+      "tool_count": 15,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/protocols/scpi-instrument"
+    },
+    {
+      "parent": "labmcp",
+      "name": "SiLA 2 Bridge",
+      "models": [
+        "Any SiLA 2 server: devices and middleware with SiLA 2 interfaces (liquid handlers, incubators, readers, robots, schedulers)",
+        "sila_python, sila_java, sila_csharp, sila_cpp and vendor SiLA 2 servers"
+      ],
+      "interfaces": [
+        "Ethernet (gRPC over HTTP/2, TLS)",
+        "mDNS discovery"
+      ],
+      "protocol": "SiLA 2 v1.x (gRPC mapping, Feature Definition Language)",
+      "status": "simulated",
+      "tool_count": 13,
+      "device_path": true,
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps/tree/main/servers/protocols/sila2"
+    },
+    {
+      "parent": "openmhp",
+      "name": "IKA C-MAG HS 7",
+      "models": [],
+      "interfaces": [
+        "Serial / NAMUR"
+      ],
+      "protocol": "Serial / NAMUR",
+      "status": "twin-tested",
+      "tool_count": null,
+      "device_path": true,
+      "url": "https://github.com/kushalsinha/openmhp/tree/main/supported-devices/ika-c-mag-hs7"
+    },
+    {
+      "parent": "openmhp",
+      "name": "Opentrons Flex",
+      "models": [],
+      "interfaces": [
+        "PyLabRobot"
+      ],
+      "protocol": "PyLabRobot",
+      "status": "twin-tested",
+      "tool_count": null,
+      "device_path": true,
+      "url": "https://github.com/kushalsinha/openmhp/tree/main/supported-devices/opentrons-flex"
+    },
+    {
+      "parent": "openmhp",
+      "name": "Manual benchtop centrifuge",
+      "models": [],
+      "interfaces": [
+        "Operator prompts"
+      ],
+      "protocol": "Operator prompts",
+      "status": "template",
+      "tool_count": null,
+      "device_path": false,
+      "url": "https://github.com/kushalsinha/openmhp/tree/main/supported-devices/manual-benchtop-centrifuge"
+    },
+    {
+      "parent": "openmhp",
+      "name": "Elveflow OB1",
+      "models": [],
+      "interfaces": [
+        "Elveflow SDK"
+      ],
+      "protocol": "Elveflow SDK",
+      "status": "twin-tested",
+      "tool_count": null,
+      "device_path": true,
+      "url": "https://github.com/kushalsinha/openmhp/tree/main/supported-devices/elveflow-ob1"
+    },
+    {
+      "parent": "openmhp",
+      "name": "Elveflow MUX Distributor",
+      "models": [],
+      "interfaces": [
+        "Elveflow SDK"
+      ],
+      "protocol": "Elveflow SDK",
+      "status": "twin-tested",
+      "tool_count": null,
+      "device_path": true,
+      "url": "https://github.com/kushalsinha/openmhp/tree/main/supported-devices/elveflow-mux-distributor"
+    },
+    {
+      "parent": "openmhp",
+      "name": "BioLogic SP-300",
+      "models": [],
+      "interfaces": [
+        "EC-Lab / easy-biologic"
+      ],
+      "protocol": "EC-Lab / easy-biologic",
+      "status": "twin-tested",
+      "tool_count": null,
+      "device_path": true,
+      "url": "https://github.com/kushalsinha/openmhp/tree/main/supported-devices/biologic-sp300"
+    },
+    {
+      "parent": "openmhp",
+      "name": "Wasatch Raman / Blaze probe",
+      "models": [],
+      "interfaces": [
+        "Wasatch.PY"
+      ],
+      "protocol": "Wasatch.PY",
+      "status": "twin-tested",
+      "tool_count": null,
+      "device_path": true,
+      "url": "https://github.com/kushalsinha/openmhp/tree/main/supported-devices/wasatch-raman-blaze"
+    },
+    {
+      "parent": "openmhp",
+      "name": "SRI 8610C GC",
+      "models": [],
+      "interfaces": [
+        "PeakSimple / pythonnet"
+      ],
+      "protocol": "PeakSimple / pythonnet",
+      "status": "twin-tested",
+      "tool_count": null,
+      "device_path": true,
+      "url": "https://github.com/kushalsinha/openmhp/tree/main/supported-devices/sri-8610c-gc"
+    }
+  ],
+  "discovery_sources": [
+    "https://github.com/gunkaynar/awesome-lab-agents",
+    "https://github.com/beriberikix/awesome-mcp-hardware"
+  ],
+  "method": {
+    "zh": "按项目、论文、官方文档、许可证及关键实现路径核查。实验状态引用作者或维护者的公开记录，本次未操作这些实机。组件与 fork 不重复计为独立工程。",
+    "en": "Reviewed repositories, papers, official documentation, licenses and selected implementation paths. Experiment status reflects author or maintainer records; this review did not operate those instruments. Components and forks are not counted as independent projects."
+  }
+}

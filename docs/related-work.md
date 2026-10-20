@@ -18,6 +18,8 @@ These systems already cover substantial parts of interoperability and automation
 
 ## AI access to physical devices
 
+The [agent–instrument study](agent-instruments/README.md) provides a source-linked comparison of protocols, runtimes and physical-device adapters, with [Chinese](agent-instruments/index.zh-CN.html?raw=1) and [English](agent-instruments/index.en.html?raw=1) offline HTML, structured project data, license distinctions and implementation evidence. It includes MHS, the AIP design reference, community OpenMHP/Open-MHS projects, MCP bridges and experimental systems across microscopy, quantum laboratories, chemistry, robotics and measurement benches.
+
 Anthropic's [Model Hardware Standard research preview](https://www.anthropic.com/news/model-hardware-standard-research-preview), announced on 27 August 2026, describes standardized drivers, device discovery, physical metadata and access through MCP, command-line tools and APIs. It also describes multi-instrument coordination and scripts for operations that should execute locally. The announcement presents an early partner preview preceding planned open sourcing.
 
 This is closely related work. AI4Instruments develops the broader design question of how instruments should be conceived, constructed and revised for autonomous experimentation, together with explicit Basic Operations, reusable Standard Operations, open-ended Workflow Operations and evidence connecting their revisions to measured performance.

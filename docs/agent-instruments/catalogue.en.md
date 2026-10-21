@@ -4,7 +4,7 @@
 
 ## OpenMHP
 
-[kushalsinha/openmhp](https://github.com/kushalsinha/openmhp) · Device protocols · Apache-2.0 · Simulation-verified
+[kushalsinha/openmhp](https://github.com/kushalsinha/openmhp) · Instrument contracts · Apache-2.0 · Simulation-verified
 
 A device contract covering descriptors, reads, writes, actions, jobs, leases and run records, with bridges to existing drivers. Useful for studying a compact device interface and on-demand discovery.
 
@@ -16,7 +16,7 @@ MCP / CLI / Python SDK / JSON-RPC / HTTP/SSE
 
 ## Open-MHS · Abenor Labs
 
-[Abenor-Labs/Open-MHS](https://github.com/Abenor-Labs/Open-MHS) · Device protocols · Apache-2.0 · Adapter / documentation
+[Abenor-Labs/Open-MHS](https://github.com/Abenor-Labs/Open-MHS) · Instrument contracts · Apache-2.0 · Adapter / documentation
 
 Capability tags and a device base class describe sensors, actuators and state, with a serial robotic-arm adapter. An independent community implementation.
 
@@ -28,7 +28,7 @@ MCP / REST / CLI / Python / Serial
 
 ## Open MHS · tongriyaotxt
 
-[tongriyaotxt/open-mhs](https://github.com/tongriyaotxt/open-mhs) · Device protocols · MIT · Adapter / documentation
+[tongriyaotxt/open-mhs](https://github.com/tongriyaotxt/open-mhs) · Instrument contracts · MIT · Adapter / documentation
 
 Device registration, common commands and MCP tools, extended with robot motion and skill execution. Maintained separately from other similarly named projects.
 
@@ -40,7 +40,7 @@ MCP / REST / CLI / Python
 
 ## Open MHS · SCUT-ESA
 
-[SCUT-ESA/open-mhs](https://github.com/SCUT-ESA/open-mhs) · Device protocols · MIT · Maintainer hardware record
+[SCUT-ESA/open-mhs](https://github.com/SCUT-ESA/open-mhs) · Instrument contracts · MIT · Maintainer hardware record
 
 A common device interface with explicit backend policies for VISA instruments, embedded I/O and simulators. A community project inspired by MHS.
 
@@ -52,7 +52,7 @@ MCP / REST / CLI / PyVISA
 
 ## Model Hardware Protocol · Cuntinum
 
-[Cuntinum/model-hardware-protocol](https://github.com/Cuntinum/model-hardware-protocol) · Device protocols · Apache-2.0 · Adapter / documentation
+[Cuntinum/model-hardware-protocol](https://github.com/Cuntinum/model-hardware-protocol) · Instrument contracts · Apache-2.0 · Adapter / documentation
 
 Organizes drivers and shared state around discover, read, write and execute. Distributed as khp; distinct from OpenMHP.
 
@@ -64,7 +64,7 @@ Python SDK / TypeScript SDK / MCP / CLI
 
 ## Open Agent Hardware Layer
 
-[fredabila/oahl](https://github.com/fredabila/oahl) · Device protocols · MIT · Maintainer hardware record
+[fredabila/oahl](https://github.com/fredabila/oahl) · Instrument contracts · MIT · Maintainer hardware record
 
 A discover–reserve–execute–release lifecycle separating nodes, adapters and transports, with local operation or optional registry and relay services.
 
@@ -76,7 +76,7 @@ JavaScript SDK / Python SDK / WebSocket / Serial / ADB / MQTT / TCP
 
 ## instrMCP
 
-[caidish/instrMCP](https://github.com/caidish/instrMCP) · Execution & orchestration · MIT · Adapter / documentation
+[caidish/instrMCP](https://github.com/caidish/instrMCP) · Persistent execution · MIT · Adapter / documentation
 
 Exposes a QCoDeS Station inside an existing Jupyter kernel, reusing parameters, snapshots, databases and measurement workflows. A direct route for QCoDeS laboratories.
 
@@ -88,7 +88,7 @@ MCP / Jupyter / QCoDeS / Python / MeasureIt
 
 ## PUDA
 
-[PUDAP/puda](https://github.com/PUDAP/puda) · Execution & orchestration · MIT · Adapter / documentation
+[PUDAP/puda](https://github.com/PUDAP/puda) · Persistent execution · MIT · Adapter / documentation
 
 A headless physical-device runtime separating messaging, layered drivers, protocol execution and result records. Agents author, validate and run experiments through a CLI and skills.
 
@@ -100,7 +100,7 @@ CLI / NATS / Python drivers / Agent Skills
 
 ## Uni-Lab-OS
 
-[deepmodeling/Uni-Lab-OS](https://github.com/deepmodeling/Uni-Lab-OS) · Execution & orchestration · GPL-3.0 framework + proprietary drivers · Published experiment
+[deepmodeling/Uni-Lab-OS](https://github.com/deepmodeling/Uni-Lab-OS) · Procedure composition · GPL-3.0 framework + proprietary drivers · Published experiment
 
 Cross-device laboratory orchestration combining actions, resources and laboratory topology. Useful for comparing framework, adapter and workflow-compiler responsibilities.
 
@@ -112,7 +112,7 @@ Python / ROS 2 / Action/Resource model / Workflow compiler
 
 ## Osprey
 
-[als-apg/osprey](https://github.com/als-apg/osprey) · Execution & orchestration · BSD-3-Clause · Published experiment
+[als-apg/osprey](https://github.com/als-apg/osprey) · Persistent execution · BSD-3-Clause · Published experiment
 
 An agent interface for large scientific facilities: semantic channel addressing, facility knowledge, control connectors and operational workflows. Includes EPICS, DOOCS and TANGO connectors.
 
@@ -124,7 +124,7 @@ MCP / CLI / Agent Skills / EPICS / DOOCS / TANGO
 
 ## IvoryOS
 
-[ivoryos-ai/IvoryOS](https://github.com/ivoryos-ai/IvoryOS) · Execution & orchestration · MIT · Published experiment
+[ivoryos-ai/IvoryOS](https://github.com/ivoryos-ai/IvoryOS) · Procedure composition · MIT · Published experiment
 
 Turns existing Python automation objects into controls and workflows, with optional natural-language workflow design. Useful for progressively exposing existing device code.
 
@@ -136,7 +136,7 @@ Python introspection / Web application / LLM workflow design
 
 ## Jumpstarter
 
-[jumpstarter-dev/jumpstarter](https://github.com/jumpstarter-dev/jumpstarter) · Execution & orchestration · Apache-2.0 · Adapter / documentation
+[jumpstarter-dev/jumpstarter](https://github.com/jumpstarter-dev/jumpstarter) · Persistent execution · Apache-2.0 · Adapter / documentation
 
 Shares and leases physical or virtual devices under test, with power, UART, CAN, SPI, GPIO and USB drivers. Agents can use the same interfaces as test scripts.
 
@@ -148,7 +148,7 @@ CLI / Python API / gRPC / Hardware leases
 
 ## Lager
 
-[lagerdata/lager](https://github.com/lagerdata/lager) · Execution & orchestration · Apache-2.0 · Adapter / documentation
+[lagerdata/lager](https://github.com/lagerdata/lager) · Persistent execution · Apache-2.0 · Adapter / documentation
 
 A bench Linux host connects supplies, scopes, debug probes and buses. A common CLI serves agents, humans and CI; programs can execute next to the devices.
 
@@ -160,7 +160,7 @@ CLI / Python Net API / Network bench control
 
 ## Experiment Automation Agents
 
-[AdvancedPhotonSource/EAA](https://github.com/AdvancedPhotonSource/EAA) · Execution & orchestration · Unspecified · Published experiment
+[AdvancedPhotonSource/EAA](https://github.com/AdvancedPhotonSource/EAA) · Persistent execution · Unspecified · Published experiment
 
 An experiment-agent runtime emphasizing visual feedback, image tool results, deterministic workflows and experiment task management.
 
@@ -172,7 +172,7 @@ MCP client / HTTP tools / Python / Agent Skills
 
 ## EAA-Pi
 
-[AdvancedPhotonSource/EAA-Pi](https://github.com/AdvancedPhotonSource/EAA-Pi) · Execution & orchestration · Unspecified · Adapter / documentation
+[AdvancedPhotonSource/EAA-Pi](https://github.com/AdvancedPhotonSource/EAA-Pi) · Persistent execution · Unspecified · Adapter / documentation
 
 An experiment-assistant interface built on pi-experiment-ops; terminal and web views share workspaces, tools and experiment sessions.
 
@@ -184,7 +184,7 @@ CLI / Web UI / MCP instruments / Agent Skills
 
 ## pi-experiment-ops
 
-[AdvancedPhotonSource/pi-experiment-ops](https://github.com/AdvancedPhotonSource/pi-experiment-ops) · Execution & orchestration · Unspecified · Adapter / documentation
+[AdvancedPhotonSource/pi-experiment-ops](https://github.com/AdvancedPhotonSource/pi-experiment-ops) · Persistent execution · Unspecified · Adapter / documentation
 
 Combines experiment tools, background execution, persistent terminals and transcript search into a reusable agent runtime for experiment applications.
 
@@ -196,7 +196,7 @@ Pi extension / MCP / CodeMode / CLI / Agent Skills
 
 ## LabMCP · K-Dense
 
-[K-Dense-AI/lab-instrument-mcps](https://github.com/K-Dense-AI/lab-instrument-mcps) · Measurement & benches · Apache-2.0 · Simulation-verified
+[K-Dense-AI/lab-instrument-mcps](https://github.com/K-Dense-AI/lab-instrument-mcps) · Device bridges · Apache-2.0 · Simulation-verified
 
 A monorepo of instrument adapters spanning electronic measurement, spectroscopy, temperature control, pumps, microscopy, liquid handling and facility protocols. Components are listed separately.
 
@@ -208,7 +208,7 @@ MCP / CLI / VISA / TCP / Serial / Vendor APIs
 
 ## LabLink
 
-[techmanual-ai/lablink-mcp](https://github.com/techmanual-ai/lablink-mcp) · Measurement & benches · MIT · Adapter / documentation
+[techmanual-ai/lablink-mcp](https://github.com/techmanual-ai/lablink-mcp) · Device bridges · MIT · Adapter / documentation
 
 Brings several transports into one MCP server so agents can use existing commands and scripts. Device semantics remain primarily in configuration and drivers.
 
@@ -220,7 +220,7 @@ MCP / VISA/SCPI / SSH / REST / Serial / Python
 
 ## scpi-mcp
 
-[armchairdeity/mcp-server-scpi](https://github.com/armchairdeity/mcp-server-scpi) · Measurement & benches · MIT · Adapter / documentation
+[armchairdeity/mcp-server-scpi](https://github.com/armchairdeity/mcp-server-scpi) · Device bridges · MIT · Adapter / documentation
 
 Wraps oscilloscope capture and measurement goals as tools, leaving SCPI details to instrument backends. The first target is the Rigol DS1054Z.
 
@@ -232,7 +232,7 @@ MCP / PyVISA / SCPI / USB/LAN
 
 ## oscilloscope-mcp
 
-[masahiro-999/oscilloscope-mcp](https://github.com/masahiro-999/oscilloscope-mcp) · Measurement & benches · MIT · Adapter / documentation
+[masahiro-999/oscilloscope-mcp](https://github.com/masahiro-999/oscilloscope-mcp) · Device bridges · MIT · Adapter / documentation
 
 Network oscilloscope configuration, triggering, waveform acquisition and measurement feedback, returning structured data, images and standalone waveform views.
 
@@ -244,7 +244,7 @@ MCP / SCPI / TCP
 
 ## lecroy-mcp
 
-[lucasgerads/lecroy-mcp](https://github.com/lucasgerads/lecroy-mcp) · Measurement & benches · AGPL-3.0 · Maintainer hardware record
+[lucasgerads/lecroy-mcp](https://github.com/lucasgerads/lecroy-mcp) · Device bridges · AGPL-3.0 · Maintainer hardware record
 
 LeCroy oscilloscope control and waveform acquisition over LAN VXI-11 or USB.
 
@@ -256,7 +256,7 @@ MCP / SCPI / VXI-11 / USB
 
 ## siglent-scpi-mcp
 
-[mp911de/siglent-scpi-mcp](https://github.com/mp911de/siglent-scpi-mcp) · Measurement & benches · Apache-2.0 · Maintainer hardware record
+[mp911de/siglent-scpi-mcp](https://github.com/mp911de/siglent-scpi-mcp) · Device bridges · Apache-2.0 · Maintainer hardware record
 
 Typed tools for Siglent oscilloscopes and supplies, recording the SCPI commands applied.
 
@@ -268,7 +268,7 @@ MCP / SCPI / TCP
 
 ## scope-mcp
 
-[Netlist-Studio/scope-mcp](https://github.com/Netlist-Studio/scope-mcp) · Measurement & benches · MIT · Maintainer hardware record
+[Netlist-Studio/scope-mcp](https://github.com/Netlist-Studio/scope-mcp) · Device bridges · MIT · Maintainer hardware record
 
 Configuration, screenshots, waveform download, measurements and serial decoding for Keysight/Agilent oscilloscopes.
 
@@ -280,7 +280,7 @@ MCP / PyVISA / Ethernet / SCPI
 
 ## dwf-mcp-server
 
-[KenosInc/dwf-mcp-server](https://github.com/KenosInc/dwf-mcp-server) · Measurement & benches · MIT · Adapter / documentation
+[KenosInc/dwf-mcp-server](https://github.com/KenosInc/dwf-mcp-server) · Device bridges · MIT · Adapter / documentation
 
 Oscilloscope, arbitrary-waveform and logic-analysis interfaces for Digilent WaveForms devices.
 
@@ -292,7 +292,7 @@ MCP / dwfpy / WaveForms SDK / USB
 
 ## Instrument MCP
 
-[zeng-andrew/instrument-mcp](https://github.com/zeng-andrew/instrument-mcp) · Measurement & benches · Unspecified · Adapter / documentation
+[zeng-andrew/instrument-mcp](https://github.com/zeng-andrew/instrument-mcp) · Device bridges · Unspecified · Adapter / documentation
 
 Combines spectrum analyzers, radio testers, supplies, chambers and a logic analyzer using YAML command definitions and multi-instrument sessions.
 
@@ -304,7 +304,7 @@ MCP / SCPI / Modbus RTU / USB / YAML commands
 
 ## daqmx-mcp
 
-[BrianDavidCouch/daqmx-mcp](https://github.com/BrianDavidCouch/daqmx-mcp) · Measurement & benches · Apache-2.0 · Adapter / documentation
+[BrianDavidCouch/daqmx-mcp](https://github.com/BrianDavidCouch/daqmx-mcp) · Device bridges · Apache-2.0 · Adapter / documentation
 
 Discovers NI DAQ devices and performs finite analog-voltage and digital-input acquisition.
 
@@ -316,7 +316,7 @@ MCP / Codex plugin / NI nidaqmx
 
 ## DAQiFi Core
 
-[daqifi/daqifi-core](https://github.com/daqifi/daqifi-core) · Measurement & benches · MIT · Adapter / documentation
+[daqifi/daqifi-core](https://github.com/daqifi/daqifi-core) · Device bridges · MIT · Adapter / documentation
 
 Vendor-published wireless DAQ SDK and MCP server covering channels, sampling, digital I/O, PWM, analog outputs and SD-card logging.
 
@@ -328,7 +328,7 @@ MCP / .NET API / Wi-Fi / USB
 
 ## LabVIEW MCP Server Toolkit
 
-[JanGoebel/LabVIEW-MCP-Server-Toolkit](https://github.com/JanGoebel/LabVIEW-MCP-Server-Toolkit) · Measurement & benches · MIT · Adapter / documentation
+[JanGoebel/LabVIEW-MCP-Server-Toolkit](https://github.com/JanGoebel/LabVIEW-MCP-Server-Toolkit) · Device bridges · MIT · Adapter / documentation
 
 Exposes VIs in existing LabVIEW applications as tools, resources and prompts. A direct way to wrap established laboratory control programs.
 
@@ -340,7 +340,7 @@ MCP / HTTP / LabVIEW VIs
 
 ## LabVIEW MCP · Zühlke
 
-[Zuehlke/labview-mcp](https://github.com/Zuehlke/labview-mcp) · Measurement & benches · MIT · Adapter / documentation
+[Zuehlke/labview-mcp](https://github.com/Zuehlke/labview-mcp) · Instrument development · MIT · Adapter / documentation
 
 Lets agents read, modify and run LabVIEW programs. Primarily a development interface; physical control depends on the invoked VI.
 
@@ -352,7 +352,7 @@ MCP / gRPC / LabVIEW scripting
 
 ## OpenFlexure-MCP
 
-[GSIBabu/OpenFlexure-MCP](https://github.com/GSIBabu/OpenFlexure-MCP) · Microscopy & beamlines · GPL-3.0 · Adapter / documentation
+[GSIBabu/OpenFlexure-MCP](https://github.com/GSIBabu/OpenFlexure-MCP) · Device bridges · GPL-3.0 · Adapter / documentation
 
 Uses the OpenFlexure client for stage motion, capture, autofocus, z-stacks and extension calls.
 
@@ -364,7 +364,7 @@ MCP / OpenFlexure Python client / HTTP
 
 ## microscope-agent
 
-[BioNanomics/microscope-agent](https://github.com/BioNanomics/microscope-agent) · Microscopy & beamlines · MIT · Adapter / documentation
+[BioNanomics/microscope-agent](https://github.com/BioNanomics/microscope-agent) · Device bridges · MIT · Adapter / documentation
 
 A compact interface for Nikon Ti2-E and a Baumer camera: position reads, XY motion and imaging, linking frames to actual stage position and revision counters.
 
@@ -376,7 +376,7 @@ MCP / Nikon SDK / GenICam camera
 
 ## Agent-Lens
 
-[aicell-lab/agent-lens](https://github.com/aicell-lab/agent-lens) · Microscopy & beamlines · MIT · Adapter / documentation
+[aicell-lab/agent-lens](https://github.com/aicell-lab/agent-lens) · Procedure composition · MIT · Adapter / documentation
 
 Combines microscope control, robotic sample transfer, segmentation, similarity search and OME-Zarr data handling.
 
@@ -388,7 +388,7 @@ Hypha RPC / Python / Web UI / BioEngine
 
 ## Agentic microscope
 
-[kyu-softmatter/agentic-microscope](https://github.com/kyu-softmatter/agentic-microscope) · Microscopy & beamlines · MIT · Adapter / documentation
+[kyu-softmatter/agentic-microscope](https://github.com/kyu-softmatter/agentic-microscope) · Device bridges · MIT · Adapter / documentation
 
 Translates research goals into microscope configurations grounded in hardware limits and calibrations, spanning microscopy, optical tweezers and piezo stages.
 
@@ -400,7 +400,7 @@ MCP / Python / Micro-Manager / Vendor SDK/TCP
 
 ## soft-matter-agents
 
-[kyu-softmatter/soft-matter-agents](https://github.com/kyu-softmatter/soft-matter-agents) · Microscopy & beamlines · MIT · Adapter / documentation
+[kyu-softmatter/soft-matter-agents](https://github.com/kyu-softmatter/soft-matter-agents) · Procedure composition · MIT · Adapter / documentation
 
 Combines microscope, simulation, literature and bridge agents; the microscope module is the successor location for Agentic microscope.
 
@@ -412,7 +412,7 @@ Python / Microscope agent / Agent workflows
 
 ## AILA
 
-[M3RG-IITD/AILA](https://github.com/M3RG-IITD/AILA) · Microscopy & beamlines · MIT · Published experiment
+[M3RG-IITD/AILA](https://github.com/M3RG-IITD/AILA) · Experimental decisions · MIT · Published experiment
 
 A language-model assistant for atomic-force-microscope experiments, combining task decomposition, tools and feedback.
 
@@ -424,7 +424,7 @@ Python tools / LLM agents / Instrument control software
 
 ## LLM-directed-SPM
 
-[DIAOZHUO/LLM-directed-SPM](https://github.com/DIAOZHUO/LLM-directed-SPM) · Microscopy & beamlines · Unspecified · Published experiment
+[DIAOZHUO/LLM-directed-SPM](https://github.com/DIAOZHUO/LLM-directed-SPM) · Experimental decisions · Unspecified · Published experiment
 
 Command generation, knowledge retrieval and specialized small models for scanning-probe experiments, with local model services and training material.
 
@@ -436,7 +436,7 @@ Python / WebSocket / Small language models / spmutil
 
 ## Quailbot Pi
 
-[BB-84C/quailbot-pi](https://github.com/BB-84C/quailbot-pi) · Microscopy & beamlines · ISC · Adapter / documentation
+[BB-84C/quailbot-pi](https://github.com/BB-84C/quailbot-pi) · Persistent execution · ISC · Adapter / documentation
 
 Turns instrument workspaces into a fixed tool surface for parameters, actions, image readbacks and multi-step programs. Actions and subsequent observations are recorded separately; Nanonis uses an external nqctl driver.
 
@@ -448,7 +448,7 @@ Pi extension / CLI driver contract / Workspace JSON / Image readback
 
 ## VISION
 
-[CFN-softbio/VISION](https://github.com/CFN-softbio/VISION) · Microscopy & beamlines · Unspecified · Published experiment
+[CFN-softbio/VISION](https://github.com/CFN-softbio/VISION) · Experimental decisions · Unspecified · Published experiment
 
 Translates spoken or written requests into beamline-operation code, with modules for transcription, classification, programming and analysis.
 
@@ -460,7 +460,7 @@ Voice/text / Python code generation / Bluesky workstation
 
 ## LeeQ
 
-[ShuxiangCao/LeeQ](https://github.com/ShuxiangCao/LeeQ) · Quantum experiments · BSD-3-Clause · Published experiment
+[ShuxiangCao/LeeQ](https://github.com/ShuxiangCao/LeeQ) · Persistent execution · BSD-3-Clause · Published experiment
 
 Pulse experiments, sweeps, calibration state and analysis for superconducting devices, with experiment descriptions and text/visual inspection hooks for agents.
 
@@ -472,7 +472,7 @@ Python experiment API / Pulse control / k-agents integration
 
 ## k-agents
 
-[EvoEvolver/k_agents](https://github.com/EvoEvolver/k_agents) · Quantum experiments · Unspecified · Published experiment
+[EvoEvolver/k_agents](https://github.com/EvoEvolver/k_agents) · Experimental decisions · Unspecified · Published experiment
 
 Discovers, executes and evaluates calibration experiments through existing experiment libraries, retaining experimental knowledge and visual results.
 
@@ -484,7 +484,7 @@ Python / Experiment agents / LeeQ
 
 ## Quantum Calibration Agent Blueprint
 
-[NVIDIA/Quantum-Calibration-Agent-Blueprint](https://github.com/NVIDIA/Quantum-Calibration-Agent-Blueprint) · Quantum experiments · Apache-2.0 · Adapter / documentation
+[NVIDIA/Quantum-Calibration-Agent-Blueprint](https://github.com/NVIDIA/Quantum-Calibration-Agent-Blueprint) · Experimental decisions · Apache-2.0 · Adapter / documentation
 
 A quantum-device calibration agent reference implementation with experiment discovery, execution, visual analysis, workflows and result storage.
 
@@ -496,7 +496,7 @@ Python experiment scripts / CLI / Web UI / HDF5 / SQLite
 
 ## CALMS
 
-[mcherukara/CALMS](https://github.com/mcherukara/CALMS) · Microscopy & beamlines · BSD-3-Clause · Maintainer hardware record
+[mcherukara/CALMS](https://github.com/mcherukara/CALMS) · Experimental decisions · BSD-3-Clause · Maintainer hardware record
 
 A context- and tool-augmented facility assistant integrating instrument knowledge with operational functions.
 
@@ -508,7 +508,7 @@ Python tools / Retrieval / Instrument commands
 
 ## CALMS · APS experimental agents
 
-[AdvancedPhotonSource/CALMS](https://github.com/AdvancedPhotonSource/CALMS) · Microscopy & beamlines · Unspecified · Published experiment
+[AdvancedPhotonSource/CALMS](https://github.com/AdvancedPhotonSource/CALMS) · Experimental decisions · Unspecified · Published experiment
 
 Teachable experiment-agent workflows for a North N9 robotic station and an X-ray nanoprobe.
 
@@ -520,7 +520,7 @@ Python / Robot command functions / Beamline tools
 
 ## Opentrons MCP
 
-[yerbymatey/opentrons-mcp](https://github.com/yerbymatey/opentrons-mcp) · Chemistry & liquid handling · MIT · Adapter / documentation
+[yerbymatey/opentrons-mcp](https://github.com/yerbymatey/opentrons-mcp) · Device bridges · MIT · Adapter / documentation
 
 Combines API-documentation search with protocol upload, run management, homing and status access for OT-2/Flex.
 
@@ -532,7 +532,7 @@ MCP / Opentrons HTTP API
 
 ## plr-mcp
 
-[di-omics/plr-mcp](https://github.com/di-omics/plr-mcp) · Chemistry & liquid handling · MIT · Simulation-verified
+[di-omics/plr-mcp](https://github.com/di-omics/plr-mcp) · Device bridges · MIT · Simulation-verified
 
 Exposes liquid handling, plate reading, thermocycling and heater-shaker operations through MCP using PyLabRobot backends.
 
@@ -544,7 +544,7 @@ MCP / PyLabRobot
 
 ## OpenLabAI
 
-[nygmeta/OpenLabAI](https://github.com/nygmeta/OpenLabAI) · Chemistry & liquid handling · MIT · Maintainer hardware record
+[nygmeta/OpenLabAI](https://github.com/nygmeta/OpenLabAI) · Procedure composition · MIT · Maintainer hardware record
 
 Natural-language liquid-handling workflows spanning Opentrons, Biomek, Hamilton and experiment-record integrations.
 
@@ -556,7 +556,7 @@ MCP / Opentrons HTTP / Biomek COM / PyLabRobot
 
 ## LabscriptAI OT
 
-[KRATSZ/labscriptai-ot](https://github.com/KRATSZ/labscriptai-ot) · Chemistry & liquid handling · LabscriptAI Research Citation License v1.0 · Adapter / documentation
+[KRATSZ/labscriptai-ot](https://github.com/KRATSZ/labscriptai-ot) · Procedure composition · LabscriptAI Research Citation License v1.0 · Adapter / documentation
 
 An Opentrons agent plugin combining protocol authoring, simulation, skills and live-runtime assistance.
 
@@ -568,7 +568,7 @@ MCP / Agent Skills / Opentrons / Local simulation
 
 ## Coscientist
 
-[gomesgroup/coscientist](https://github.com/gomesgroup/coscientist) · Chemistry & liquid handling · Apache-2.0 + Commons Clause · Published experiment
+[gomesgroup/coscientist](https://github.com/gomesgroup/coscientist) · Experimental decisions · Apache-2.0 + Commons Clause · Published experiment
 
 A language model coordinates literature, code and experimental tools for chemical research; an important early physical-experiment case study.
 
@@ -580,7 +580,7 @@ Python tools / Opentrons / Laboratory APIs
 
 ## ChemAgents
 
-[pic-ai-robotic-chemistry/ChemAgents](https://github.com/pic-ai-robotic-chemistry/ChemAgents) · Chemistry & liquid handling · Unspecified · Published experiment
+[pic-ai-robotic-chemistry/ChemAgents](https://github.com/pic-ai-robotic-chemistry/ChemAgents) · Experimental decisions · Unspecified · Published experiment
 
 A multi-agent chemical-research system connecting experimental protocols, a robotic workcell and experiment data.
 
@@ -592,11 +592,11 @@ LangGraph tools / Robot instruction set / ROS drivers
 
 ## ORGANA
 
-[ac-rad/organa](https://github.com/ac-rad/organa) · Chemistry & liquid handling · Unspecified · Published experiment
+[ac-rad/organa](https://github.com/ac-rad/organa) · Experimental decisions · Unspecified · Published experiment
 
-A chemistry robot assistant combines user goals, scene perception and experiment progress to organize multi-step experiments and reporting.
+The ORGANA paper combines user intent, scene perception and experiment progress in a chemistry robot assistant; this repository mainly publishes the project website and research material.
 
-The project and paper demonstrate physical robot experiments; repository contents and the external deployment environment are distinct. No license was identified.
+The paper reports physical robot experiments. The README identifies this repository as website source, rather than establishing a complete robot-control release; no license was identified.
 
 Task planning / Robot perception / Laboratory operations
 
@@ -604,7 +604,7 @@ Task planning / Robot perception / Laboratory operations
 
 ## CLAIRify
 
-[ac-rad/xdl-generation](https://github.com/ac-rad/xdl-generation) · Chemistry & liquid handling · MIT · Published experiment
+[ac-rad/xdl-generation](https://github.com/ac-rad/xdl-generation) · Procedure composition · MIT · Published experiment
 
 Translates natural-language experiment steps into verifiable XDL procedures, feeding verification errors back to the model for revision.
 
@@ -616,7 +616,7 @@ Natural language to XDL / Verifier loop / Python
 
 ## CLAIRify-Chemspeed
 
-[ac-rad/clairify-chemspeed](https://github.com/ac-rad/clairify-chemspeed) · Chemistry & liquid handling · Unspecified · Adapter / documentation
+[ac-rad/clairify-chemspeed](https://github.com/ac-rad/clairify-chemspeed) · Procedure composition · Unspecified · Adapter / documentation
 
 Generates Chemspyd programs from natural language, connecting protocol generation to Chemspeed automation.
 
@@ -628,7 +628,7 @@ Python generation / Chemspyd / Chemspeed
 
 ## SynAgent · thin-film synthesis
 
-[izumitkhr/synagent](https://github.com/izumitkhr/synagent) · Chemistry & liquid handling · MIT · Published experiment
+[izumitkhr/synagent](https://github.com/izumitkhr/synagent) · Experimental decisions · MIT · Published experiment
 
 Multimodal planning and hypothesis testing in a thin-film synthesis loop, reading XRD/SEM data and writing conditions for the next experiment.
 
@@ -640,7 +640,7 @@ Python iteration runner / MaiML / File-based platform interface / Generated skil
 
 ## AutoLabs
 
-[pnnl/autolabs](https://github.com/pnnl/autolabs) · Chemistry & liquid handling · BSD-2-Clause · Supporting code / material
+[pnnl/autolabs](https://github.com/pnnl/autolabs) · Experimental decisions · BSD-2-Clause · Supporting artifact
 
 Generates experiment steps and Lab Step Representation, supporting multi-agent revision and experiment-design evaluation.
 
@@ -652,7 +652,7 @@ Python / LSR export / Agent planning
 
 ## opcua-mcp · kukapay
 
-[kukapay/opcua-mcp](https://github.com/kukapay/opcua-mcp) · Industry & facilities · MIT · Adapter / documentation
+[kukapay/opcua-mcp](https://github.com/kukapay/opcua-mcp) · Device bridges · MIT · Adapter / documentation
 
 Connects OPC UA browsing and single-node or batch reads/writes to agents while retaining existing industrial servers.
 
@@ -664,7 +664,7 @@ MCP / OPC UA
 
 ## OPC UA MCP · IndustriAgents
 
-[IndustriAgents/OPCUA-MCP](https://github.com/IndustriAgents/OPCUA-MCP) · Industry & facilities · MIT · Adapter / documentation
+[IndustriAgents/OPCUA-MCP](https://github.com/IndustriAgents/OPCUA-MCP) · Device bridges · MIT · Adapter / documentation
 
 Browsing, reads, history, subscriptions, alarms and configured writes/method calls, with one local process per OPC UA endpoint.
 
@@ -676,7 +676,7 @@ MCP / OPC UA / Subscriptions / History
 
 ## modbus-mcp
 
-[kukapay/modbus-mcp](https://github.com/kukapay/modbus-mcp) · Industry & facilities · MIT · Adapter / documentation
+[kukapay/modbus-mcp](https://github.com/kukapay/modbus-mcp) · Device bridges · MIT · Adapter / documentation
 
 Exposes register and coil reads/writes, providing a low-level route to existing PLCs, sensors and controllers.
 
@@ -688,7 +688,7 @@ MCP / Modbus TCP/UDP/Serial
 
 ## TANGO MCP
 
-[abogani/tango-mcp](https://github.com/abogani/tango-mcp) · Industry & facilities · Apache-2.0 · Adapter / documentation
+[abogani/tango-mcp](https://github.com/abogani/tango-mcp) · Device bridges · Apache-2.0 · Adapter / documentation
 
 Discovers devices through a TANGO database and maps attributes, state and commands to MCP resources and tools, including bulk reads.
 
@@ -700,7 +700,7 @@ MCP / PyTango / Streamable HTTP
 
 ## MCP Server for EPICS
 
-[sryu81/mcp-server-for-epics](https://github.com/sryu81/mcp-server-for-epics) · Industry & facilities · Unspecified · Adapter / documentation
+[sryu81/mcp-server-for-epics](https://github.com/sryu81/mcp-server-for-epics) · Device bridges · Unspecified · Adapter / documentation
 
 Offers standalone-process and IOC-embedded entry points exposing EPICS PVs and control commands to agents.
 
@@ -712,7 +712,7 @@ MCP / EPICS CA/PVA / IOC / stdio/HTTP
 
 ## MCP2Serial
 
-[mcp2everything/mcp2serial](https://github.com/mcp2everything/mcp2serial) · Embedded & debugging · MIT · Adapter / documentation
+[mcp2everything/mcp2serial](https://github.com/mcp2everything/mcp2serial) · Device bridges · MIT · Adapter / documentation
 
 Connects microcontrollers to agents through serial communication, useful as a basic bridge for custom instruments.
 
@@ -724,7 +724,7 @@ MCP / Serial / Raspberry Pi Pico
 
 ## tinymcp
 
-[golioth/tinymcp](https://github.com/golioth/tinymcp) · Embedded & debugging · Apache-2.0 · Adapter / documentation
+[golioth/tinymcp](https://github.com/golioth/tinymcp) · Device bridges · Apache-2.0 · Adapter / documentation
 
 Exposes Golioth device RPCs as MCP tools; existing devices can publish tool schemas through the state service.
 
@@ -736,7 +736,7 @@ MCP / Golioth management API / Device RPC
 
 ## Embedded Debugger MCP
 
-[Adancurusul/embedded-debugger-mcp](https://github.com/Adancurusul/embedded-debugger-mcp) · Embedded & debugging · MIT · Maintainer hardware record
+[Adancurusul/embedded-debugger-mcp](https://github.com/Adancurusul/embedded-debugger-mcp) · Instrument development · MIT · Maintainer hardware record
 
 Connects agents to debug probes for target control, memory access, breakpoints, flashing and fault inspection, supplying physical feedback during instrument-firmware development.
 
@@ -748,7 +748,7 @@ MCP / CLI / Agent Skills / probe-rs / OpenOCD/GDB
 
 ## Saleae Logic 2 MCP
 
-[hsoffar/saleae-logic2-mcp](https://github.com/hsoffar/saleae-logic2-mcp) · Embedded & debugging · Apache-2.0 · Adapter / documentation
+[hsoffar/saleae-logic2-mcp](https://github.com/hsoffar/saleae-logic2-mcp) · Instrument development · Apache-2.0 · Adapter / documentation
 
 Logic-analyzer capture, protocol decoding, timing measurement and export for firmware and physical-bus debugging.
 
@@ -760,7 +760,7 @@ MCP / Logic 2 automation API
 
 ## MicroPython MCP Bridge
 
-[SWITCHSCIENCE/mcp-micropython-bridge](https://github.com/SWITCHSCIENCE/mcp-micropython-bridge) · Embedded & debugging · Unspecified · Adapter / documentation
+[SWITCHSCIENCE/mcp-micropython-bridge](https://github.com/SWITCHSCIENCE/mcp-micropython-bridge) · Instrument development · Unspecified · Adapter / documentation
 
 Operates ESP32/RP2040-class boards through serial or WebREPL, using device-side helper modules and HARDWARE.md for board-specific knowledge.
 
@@ -772,7 +772,7 @@ MCP / USB Serial / WebREPL / MicroPython
 
 ## ROS MCP Server
 
-[robotmcp/ros-mcp-server](https://github.com/robotmcp/ros-mcp-server) · Robotics · Apache-2.0 · Maintainer hardware record
+[robotmcp/ros-mcp-server](https://github.com/robotmcp/ros-mcp-server) · Device bridges · Apache-2.0 · Maintainer hardware record
 
 Uses rosbridge to discover topics, services, actions and message types, publish control messages and read robot-sensor feedback.
 
@@ -784,7 +784,7 @@ MCP / rosbridge / ROS 1 / ROS 2
 
 ## ROSA
 
-[nasa-jpl/rosa](https://github.com/nasa-jpl/rosa) · Robotics · Apache-2.0 · Published experiment
+[nasa-jpl/rosa](https://github.com/nasa-jpl/rosa) · Experimental decisions · Apache-2.0 · Published experiment
 
 JPL’s natural-language ROS assistant combines system diagnostics, state queries and extensible robot-operation tools.
 
@@ -796,7 +796,7 @@ LangChain tools / ROS 1 / ROS 2
 
 ## device-use
 
-[labclaw/device-use](https://github.com/labclaw/device-use) · GUI & operating knowledge · Apache-2.0 · Adapter / documentation
+[labclaw/device-use](https://github.com/labclaw/device-use) · GUI operation · Apache-2.0 · Adapter / documentation
 
 Wraps instrument software through screen observation, planning and mouse/keyboard actions with device profiles. Relevant when an API is unavailable.
 
@@ -808,7 +808,7 @@ Python / GUI automation / MCP / VLM backends
 
 ## device-skills
 
-[labclaw/device-skills](https://github.com/labclaw/device-skills) · GUI & operating knowledge · Apache-2.0 · Supporting code / material
+[labclaw/device-skills](https://github.com/labclaw/device-skills) · Knowledge and artifacts · Apache-2.0 · Supporting artifact
 
 Instrument operating knowledge and skill material accompanying device-use execution interfaces.
 
@@ -820,7 +820,7 @@ Agent Skills / Device operating knowledge
 
 ## edge-mhs
 
-[fastly/edge-mhs](https://github.com/fastly/edge-mhs) · Device protocols · Apache-2.0 · Simulation-verified
+[fastly/edge-mhs](https://github.com/fastly/edge-mhs) · Device bridges · Apache-2.0 · Simulation-verified
 
 An edge gateway between agents and device services for identity, parameter constraints, quotas and audit records.
 
@@ -832,7 +832,7 @@ MCP gateway / Fastly Compute
 
 ## Agent2Device Protocol
 
-[neogyk/Agent2Device-Protocol](https://github.com/neogyk/Agent2Device-Protocol) · Device protocols · MIT · Concept / proposal
+[neogyk/Agent2Device-Protocol](https://github.com/neogyk/Agent2Device-Protocol) · Instrument contracts · MIT · Concept / proposal
 
 A protocol concept for connecting agents to laboratory devices.
 
@@ -844,7 +844,7 @@ Design notes
 
 ## ChemCrow public release
 
-[ur-whitelab/chemcrow-public](https://github.com/ur-whitelab/chemcrow-public) · Chemistry & liquid handling · MIT · Supporting code / material
+[ur-whitelab/chemcrow-public](https://github.com/ur-whitelab/chemcrow-public) · Knowledge and artifacts · MIT · Supporting artifact
 
 An important chemistry tool-augmented agent case for understanding orchestration and experimental-service boundaries.
 
@@ -856,7 +856,7 @@ Python / LangChain tools
 
 ## NV autonomous experiments
 
-[takuyaisogawa/nv-autonomous-experiments](https://github.com/takuyaisogawa/nv-autonomous-experiments) · Quantum experiments · MIT code / CC BY-4.0 artifacts · Supporting code / material
+[takuyaisogawa/nv-autonomous-experiments](https://github.com/takuyaisogawa/nv-autonomous-experiments) · Knowledge and artifacts · MIT code / CC BY-4.0 artifacts · Supporting artifact
 
 Public case studies, analysis code and experimental artifacts for autonomous NV-center experiments.
 
@@ -868,7 +868,7 @@ Python / MATLAB / Case-study artifacts
 
 ## UC2 LLM microscopy workshop
 
-[openUC2/Hackathon-UC2-LLM](https://github.com/openUC2/Hackathon-UC2-LLM) · Microscopy & beamlines · Unspecified · Supporting code / material
+[openUC2/Hackathon-UC2-LLM](https://github.com/openUC2/Hackathon-UC2-LLM) · Knowledge and artifacts · Unspecified · Supporting artifact
 
 A teaching entry point for physical UC2 microscopes and the ImSwitch API, covering hardware, access and experimental challenges.
 

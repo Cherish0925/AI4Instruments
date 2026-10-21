@@ -2234,7 +2234,7 @@
       "repository": "ac-rad/organa",
       "url": "https://github.com/ac-rad/organa",
       "category": "chemistry",
-      "scope": "implementation",
+      "scope": "reference",
       "interfaces": [
         "Task planning",
         "Robot perception",
@@ -2245,13 +2245,13 @@
       "license": "Unspecified",
       "license_class": "unspecified",
       "description": {
-        "zh": "化学机器人助手结合用户目标、场景感知与实验进度，安排多步实验并生成报告。",
-        "en": "A chemistry robot assistant combines user goals, scene perception and experiment progress to organize multi-step experiments and reporting."
+        "zh": "ORGANA 论文中的化学机器人助手结合用户目标、场景感知与实验进度；本仓库主要发布项目网站与研究材料。",
+        "en": "The ORGANA paper combines user intent, scene perception and experiment progress in a chemistry robot assistant; this repository mainly publishes the project website and research material."
       },
       "evidence": {
         "kind": "experiment",
-        "zh": "项目与论文展示真实机器人实验；仓库内容和外部部署环境需要分开理解，未识别到许可证。",
-        "en": "The project and paper demonstrate physical robot experiments; repository contents and the external deployment environment are distinct. No license was identified."
+        "zh": "论文展示真实机器人实验；README 明确该仓库包含网站源码，没有据此确认完整机器人控制实现；许可证未识别。",
+        "en": "The paper reports physical robot experiments. The README identifies this repository as website source, rather than establishing a complete robot-control release; no license was identified."
       },
       "sources": [
         {
@@ -2264,7 +2264,7 @@
         }
       ],
       "related": [],
-      "reviewed": "2026-10-20",
+      "reviewed": "2026-10-21",
       "snapshot_sha256": {
         "README.txt": "5903e89a8b0eca841b2d5ac5c04fc1653ed1bdbea0c692ed826d1df2b6710349"
       }

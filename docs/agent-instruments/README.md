@@ -1,48 +1,53 @@
-# Agents and physical instruments
+# AI and physical instruments: landscape and project comparisons
 
 [中文](README.zh-CN.md) · [Chinese HTML](index.zh-CN.html?raw=1) · [English HTML](index.en.html?raw=1)
 
-A source-linked study of interfaces through which AI agents discover, operate and observe physical instruments. It connects protocol design to actual drivers, runtimes, experiments and licensing.
+A source-linked study of how AI / LLM agents discover, operate and observe physical instruments, connecting participants, interfaces, runtimes, experimental results and reusable engineering.
 
-The collection contains **73 project and supporting-material records**, **14 protocol or foundation entries**, and **40 separately listed components**. Review date: **2026-10-20**. Download either HTML file and open it locally for search, filters and data export without a server or network connection.
+This edition contains **73 project and research-artifact records, 70 maintainer/standards actors, 190 graph nodes, 323 relationships and 316 source addresses**, plus **14 standards/foundation entries and 40 device components**. Edition date: **2026-10-21**; individual records retain their own review dates.
 
-## Read
+Download either HTML file and open it locally. Fonts, diagrams, text and structured records are embedded, supporting offline search, pagination, comparison and export.
 
-| Purpose | File |
+## Eight reading sections
+
+| Section | Question |
 | --- | --- |
-| Chinese analysis and design recommendations | [guide.zh-CN.md](guide.zh-CN.md) |
-| English analysis and design recommendations | [guide.en.md](guide.en.md) |
-| Complete readable catalogues | [中文](catalogue.zh-CN.md) · [English](catalogue.en.md) |
-| Bilingual project records | [catalogue.json](catalogue.json) · [CSV](catalogue.csv) |
-| Protocols, foundations, components and scope boundaries | [context.json](context.json) |
-| Primary-source index | [sources.json](sources.json) |
-| Machine-readable field definitions | [catalogue.schema.json](catalogue.schema.json) |
+| Landscape | How do device bridges, contracts, persistent execution, procedures, experimental decisions, instrument development, GUI operation and knowledge resources fit together? |
+| Relationships | Who maintains what; which foundations does a project use; how have projects developed or migrated? |
+| Approaches | What problem does each route solve, what does it produce, and how should it be compared and verified? |
+| Participants | What have research groups, industry teams, collaborative organizations, user accounts and standards actors contributed? |
+| Projects and comparison | How does each project connect, contribute and differ, and what can be reused? Compare up to three projects side by side. |
+| Standards and components | Where do shared semantics, agent interfaces, execution foundations and device packages belong? |
+| Design choices | How should capabilities, execution ownership, observations, procedures and ecosystem collaboration be designed? |
+| Sources and data | Where is the evidence, and how can the collection be exported and reused? |
+
+Use the sidebar, previous/next controls and section numbers to navigate. Profiles have individual addresses; directories and sources are paginated. URL fragments such as `#projects/instrmcp` and `#relations/s:mcp` locate specific content.
+
+## Files and data
+
+| Content | File |
+| --- | --- |
+| Complete interactive editions | [中文](index.zh-CN.html) · [English](index.en.html) |
+| Per-project contributions, distinctions and reuse analysis | [中文](profiles.zh-CN.md) · [English](profiles.en.md) |
+| Interface design and experimental examples | [中文](guide.zh-CN.md) · [English](guide.en.md) |
+| Project facts | [catalogue.json](catalogue.json) · [CSV](catalogue.csv) · [中文 catalogue](catalogue.zh-CN.md) · [English](catalogue.en.md) |
+| Actors, routes, profiles and design decisions | [landscape.json](landscape.json) |
+| Typed, source-linked relationships | [graph.json](graph.json) |
+| Standards, foundations, components and scope | [context.json](context.json) |
+| Original-source index | [sources.json](sources.json) |
+| Field and relationship semantics | [data-model.md](data-model.md) |
+| JSON Schema | [Projects](catalogue.schema.json) · [Landscape](landscape.schema.json) · [Graph](graph.schema.json) |
 | Illustrative device/measurement contract | [examples/](examples/README.md) |
 
-The HTML files are the integrated reading editions: system responsibilities, project selection, protocol comparisons, design analysis, experimental examples and reusable records. The catalogue schema, measurement-contract example and both analysis texts are embedded and can be exported offline. Protocols are grouped by their role; each entry retains its own implementation and publication status.
+The opening diagram explains functional responsibilities. The relationship graph records actual maintenance, integration, reuse and development links. It distinguishes `documented` relationships from `analysis` classifications. For grouped foundation nodes, edge notes identify the actual integration scope: OPC UA access, for example, is distinguished from implementing the LADS information model.
 
-## How records are evaluated
+Each project preserves its public release scope, licensing and experimental evidence. Published physical experiments, maintainer hardware records, adapter implementations, simulations, supporting artifacts and proposals are separate evidence categories. The system described in a paper and the material delivered by its linked repository are recorded separately.
 
-Sources are maintainer repositories and documentation, official protocol material and original papers. Discovery lists identify leads; they do not establish technical claims. Selected implementation paths were inspected for connection ownership, actual device calls, simulation boundaries and result handling. Source-file hashes record the reviewed copies where available; they identify snapshots and are not a substitute for an upstream release or commit.
-
-Experimental status and licensing are independent:
-
-| Field | Meaning |
-| --- | --- |
-| `experiment` | A linked publication reports a physical experiment; the release may cover only part of that system. |
-| `hardware` | Maintainers identify a physical device test or demonstration. |
-| `adapter` | A concrete adapter or integration path is documented; this label does not assert hardware validation. |
-| `simulation` | The project explicitly reports simulator or twin validation. |
-| `artifact` | Supporting code, skills, data, workshop material or a partial research release. |
-| `proposal` | A concept without a device implementation in the reviewed repository. |
-
-`mcp` and `skills` record documented interfaces; `not_documented` means that this review did not establish their availability. It does not mean the interface cannot exist. “Open-source license” applies to the listed repository scope, not automatically to required vendor SDKs, model services or laboratory hardware. Restricted, mixed and unidentified licenses have separate groups.
-
-This was a source and implementation review, not a hardware test campaign. Component inventories do not increase independent-project counts. Related repositories and migrations are linked explicitly; ordinary forks are deduplicated. AIP is identified as a supplied design reference, without presenting the source PRD as a public software release.
+The 70 actors comprise 65 repository-maintainer namespaces and five protocol/standards actors. User accounts are not assumed to represent sole developers, and organization accounts are not automatically classified as companies. Verified institutional context has separate primary sources. Routes, contribution comparisons and design choices are analysis of the material.
 
 ## Update and rebuild
 
-Edit `catalogue.json`, `context.json` and the two guide Markdown files. Keep the same project IDs and meanings across languages. Add source URLs to every material factual change. Record tested model, firmware, backend and scope when upgrading a hardware-evidence label.
+Edit `catalogue.json`, `context.json`, `landscape.json` and both guide Markdown files. Preserve stable IDs and bilingual fields. A new entry needs its project facts, maintainer, contribution analysis, access path and sources. Add foundation relationships only when supported by concrete documentation or implementation.
 
 From the repository root:
 
@@ -50,12 +55,12 @@ From the repository root:
 python docs/agent-instruments/build.py
 ```
 
-The build uses only Python’s standard library. It regenerates both self-contained HTML files, Markdown catalogues, CSV and `sources.json`. Project descriptions remain readable in HTML without JavaScript; JavaScript supplies filtering and export. The embedded JSON is in `script#research-data[type="application/json"]`; its `documents` field holds the analysis texts, catalogue schema and contract example.
+The builder uses Python’s standard library and generates both HTML files, project profiles, Markdown catalogues, CSV, graph and source index. Layout is in `reader.py` and `assets/reader.css`; interaction is in `assets/reader.js`. All static text remains readable without JavaScript.
 
-When adding a project, check for an actual physical-device path, an existing upstream entry, a separate license file and a simulator-only demonstration. If a useful project lacks a complete control release, retain it as a clearly scoped reference rather than extending its claims. Change records belong in [CHANGELOG.md](CHANGELOG.md).
+The HTML’s `script#research-data` contains the complete dataset. Its `documents` field includes both language editions of design text and project profiles, schemas, CSV and the contract example. See [data-model.md](data-model.md) for data relationships and [CHANGELOG.md](CHANGELOG.md) for updates.
 
 ## Attribution
 
-Original research prose and catalogue annotations follow the repository’s [CC BY 4.0 documentation license](../../LICENSE-docs.md); build code follows [MIT](../../LICENSE). Upstream software retains its own license. LabMCP component names, protocol identifiers and tool counts are indexed from its Apache-2.0 catalogue, with links to the [original source](https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/packages/labmcp/src/labmcp/catalog.json). OpenMHP component status comes from its [supported-device index](https://github.com/kushalsinha/openmhp/blob/main/supported-devices/README.md).
+Original prose and catalogue annotations follow [CC BY 4.0](../../LICENSE-docs.md); build code follows [MIT](../../LICENSE). Upstream software retains its own license. LabMCP component names, protocol identifiers and tool counts are indexed from its Apache-2.0 [catalogue](https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/packages/labmcp/src/labmcp/catalog.json). OpenMHP component status comes from its [supported-device index](https://github.com/kushalsinha/openmhp/blob/main/supported-devices/README.md).
 
-The offline font is a renamed subset of Noto Sans CJK SC under the [SIL Open Font License](assets/FONT_LICENSE.txt). No third-party manual or article is bundled in full.
+The embedded font is a renamed subset of Noto Sans CJK SC under the [SIL Open Font License](assets/FONT_LICENSE.txt). Original papers and manuals are linked.

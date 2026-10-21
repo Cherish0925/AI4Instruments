@@ -1,5 +1,5 @@
 {
-  "reviewed": "2026-10-20",
+  "reviewed": "2026-10-21",
   "sources": [
     {
       "url": "https://github.com/kushalsinha/openmhp/blob/main/README.md",
@@ -1229,7 +1229,7 @@
       "roles": [
         "overview"
       ],
-      "reviewed": "2026-10-20"
+      "reviewed": "2026-10-21"
     },
     {
       "url": "https://arxiv.org/abs/2401.06949",
@@ -1239,7 +1239,7 @@
       "roles": [
         "paper"
       ],
-      "reviewed": "2026-10-20"
+      "reviewed": "2026-10-21"
     },
     {
       "url": "https://github.com/ac-rad/xdl-generation/blob/master/README.md",
@@ -1744,20 +1744,24 @@
     {
       "url": "https://www.anthropic.com/news/model-hardware-standard-research-preview",
       "subjects": [
-        "mhs"
+        "mhs",
+        "Anthropic"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
     {
       "url": "https://modelhardwarestandard.com/",
       "subjects": [
-        "mhs"
+        "mhs",
+        "Anthropic"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
@@ -1784,80 +1788,96 @@
     {
       "url": "https://modelcontextprotocol.io/docs/learn/architecture",
       "subjects": [
-        "mcp"
+        "mcp",
+        "MCP-project"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
     {
       "url": "https://tasks.extensions.modelcontextprotocol.io/",
       "subjects": [
-        "mcp"
+        "mcp",
+        "MCP-project"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
     {
       "url": "https://tasks.extensions.modelcontextprotocol.io/specification/draft/tasks",
       "subjects": [
-        "mcp"
+        "mcp",
+        "MCP-project"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
     {
       "url": "https://sila2.gitlab.io/sila_python/",
       "subjects": [
-        "sila"
+        "sila",
+        "SiLA"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
     {
       "url": "https://sila2.gitlab.io/sila_python/content/api/framework/index.html",
       "subjects": [
-        "sila"
+        "sila",
+        "SiLA"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
     {
       "url": "https://reference.opcfoundation.org/specs/OPC-30500-1/4.1.2.2",
       "subjects": [
-        "lads"
+        "lads",
+        "OPC-Foundation"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
     {
       "url": "https://reference.opcfoundation.org/specs/OPC-30500-1/7.2",
       "subjects": [
-        "lads"
+        "lads",
+        "OPC-Foundation"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
     {
       "url": "https://www.w3.org/TR/wot-thing-description/",
       "subjects": [
-        "wot"
+        "wot",
+        "W3C"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
@@ -1874,20 +1894,24 @@
     {
       "url": "https://github.com/abogani/tango-mcp",
       "subjects": [
-        "facility"
+        "facility",
+        "abogani"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
     {
       "url": "https://github.com/sryu81/mcp-server-for-epics",
       "subjects": [
-        "facility"
+        "facility",
+        "sryu81"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
@@ -1904,10 +1928,12 @@
     {
       "url": "https://github.com/caidish/instrMCP",
       "subjects": [
-        "qcodes"
+        "qcodes",
+        "caidish"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
@@ -1924,12 +1950,14 @@
     {
       "url": "https://github.com/CFN-softbio/VISION",
       "subjects": [
-        "bluesky"
+        "bluesky",
+        "CFN-softbio"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
-      "reviewed": "2026-10-20"
+      "reviewed": "2026-10-21"
     },
     {
       "url": "https://pylabrobot.org/",
@@ -1944,100 +1972,120 @@
     {
       "url": "https://github.com/di-omics/plr-mcp",
       "subjects": [
-        "liquid"
+        "liquid",
+        "di-omics"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
     {
       "url": "https://github.com/yerbymatey/opentrons-mcp",
       "subjects": [
-        "liquid"
+        "liquid",
+        "yerbymatey"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
     {
       "url": "https://github.com/robotmcp/ros-mcp-server",
       "subjects": [
-        "ros"
+        "ros",
+        "robotmcp"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
     {
       "url": "https://github.com/nasa-jpl/rosa",
       "subjects": [
-        "ros"
+        "ros",
+        "nasa-jpl"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
-      "reviewed": "2026-10-20"
+      "reviewed": "2026-10-21"
     },
     {
       "url": "https://github.com/techmanual-ai/lablink-mcp",
       "subjects": [
-        "bench"
+        "bench",
+        "techmanual-ai"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
     {
       "url": "https://github.com/mp911de/siglent-scpi-mcp",
       "subjects": [
-        "bench"
+        "bench",
+        "mp911de"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
     {
       "url": "https://github.com/Netlist-Studio/scope-mcp",
       "subjects": [
-        "bench"
+        "bench",
+        "Netlist-Studio"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
     {
       "url": "https://github.com/kyu-softmatter/agentic-microscope",
       "subjects": [
-        "microscopy-access"
+        "microscopy-access",
+        "kyu-softmatter"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
     {
       "url": "https://github.com/BioNanomics/microscope-agent",
       "subjects": [
-        "microscopy-access"
+        "microscopy-access",
+        "BioNanomics"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
     {
       "url": "https://github.com/openUC2/Hackathon-UC2-LLM",
       "subjects": [
-        "microscopy-access"
+        "microscopy-access",
+        "openUC2"
       ],
       "roles": [
-        "standard-or-ecosystem"
+        "standard-or-ecosystem",
+        "maintainer-context"
       ],
       "reviewed": "2026-10-20"
     },
@@ -2580,6 +2628,586 @@
         "discovery-only"
       ],
       "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/Abenor-Labs/Open-MHS",
+      "subjects": [
+        "Abenor-Labs"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://ac-rad.github.io/organa/",
+      "subjects": [
+        "ac-rad"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-21"
+    },
+    {
+      "url": "https://github.com/Adancurusul/embedded-debugger-mcp",
+      "subjects": [
+        "Adancurusul"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/AdvancedPhotonSource",
+      "subjects": [
+        "AdvancedPhotonSource"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-21"
+    },
+    {
+      "url": "https://www.aps.anl.gov/",
+      "subjects": [
+        "AdvancedPhotonSource"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-21"
+    },
+    {
+      "url": "https://aicell.io/",
+      "subjects": [
+        "aicell-lab"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-21"
+    },
+    {
+      "url": "https://github.com/aicell-lab/agent-lens",
+      "subjects": [
+        "aicell-lab"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-21"
+    },
+    {
+      "url": "https://github.com/als-apg",
+      "subjects": [
+        "als-apg"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-21"
+    },
+    {
+      "url": "https://als-apg.github.io/osprey/",
+      "subjects": [
+        "als-apg"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-21"
+    },
+    {
+      "url": "https://github.com/armchairdeity/mcp-server-scpi",
+      "subjects": [
+        "armchairdeity"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/BB-84C/quailbot-pi",
+      "subjects": [
+        "BB-84C"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/BrianDavidCouch/daqmx-mcp",
+      "subjects": [
+        "BrianDavidCouch"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://www.bnl.gov/newsroom/news.php?a=122449",
+      "subjects": [
+        "CFN-softbio"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-21"
+    },
+    {
+      "url": "https://github.com/Cuntinum/model-hardware-protocol",
+      "subjects": [
+        "Cuntinum"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/daqifi/daqifi-core",
+      "subjects": [
+        "daqifi"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-21"
+    },
+    {
+      "url": "https://github.com/deepmodeling/Uni-Lab-OS",
+      "subjects": [
+        "deepmodeling"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/DIAOZHUO/LLM-directed-SPM",
+      "subjects": [
+        "DIAOZHUO"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/EvoEvolver/k_agents",
+      "subjects": [
+        "EvoEvolver"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/fastly/edge-mhs",
+      "subjects": [
+        "fastly"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-21"
+    },
+    {
+      "url": "https://github.com/fredabila/oahl",
+      "subjects": [
+        "fredabila"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/golioth/tinymcp",
+      "subjects": [
+        "golioth"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-21"
+    },
+    {
+      "url": "https://engineering.cmu.edu/news-events/news/2023/12/20-ai-coscientist.html",
+      "subjects": [
+        "gomesgroup"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-21"
+    },
+    {
+      "url": "https://github.com/GSIBabu/OpenFlexure-MCP",
+      "subjects": [
+        "GSIBabu"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/hsoffar/saleae-logic2-mcp",
+      "subjects": [
+        "hsoffar"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/IndustriAgents/OPCUA-MCP",
+      "subjects": [
+        "IndustriAgents"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/ivoryos-ai/IvoryOS",
+      "subjects": [
+        "ivoryos-ai"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/izumitkhr/synagent",
+      "subjects": [
+        "izumitkhr"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/JanGoebel/LabVIEW-MCP-Server-Toolkit",
+      "subjects": [
+        "JanGoebel"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/jumpstarter-dev/jumpstarter",
+      "subjects": [
+        "jumpstarter-dev"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/K-Dense-AI/lab-instrument-mcps",
+      "subjects": [
+        "K-Dense-AI"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-21"
+    },
+    {
+      "url": "https://github.com/KenosInc/dwf-mcp-server",
+      "subjects": [
+        "KenosInc"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/KRATSZ/labscriptai-ot",
+      "subjects": [
+        "KRATSZ"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kukapay/opcua-mcp",
+      "subjects": [
+        "kukapay"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/kushalsinha/openmhp",
+      "subjects": [
+        "kushalsinha"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/labclaw/device-use",
+      "subjects": [
+        "labclaw"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/lagerdata/lager",
+      "subjects": [
+        "lagerdata"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/lucasgerads/lecroy-mcp",
+      "subjects": [
+        "lucasgerads"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/M3RG-IITD",
+      "subjects": [
+        "M3RG-IITD"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-21"
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12521570/",
+      "subjects": [
+        "M3RG-IITD"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-21"
+    },
+    {
+      "url": "https://github.com/masahiro-999/oscilloscope-mcp",
+      "subjects": [
+        "masahiro-999"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/mcherukara/CALMS",
+      "subjects": [
+        "mcherukara"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/mcp2everything/mcp2serial",
+      "subjects": [
+        "mcp2everything"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/nasa-jpl",
+      "subjects": [
+        "nasa-jpl"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-21"
+    },
+    {
+      "url": "https://github.com/neogyk/Agent2Device-Protocol",
+      "subjects": [
+        "neogyk"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/NVIDIA/Quantum-Calibration-Agent-Blueprint",
+      "subjects": [
+        "NVIDIA"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-21"
+    },
+    {
+      "url": "https://github.com/nygmeta/OpenLabAI",
+      "subjects": [
+        "nygmeta"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/pic-ai-robotic-chemistry/ChemAgents",
+      "subjects": [
+        "pic-ai-robotic-chemistry"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/pnnl",
+      "subjects": [
+        "pnnl"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-21"
+    },
+    {
+      "url": "https://github.com/pnnl/autolabs",
+      "subjects": [
+        "pnnl"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-21"
+    },
+    {
+      "url": "https://github.com/PUDAP/puda",
+      "subjects": [
+        "PUDAP"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/SCUT-ESA/open-mhs",
+      "subjects": [
+        "SCUT-ESA"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/ShuxiangCao/LeeQ",
+      "subjects": [
+        "ShuxiangCao"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/SWITCHSCIENCE/mcp-micropython-bridge",
+      "subjects": [
+        "SWITCHSCIENCE"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/takuyaisogawa/nv-autonomous-experiments",
+      "subjects": [
+        "takuyaisogawa"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/tongriyaotxt/open-mhs",
+      "subjects": [
+        "tongriyaotxt"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/ur-whitelab/chemcrow-public",
+      "subjects": [
+        "ur-whitelab"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/zeng-andrew/instrument-mcp",
+      "subjects": [
+        "zeng-andrew"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "url": "https://github.com/Zuehlke/labview-mcp",
+      "subjects": [
+        "Zuehlke"
+      ],
+      "roles": [
+        "maintainer-context"
+      ],
+      "reviewed": "2026-10-21"
     }
   ]
 }

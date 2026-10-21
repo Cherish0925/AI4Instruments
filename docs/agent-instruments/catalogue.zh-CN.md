@@ -4,7 +4,7 @@
 
 ## OpenMHP
 
-[kushalsinha/openmhp](https://github.com/kushalsinha/openmhp) · 设备协议 · Apache-2.0 · 模拟验证
+[kushalsinha/openmhp](https://github.com/kushalsinha/openmhp) · 仪器契约 · Apache-2.0 · 模拟验证
 
 设备描述、读写、动作、任务、租约与实验记录组成统一接口；可通过已有驱动生态接入。适合研究精简设备契约与按需发现。
 
@@ -16,7 +16,7 @@ MCP / CLI / Python SDK / JSON-RPC / HTTP/SSE
 
 ## Open-MHS · Abenor Labs
 
-[Abenor-Labs/Open-MHS](https://github.com/Abenor-Labs/Open-MHS) · 设备协议 · Apache-2.0 · 接入实现 / 文档
+[Abenor-Labs/Open-MHS](https://github.com/Abenor-Labs/Open-MHS) · 仪器契约 · Apache-2.0 · 接入实现 / 文档
 
 以 capability tag 和设备基类统一传感器、执行器及状态；提供串口机械臂适配示例。独立社区实现。
 
@@ -28,7 +28,7 @@ MCP / REST / CLI / Python / Serial
 
 ## Open MHS · tongriyaotxt
 
-[tongriyaotxt/open-mhs](https://github.com/tongriyaotxt/open-mhs) · 设备协议 · MIT · 接入实现 / 文档
+[tongriyaotxt/open-mhs](https://github.com/tongriyaotxt/open-mhs) · 仪器契约 · MIT · 接入实现 / 文档
 
 设备注册、统一命令和 MCP 工具；包含机器人动作与技能执行扩展。与同名项目分别维护。
 
@@ -40,7 +40,7 @@ MCP / REST / CLI / Python
 
 ## Open MHS · SCUT-ESA
 
-[SCUT-ESA/open-mhs](https://github.com/SCUT-ESA/open-mhs) · 设备协议 · MIT · 维护者实机记录
+[SCUT-ESA/open-mhs](https://github.com/SCUT-ESA/open-mhs) · 仪器契约 · MIT · 维护者实机记录
 
 统一设备接口加显式后端策略，覆盖 VISA 仪器、嵌入式 I/O 与模拟设备。属于受 MHS 启发的社区工程。
 
@@ -52,7 +52,7 @@ MCP / REST / CLI / PyVISA
 
 ## Model Hardware Protocol · Cuntinum
 
-[Cuntinum/model-hardware-protocol](https://github.com/Cuntinum/model-hardware-protocol) · 设备协议 · Apache-2.0 · 接入实现 / 文档
+[Cuntinum/model-hardware-protocol](https://github.com/Cuntinum/model-hardware-protocol) · 仪器契约 · Apache-2.0 · 接入实现 / 文档
 
 以 discover、read、write、execute 组织设备驱动和共享状态。包名 khp，与 OpenMHP 不是同一项目。
 
@@ -64,7 +64,7 @@ Python SDK / TypeScript SDK / MCP / CLI
 
 ## Open Agent Hardware Layer
 
-[fredabila/oahl](https://github.com/fredabila/oahl) · 设备协议 · MIT · 维护者实机记录
+[fredabila/oahl](https://github.com/fredabila/oahl) · 仪器契约 · MIT · 维护者实机记录
 
 discover–reserve–execute–release 生命周期；节点、适配器与传输插件分离，可本地运行或使用可选注册与中继服务。
 
@@ -76,7 +76,7 @@ JavaScript SDK / Python SDK / WebSocket / Serial / ADB / MQTT / TCP
 
 ## instrMCP
 
-[caidish/instrMCP](https://github.com/caidish/instrMCP) · 执行与编排 · MIT · 接入实现 / 文档
+[caidish/instrMCP](https://github.com/caidish/instrMCP) · 常驻执行 · MIT · 接入实现 / 文档
 
 把现有 Jupyter 内核中的 QCoDeS Station 暴露给 Agent，复用参数、仪器快照、数据库与测量工作流。适合已使用 QCoDeS 的实验室。
 
@@ -88,7 +88,7 @@ MCP / Jupyter / QCoDeS / Python / MeasureIt
 
 ## PUDA
 
-[PUDAP/puda](https://github.com/PUDAP/puda) · 执行与编排 · MIT · 接入实现 / 文档
+[PUDAP/puda](https://github.com/PUDAP/puda) · 常驻执行 · MIT · 接入实现 / 文档
 
 无头物理设备执行平台：消息层、分层驱动、协议运行与结果记录分离。Agent 通过 CLI 和技能编写、验证、运行实验。
 
@@ -100,7 +100,7 @@ CLI / NATS / Python drivers / Agent Skills
 
 ## Uni-Lab-OS
 
-[deepmodeling/Uni-Lab-OS](https://github.com/deepmodeling/Uni-Lab-OS) · 执行与编排 · GPL-3.0 framework + proprietary drivers · 论文实机案例
+[deepmodeling/Uni-Lab-OS](https://github.com/deepmodeling/Uni-Lab-OS) · 过程编排 · GPL-3.0 framework + proprietary drivers · 论文实机案例
 
 跨设备实验室编排，结合动作、资源和实验室拓扑。框架、设备适配与工作流编译的分工值得比较。
 
@@ -112,7 +112,7 @@ Python / ROS 2 / Action/Resource model / Workflow compiler
 
 ## Osprey
 
-[als-apg/osprey](https://github.com/als-apg/osprey) · 执行与编排 · BSD-3-Clause · 论文实机案例
+[als-apg/osprey](https://github.com/als-apg/osprey) · 常驻执行 · BSD-3-Clause · 论文实机案例
 
 面向大型科学设施的 Agent 接口，处理通道语义寻址、设施知识、控制连接与操作过程。已有 EPICS、DOOCS、TANGO 连接器。
 
@@ -124,7 +124,7 @@ MCP / CLI / Agent Skills / EPICS / DOOCS / TANGO
 
 ## IvoryOS
 
-[ivoryos-ai/IvoryOS](https://github.com/ivoryos-ai/IvoryOS) · 执行与编排 · MIT · 论文实机案例
+[ivoryos-ai/IvoryOS](https://github.com/ivoryos-ai/IvoryOS) · 过程编排 · MIT · 论文实机案例
 
 从已有 Python 自动化对象生成控制界面和工作流，包含可选的自然语言工作流设计功能。适合逐步接管已有设备代码。
 
@@ -136,7 +136,7 @@ Python introspection / Web application / LLM workflow design
 
 ## Jumpstarter
 
-[jumpstarter-dev/jumpstarter](https://github.com/jumpstarter-dev/jumpstarter) · 执行与编排 · Apache-2.0 · 接入实现 / 文档
+[jumpstarter-dev/jumpstarter](https://github.com/jumpstarter-dev/jumpstarter) · 常驻执行 · Apache-2.0 · 接入实现 / 文档
 
 共享和租用真实或虚拟被测硬件，统一电源、串口、CAN、SPI、GPIO 与 USB 控制。Agent 可沿用测试脚本的接口。
 
@@ -148,7 +148,7 @@ CLI / Python API / gRPC / Hardware leases
 
 ## Lager
 
-[lagerdata/lager](https://github.com/lagerdata/lager) · 执行与编排 · Apache-2.0 · 接入实现 / 文档
+[lagerdata/lager](https://github.com/lagerdata/lager) · 常驻执行 · Apache-2.0 · 接入实现 / 文档
 
 用台架 Linux 主机集中连接电源、示波器、调试探针和总线；统一 CLI 可由 Agent、人工或 CI 使用，程序可在设备旁执行。
 
@@ -160,7 +160,7 @@ CLI / Python Net API / Network bench control
 
 ## Experiment Automation Agents
 
-[AdvancedPhotonSource/EAA](https://github.com/AdvancedPhotonSource/EAA) · 执行与编排 · Unspecified · 论文实机案例
+[AdvancedPhotonSource/EAA](https://github.com/AdvancedPhotonSource/EAA) · 常驻执行 · Unspecified · 论文实机案例
 
 面向需要视觉反馈的科学实验 Agent 运行环境；支持图像工具结果、确定性工作流及实验任务管理。
 
@@ -172,7 +172,7 @@ MCP client / HTTP tools / Python / Agent Skills
 
 ## EAA-Pi
 
-[AdvancedPhotonSource/EAA-Pi](https://github.com/AdvancedPhotonSource/EAA-Pi) · 执行与编排 · Unspecified · 接入实现 / 文档
+[AdvancedPhotonSource/EAA-Pi](https://github.com/AdvancedPhotonSource/EAA-Pi) · 常驻执行 · Unspecified · 接入实现 / 文档
 
 基于 pi-experiment-ops 的实验助手界面，终端与网页共享工作区、工具配置和实验会话。
 
@@ -184,7 +184,7 @@ CLI / Web UI / MCP instruments / Agent Skills
 
 ## pi-experiment-ops
 
-[AdvancedPhotonSource/pi-experiment-ops](https://github.com/AdvancedPhotonSource/pi-experiment-ops) · 执行与编排 · Unspecified · 接入实现 / 文档
+[AdvancedPhotonSource/pi-experiment-ops](https://github.com/AdvancedPhotonSource/pi-experiment-ops) · 常驻执行 · Unspecified · 接入实现 / 文档
 
 组合实验工具、后台执行、持久终端和会话检索，为实验应用提供可复用 Agent 执行环境。
 
@@ -196,7 +196,7 @@ Pi extension / MCP / CodeMode / CLI / Agent Skills
 
 ## LabMCP · K-Dense
 
-[K-Dense-AI/lab-instrument-mcps](https://github.com/K-Dense-AI/lab-instrument-mcps) · 测量与台架 · Apache-2.0 · 模拟验证
+[K-Dense-AI/lab-instrument-mcps](https://github.com/K-Dense-AI/lab-instrument-mcps) · 设备桥接 · Apache-2.0 · 模拟验证
 
 单仓库仪器适配集合，覆盖电子测量、光谱、温控、泵、显微、液体处理和设施协议。组件清单单列，避免把服务器数量当作独立项目数量。
 
@@ -208,7 +208,7 @@ MCP / CLI / VISA / TCP / Serial / Vendor APIs
 
 ## LabLink
 
-[techmanual-ai/lablink-mcp](https://github.com/techmanual-ai/lablink-mcp) · 测量与台架 · MIT · 接入实现 / 文档
+[techmanual-ai/lablink-mcp](https://github.com/techmanual-ai/lablink-mcp) · 设备桥接 · MIT · 接入实现 / 文档
 
 多种传输接口汇入同一 MCP 服务，便于把已有指令和脚本接给 Agent。设备语义主要仍由配置和驱动表达。
 
@@ -220,7 +220,7 @@ MCP / VISA/SCPI / SSH / REST / Serial / Python
 
 ## scpi-mcp
 
-[armchairdeity/mcp-server-scpi](https://github.com/armchairdeity/mcp-server-scpi) · 测量与台架 · MIT · 接入实现 / 文档
+[armchairdeity/mcp-server-scpi](https://github.com/armchairdeity/mcp-server-scpi) · 设备桥接 · MIT · 接入实现 / 文档
 
 将示波器采集与测量目标封装为工具，仪器后端负责具体 SCPI。首个目标是 Rigol DS1054Z。
 
@@ -232,7 +232,7 @@ MCP / PyVISA / SCPI / USB/LAN
 
 ## oscilloscope-mcp
 
-[masahiro-999/oscilloscope-mcp](https://github.com/masahiro-999/oscilloscope-mcp) · 测量与台架 · MIT · 接入实现 / 文档
+[masahiro-999/oscilloscope-mcp](https://github.com/masahiro-999/oscilloscope-mcp) · 设备桥接 · MIT · 接入实现 / 文档
 
 网络示波器设置、触发、波形读取和测量反馈；返回结构化数据、图像及可独立查看的波形页面。
 
@@ -244,7 +244,7 @@ MCP / SCPI / TCP
 
 ## lecroy-mcp
 
-[lucasgerads/lecroy-mcp](https://github.com/lucasgerads/lecroy-mcp) · 测量与台架 · AGPL-3.0 · 维护者实机记录
+[lucasgerads/lecroy-mcp](https://github.com/lucasgerads/lecroy-mcp) · 设备桥接 · AGPL-3.0 · 维护者实机记录
 
 LeCroy 示波器控制与波形采集，使用 LAN VXI-11 或 USB。
 
@@ -256,7 +256,7 @@ MCP / SCPI / VXI-11 / USB
 
 ## siglent-scpi-mcp
 
-[mp911de/siglent-scpi-mcp](https://github.com/mp911de/siglent-scpi-mcp) · 测量与台架 · Apache-2.0 · 维护者实机记录
+[mp911de/siglent-scpi-mcp](https://github.com/mp911de/siglent-scpi-mcp) · 设备桥接 · Apache-2.0 · 维护者实机记录
 
 Siglent 示波器和电源的类型化工具，记录实际发送的 SCPI 命令。
 
@@ -268,7 +268,7 @@ MCP / SCPI / TCP
 
 ## scope-mcp
 
-[Netlist-Studio/scope-mcp](https://github.com/Netlist-Studio/scope-mcp) · 测量与台架 · MIT · 维护者实机记录
+[Netlist-Studio/scope-mcp](https://github.com/Netlist-Studio/scope-mcp) · 设备桥接 · MIT · 维护者实机记录
 
 Keysight/Agilent 示波器的设置、截图、波形下载、测量与串行解码。
 
@@ -280,7 +280,7 @@ MCP / PyVISA / Ethernet / SCPI
 
 ## dwf-mcp-server
 
-[KenosInc/dwf-mcp-server](https://github.com/KenosInc/dwf-mcp-server) · 测量与台架 · MIT · 接入实现 / 文档
+[KenosInc/dwf-mcp-server](https://github.com/KenosInc/dwf-mcp-server) · 设备桥接 · MIT · 接入实现 / 文档
 
 Digilent WaveForms 设备的示波器、任意波形与逻辑分析接口。
 
@@ -292,7 +292,7 @@ MCP / dwfpy / WaveForms SDK / USB
 
 ## Instrument MCP
 
-[zeng-andrew/instrument-mcp](https://github.com/zeng-andrew/instrument-mcp) · 测量与台架 · Unspecified · 接入实现 / 文档
+[zeng-andrew/instrument-mcp](https://github.com/zeng-andrew/instrument-mcp) · 设备桥接 · Unspecified · 接入实现 / 文档
 
 集成频谱分析仪、无线综测仪、电源、温箱及逻辑分析仪，使用 YAML 描述命令并管理多仪器会话。
 
@@ -304,7 +304,7 @@ MCP / SCPI / Modbus RTU / USB / YAML commands
 
 ## daqmx-mcp
 
-[BrianDavidCouch/daqmx-mcp](https://github.com/BrianDavidCouch/daqmx-mcp) · 测量与台架 · Apache-2.0 · 接入实现 / 文档
+[BrianDavidCouch/daqmx-mcp](https://github.com/BrianDavidCouch/daqmx-mcp) · 设备桥接 · Apache-2.0 · 接入实现 / 文档
 
 发现 NI DAQ 设备并执行有限长度的模拟电压和数字输入采集。
 
@@ -316,7 +316,7 @@ MCP / Codex plugin / NI nidaqmx
 
 ## DAQiFi Core
 
-[daqifi/daqifi-core](https://github.com/daqifi/daqifi-core) · 测量与台架 · MIT · 接入实现 / 文档
+[daqifi/daqifi-core](https://github.com/daqifi/daqifi-core) · 设备桥接 · MIT · 接入实现 / 文档
 
 厂商公开的无线采集 SDK 与 MCP 服务，涵盖通道配置、采样、数字 I/O、PWM、模拟输出和 SD 卡记录。
 
@@ -328,7 +328,7 @@ MCP / .NET API / Wi-Fi / USB
 
 ## LabVIEW MCP Server Toolkit
 
-[JanGoebel/LabVIEW-MCP-Server-Toolkit](https://github.com/JanGoebel/LabVIEW-MCP-Server-Toolkit) · 测量与台架 · MIT · 接入实现 / 文档
+[JanGoebel/LabVIEW-MCP-Server-Toolkit](https://github.com/JanGoebel/LabVIEW-MCP-Server-Toolkit) · 设备桥接 · MIT · 接入实现 / 文档
 
 让已有 LabVIEW 应用以工具、资源和提示的方式暴露 VI。适合直接包装实验室现有控制程序。
 
@@ -340,7 +340,7 @@ MCP / HTTP / LabVIEW VIs
 
 ## LabVIEW MCP · Zühlke
 
-[Zuehlke/labview-mcp](https://github.com/Zuehlke/labview-mcp) · 测量与台架 · MIT · 接入实现 / 文档
+[Zuehlke/labview-mcp](https://github.com/Zuehlke/labview-mcp) · 仪器开发 · MIT · 接入实现 / 文档
 
 Agent 可读取、修改和运行 LabVIEW 程序，主要处于开发工具层；能否控制设备取决于所运行 VI。
 
@@ -352,7 +352,7 @@ MCP / gRPC / LabVIEW scripting
 
 ## OpenFlexure-MCP
 
-[GSIBabu/OpenFlexure-MCP](https://github.com/GSIBabu/OpenFlexure-MCP) · 显微与束线 · GPL-3.0 · 接入实现 / 文档
+[GSIBabu/OpenFlexure-MCP](https://github.com/GSIBabu/OpenFlexure-MCP) · 设备桥接 · GPL-3.0 · 接入实现 / 文档
 
 通过 OpenFlexure 客户端操作载物台、拍照、自动对焦、Z-stack 与扩展功能。
 
@@ -364,7 +364,7 @@ MCP / OpenFlexure Python client / HTTP
 
 ## microscope-agent
 
-[BioNanomics/microscope-agent](https://github.com/BioNanomics/microscope-agent) · 显微与束线 · MIT · 接入实现 / 文档
+[BioNanomics/microscope-agent](https://github.com/BioNanomics/microscope-agent) · 设备桥接 · MIT · 接入实现 / 文档
 
 面向 Nikon Ti2-E 与 Baumer 相机的紧凑接口，读位置、移动 XY、采图；图像与实际位置及状态修订号关联。
 
@@ -376,7 +376,7 @@ MCP / Nikon SDK / GenICam camera
 
 ## Agent-Lens
 
-[aicell-lab/agent-lens](https://github.com/aicell-lab/agent-lens) · 显微与束线 · MIT · 接入实现 / 文档
+[aicell-lab/agent-lens](https://github.com/aicell-lab/agent-lens) · 过程编排 · MIT · 接入实现 / 文档
 
 将显微镜控制、机器人样本转移、图像分割、相似搜索和 OME-Zarr 数据组织在一起。
 
@@ -388,7 +388,7 @@ Hypha RPC / Python / Web UI / BioEngine
 
 ## Agentic microscope
 
-[kyu-softmatter/agentic-microscope](https://github.com/kyu-softmatter/agentic-microscope) · 显微与束线 · MIT · 接入实现 / 文档
+[kyu-softmatter/agentic-microscope](https://github.com/kyu-softmatter/agentic-microscope) · 设备桥接 · MIT · 接入实现 / 文档
 
 将研究目标转为有硬件边界与校准依据的显微镜配置，涵盖显微镜、光镊与压电平台。
 
@@ -400,7 +400,7 @@ MCP / Python / Micro-Manager / Vendor SDK/TCP
 
 ## soft-matter-agents
 
-[kyu-softmatter/soft-matter-agents](https://github.com/kyu-softmatter/soft-matter-agents) · 显微与束线 · MIT · 接入实现 / 文档
+[kyu-softmatter/soft-matter-agents](https://github.com/kyu-softmatter/soft-matter-agents) · 过程编排 · MIT · 接入实现 / 文档
 
 显微镜、模拟、文献与桥接 Agent 的组合工程；显微镜模块是旧 Agentic microscope 的后继位置。
 
@@ -412,7 +412,7 @@ Python / Microscope agent / Agent workflows
 
 ## AILA
 
-[M3RG-IITD/AILA](https://github.com/M3RG-IITD/AILA) · 显微与束线 · MIT · 论文实机案例
+[M3RG-IITD/AILA](https://github.com/M3RG-IITD/AILA) · 实验决策 · MIT · 论文实机案例
 
 原子力显微镜实验中的语言模型助手，结合任务分解、工具调用和反馈。
 
@@ -424,7 +424,7 @@ Python tools / LLM agents / Instrument control software
 
 ## LLM-directed-SPM
 
-[DIAOZHUO/LLM-directed-SPM](https://github.com/DIAOZHUO/LLM-directed-SPM) · 显微与束线 · Unspecified · 论文实机案例
+[DIAOZHUO/LLM-directed-SPM](https://github.com/DIAOZHUO/LLM-directed-SPM) · 实验决策 · Unspecified · 论文实机案例
 
 扫描探针显微实验中的命令生成、知识库和专门小模型；包含本地模型服务与模型训练材料。
 
@@ -436,7 +436,7 @@ Python / WebSocket / Small language models / spmutil
 
 ## Quailbot Pi
 
-[BB-84C/quailbot-pi](https://github.com/BB-84C/quailbot-pi) · 显微与束线 · ISC · 接入实现 / 文档
+[BB-84C/quailbot-pi](https://github.com/BB-84C/quailbot-pi) · 常驻执行 · ISC · 接入实现 / 文档
 
 将仪器工作区变为参数、动作、图像回读与多步程序的固定工具接口；操作与后续观察分别记录。Nanonis 路径依赖外部 nqctl。
 
@@ -448,7 +448,7 @@ Pi extension / CLI driver contract / Workspace JSON / Image readback
 
 ## VISION
 
-[CFN-softbio/VISION](https://github.com/CFN-softbio/VISION) · 显微与束线 · Unspecified · 论文实机案例
+[CFN-softbio/VISION](https://github.com/CFN-softbio/VISION) · 实验决策 · Unspecified · 论文实机案例
 
 以语音或文字把用户意图转为束线操作代码，模块化处理转录、分类、编程与分析。
 
@@ -460,7 +460,7 @@ Voice/text / Python code generation / Bluesky workstation
 
 ## LeeQ
 
-[ShuxiangCao/LeeQ](https://github.com/ShuxiangCao/LeeQ) · 量子实验 · BSD-3-Clause · 论文实机案例
+[ShuxiangCao/LeeQ](https://github.com/ShuxiangCao/LeeQ) · 常驻执行 · BSD-3-Clause · 论文实机案例
 
 超导量子器件的脉冲实验、扫描、校准状态与分析框架；可向 Agent 提供实验描述及图文检查接口。
 
@@ -472,7 +472,7 @@ Python experiment API / Pulse control / k-agents integration
 
 ## k-agents
 
-[EvoEvolver/k_agents](https://github.com/EvoEvolver/k_agents) · 量子实验 · Unspecified · 论文实机案例
+[EvoEvolver/k_agents](https://github.com/EvoEvolver/k_agents) · 实验决策 · Unspecified · 论文实机案例
 
 围绕已有实验库发现、执行和判断校准实验，保留实验知识与视觉结果。
 
@@ -484,7 +484,7 @@ Python / Experiment agents / LeeQ
 
 ## Quantum Calibration Agent Blueprint
 
-[NVIDIA/Quantum-Calibration-Agent-Blueprint](https://github.com/NVIDIA/Quantum-Calibration-Agent-Blueprint) · 量子实验 · Apache-2.0 · 接入实现 / 文档
+[NVIDIA/Quantum-Calibration-Agent-Blueprint](https://github.com/NVIDIA/Quantum-Calibration-Agent-Blueprint) · 实验决策 · Apache-2.0 · 接入实现 / 文档
 
 量子器件校准 Agent 参考工程，包含实验发现、执行、图像分析、工作流和结果存储。
 
@@ -496,7 +496,7 @@ Python experiment scripts / CLI / Web UI / HDF5 / SQLite
 
 ## CALMS
 
-[mcherukara/CALMS](https://github.com/mcherukara/CALMS) · 显微与束线 · BSD-3-Clause · 维护者实机记录
+[mcherukara/CALMS](https://github.com/mcherukara/CALMS) · 实验决策 · BSD-3-Clause · 维护者实机记录
 
 上下文与工具增强的科学设施助手，将仪器知识和操作函数纳入交互。
 
@@ -508,7 +508,7 @@ Python tools / Retrieval / Instrument commands
 
 ## CALMS · APS experimental agents
 
-[AdvancedPhotonSource/CALMS](https://github.com/AdvancedPhotonSource/CALMS) · 显微与束线 · Unspecified · 论文实机案例
+[AdvancedPhotonSource/CALMS](https://github.com/AdvancedPhotonSource/CALMS) · 实验决策 · Unspecified · 论文实机案例
 
 面向 North N9 机器人与 X-ray nanoprobe 的可教学实验 Agent 工作流。
 
@@ -520,7 +520,7 @@ Python / Robot command functions / Beamline tools
 
 ## Opentrons MCP
 
-[yerbymatey/opentrons-mcp](https://github.com/yerbymatey/opentrons-mcp) · 化学与液体处理 · MIT · 接入实现 / 文档
+[yerbymatey/opentrons-mcp](https://github.com/yerbymatey/opentrons-mcp) · 设备桥接 · MIT · 接入实现 / 文档
 
 结合 API 文档检索与机器人协议上传、运行管理、归位及状态读取，面向 OT-2/Flex。
 
@@ -532,7 +532,7 @@ MCP / Opentrons HTTP API
 
 ## plr-mcp
 
-[di-omics/plr-mcp](https://github.com/di-omics/plr-mcp) · 化学与液体处理 · MIT · 模拟验证
+[di-omics/plr-mcp](https://github.com/di-omics/plr-mcp) · 设备桥接 · MIT · 模拟验证
 
 将液体处理、酶标仪、热循环仪和加热振荡器操作暴露为 MCP，复用 PyLabRobot 后端。
 
@@ -544,7 +544,7 @@ MCP / PyLabRobot
 
 ## OpenLabAI
 
-[nygmeta/OpenLabAI](https://github.com/nygmeta/OpenLabAI) · 化学与液体处理 · MIT · 维护者实机记录
+[nygmeta/OpenLabAI](https://github.com/nygmeta/OpenLabAI) · 过程编排 · MIT · 维护者实机记录
 
 自然语言液体处理工作流，包含 Opentrons、Biomek、Hamilton 与实验记录连接。
 
@@ -556,7 +556,7 @@ MCP / Opentrons HTTP / Biomek COM / PyLabRobot
 
 ## LabscriptAI OT
 
-[KRATSZ/labscriptai-ot](https://github.com/KRATSZ/labscriptai-ot) · 化学与液体处理 · LabscriptAI Research Citation License v1.0 · 接入实现 / 文档
+[KRATSZ/labscriptai-ot](https://github.com/KRATSZ/labscriptai-ot) · 过程编排 · LabscriptAI Research Citation License v1.0 · 接入实现 / 文档
 
 面向 Opentrons 的 Agent 插件，集成协议编写、模拟、技能和实时运行辅助。
 
@@ -568,7 +568,7 @@ MCP / Agent Skills / Opentrons / Local simulation
 
 ## Coscientist
 
-[gomesgroup/coscientist](https://github.com/gomesgroup/coscientist) · 化学与液体处理 · Apache-2.0 + Commons Clause · 论文实机案例
+[gomesgroup/coscientist](https://github.com/gomesgroup/coscientist) · 实验决策 · Apache-2.0 + Commons Clause · 论文实机案例
 
 语言模型组织文献、程序和实验工具完成化学研究；是早期真实实验的重要案例。
 
@@ -580,7 +580,7 @@ Python tools / Opentrons / Laboratory APIs
 
 ## ChemAgents
 
-[pic-ai-robotic-chemistry/ChemAgents](https://github.com/pic-ai-robotic-chemistry/ChemAgents) · 化学与液体处理 · Unspecified · 论文实机案例
+[pic-ai-robotic-chemistry/ChemAgents](https://github.com/pic-ai-robotic-chemistry/ChemAgents) · 实验决策 · Unspecified · 论文实机案例
 
 多 Agent 化学研究系统，连接实验协议、机器人工作站与实验数据。
 
@@ -592,11 +592,11 @@ LangGraph tools / Robot instruction set / ROS drivers
 
 ## ORGANA
 
-[ac-rad/organa](https://github.com/ac-rad/organa) · 化学与液体处理 · Unspecified · 论文实机案例
+[ac-rad/organa](https://github.com/ac-rad/organa) · 实验决策 · Unspecified · 论文实机案例
 
-化学机器人助手结合用户目标、场景感知与实验进度，安排多步实验并生成报告。
+ORGANA 论文中的化学机器人助手结合用户目标、场景感知与实验进度；本仓库主要发布项目网站与研究材料。
 
-项目与论文展示真实机器人实验；仓库内容和外部部署环境需要分开理解，未识别到许可证。
+论文展示真实机器人实验；README 明确该仓库包含网站源码，没有据此确认完整机器人控制实现；许可证未识别。
 
 Task planning / Robot perception / Laboratory operations
 
@@ -604,7 +604,7 @@ Task planning / Robot perception / Laboratory operations
 
 ## CLAIRify
 
-[ac-rad/xdl-generation](https://github.com/ac-rad/xdl-generation) · 化学与液体处理 · MIT · 论文实机案例
+[ac-rad/xdl-generation](https://github.com/ac-rad/xdl-generation) · 过程编排 · MIT · 论文实机案例
 
 把自然语言实验步骤转换为可检查的 XDL 过程，验证错误反馈给模型进行修订。
 
@@ -616,7 +616,7 @@ Natural language to XDL / Verifier loop / Python
 
 ## CLAIRify-Chemspeed
 
-[ac-rad/clairify-chemspeed](https://github.com/ac-rad/clairify-chemspeed) · 化学与液体处理 · Unspecified · 接入实现 / 文档
+[ac-rad/clairify-chemspeed](https://github.com/ac-rad/clairify-chemspeed) · 过程编排 · Unspecified · 接入实现 / 文档
 
 自然语言生成 Chemspyd 程序，把协议生成连接到 Chemspeed 自动化平台。
 
@@ -628,7 +628,7 @@ Python generation / Chemspyd / Chemspeed
 
 ## SynAgent · thin-film synthesis
 
-[izumitkhr/synagent](https://github.com/izumitkhr/synagent) · 化学与液体处理 · MIT · 论文实机案例
+[izumitkhr/synagent](https://github.com/izumitkhr/synagent) · 实验决策 · MIT · 论文实机案例
 
 薄膜合成闭环中的多模态规划与假设检验，读取 XRD/SEM 数据，为下一次实验写出条件。
 
@@ -640,7 +640,7 @@ Python iteration runner / MaiML / File-based platform interface / Generated skil
 
 ## AutoLabs
 
-[pnnl/autolabs](https://github.com/pnnl/autolabs) · 化学与液体处理 · BSD-2-Clause · 配套代码 / 资料
+[pnnl/autolabs](https://github.com/pnnl/autolabs) · 实验决策 · BSD-2-Clause · 配套代码 / 资料
 
 生成实验步骤与 Lab Step Representation，支持多 Agent 修订和实验设计评估。
 
@@ -652,7 +652,7 @@ Python / LSR export / Agent planning
 
 ## opcua-mcp · kukapay
 
-[kukapay/opcua-mcp](https://github.com/kukapay/opcua-mcp) · 工业与设施 · MIT · 接入实现 / 文档
+[kukapay/opcua-mcp](https://github.com/kukapay/opcua-mcp) · 设备桥接 · MIT · 接入实现 / 文档
 
 把 OPC UA 节点浏览、单点与批量读写接到 Agent，保留已有工业设备服务端。
 
@@ -664,7 +664,7 @@ MCP / OPC UA
 
 ## OPC UA MCP · IndustriAgents
 
-[IndustriAgents/OPCUA-MCP](https://github.com/IndustriAgents/OPCUA-MCP) · 工业与设施 · MIT · 接入实现 / 文档
+[IndustriAgents/OPCUA-MCP](https://github.com/IndustriAgents/OPCUA-MCP) · 设备桥接 · MIT · 接入实现 / 文档
 
 浏览、读数、历史、订阅、告警与受配置约束的写入及方法调用；一个本地进程连接一个 OPC UA 端点。
 
@@ -676,7 +676,7 @@ MCP / OPC UA / Subscriptions / History
 
 ## modbus-mcp
 
-[kukapay/modbus-mcp](https://github.com/kukapay/modbus-mcp) · 工业与设施 · MIT · 接入实现 / 文档
+[kukapay/modbus-mcp](https://github.com/kukapay/modbus-mcp) · 设备桥接 · MIT · 接入实现 / 文档
 
 把寄存器和线圈读写暴露为工具，是连接已有 PLC、传感器与控制器的底层入口。
 
@@ -688,7 +688,7 @@ MCP / Modbus TCP/UDP/Serial
 
 ## TANGO MCP
 
-[abogani/tango-mcp](https://github.com/abogani/tango-mcp) · 工业与设施 · Apache-2.0 · 接入实现 / 文档
+[abogani/tango-mcp](https://github.com/abogani/tango-mcp) · 设备桥接 · Apache-2.0 · 接入实现 / 文档
 
 从 TANGO 数据库发现设备，将属性、状态和命令映射为 MCP 资源与工具，支持批量读取。
 
@@ -700,7 +700,7 @@ MCP / PyTango / Streamable HTTP
 
 ## MCP Server for EPICS
 
-[sryu81/mcp-server-for-epics](https://github.com/sryu81/mcp-server-for-epics) · 工业与设施 · Unspecified · 接入实现 / 文档
+[sryu81/mcp-server-for-epics](https://github.com/sryu81/mcp-server-for-epics) · 设备桥接 · Unspecified · 接入实现 / 文档
 
 提供独立进程和 IOC 内嵌两种入口，把 EPICS PV 和控制命令暴露给 Agent。
 
@@ -712,7 +712,7 @@ MCP / EPICS CA/PVA / IOC / stdio/HTTP
 
 ## MCP2Serial
 
-[mcp2everything/mcp2serial](https://github.com/mcp2everything/mcp2serial) · 嵌入式与调试 · MIT · 接入实现 / 文档
+[mcp2everything/mcp2serial](https://github.com/mcp2everything/mcp2serial) · 设备桥接 · MIT · 接入实现 / 文档
 
 通过串口连接 MCU 与 Agent，适合作为自制仪器的基础通信桥。
 
@@ -724,7 +724,7 @@ MCP / Serial / Raspberry Pi Pico
 
 ## tinymcp
 
-[golioth/tinymcp](https://github.com/golioth/tinymcp) · 嵌入式与调试 · Apache-2.0 · 接入实现 / 文档
+[golioth/tinymcp](https://github.com/golioth/tinymcp) · 设备桥接 · Apache-2.0 · 接入实现 / 文档
 
 将 Golioth 设备 RPC 及其描述动态暴露为 MCP 工具，已有设备可通过状态服务发布工具 schema。
 
@@ -736,7 +736,7 @@ MCP / Golioth management API / Device RPC
 
 ## Embedded Debugger MCP
 
-[Adancurusul/embedded-debugger-mcp](https://github.com/Adancurusul/embedded-debugger-mcp) · 嵌入式与调试 · MIT · 维护者实机记录
+[Adancurusul/embedded-debugger-mcp](https://github.com/Adancurusul/embedded-debugger-mcp) · 仪器开发 · MIT · 维护者实机记录
 
 让 Agent 连接调试探针、控制目标、读写内存、设断点、刷写与检查故障，为仪器固件开发提供物理反馈。
 
@@ -748,7 +748,7 @@ MCP / CLI / Agent Skills / probe-rs / OpenOCD/GDB
 
 ## Saleae Logic 2 MCP
 
-[hsoffar/saleae-logic2-mcp](https://github.com/hsoffar/saleae-logic2-mcp) · 嵌入式与调试 · Apache-2.0 · 接入实现 / 文档
+[hsoffar/saleae-logic2-mcp](https://github.com/hsoffar/saleae-logic2-mcp) · 仪器开发 · Apache-2.0 · 接入实现 / 文档
 
 逻辑分析仪的采集、协议解码、时序测量和导出接口，用于固件与真实总线调试。
 
@@ -760,7 +760,7 @@ MCP / Logic 2 automation API
 
 ## MicroPython MCP Bridge
 
-[SWITCHSCIENCE/mcp-micropython-bridge](https://github.com/SWITCHSCIENCE/mcp-micropython-bridge) · 嵌入式与调试 · Unspecified · 接入实现 / 文档
+[SWITCHSCIENCE/mcp-micropython-bridge](https://github.com/SWITCHSCIENCE/mcp-micropython-bridge) · 仪器开发 · Unspecified · 接入实现 / 文档
 
 通过串口或 WebREPL 操作 ESP32/RP2040 等，利用设备侧 helper 模块和 HARDWARE.md 保存板级知识。
 
@@ -772,7 +772,7 @@ MCP / USB Serial / WebREPL / MicroPython
 
 ## ROS MCP Server
 
-[robotmcp/ros-mcp-server](https://github.com/robotmcp/ros-mcp-server) · 机器人 · Apache-2.0 · 维护者实机记录
+[robotmcp/ros-mcp-server](https://github.com/robotmcp/ros-mcp-server) · 设备桥接 · Apache-2.0 · 维护者实机记录
 
 经 rosbridge 发现主题、服务、动作与消息类型，发布控制消息并读取机器人传感器反馈。
 
@@ -784,7 +784,7 @@ MCP / rosbridge / ROS 1 / ROS 2
 
 ## ROSA
 
-[nasa-jpl/rosa](https://github.com/nasa-jpl/rosa) · 机器人 · Apache-2.0 · 论文实机案例
+[nasa-jpl/rosa](https://github.com/nasa-jpl/rosa) · 实验决策 · Apache-2.0 · 论文实机案例
 
 JPL 的 ROS 自然语言助手，结合系统诊断、状态查询与可扩展机器人操作工具。
 
@@ -796,7 +796,7 @@ LangChain tools / ROS 1 / ROS 2
 
 ## device-use
 
-[labclaw/device-use](https://github.com/labclaw/device-use) · GUI 与操作知识 · Apache-2.0 · 接入实现 / 文档
+[labclaw/device-use](https://github.com/labclaw/device-use) · 界面操作 · Apache-2.0 · 接入实现 / 文档
 
 用屏幕观察、规划和鼠标键盘操作包装仪器软件，配套设备 profile。适用于 API 缺失时的替代接入研究。
 
@@ -808,7 +808,7 @@ Python / GUI automation / MCP / VLM backends
 
 ## device-skills
 
-[labclaw/device-skills](https://github.com/labclaw/device-skills) · GUI 与操作知识 · Apache-2.0 · 配套代码 / 资料
+[labclaw/device-skills](https://github.com/labclaw/device-skills) · 知识与资料 · Apache-2.0 · 配套代码 / 资料
 
 仪器操作知识与技能材料，与 device-use 的执行接口配套。
 
@@ -820,7 +820,7 @@ Agent Skills / Device operating knowledge
 
 ## edge-mhs
 
-[fastly/edge-mhs](https://github.com/fastly/edge-mhs) · 设备协议 · Apache-2.0 · 模拟验证
+[fastly/edge-mhs](https://github.com/fastly/edge-mhs) · 设备桥接 · Apache-2.0 · 模拟验证
 
 在 Agent 与设备服务之间加入边缘网关，处理身份、参数约束、配额与审计。
 
@@ -832,7 +832,7 @@ MCP gateway / Fastly Compute
 
 ## Agent2Device Protocol
 
-[neogyk/Agent2Device-Protocol](https://github.com/neogyk/Agent2Device-Protocol) · 设备协议 · MIT · 构想 / 提案
+[neogyk/Agent2Device-Protocol](https://github.com/neogyk/Agent2Device-Protocol) · 仪器契约 · MIT · 构想 / 提案
 
 讨论 Agent 与实验设备连接的协议构想。
 
@@ -844,7 +844,7 @@ Design notes
 
 ## ChemCrow public release
 
-[ur-whitelab/chemcrow-public](https://github.com/ur-whitelab/chemcrow-public) · 化学与液体处理 · MIT · 配套代码 / 资料
+[ur-whitelab/chemcrow-public](https://github.com/ur-whitelab/chemcrow-public) · 知识与资料 · MIT · 配套代码 / 资料
 
 化学工具增强 Agent 的重要案例，可用于理解工具编排和实验服务边界。
 
@@ -856,7 +856,7 @@ Python / LangChain tools
 
 ## NV autonomous experiments
 
-[takuyaisogawa/nv-autonomous-experiments](https://github.com/takuyaisogawa/nv-autonomous-experiments) · 量子实验 · MIT code / CC BY-4.0 artifacts · 配套代码 / 资料
+[takuyaisogawa/nv-autonomous-experiments](https://github.com/takuyaisogawa/nv-autonomous-experiments) · 知识与资料 · MIT code / CC BY-4.0 artifacts · 配套代码 / 资料
 
 NV 中心自主实验的公共案例、分析代码与实验资料。
 
@@ -868,7 +868,7 @@ Python / MATLAB / Case-study artifacts
 
 ## UC2 LLM microscopy workshop
 
-[openUC2/Hackathon-UC2-LLM](https://github.com/openUC2/Hackathon-UC2-LLM) · 显微与束线 · Unspecified · 配套代码 / 资料
+[openUC2/Hackathon-UC2-LLM](https://github.com/openUC2/Hackathon-UC2-LLM) · 知识与资料 · Unspecified · 配套代码 / 资料
 
 围绕真实 UC2 显微镜和 ImSwitch API 的教学入口，包括设备构成、接入与实验挑战。
 

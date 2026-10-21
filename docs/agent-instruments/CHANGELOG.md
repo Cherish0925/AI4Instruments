@@ -1,6 +1,15 @@
 # Changes
 
-## 2026-10-21
+## 2026-10-21 — Landscape reader
+
+- Replaced the stacked report with eight navigable sections, deep-linked project profiles, independent directory pagination and previous/next controls.
+- Added a role diagram and a source-linked graph with 190 nodes and 323 typed relationships, separating 177 documented relations from 146 analytical classifications.
+- Added 73 bilingual contribution profiles, eight contribution routes, 70 maintainer/standards actors and eight concrete design decisions.
+- Added side-by-side comparison, actor/domain/route filters, graph neighborhood exploration and chapter navigation.
+- Added reusable graph and landscape datasets, JSON Schemas, bilingual profile Markdown and embedded offline exports; expanded the source index to 316 URLs.
+- Corrected ORGANA’s public repository scope to project-website material while retaining the paper’s physical-experiment evidence.
+
+## 2026-10-21 — Integrated edition
 
 - Organized the homepage around device access, experiment execution and physical feedback.
 - Grouped protocol entries by function with equal visual treatment; placed the system model before acronym comparisons.

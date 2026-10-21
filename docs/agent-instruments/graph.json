@@ -1,0 +1,6031 @@
+{
+  "schema_version": "1.0",
+  "updated": "2026-10-21",
+  "nodes": [
+    {
+      "id": "r:bridge",
+      "kind": "route",
+      "label": {
+        "zh": "设备桥接",
+        "en": "Device bridges"
+      },
+      "reference": "bridge"
+    },
+    {
+      "id": "r:contract",
+      "kind": "route",
+      "label": {
+        "zh": "仪器契约",
+        "en": "Instrument contracts"
+      },
+      "reference": "contract"
+    },
+    {
+      "id": "r:runtime",
+      "kind": "route",
+      "label": {
+        "zh": "常驻执行",
+        "en": "Persistent execution"
+      },
+      "reference": "runtime"
+    },
+    {
+      "id": "r:workflow",
+      "kind": "route",
+      "label": {
+        "zh": "过程编排",
+        "en": "Procedure composition"
+      },
+      "reference": "workflow"
+    },
+    {
+      "id": "r:experiment",
+      "kind": "route",
+      "label": {
+        "zh": "实验决策",
+        "en": "Experimental decisions"
+      },
+      "reference": "experiment"
+    },
+    {
+      "id": "r:development",
+      "kind": "route",
+      "label": {
+        "zh": "仪器开发",
+        "en": "Instrument development"
+      },
+      "reference": "development"
+    },
+    {
+      "id": "r:gui",
+      "kind": "route",
+      "label": {
+        "zh": "界面操作",
+        "en": "GUI operation"
+      },
+      "reference": "gui"
+    },
+    {
+      "id": "r:knowledge",
+      "kind": "route",
+      "label": {
+        "zh": "知识与资料",
+        "en": "Knowledge and artifacts"
+      },
+      "reference": "knowledge"
+    },
+    {
+      "id": "d:cross",
+      "kind": "domain",
+      "label": {
+        "zh": "跨领域接口",
+        "en": "Cross-domain interfaces"
+      },
+      "reference": "cross"
+    },
+    {
+      "id": "d:bench",
+      "kind": "domain",
+      "label": {
+        "zh": "电子测量与台架",
+        "en": "Measurement benches"
+      },
+      "reference": "bench"
+    },
+    {
+      "id": "d:imaging",
+      "kind": "domain",
+      "label": {
+        "zh": "显微与成像",
+        "en": "Microscopy and imaging"
+      },
+      "reference": "imaging"
+    },
+    {
+      "id": "d:facility",
+      "kind": "domain",
+      "label": {
+        "zh": "束线与工业设施",
+        "en": "Beamlines and facilities"
+      },
+      "reference": "facility"
+    },
+    {
+      "id": "d:quantum",
+      "kind": "domain",
+      "label": {
+        "zh": "量子实验",
+        "en": "Quantum experiments"
+      },
+      "reference": "quantum"
+    },
+    {
+      "id": "d:liquids",
+      "kind": "domain",
+      "label": {
+        "zh": "化学、材料与液体处理",
+        "en": "Chemistry, materials and liquids"
+      },
+      "reference": "liquids"
+    },
+    {
+      "id": "d:embedded",
+      "kind": "domain",
+      "label": {
+        "zh": "嵌入式与调试",
+        "en": "Embedded development"
+      },
+      "reference": "embedded"
+    },
+    {
+      "id": "d:robotics",
+      "kind": "domain",
+      "label": {
+        "zh": "机器人",
+        "en": "Robotics"
+      },
+      "reference": "robotics"
+    },
+    {
+      "id": "a:Abenor-Labs",
+      "kind": "actor",
+      "label": {
+        "zh": "Abenor-Labs",
+        "en": "Abenor-Labs"
+      },
+      "reference": "Abenor-Labs",
+      "sources": [
+        "https://github.com/Abenor-Labs/Open-MHS"
+      ]
+    },
+    {
+      "id": "a:abogani",
+      "kind": "actor",
+      "label": {
+        "zh": "abogani",
+        "en": "abogani"
+      },
+      "reference": "abogani",
+      "sources": [
+        "https://github.com/abogani/tango-mcp"
+      ]
+    },
+    {
+      "id": "a:ac-rad",
+      "kind": "actor",
+      "label": {
+        "zh": "AC-RAD 研究合作团队",
+        "en": "AC-RAD research collaboration"
+      },
+      "reference": "ac-rad",
+      "sources": [
+        "https://ac-rad.github.io/organa/"
+      ]
+    },
+    {
+      "id": "a:Adancurusul",
+      "kind": "actor",
+      "label": {
+        "zh": "Adancurusul",
+        "en": "Adancurusul"
+      },
+      "reference": "Adancurusul",
+      "sources": [
+        "https://github.com/Adancurusul/embedded-debugger-mcp"
+      ]
+    },
+    {
+      "id": "a:AdvancedPhotonSource",
+      "kind": "actor",
+      "label": {
+        "zh": "Argonne · Advanced Photon Source",
+        "en": "Argonne · Advanced Photon Source"
+      },
+      "reference": "AdvancedPhotonSource",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource",
+        "https://www.aps.anl.gov/"
+      ]
+    },
+    {
+      "id": "a:aicell-lab",
+      "kind": "actor",
+      "label": {
+        "zh": "KTH / SciLifeLab · AICell Lab",
+        "en": "KTH / SciLifeLab · AICell Lab"
+      },
+      "reference": "aicell-lab",
+      "sources": [
+        "https://aicell.io/",
+        "https://github.com/aicell-lab/agent-lens"
+      ]
+    },
+    {
+      "id": "a:als-apg",
+      "kind": "actor",
+      "label": {
+        "zh": "Berkeley Lab · ALS 加速器物理组",
+        "en": "Berkeley Lab · ALS Accelerator Physics Group"
+      },
+      "reference": "als-apg",
+      "sources": [
+        "https://github.com/als-apg",
+        "https://als-apg.github.io/osprey/"
+      ]
+    },
+    {
+      "id": "a:armchairdeity",
+      "kind": "actor",
+      "label": {
+        "zh": "armchairdeity",
+        "en": "armchairdeity"
+      },
+      "reference": "armchairdeity",
+      "sources": [
+        "https://github.com/armchairdeity/mcp-server-scpi"
+      ]
+    },
+    {
+      "id": "a:BB-84C",
+      "kind": "actor",
+      "label": {
+        "zh": "BB-84C",
+        "en": "BB-84C"
+      },
+      "reference": "BB-84C",
+      "sources": [
+        "https://github.com/BB-84C/quailbot-pi"
+      ]
+    },
+    {
+      "id": "a:BioNanomics",
+      "kind": "actor",
+      "label": {
+        "zh": "BioNanomics",
+        "en": "BioNanomics"
+      },
+      "reference": "BioNanomics",
+      "sources": [
+        "https://github.com/BioNanomics/microscope-agent"
+      ]
+    },
+    {
+      "id": "a:BrianDavidCouch",
+      "kind": "actor",
+      "label": {
+        "zh": "BrianDavidCouch",
+        "en": "BrianDavidCouch"
+      },
+      "reference": "BrianDavidCouch",
+      "sources": [
+        "https://github.com/BrianDavidCouch/daqmx-mcp"
+      ]
+    },
+    {
+      "id": "a:caidish",
+      "kind": "actor",
+      "label": {
+        "zh": "caidish",
+        "en": "caidish"
+      },
+      "reference": "caidish",
+      "sources": [
+        "https://github.com/caidish/instrMCP"
+      ]
+    },
+    {
+      "id": "a:CFN-softbio",
+      "kind": "actor",
+      "label": {
+        "zh": "Brookhaven · CFN 团队",
+        "en": "Brookhaven · CFN team"
+      },
+      "reference": "CFN-softbio",
+      "sources": [
+        "https://github.com/CFN-softbio/VISION",
+        "https://www.bnl.gov/newsroom/news.php?a=122449"
+      ]
+    },
+    {
+      "id": "a:Cuntinum",
+      "kind": "actor",
+      "label": {
+        "zh": "Cuntinum",
+        "en": "Cuntinum"
+      },
+      "reference": "Cuntinum",
+      "sources": [
+        "https://github.com/Cuntinum/model-hardware-protocol"
+      ]
+    },
+    {
+      "id": "a:daqifi",
+      "kind": "actor",
+      "label": {
+        "zh": "DAQiFi",
+        "en": "DAQiFi"
+      },
+      "reference": "daqifi",
+      "sources": [
+        "https://github.com/daqifi/daqifi-core"
+      ]
+    },
+    {
+      "id": "a:deepmodeling",
+      "kind": "actor",
+      "label": {
+        "zh": "deepmodeling",
+        "en": "deepmodeling"
+      },
+      "reference": "deepmodeling",
+      "sources": [
+        "https://github.com/deepmodeling/Uni-Lab-OS"
+      ]
+    },
+    {
+      "id": "a:di-omics",
+      "kind": "actor",
+      "label": {
+        "zh": "di-omics",
+        "en": "di-omics"
+      },
+      "reference": "di-omics",
+      "sources": [
+        "https://github.com/di-omics/plr-mcp"
+      ]
+    },
+    {
+      "id": "a:DIAOZHUO",
+      "kind": "actor",
+      "label": {
+        "zh": "DIAOZHUO",
+        "en": "DIAOZHUO"
+      },
+      "reference": "DIAOZHUO",
+      "sources": [
+        "https://github.com/DIAOZHUO/LLM-directed-SPM"
+      ]
+    },
+    {
+      "id": "a:EvoEvolver",
+      "kind": "actor",
+      "label": {
+        "zh": "EvoEvolver",
+        "en": "EvoEvolver"
+      },
+      "reference": "EvoEvolver",
+      "sources": [
+        "https://github.com/EvoEvolver/k_agents"
+      ]
+    },
+    {
+      "id": "a:fastly",
+      "kind": "actor",
+      "label": {
+        "zh": "Fastly",
+        "en": "Fastly"
+      },
+      "reference": "fastly",
+      "sources": [
+        "https://github.com/fastly/edge-mhs"
+      ]
+    },
+    {
+      "id": "a:fredabila",
+      "kind": "actor",
+      "label": {
+        "zh": "fredabila",
+        "en": "fredabila"
+      },
+      "reference": "fredabila",
+      "sources": [
+        "https://github.com/fredabila/oahl"
+      ]
+    },
+    {
+      "id": "a:golioth",
+      "kind": "actor",
+      "label": {
+        "zh": "Golioth",
+        "en": "Golioth"
+      },
+      "reference": "golioth",
+      "sources": [
+        "https://github.com/golioth/tinymcp"
+      ]
+    },
+    {
+      "id": "a:gomesgroup",
+      "kind": "actor",
+      "label": {
+        "zh": "Carnegie Mellon · Gomes Group",
+        "en": "Carnegie Mellon · Gomes Group"
+      },
+      "reference": "gomesgroup",
+      "sources": [
+        "https://engineering.cmu.edu/news-events/news/2023/12/20-ai-coscientist.html"
+      ]
+    },
+    {
+      "id": "a:GSIBabu",
+      "kind": "actor",
+      "label": {
+        "zh": "GSIBabu",
+        "en": "GSIBabu"
+      },
+      "reference": "GSIBabu",
+      "sources": [
+        "https://github.com/GSIBabu/OpenFlexure-MCP"
+      ]
+    },
+    {
+      "id": "a:hsoffar",
+      "kind": "actor",
+      "label": {
+        "zh": "hsoffar",
+        "en": "hsoffar"
+      },
+      "reference": "hsoffar",
+      "sources": [
+        "https://github.com/hsoffar/saleae-logic2-mcp"
+      ]
+    },
+    {
+      "id": "a:IndustriAgents",
+      "kind": "actor",
+      "label": {
+        "zh": "IndustriAgents",
+        "en": "IndustriAgents"
+      },
+      "reference": "IndustriAgents",
+      "sources": [
+        "https://github.com/IndustriAgents/OPCUA-MCP"
+      ]
+    },
+    {
+      "id": "a:ivoryos-ai",
+      "kind": "actor",
+      "label": {
+        "zh": "ivoryos-ai",
+        "en": "ivoryos-ai"
+      },
+      "reference": "ivoryos-ai",
+      "sources": [
+        "https://github.com/ivoryos-ai/IvoryOS"
+      ]
+    },
+    {
+      "id": "a:izumitkhr",
+      "kind": "actor",
+      "label": {
+        "zh": "izumitkhr",
+        "en": "izumitkhr"
+      },
+      "reference": "izumitkhr",
+      "sources": [
+        "https://github.com/izumitkhr/synagent"
+      ]
+    },
+    {
+      "id": "a:JanGoebel",
+      "kind": "actor",
+      "label": {
+        "zh": "JanGoebel",
+        "en": "JanGoebel"
+      },
+      "reference": "JanGoebel",
+      "sources": [
+        "https://github.com/JanGoebel/LabVIEW-MCP-Server-Toolkit"
+      ]
+    },
+    {
+      "id": "a:jumpstarter-dev",
+      "kind": "actor",
+      "label": {
+        "zh": "jumpstarter-dev",
+        "en": "jumpstarter-dev"
+      },
+      "reference": "jumpstarter-dev",
+      "sources": [
+        "https://github.com/jumpstarter-dev/jumpstarter"
+      ]
+    },
+    {
+      "id": "a:K-Dense-AI",
+      "kind": "actor",
+      "label": {
+        "zh": "K-Dense",
+        "en": "K-Dense"
+      },
+      "reference": "K-Dense-AI",
+      "sources": [
+        "https://github.com/K-Dense-AI/lab-instrument-mcps"
+      ]
+    },
+    {
+      "id": "a:KenosInc",
+      "kind": "actor",
+      "label": {
+        "zh": "KenosInc",
+        "en": "KenosInc"
+      },
+      "reference": "KenosInc",
+      "sources": [
+        "https://github.com/KenosInc/dwf-mcp-server"
+      ]
+    },
+    {
+      "id": "a:KRATSZ",
+      "kind": "actor",
+      "label": {
+        "zh": "KRATSZ",
+        "en": "KRATSZ"
+      },
+      "reference": "KRATSZ",
+      "sources": [
+        "https://github.com/KRATSZ/labscriptai-ot"
+      ]
+    },
+    {
+      "id": "a:kukapay",
+      "kind": "actor",
+      "label": {
+        "zh": "kukapay",
+        "en": "kukapay"
+      },
+      "reference": "kukapay",
+      "sources": [
+        "https://github.com/kukapay/opcua-mcp"
+      ]
+    },
+    {
+      "id": "a:kushalsinha",
+      "kind": "actor",
+      "label": {
+        "zh": "kushalsinha",
+        "en": "kushalsinha"
+      },
+      "reference": "kushalsinha",
+      "sources": [
+        "https://github.com/kushalsinha/openmhp"
+      ]
+    },
+    {
+      "id": "a:kyu-softmatter",
+      "kind": "actor",
+      "label": {
+        "zh": "kyu-softmatter",
+        "en": "kyu-softmatter"
+      },
+      "reference": "kyu-softmatter",
+      "sources": [
+        "https://github.com/kyu-softmatter/agentic-microscope"
+      ]
+    },
+    {
+      "id": "a:labclaw",
+      "kind": "actor",
+      "label": {
+        "zh": "labclaw",
+        "en": "labclaw"
+      },
+      "reference": "labclaw",
+      "sources": [
+        "https://github.com/labclaw/device-use"
+      ]
+    },
+    {
+      "id": "a:lagerdata",
+      "kind": "actor",
+      "label": {
+        "zh": "lagerdata",
+        "en": "lagerdata"
+      },
+      "reference": "lagerdata",
+      "sources": [
+        "https://github.com/lagerdata/lager"
+      ]
+    },
+    {
+      "id": "a:lucasgerads",
+      "kind": "actor",
+      "label": {
+        "zh": "lucasgerads",
+        "en": "lucasgerads"
+      },
+      "reference": "lucasgerads",
+      "sources": [
+        "https://github.com/lucasgerads/lecroy-mcp"
+      ]
+    },
+    {
+      "id": "a:M3RG-IITD",
+      "kind": "actor",
+      "label": {
+        "zh": "IIT Delhi · M3RG",
+        "en": "IIT Delhi · M3RG"
+      },
+      "reference": "M3RG-IITD",
+      "sources": [
+        "https://github.com/M3RG-IITD",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC12521570/"
+      ]
+    },
+    {
+      "id": "a:masahiro-999",
+      "kind": "actor",
+      "label": {
+        "zh": "masahiro-999",
+        "en": "masahiro-999"
+      },
+      "reference": "masahiro-999",
+      "sources": [
+        "https://github.com/masahiro-999/oscilloscope-mcp"
+      ]
+    },
+    {
+      "id": "a:mcherukara",
+      "kind": "actor",
+      "label": {
+        "zh": "mcherukara",
+        "en": "mcherukara"
+      },
+      "reference": "mcherukara",
+      "sources": [
+        "https://github.com/mcherukara/CALMS"
+      ]
+    },
+    {
+      "id": "a:mcp2everything",
+      "kind": "actor",
+      "label": {
+        "zh": "mcp2everything",
+        "en": "mcp2everything"
+      },
+      "reference": "mcp2everything",
+      "sources": [
+        "https://github.com/mcp2everything/mcp2serial"
+      ]
+    },
+    {
+      "id": "a:mp911de",
+      "kind": "actor",
+      "label": {
+        "zh": "mp911de",
+        "en": "mp911de"
+      },
+      "reference": "mp911de",
+      "sources": [
+        "https://github.com/mp911de/siglent-scpi-mcp"
+      ]
+    },
+    {
+      "id": "a:nasa-jpl",
+      "kind": "actor",
+      "label": {
+        "zh": "NASA · Jet Propulsion Laboratory",
+        "en": "NASA · Jet Propulsion Laboratory"
+      },
+      "reference": "nasa-jpl",
+      "sources": [
+        "https://github.com/nasa-jpl",
+        "https://github.com/nasa-jpl/rosa"
+      ]
+    },
+    {
+      "id": "a:neogyk",
+      "kind": "actor",
+      "label": {
+        "zh": "neogyk",
+        "en": "neogyk"
+      },
+      "reference": "neogyk",
+      "sources": [
+        "https://github.com/neogyk/Agent2Device-Protocol"
+      ]
+    },
+    {
+      "id": "a:Netlist-Studio",
+      "kind": "actor",
+      "label": {
+        "zh": "Netlist-Studio",
+        "en": "Netlist-Studio"
+      },
+      "reference": "Netlist-Studio",
+      "sources": [
+        "https://github.com/Netlist-Studio/scope-mcp"
+      ]
+    },
+    {
+      "id": "a:NVIDIA",
+      "kind": "actor",
+      "label": {
+        "zh": "NVIDIA",
+        "en": "NVIDIA"
+      },
+      "reference": "NVIDIA",
+      "sources": [
+        "https://github.com/NVIDIA/Quantum-Calibration-Agent-Blueprint"
+      ]
+    },
+    {
+      "id": "a:nygmeta",
+      "kind": "actor",
+      "label": {
+        "zh": "nygmeta",
+        "en": "nygmeta"
+      },
+      "reference": "nygmeta",
+      "sources": [
+        "https://github.com/nygmeta/OpenLabAI"
+      ]
+    },
+    {
+      "id": "a:openUC2",
+      "kind": "actor",
+      "label": {
+        "zh": "openUC2",
+        "en": "openUC2"
+      },
+      "reference": "openUC2",
+      "sources": [
+        "https://github.com/openUC2/Hackathon-UC2-LLM"
+      ]
+    },
+    {
+      "id": "a:pic-ai-robotic-chemistry",
+      "kind": "actor",
+      "label": {
+        "zh": "pic-ai-robotic-chemistry",
+        "en": "pic-ai-robotic-chemistry"
+      },
+      "reference": "pic-ai-robotic-chemistry",
+      "sources": [
+        "https://github.com/pic-ai-robotic-chemistry/ChemAgents"
+      ]
+    },
+    {
+      "id": "a:pnnl",
+      "kind": "actor",
+      "label": {
+        "zh": "Pacific Northwest National Laboratory",
+        "en": "Pacific Northwest National Laboratory"
+      },
+      "reference": "pnnl",
+      "sources": [
+        "https://github.com/pnnl",
+        "https://github.com/pnnl/autolabs"
+      ]
+    },
+    {
+      "id": "a:PUDAP",
+      "kind": "actor",
+      "label": {
+        "zh": "PUDAP",
+        "en": "PUDAP"
+      },
+      "reference": "PUDAP",
+      "sources": [
+        "https://github.com/PUDAP/puda"
+      ]
+    },
+    {
+      "id": "a:robotmcp",
+      "kind": "actor",
+      "label": {
+        "zh": "robotmcp",
+        "en": "robotmcp"
+      },
+      "reference": "robotmcp",
+      "sources": [
+        "https://github.com/robotmcp/ros-mcp-server"
+      ]
+    },
+    {
+      "id": "a:SCUT-ESA",
+      "kind": "actor",
+      "label": {
+        "zh": "SCUT-ESA",
+        "en": "SCUT-ESA"
+      },
+      "reference": "SCUT-ESA",
+      "sources": [
+        "https://github.com/SCUT-ESA/open-mhs"
+      ]
+    },
+    {
+      "id": "a:ShuxiangCao",
+      "kind": "actor",
+      "label": {
+        "zh": "ShuxiangCao",
+        "en": "ShuxiangCao"
+      },
+      "reference": "ShuxiangCao",
+      "sources": [
+        "https://github.com/ShuxiangCao/LeeQ"
+      ]
+    },
+    {
+      "id": "a:sryu81",
+      "kind": "actor",
+      "label": {
+        "zh": "sryu81",
+        "en": "sryu81"
+      },
+      "reference": "sryu81",
+      "sources": [
+        "https://github.com/sryu81/mcp-server-for-epics"
+      ]
+    },
+    {
+      "id": "a:SWITCHSCIENCE",
+      "kind": "actor",
+      "label": {
+        "zh": "SWITCHSCIENCE",
+        "en": "SWITCHSCIENCE"
+      },
+      "reference": "SWITCHSCIENCE",
+      "sources": [
+        "https://github.com/SWITCHSCIENCE/mcp-micropython-bridge"
+      ]
+    },
+    {
+      "id": "a:takuyaisogawa",
+      "kind": "actor",
+      "label": {
+        "zh": "takuyaisogawa",
+        "en": "takuyaisogawa"
+      },
+      "reference": "takuyaisogawa",
+      "sources": [
+        "https://github.com/takuyaisogawa/nv-autonomous-experiments"
+      ]
+    },
+    {
+      "id": "a:techmanual-ai",
+      "kind": "actor",
+      "label": {
+        "zh": "techmanual-ai",
+        "en": "techmanual-ai"
+      },
+      "reference": "techmanual-ai",
+      "sources": [
+        "https://github.com/techmanual-ai/lablink-mcp"
+      ]
+    },
+    {
+      "id": "a:tongriyaotxt",
+      "kind": "actor",
+      "label": {
+        "zh": "tongriyaotxt",
+        "en": "tongriyaotxt"
+      },
+      "reference": "tongriyaotxt",
+      "sources": [
+        "https://github.com/tongriyaotxt/open-mhs"
+      ]
+    },
+    {
+      "id": "a:ur-whitelab",
+      "kind": "actor",
+      "label": {
+        "zh": "ur-whitelab",
+        "en": "ur-whitelab"
+      },
+      "reference": "ur-whitelab",
+      "sources": [
+        "https://github.com/ur-whitelab/chemcrow-public"
+      ]
+    },
+    {
+      "id": "a:yerbymatey",
+      "kind": "actor",
+      "label": {
+        "zh": "yerbymatey",
+        "en": "yerbymatey"
+      },
+      "reference": "yerbymatey",
+      "sources": [
+        "https://github.com/yerbymatey/opentrons-mcp"
+      ]
+    },
+    {
+      "id": "a:zeng-andrew",
+      "kind": "actor",
+      "label": {
+        "zh": "zeng-andrew",
+        "en": "zeng-andrew"
+      },
+      "reference": "zeng-andrew",
+      "sources": [
+        "https://github.com/zeng-andrew/instrument-mcp"
+      ]
+    },
+    {
+      "id": "a:Zuehlke",
+      "kind": "actor",
+      "label": {
+        "zh": "Zühlke",
+        "en": "Zühlke"
+      },
+      "reference": "Zuehlke",
+      "sources": [
+        "https://github.com/Zuehlke/labview-mcp"
+      ]
+    },
+    {
+      "id": "a:Anthropic",
+      "kind": "actor",
+      "label": {
+        "zh": "Anthropic",
+        "en": "Anthropic"
+      },
+      "reference": "Anthropic",
+      "sources": [
+        "https://www.anthropic.com/news/model-hardware-standard-research-preview",
+        "https://modelhardwarestandard.com/"
+      ]
+    },
+    {
+      "id": "a:MCP-project",
+      "kind": "actor",
+      "label": {
+        "zh": "Model Context Protocol 项目",
+        "en": "Model Context Protocol project"
+      },
+      "reference": "MCP-project",
+      "sources": [
+        "https://modelcontextprotocol.io/docs/learn/architecture",
+        "https://tasks.extensions.modelcontextprotocol.io/",
+        "https://tasks.extensions.modelcontextprotocol.io/specification/draft/tasks"
+      ]
+    },
+    {
+      "id": "a:SiLA",
+      "kind": "actor",
+      "label": {
+        "zh": "SiLA 标准组织",
+        "en": "SiLA standards organization"
+      },
+      "reference": "SiLA",
+      "sources": [
+        "https://sila2.gitlab.io/sila_python/",
+        "https://sila2.gitlab.io/sila_python/content/api/framework/index.html"
+      ]
+    },
+    {
+      "id": "a:OPC-Foundation",
+      "kind": "actor",
+      "label": {
+        "zh": "OPC Foundation",
+        "en": "OPC Foundation"
+      },
+      "reference": "OPC-Foundation",
+      "sources": [
+        "https://reference.opcfoundation.org/specs/OPC-30500-1/4.1.2.2",
+        "https://reference.opcfoundation.org/specs/OPC-30500-1/7.2"
+      ]
+    },
+    {
+      "id": "a:W3C",
+      "kind": "actor",
+      "label": {
+        "zh": "World Wide Web Consortium",
+        "en": "World Wide Web Consortium"
+      },
+      "reference": "W3C",
+      "sources": [
+        "https://www.w3.org/TR/wot-thing-description/"
+      ]
+    },
+    {
+      "id": "s:mhs",
+      "kind": "standard",
+      "label": {
+        "zh": "Model Hardware Standard (MHS)",
+        "en": "Model Hardware Standard (MHS)"
+      },
+      "reference": "mhs",
+      "sources": [
+        "https://www.anthropic.com/news/model-hardware-standard-research-preview",
+        "https://modelhardwarestandard.com/"
+      ]
+    },
+    {
+      "id": "s:aip",
+      "kind": "standard",
+      "label": {
+        "zh": "Agent–Instrument Protocol (AIP)",
+        "en": "Agent–Instrument Protocol (AIP)"
+      },
+      "reference": "aip",
+      "sources": []
+    },
+    {
+      "id": "s:lap",
+      "kind": "standard",
+      "label": {
+        "zh": "Lab Agent Protocol (LAP)",
+        "en": "Lab Agent Protocol (LAP)"
+      },
+      "reference": "lap",
+      "sources": [
+        "https://arxiv.org/abs/2606.03755",
+        "https://arxiv.org/html/2606.03755v1"
+      ]
+    },
+    {
+      "id": "s:mcp",
+      "kind": "standard",
+      "label": {
+        "zh": "Model Context Protocol (MCP)",
+        "en": "Model Context Protocol (MCP)"
+      },
+      "reference": "mcp",
+      "sources": [
+        "https://modelcontextprotocol.io/docs/learn/architecture",
+        "https://tasks.extensions.modelcontextprotocol.io/",
+        "https://tasks.extensions.modelcontextprotocol.io/specification/draft/tasks"
+      ]
+    },
+    {
+      "id": "s:sila",
+      "kind": "standard",
+      "label": {
+        "zh": "SiLA 2",
+        "en": "SiLA 2"
+      },
+      "reference": "sila",
+      "sources": [
+        "https://sila2.gitlab.io/sila_python/",
+        "https://sila2.gitlab.io/sila_python/content/api/framework/index.html"
+      ]
+    },
+    {
+      "id": "s:lads",
+      "kind": "standard",
+      "label": {
+        "zh": "OPC UA / LADS",
+        "en": "OPC UA / LADS"
+      },
+      "reference": "lads",
+      "sources": [
+        "https://reference.opcfoundation.org/specs/OPC-30500-1/4.1.2.2",
+        "https://reference.opcfoundation.org/specs/OPC-30500-1/7.2"
+      ]
+    },
+    {
+      "id": "s:wot",
+      "kind": "standard",
+      "label": {
+        "zh": "W3C Web of Things",
+        "en": "W3C Web of Things"
+      },
+      "reference": "wot",
+      "sources": [
+        "https://www.w3.org/TR/wot-thing-description/"
+      ]
+    },
+    {
+      "id": "s:facility",
+      "kind": "standard",
+      "label": {
+        "zh": "EPICS / TANGO / DOOCS",
+        "en": "EPICS / TANGO / DOOCS"
+      },
+      "reference": "facility",
+      "sources": [
+        "https://github.com/als-apg/osprey",
+        "https://github.com/abogani/tango-mcp",
+        "https://github.com/sryu81/mcp-server-for-epics"
+      ]
+    },
+    {
+      "id": "s:qcodes",
+      "kind": "standard",
+      "label": {
+        "zh": "QCoDeS",
+        "en": "QCoDeS"
+      },
+      "reference": "qcodes",
+      "sources": [
+        "https://microsoft.github.io/Qcodes/",
+        "https://github.com/caidish/instrMCP"
+      ]
+    },
+    {
+      "id": "s:bluesky",
+      "kind": "standard",
+      "label": {
+        "zh": "Bluesky / ophyd",
+        "en": "Bluesky / ophyd"
+      },
+      "reference": "bluesky",
+      "sources": [
+        "https://blueskyproject.io/bluesky/",
+        "https://github.com/CFN-softbio/VISION"
+      ]
+    },
+    {
+      "id": "s:liquid",
+      "kind": "standard",
+      "label": {
+        "zh": "PyLabRobot / Opentrons API",
+        "en": "PyLabRobot / Opentrons API"
+      },
+      "reference": "liquid",
+      "sources": [
+        "https://pylabrobot.org/",
+        "https://github.com/di-omics/plr-mcp",
+        "https://github.com/yerbymatey/opentrons-mcp"
+      ]
+    },
+    {
+      "id": "s:ros",
+      "kind": "standard",
+      "label": {
+        "zh": "ROS / rosbridge",
+        "en": "ROS / rosbridge"
+      },
+      "reference": "ros",
+      "sources": [
+        "https://github.com/robotmcp/ros-mcp-server",
+        "https://github.com/nasa-jpl/rosa"
+      ]
+    },
+    {
+      "id": "s:bench",
+      "kind": "standard",
+      "label": {
+        "zh": "SCPI / VISA / vendor SDK",
+        "en": "SCPI / VISA / vendor SDK"
+      },
+      "reference": "bench",
+      "sources": [
+        "https://github.com/techmanual-ai/lablink-mcp",
+        "https://github.com/mp911de/siglent-scpi-mcp",
+        "https://github.com/Netlist-Studio/scope-mcp"
+      ]
+    },
+    {
+      "id": "s:microscopy-access",
+      "kind": "standard",
+      "label": {
+        "zh": "Micro-Manager / GenICam / ImSwitch",
+        "en": "Micro-Manager / GenICam / ImSwitch"
+      },
+      "reference": "microscopy-access",
+      "sources": [
+        "https://github.com/kyu-softmatter/agentic-microscope",
+        "https://github.com/BioNanomics/microscope-agent",
+        "https://github.com/openUC2/Hackathon-UC2-LLM"
+      ]
+    },
+    {
+      "id": "f:nats",
+      "kind": "foundation",
+      "label": {
+        "zh": "NATS",
+        "en": "NATS"
+      },
+      "reference": "nats"
+    },
+    {
+      "id": "f:grpc",
+      "kind": "foundation",
+      "label": {
+        "zh": "gRPC",
+        "en": "gRPC"
+      },
+      "reference": "grpc"
+    },
+    {
+      "id": "f:waveforms",
+      "kind": "foundation",
+      "label": {
+        "zh": "WaveForms SDK",
+        "en": "WaveForms SDK"
+      },
+      "reference": "waveforms"
+    },
+    {
+      "id": "f:modbus-interface",
+      "kind": "foundation",
+      "label": {
+        "zh": "Modbus",
+        "en": "Modbus"
+      },
+      "reference": "modbus-interface"
+    },
+    {
+      "id": "f:nidaqmx",
+      "kind": "foundation",
+      "label": {
+        "zh": "NI-DAQmx",
+        "en": "NI-DAQmx"
+      },
+      "reference": "nidaqmx"
+    },
+    {
+      "id": "f:labview",
+      "kind": "foundation",
+      "label": {
+        "zh": "LabVIEW",
+        "en": "LabVIEW"
+      },
+      "reference": "labview"
+    },
+    {
+      "id": "f:openflexure-api",
+      "kind": "foundation",
+      "label": {
+        "zh": "OpenFlexure API",
+        "en": "OpenFlexure API"
+      },
+      "reference": "openflexure-api"
+    },
+    {
+      "id": "f:hypha",
+      "kind": "foundation",
+      "label": {
+        "zh": "Hypha / BioEngine",
+        "en": "Hypha / BioEngine"
+      },
+      "reference": "hypha"
+    },
+    {
+      "id": "f:nqctl",
+      "kind": "foundation",
+      "label": {
+        "zh": "nqctl",
+        "en": "nqctl"
+      },
+      "reference": "nqctl"
+    },
+    {
+      "id": "f:xdl",
+      "kind": "foundation",
+      "label": {
+        "zh": "XDL",
+        "en": "XDL"
+      },
+      "reference": "xdl"
+    },
+    {
+      "id": "f:chemspyd",
+      "kind": "foundation",
+      "label": {
+        "zh": "Chemspyd",
+        "en": "Chemspyd"
+      },
+      "reference": "chemspyd"
+    },
+    {
+      "id": "f:maiml",
+      "kind": "foundation",
+      "label": {
+        "zh": "MaiML / dLab",
+        "en": "MaiML / dLab"
+      },
+      "reference": "maiml"
+    },
+    {
+      "id": "f:serial",
+      "kind": "foundation",
+      "label": {
+        "zh": "Serial / UART",
+        "en": "Serial / UART"
+      },
+      "reference": "serial"
+    },
+    {
+      "id": "f:golioth-api",
+      "kind": "foundation",
+      "label": {
+        "zh": "Golioth device RPC",
+        "en": "Golioth device RPC"
+      },
+      "reference": "golioth-api"
+    },
+    {
+      "id": "f:debug-probe",
+      "kind": "foundation",
+      "label": {
+        "zh": "probe-rs / OpenOCD",
+        "en": "probe-rs / OpenOCD"
+      },
+      "reference": "debug-probe"
+    },
+    {
+      "id": "f:logic2",
+      "kind": "foundation",
+      "label": {
+        "zh": "Saleae Logic 2",
+        "en": "Saleae Logic 2"
+      },
+      "reference": "logic2"
+    },
+    {
+      "id": "f:micropython-api",
+      "kind": "foundation",
+      "label": {
+        "zh": "MicroPython",
+        "en": "MicroPython"
+      },
+      "reference": "micropython-api"
+    },
+    {
+      "id": "p:openmhp",
+      "kind": "project",
+      "label": {
+        "zh": "OpenMHP",
+        "en": "OpenMHP"
+      },
+      "reference": "openmhp",
+      "sources": [
+        "https://github.com/kushalsinha/openmhp/blob/main/README.md",
+        "https://github.com/kushalsinha/openmhp/blob/main/SPEC.md",
+        "https://github.com/kushalsinha/openmhp/blob/main/supported-devices/README.md",
+        "https://github.com/kushalsinha/openmhp/blob/main/supported-devices/biologic-sp300/driver.py"
+      ]
+    },
+    {
+      "id": "p:open-mhs-abenor",
+      "kind": "project",
+      "label": {
+        "zh": "Open-MHS · Abenor Labs",
+        "en": "Open-MHS · Abenor Labs"
+      },
+      "reference": "open-mhs-abenor",
+      "sources": [
+        "https://github.com/Abenor-Labs/Open-MHS/blob/main/README.md",
+        "https://github.com/Abenor-Labs/Open-MHS/blob/main/open_mhs/drivers/serial_robotic_arm.py",
+        "https://github.com/Abenor-Labs/Open-MHS/blob/main/schema/capability_schema.json"
+      ]
+    },
+    {
+      "id": "p:open-mhs-tong",
+      "kind": "project",
+      "label": {
+        "zh": "Open MHS · tongriyaotxt",
+        "en": "Open MHS · tongriyaotxt"
+      },
+      "reference": "open-mhs-tong",
+      "sources": [
+        "https://github.com/tongriyaotxt/open-mhs/blob/main/README.md",
+        "https://github.com/tongriyaotxt/open-mhs/blob/main/src/openmhs/mcp/server.py"
+      ]
+    },
+    {
+      "id": "p:open-mhs-scut",
+      "kind": "project",
+      "label": {
+        "zh": "Open MHS · SCUT-ESA",
+        "en": "Open MHS · SCUT-ESA"
+      },
+      "reference": "open-mhs-scut",
+      "sources": [
+        "https://github.com/SCUT-ESA/open-mhs/blob/main/README.md",
+        "https://github.com/SCUT-ESA/open-mhs/blob/main/src/openmhs/core/backend.py"
+      ]
+    },
+    {
+      "id": "p:mhp-cuntinum",
+      "kind": "project",
+      "label": {
+        "zh": "Model Hardware Protocol · Cuntinum",
+        "en": "Model Hardware Protocol · Cuntinum"
+      },
+      "reference": "mhp-cuntinum",
+      "sources": [
+        "https://github.com/Cuntinum/model-hardware-protocol/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:oahl",
+      "kind": "project",
+      "label": {
+        "zh": "Open Agent Hardware Layer",
+        "en": "Open Agent Hardware Layer"
+      },
+      "reference": "oahl",
+      "sources": [
+        "https://github.com/fredabila/oahl/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:instrmcp",
+      "kind": "project",
+      "label": {
+        "zh": "instrMCP",
+        "en": "instrMCP"
+      },
+      "reference": "instrmcp",
+      "sources": [
+        "https://github.com/caidish/instrMCP/blob/main/README.md",
+        "https://github.com/caidish/instrMCP/blob/main/instrmcp/servers/jupyter_qcodes/backend/qcodes.py"
+      ]
+    },
+    {
+      "id": "p:puda",
+      "kind": "project",
+      "label": {
+        "zh": "PUDA",
+        "en": "PUDA"
+      },
+      "reference": "puda",
+      "sources": [
+        "https://github.com/PUDAP/puda/blob/main/README.md",
+        "https://github.com/PUDAP/puda/blob/main/apps/cli/internal/cli/protocol-run.go",
+        "https://arxiv.org/abs/2607.26464"
+      ]
+    },
+    {
+      "id": "p:unilabos",
+      "kind": "project",
+      "label": {
+        "zh": "Uni-Lab-OS",
+        "en": "Uni-Lab-OS"
+      },
+      "reference": "unilabos",
+      "sources": [
+        "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/README.md",
+        "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/NOTICE",
+        "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/unilabos/devices/LICENSE",
+        "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/docs/developer_guide/add_device.md",
+        "https://arxiv.org/abs/2512.21766"
+      ]
+    },
+    {
+      "id": "p:osprey",
+      "kind": "project",
+      "label": {
+        "zh": "Osprey",
+        "en": "Osprey"
+      },
+      "reference": "osprey",
+      "sources": [
+        "https://github.com/als-apg/osprey/blob/main/README.md",
+        "https://github.com/als-apg/osprey/blob/main/docs/source/architecture/mcp-servers.rst",
+        "https://doi.org/10.1063/5.0306302"
+      ]
+    },
+    {
+      "id": "p:ivoryos",
+      "kind": "project",
+      "label": {
+        "zh": "IvoryOS",
+        "en": "IvoryOS"
+      },
+      "reference": "ivoryos",
+      "sources": [
+        "https://github.com/ivoryos-ai/IvoryOS/blob/main/README.md",
+        "https://github.com/ivoryos-ai/IvoryOS/blob/main/ivoryos/parsers/introspection.py",
+        "https://www.nature.com/articles/s41467-025-60514-w"
+      ]
+    },
+    {
+      "id": "p:jumpstarter",
+      "kind": "project",
+      "label": {
+        "zh": "Jumpstarter",
+        "en": "Jumpstarter"
+      },
+      "reference": "jumpstarter",
+      "sources": [
+        "https://github.com/jumpstarter-dev/jumpstarter/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:lager",
+      "kind": "project",
+      "label": {
+        "zh": "Lager",
+        "en": "Lager"
+      },
+      "reference": "lager",
+      "sources": [
+        "https://github.com/lagerdata/lager/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:eaa",
+      "kind": "project",
+      "label": {
+        "zh": "Experiment Automation Agents",
+        "en": "Experiment Automation Agents"
+      },
+      "reference": "eaa",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/EAA/blob/main/README.md",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC13633048/"
+      ]
+    },
+    {
+      "id": "p:eaa-pi",
+      "kind": "project",
+      "label": {
+        "zh": "EAA-Pi",
+        "en": "EAA-Pi"
+      },
+      "reference": "eaa-pi",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/EAA-Pi/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:pi-experiment-ops",
+      "kind": "project",
+      "label": {
+        "zh": "pi-experiment-ops",
+        "en": "pi-experiment-ops"
+      },
+      "reference": "pi-experiment-ops",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/pi-experiment-ops/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:labmcp",
+      "kind": "project",
+      "label": {
+        "zh": "LabMCP · K-Dense",
+        "en": "LabMCP · K-Dense"
+      },
+      "reference": "labmcp",
+      "sources": [
+        "https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/README.md",
+        "https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/packages/labmcp/src/labmcp/catalog.json"
+      ]
+    },
+    {
+      "id": "p:lablink",
+      "kind": "project",
+      "label": {
+        "zh": "LabLink",
+        "en": "LabLink"
+      },
+      "reference": "lablink",
+      "sources": [
+        "https://github.com/techmanual-ai/lablink-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:scpi-mcp",
+      "kind": "project",
+      "label": {
+        "zh": "scpi-mcp",
+        "en": "scpi-mcp"
+      },
+      "reference": "scpi-mcp",
+      "sources": [
+        "https://github.com/armchairdeity/mcp-server-scpi/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:oscilloscope-mcp",
+      "kind": "project",
+      "label": {
+        "zh": "oscilloscope-mcp",
+        "en": "oscilloscope-mcp"
+      },
+      "reference": "oscilloscope-mcp",
+      "sources": [
+        "https://github.com/masahiro-999/oscilloscope-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:lecroy",
+      "kind": "project",
+      "label": {
+        "zh": "lecroy-mcp",
+        "en": "lecroy-mcp"
+      },
+      "reference": "lecroy",
+      "sources": [
+        "https://github.com/lucasgerads/lecroy-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:siglent",
+      "kind": "project",
+      "label": {
+        "zh": "siglent-scpi-mcp",
+        "en": "siglent-scpi-mcp"
+      },
+      "reference": "siglent",
+      "sources": [
+        "https://github.com/mp911de/siglent-scpi-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:scope-mcp",
+      "kind": "project",
+      "label": {
+        "zh": "scope-mcp",
+        "en": "scope-mcp"
+      },
+      "reference": "scope-mcp",
+      "sources": [
+        "https://github.com/Netlist-Studio/scope-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:dwf",
+      "kind": "project",
+      "label": {
+        "zh": "dwf-mcp-server",
+        "en": "dwf-mcp-server"
+      },
+      "reference": "dwf",
+      "sources": [
+        "https://github.com/KenosInc/dwf-mcp-server/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:instrument-mcp",
+      "kind": "project",
+      "label": {
+        "zh": "Instrument MCP",
+        "en": "Instrument MCP"
+      },
+      "reference": "instrument-mcp",
+      "sources": [
+        "https://github.com/zeng-andrew/instrument-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:daqmx",
+      "kind": "project",
+      "label": {
+        "zh": "daqmx-mcp",
+        "en": "daqmx-mcp"
+      },
+      "reference": "daqmx",
+      "sources": [
+        "https://github.com/BrianDavidCouch/daqmx-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:daqifi",
+      "kind": "project",
+      "label": {
+        "zh": "DAQiFi Core",
+        "en": "DAQiFi Core"
+      },
+      "reference": "daqifi",
+      "sources": [
+        "https://github.com/daqifi/daqifi-core/blob/main/README.md",
+        "https://github.com/daqifi/daqifi-core/tree/main/src/Daqifi.Mcp"
+      ]
+    },
+    {
+      "id": "p:labview-toolkit",
+      "kind": "project",
+      "label": {
+        "zh": "LabVIEW MCP Server Toolkit",
+        "en": "LabVIEW MCP Server Toolkit"
+      },
+      "reference": "labview-toolkit",
+      "sources": [
+        "https://github.com/JanGoebel/LabVIEW-MCP-Server-Toolkit/blob/main/readme.md"
+      ]
+    },
+    {
+      "id": "p:labview-dev",
+      "kind": "project",
+      "label": {
+        "zh": "LabVIEW MCP · Zühlke",
+        "en": "LabVIEW MCP · Zühlke"
+      },
+      "reference": "labview-dev",
+      "sources": [
+        "https://github.com/Zuehlke/labview-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:openflexure",
+      "kind": "project",
+      "label": {
+        "zh": "OpenFlexure-MCP",
+        "en": "OpenFlexure-MCP"
+      },
+      "reference": "openflexure",
+      "sources": [
+        "https://github.com/GSIBabu/OpenFlexure-MCP/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:microscope-agent",
+      "kind": "project",
+      "label": {
+        "zh": "microscope-agent",
+        "en": "microscope-agent"
+      },
+      "reference": "microscope-agent",
+      "sources": [
+        "https://github.com/BioNanomics/microscope-agent/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:agent-lens",
+      "kind": "project",
+      "label": {
+        "zh": "Agent-Lens",
+        "en": "Agent-Lens"
+      },
+      "reference": "agent-lens",
+      "sources": [
+        "https://github.com/aicell-lab/agent-lens/blob/main/README.md",
+        "https://github.com/aicell-lab/agent-lens/blob/main/agent_lens/register_tools_service.py"
+      ]
+    },
+    {
+      "id": "p:agentic-microscope",
+      "kind": "project",
+      "label": {
+        "zh": "Agentic microscope",
+        "en": "Agentic microscope"
+      },
+      "reference": "agentic-microscope",
+      "sources": [
+        "https://github.com/kyu-softmatter/agentic-microscope/blob/main/README.md",
+        "https://github.com/kyu-softmatter/agentic-microscope/blob/main/hardware/microscope.py"
+      ]
+    },
+    {
+      "id": "p:soft-matter-agents",
+      "kind": "project",
+      "label": {
+        "zh": "soft-matter-agents",
+        "en": "soft-matter-agents"
+      },
+      "reference": "soft-matter-agents",
+      "sources": [
+        "https://github.com/kyu-softmatter/soft-matter-agents/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:aila",
+      "kind": "project",
+      "label": {
+        "zh": "AILA",
+        "en": "AILA"
+      },
+      "reference": "aila",
+      "sources": [
+        "https://github.com/M3RG-IITD/AILA/blob/main/README.md",
+        "https://www.nature.com/articles/s41467-025-64105-7"
+      ]
+    },
+    {
+      "id": "p:llm-spm",
+      "kind": "project",
+      "label": {
+        "zh": "LLM-directed-SPM",
+        "en": "LLM-directed-SPM"
+      },
+      "reference": "llm-spm",
+      "sources": [
+        "https://github.com/DIAOZHUO/LLM-directed-SPM/blob/main/readme.md",
+        "https://arxiv.org/abs/2602.20669"
+      ]
+    },
+    {
+      "id": "p:quailbot",
+      "kind": "project",
+      "label": {
+        "zh": "Quailbot Pi",
+        "en": "Quailbot Pi"
+      },
+      "reference": "quailbot",
+      "sources": [
+        "https://github.com/BB-84C/quailbot-pi/blob/main/README.md",
+        "https://arxiv.org/abs/2609.27302"
+      ]
+    },
+    {
+      "id": "p:vision",
+      "kind": "project",
+      "label": {
+        "zh": "VISION",
+        "en": "VISION"
+      },
+      "reference": "vision",
+      "sources": [
+        "https://github.com/CFN-softbio/VISION/blob/main/README.md",
+        "https://doi.org/10.1088/2632-2153/add9e4"
+      ]
+    },
+    {
+      "id": "p:leeq",
+      "kind": "project",
+      "label": {
+        "zh": "LeeQ",
+        "en": "LeeQ"
+      },
+      "reference": "leeq",
+      "sources": [
+        "https://github.com/ShuxiangCao/LeeQ/blob/main/README.md",
+        "https://doi.org/10.1016/j.patter.2025.101372"
+      ]
+    },
+    {
+      "id": "p:k-agents",
+      "kind": "project",
+      "label": {
+        "zh": "k-agents",
+        "en": "k-agents"
+      },
+      "reference": "k-agents",
+      "sources": [
+        "https://github.com/EvoEvolver/k_agents/blob/main/README.md",
+        "https://arxiv.org/abs/2412.07978"
+      ]
+    },
+    {
+      "id": "p:nvidia-qca",
+      "kind": "project",
+      "label": {
+        "zh": "Quantum Calibration Agent Blueprint",
+        "en": "Quantum Calibration Agent Blueprint"
+      },
+      "reference": "nvidia-qca",
+      "sources": [
+        "https://github.com/NVIDIA/Quantum-Calibration-Agent-Blueprint/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:calms",
+      "kind": "project",
+      "label": {
+        "zh": "CALMS",
+        "en": "CALMS"
+      },
+      "reference": "calms",
+      "sources": [
+        "https://github.com/mcherukara/CALMS/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:calms-aps",
+      "kind": "project",
+      "label": {
+        "zh": "CALMS · APS experimental agents",
+        "en": "CALMS · APS experimental agents"
+      },
+      "reference": "calms-aps",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/CALMS/blob/main/README.md",
+        "https://doi.org/10.1038/s41524-026-02005-0"
+      ]
+    },
+    {
+      "id": "p:opentrons",
+      "kind": "project",
+      "label": {
+        "zh": "Opentrons MCP",
+        "en": "Opentrons MCP"
+      },
+      "reference": "opentrons",
+      "sources": [
+        "https://github.com/yerbymatey/opentrons-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:plr-mcp",
+      "kind": "project",
+      "label": {
+        "zh": "plr-mcp",
+        "en": "plr-mcp"
+      },
+      "reference": "plr-mcp",
+      "sources": [
+        "https://github.com/di-omics/plr-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:openlabai",
+      "kind": "project",
+      "label": {
+        "zh": "OpenLabAI",
+        "en": "OpenLabAI"
+      },
+      "reference": "openlabai",
+      "sources": [
+        "https://github.com/nygmeta/OpenLabAI/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:labscriptai",
+      "kind": "project",
+      "label": {
+        "zh": "LabscriptAI OT",
+        "en": "LabscriptAI OT"
+      },
+      "reference": "labscriptai",
+      "sources": [
+        "https://github.com/KRATSZ/labscriptai-ot/blob/main/README.md",
+        "https://doi.org/10.1101/2025.09.30.679666"
+      ]
+    },
+    {
+      "id": "p:coscientist",
+      "kind": "project",
+      "label": {
+        "zh": "Coscientist",
+        "en": "Coscientist"
+      },
+      "reference": "coscientist",
+      "sources": [
+        "https://github.com/gomesgroup/coscientist/blob/main/README.md",
+        "https://doi.org/10.1038/s41586-023-06792-0"
+      ]
+    },
+    {
+      "id": "p:chemagents",
+      "kind": "project",
+      "label": {
+        "zh": "ChemAgents",
+        "en": "ChemAgents"
+      },
+      "reference": "chemagents",
+      "sources": [
+        "https://github.com/pic-ai-robotic-chemistry/ChemAgents/blob/main/README.md",
+        "https://doi.org/10.1021/jacs.4c17738"
+      ]
+    },
+    {
+      "id": "p:organa",
+      "kind": "project",
+      "label": {
+        "zh": "ORGANA",
+        "en": "ORGANA"
+      },
+      "reference": "organa",
+      "sources": [
+        "https://github.com/ac-rad/organa/blob/main/README.md",
+        "https://arxiv.org/abs/2401.06949"
+      ]
+    },
+    {
+      "id": "p:clairify",
+      "kind": "project",
+      "label": {
+        "zh": "CLAIRify",
+        "en": "CLAIRify"
+      },
+      "reference": "clairify",
+      "sources": [
+        "https://github.com/ac-rad/xdl-generation/blob/master/README.md",
+        "https://arxiv.org/abs/2303.14100"
+      ]
+    },
+    {
+      "id": "p:clairify-chemspeed",
+      "kind": "project",
+      "label": {
+        "zh": "CLAIRify-Chemspeed",
+        "en": "CLAIRify-Chemspeed"
+      },
+      "reference": "clairify-chemspeed",
+      "sources": [
+        "https://github.com/ac-rad/clairify-chemspeed/blob/master/README.md",
+        "https://doi.org/10.1039/D4DD00046C"
+      ]
+    },
+    {
+      "id": "p:synagent",
+      "kind": "project",
+      "label": {
+        "zh": "SynAgent · thin-film synthesis",
+        "en": "SynAgent · thin-film synthesis"
+      },
+      "reference": "synagent",
+      "sources": [
+        "https://github.com/izumitkhr/synagent/blob/main/README.md",
+        "https://arxiv.org/abs/2609.18598"
+      ]
+    },
+    {
+      "id": "p:autolabs",
+      "kind": "project",
+      "label": {
+        "zh": "AutoLabs",
+        "en": "AutoLabs"
+      },
+      "reference": "autolabs",
+      "sources": [
+        "https://github.com/pnnl/autolabs/blob/master/README.md",
+        "https://arxiv.org/abs/2509.25651"
+      ]
+    },
+    {
+      "id": "p:opcua-kuka",
+      "kind": "project",
+      "label": {
+        "zh": "opcua-mcp · kukapay",
+        "en": "opcua-mcp · kukapay"
+      },
+      "reference": "opcua-kuka",
+      "sources": [
+        "https://github.com/kukapay/opcua-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:opcua-industrial",
+      "kind": "project",
+      "label": {
+        "zh": "OPC UA MCP · IndustriAgents",
+        "en": "OPC UA MCP · IndustriAgents"
+      },
+      "reference": "opcua-industrial",
+      "sources": [
+        "https://github.com/IndustriAgents/OPCUA-MCP/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:modbus",
+      "kind": "project",
+      "label": {
+        "zh": "modbus-mcp",
+        "en": "modbus-mcp"
+      },
+      "reference": "modbus",
+      "sources": [
+        "https://github.com/kukapay/modbus-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:tango",
+      "kind": "project",
+      "label": {
+        "zh": "TANGO MCP",
+        "en": "TANGO MCP"
+      },
+      "reference": "tango",
+      "sources": [
+        "https://github.com/abogani/tango-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:epics-mcp",
+      "kind": "project",
+      "label": {
+        "zh": "MCP Server for EPICS",
+        "en": "MCP Server for EPICS"
+      },
+      "reference": "epics-mcp",
+      "sources": [
+        "https://github.com/sryu81/mcp-server-for-epics/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:mcp2serial",
+      "kind": "project",
+      "label": {
+        "zh": "MCP2Serial",
+        "en": "MCP2Serial"
+      },
+      "reference": "mcp2serial",
+      "sources": [
+        "https://github.com/mcp2everything/mcp2serial/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:tinymcp",
+      "kind": "project",
+      "label": {
+        "zh": "tinymcp",
+        "en": "tinymcp"
+      },
+      "reference": "tinymcp",
+      "sources": [
+        "https://github.com/golioth/tinymcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:embedded-debugger",
+      "kind": "project",
+      "label": {
+        "zh": "Embedded Debugger MCP",
+        "en": "Embedded Debugger MCP"
+      },
+      "reference": "embedded-debugger",
+      "sources": [
+        "https://github.com/Adancurusul/embedded-debugger-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:saleae",
+      "kind": "project",
+      "label": {
+        "zh": "Saleae Logic 2 MCP",
+        "en": "Saleae Logic 2 MCP"
+      },
+      "reference": "saleae",
+      "sources": [
+        "https://github.com/hsoffar/saleae-logic2-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:micropython",
+      "kind": "project",
+      "label": {
+        "zh": "MicroPython MCP Bridge",
+        "en": "MicroPython MCP Bridge"
+      },
+      "reference": "micropython",
+      "sources": [
+        "https://github.com/SWITCHSCIENCE/mcp-micropython-bridge/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:ros-mcp",
+      "kind": "project",
+      "label": {
+        "zh": "ROS MCP Server",
+        "en": "ROS MCP Server"
+      },
+      "reference": "ros-mcp",
+      "sources": [
+        "https://github.com/robotmcp/ros-mcp-server/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:rosa",
+      "kind": "project",
+      "label": {
+        "zh": "ROSA",
+        "en": "ROSA"
+      },
+      "reference": "rosa",
+      "sources": [
+        "https://github.com/nasa-jpl/rosa/blob/main/README.md",
+        "https://arxiv.org/abs/2410.06472"
+      ]
+    },
+    {
+      "id": "p:device-use",
+      "kind": "project",
+      "label": {
+        "zh": "device-use",
+        "en": "device-use"
+      },
+      "reference": "device-use",
+      "sources": [
+        "https://github.com/labclaw/device-use/blob/main/README.md",
+        "https://github.com/labclaw/device-use/blob/main/src/device_use/integrations/mcp_server.py"
+      ]
+    },
+    {
+      "id": "p:device-skills",
+      "kind": "project",
+      "label": {
+        "zh": "device-skills",
+        "en": "device-skills"
+      },
+      "reference": "device-skills",
+      "sources": [
+        "https://github.com/labclaw/device-skills/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:edge-mhs",
+      "kind": "project",
+      "label": {
+        "zh": "edge-mhs",
+        "en": "edge-mhs"
+      },
+      "reference": "edge-mhs",
+      "sources": [
+        "https://github.com/fastly/edge-mhs/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:agent2device",
+      "kind": "project",
+      "label": {
+        "zh": "Agent2Device Protocol",
+        "en": "Agent2Device Protocol"
+      },
+      "reference": "agent2device",
+      "sources": [
+        "https://github.com/neogyk/Agent2Device-Protocol/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "p:chemcrow",
+      "kind": "project",
+      "label": {
+        "zh": "ChemCrow public release",
+        "en": "ChemCrow public release"
+      },
+      "reference": "chemcrow",
+      "sources": [
+        "https://github.com/ur-whitelab/chemcrow-public/blob/main/README.md",
+        "https://doi.org/10.1038/s42256-024-00832-8"
+      ]
+    },
+    {
+      "id": "p:nvagent",
+      "kind": "project",
+      "label": {
+        "zh": "NV autonomous experiments",
+        "en": "NV autonomous experiments"
+      },
+      "reference": "nvagent",
+      "sources": [
+        "https://github.com/takuyaisogawa/nv-autonomous-experiments/blob/main/README.md",
+        "https://arxiv.org/abs/2607.25145"
+      ]
+    },
+    {
+      "id": "p:uc2-hackathon",
+      "kind": "project",
+      "label": {
+        "zh": "UC2 LLM microscopy workshop",
+        "en": "UC2 LLM microscopy workshop"
+      },
+      "reference": "uc2-hackathon",
+      "sources": [
+        "https://github.com/openUC2/Hackathon-UC2-LLM/blob/main/README.md"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "a:Anthropic",
+      "target": "s:mhs",
+      "kind": "publishes",
+      "basis": "documented",
+      "sources": [
+        "https://www.anthropic.com/news/model-hardware-standard-research-preview",
+        "https://modelhardwarestandard.com/"
+      ],
+      "note": null
+    },
+    {
+      "id": "e2",
+      "source": "a:MCP-project",
+      "target": "s:mcp",
+      "kind": "publishes",
+      "basis": "documented",
+      "sources": [
+        "https://modelcontextprotocol.io/docs/learn/architecture",
+        "https://tasks.extensions.modelcontextprotocol.io/",
+        "https://tasks.extensions.modelcontextprotocol.io/specification/draft/tasks"
+      ],
+      "note": null
+    },
+    {
+      "id": "e3",
+      "source": "a:SiLA",
+      "target": "s:sila",
+      "kind": "publishes",
+      "basis": "documented",
+      "sources": [
+        "https://sila2.gitlab.io/sila_python/",
+        "https://sila2.gitlab.io/sila_python/content/api/framework/index.html"
+      ],
+      "note": null
+    },
+    {
+      "id": "e4",
+      "source": "a:OPC-Foundation",
+      "target": "s:lads",
+      "kind": "publishes",
+      "basis": "documented",
+      "sources": [
+        "https://reference.opcfoundation.org/specs/OPC-30500-1/4.1.2.2",
+        "https://reference.opcfoundation.org/specs/OPC-30500-1/7.2"
+      ],
+      "note": null
+    },
+    {
+      "id": "e5",
+      "source": "a:W3C",
+      "target": "s:wot",
+      "kind": "publishes",
+      "basis": "documented",
+      "sources": [
+        "https://www.w3.org/TR/wot-thing-description/"
+      ],
+      "note": null
+    },
+    {
+      "id": "e6",
+      "source": "p:openmhp",
+      "target": "a:kushalsinha",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/kushalsinha/openmhp"
+      ],
+      "note": null
+    },
+    {
+      "id": "e7",
+      "source": "p:openmhp",
+      "target": "r:contract",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/kushalsinha/openmhp/blob/main/README.md",
+        "https://github.com/kushalsinha/openmhp/blob/main/SPEC.md",
+        "https://github.com/kushalsinha/openmhp/blob/main/supported-devices/README.md",
+        "https://github.com/kushalsinha/openmhp/blob/main/supported-devices/biologic-sp300/driver.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e8",
+      "source": "p:openmhp",
+      "target": "d:cross",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/kushalsinha/openmhp/blob/main/README.md",
+        "https://github.com/kushalsinha/openmhp/blob/main/SPEC.md",
+        "https://github.com/kushalsinha/openmhp/blob/main/supported-devices/README.md",
+        "https://github.com/kushalsinha/openmhp/blob/main/supported-devices/biologic-sp300/driver.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e9",
+      "source": "p:openmhp",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/kushalsinha/openmhp/blob/main/README.md",
+        "https://github.com/kushalsinha/openmhp/blob/main/SPEC.md",
+        "https://github.com/kushalsinha/openmhp/blob/main/supported-devices/README.md",
+        "https://github.com/kushalsinha/openmhp/blob/main/supported-devices/biologic-sp300/driver.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e10",
+      "source": "p:open-mhs-abenor",
+      "target": "a:Abenor-Labs",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/Abenor-Labs/Open-MHS"
+      ],
+      "note": null
+    },
+    {
+      "id": "e11",
+      "source": "p:open-mhs-abenor",
+      "target": "r:contract",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/Abenor-Labs/Open-MHS/blob/main/README.md",
+        "https://github.com/Abenor-Labs/Open-MHS/blob/main/open_mhs/drivers/serial_robotic_arm.py",
+        "https://github.com/Abenor-Labs/Open-MHS/blob/main/schema/capability_schema.json"
+      ],
+      "note": null
+    },
+    {
+      "id": "e12",
+      "source": "p:open-mhs-abenor",
+      "target": "d:cross",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/Abenor-Labs/Open-MHS/blob/main/README.md",
+        "https://github.com/Abenor-Labs/Open-MHS/blob/main/open_mhs/drivers/serial_robotic_arm.py",
+        "https://github.com/Abenor-Labs/Open-MHS/blob/main/schema/capability_schema.json"
+      ],
+      "note": null
+    },
+    {
+      "id": "e13",
+      "source": "p:open-mhs-abenor",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/Abenor-Labs/Open-MHS/blob/main/README.md",
+        "https://github.com/Abenor-Labs/Open-MHS/blob/main/open_mhs/drivers/serial_robotic_arm.py",
+        "https://github.com/Abenor-Labs/Open-MHS/blob/main/schema/capability_schema.json"
+      ],
+      "note": null
+    },
+    {
+      "id": "e14",
+      "source": "p:open-mhs-tong",
+      "target": "a:tongriyaotxt",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/tongriyaotxt/open-mhs"
+      ],
+      "note": null
+    },
+    {
+      "id": "e15",
+      "source": "p:open-mhs-tong",
+      "target": "r:contract",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/tongriyaotxt/open-mhs/blob/main/README.md",
+        "https://github.com/tongriyaotxt/open-mhs/blob/main/src/openmhs/mcp/server.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e16",
+      "source": "p:open-mhs-tong",
+      "target": "d:cross",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/tongriyaotxt/open-mhs/blob/main/README.md",
+        "https://github.com/tongriyaotxt/open-mhs/blob/main/src/openmhs/mcp/server.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e17",
+      "source": "p:open-mhs-tong",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/tongriyaotxt/open-mhs/blob/main/README.md",
+        "https://github.com/tongriyaotxt/open-mhs/blob/main/src/openmhs/mcp/server.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e18",
+      "source": "p:open-mhs-scut",
+      "target": "a:SCUT-ESA",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/SCUT-ESA/open-mhs"
+      ],
+      "note": null
+    },
+    {
+      "id": "e19",
+      "source": "p:open-mhs-scut",
+      "target": "r:contract",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/SCUT-ESA/open-mhs/blob/main/README.md",
+        "https://github.com/SCUT-ESA/open-mhs/blob/main/src/openmhs/core/backend.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e20",
+      "source": "p:open-mhs-scut",
+      "target": "d:cross",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/SCUT-ESA/open-mhs/blob/main/README.md",
+        "https://github.com/SCUT-ESA/open-mhs/blob/main/src/openmhs/core/backend.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e21",
+      "source": "p:open-mhs-scut",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/SCUT-ESA/open-mhs/blob/main/README.md",
+        "https://github.com/SCUT-ESA/open-mhs/blob/main/src/openmhs/core/backend.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e22",
+      "source": "p:open-mhs-scut",
+      "target": "s:bench",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/SCUT-ESA/open-mhs/blob/main/README.md",
+        "https://github.com/SCUT-ESA/open-mhs/blob/main/src/openmhs/core/backend.py"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Agent → MCP / REST / CLI → explicit backend → VISA device。",
+        "en": "This node groups related foundations; this project’s specific path is Agent → MCP / REST / CLI → explicit backend → VISA device."
+      }
+    },
+    {
+      "id": "e23",
+      "source": "p:mhp-cuntinum",
+      "target": "a:Cuntinum",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/Cuntinum/model-hardware-protocol"
+      ],
+      "note": null
+    },
+    {
+      "id": "e24",
+      "source": "p:mhp-cuntinum",
+      "target": "r:contract",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/Cuntinum/model-hardware-protocol/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e25",
+      "source": "p:mhp-cuntinum",
+      "target": "d:cross",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/Cuntinum/model-hardware-protocol/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e26",
+      "source": "p:mhp-cuntinum",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/Cuntinum/model-hardware-protocol/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e27",
+      "source": "p:oahl",
+      "target": "a:fredabila",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/fredabila/oahl"
+      ],
+      "note": null
+    },
+    {
+      "id": "e28",
+      "source": "p:oahl",
+      "target": "r:contract",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/fredabila/oahl/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e29",
+      "source": "p:oahl",
+      "target": "d:cross",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/fredabila/oahl/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e30",
+      "source": "p:instrmcp",
+      "target": "a:caidish",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/caidish/instrMCP"
+      ],
+      "note": null
+    },
+    {
+      "id": "e31",
+      "source": "p:instrmcp",
+      "target": "r:runtime",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/caidish/instrMCP/blob/main/README.md",
+        "https://github.com/caidish/instrMCP/blob/main/instrmcp/servers/jupyter_qcodes/backend/qcodes.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e32",
+      "source": "p:instrmcp",
+      "target": "d:cross",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/caidish/instrMCP/blob/main/README.md",
+        "https://github.com/caidish/instrMCP/blob/main/instrmcp/servers/jupyter_qcodes/backend/qcodes.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e33",
+      "source": "p:instrmcp",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/caidish/instrMCP/blob/main/README.md",
+        "https://github.com/caidish/instrMCP/blob/main/instrmcp/servers/jupyter_qcodes/backend/qcodes.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e34",
+      "source": "p:instrmcp",
+      "target": "s:qcodes",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/caidish/instrMCP/blob/main/README.md",
+        "https://github.com/caidish/instrMCP/blob/main/instrmcp/servers/jupyter_qcodes/backend/qcodes.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e35",
+      "source": "p:puda",
+      "target": "a:PUDAP",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/PUDAP/puda"
+      ],
+      "note": null
+    },
+    {
+      "id": "e36",
+      "source": "p:puda",
+      "target": "r:runtime",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/PUDAP/puda/blob/main/README.md",
+        "https://github.com/PUDAP/puda/blob/main/apps/cli/internal/cli/protocol-run.go",
+        "https://arxiv.org/abs/2607.26464"
+      ],
+      "note": null
+    },
+    {
+      "id": "e37",
+      "source": "p:puda",
+      "target": "d:cross",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/PUDAP/puda/blob/main/README.md",
+        "https://github.com/PUDAP/puda/blob/main/apps/cli/internal/cli/protocol-run.go",
+        "https://arxiv.org/abs/2607.26464"
+      ],
+      "note": null
+    },
+    {
+      "id": "e38",
+      "source": "p:puda",
+      "target": "f:nats",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/PUDAP/puda/blob/main/README.md",
+        "https://github.com/PUDAP/puda/blob/main/apps/cli/internal/cli/protocol-run.go",
+        "https://arxiv.org/abs/2607.26464"
+      ],
+      "note": null
+    },
+    {
+      "id": "e39",
+      "source": "p:unilabos",
+      "target": "a:deepmodeling",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/deepmodeling/Uni-Lab-OS"
+      ],
+      "note": null
+    },
+    {
+      "id": "e40",
+      "source": "p:unilabos",
+      "target": "r:workflow",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/README.md",
+        "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/NOTICE",
+        "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/unilabos/devices/LICENSE",
+        "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/docs/developer_guide/add_device.md",
+        "https://arxiv.org/abs/2512.21766"
+      ],
+      "note": null
+    },
+    {
+      "id": "e41",
+      "source": "p:unilabos",
+      "target": "d:cross",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/README.md",
+        "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/NOTICE",
+        "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/unilabos/devices/LICENSE",
+        "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/docs/developer_guide/add_device.md",
+        "https://arxiv.org/abs/2512.21766"
+      ],
+      "note": null
+    },
+    {
+      "id": "e42",
+      "source": "p:unilabos",
+      "target": "s:ros",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/README.md",
+        "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/NOTICE",
+        "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/unilabos/devices/LICENSE",
+        "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/docs/developer_guide/add_device.md",
+        "https://arxiv.org/abs/2512.21766"
+      ],
+      "note": null
+    },
+    {
+      "id": "e43",
+      "source": "p:osprey",
+      "target": "a:als-apg",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/als-apg/osprey"
+      ],
+      "note": null
+    },
+    {
+      "id": "e44",
+      "source": "p:osprey",
+      "target": "r:runtime",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/als-apg/osprey/blob/main/README.md",
+        "https://github.com/als-apg/osprey/blob/main/docs/source/architecture/mcp-servers.rst",
+        "https://doi.org/10.1063/5.0306302"
+      ],
+      "note": null
+    },
+    {
+      "id": "e45",
+      "source": "p:osprey",
+      "target": "d:facility",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/als-apg/osprey/blob/main/README.md",
+        "https://github.com/als-apg/osprey/blob/main/docs/source/architecture/mcp-servers.rst",
+        "https://doi.org/10.1063/5.0306302"
+      ],
+      "note": null
+    },
+    {
+      "id": "e46",
+      "source": "p:osprey",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/als-apg/osprey/blob/main/README.md",
+        "https://github.com/als-apg/osprey/blob/main/docs/source/architecture/mcp-servers.rst",
+        "https://doi.org/10.1063/5.0306302"
+      ],
+      "note": null
+    },
+    {
+      "id": "e47",
+      "source": "p:osprey",
+      "target": "s:facility",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/als-apg/osprey/blob/main/README.md",
+        "https://github.com/als-apg/osprey/blob/main/docs/source/architecture/mcp-servers.rst",
+        "https://doi.org/10.1063/5.0306302"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Agent / MCP / CLI → semantic channel lookup → facility connector → EPICS / TANGO / DOOCS。",
+        "en": "This node groups related foundations; this project’s specific path is Agent / MCP / CLI → semantic channel lookup → facility connector → EPICS / TANGO / DOOCS."
+      }
+    },
+    {
+      "id": "e48",
+      "source": "p:ivoryos",
+      "target": "a:ivoryos-ai",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/ivoryos-ai/IvoryOS"
+      ],
+      "note": null
+    },
+    {
+      "id": "e49",
+      "source": "p:ivoryos",
+      "target": "r:workflow",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/ivoryos-ai/IvoryOS/blob/main/README.md",
+        "https://github.com/ivoryos-ai/IvoryOS/blob/main/ivoryos/parsers/introspection.py",
+        "https://www.nature.com/articles/s41467-025-60514-w"
+      ],
+      "note": null
+    },
+    {
+      "id": "e50",
+      "source": "p:ivoryos",
+      "target": "d:cross",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/ivoryos-ai/IvoryOS/blob/main/README.md",
+        "https://github.com/ivoryos-ai/IvoryOS/blob/main/ivoryos/parsers/introspection.py",
+        "https://www.nature.com/articles/s41467-025-60514-w"
+      ],
+      "note": null
+    },
+    {
+      "id": "e51",
+      "source": "p:jumpstarter",
+      "target": "a:jumpstarter-dev",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/jumpstarter-dev/jumpstarter"
+      ],
+      "note": null
+    },
+    {
+      "id": "e52",
+      "source": "p:jumpstarter",
+      "target": "r:runtime",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/jumpstarter-dev/jumpstarter/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e53",
+      "source": "p:jumpstarter",
+      "target": "d:embedded",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/jumpstarter-dev/jumpstarter/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e54",
+      "source": "p:jumpstarter",
+      "target": "f:grpc",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/jumpstarter-dev/jumpstarter/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e55",
+      "source": "p:lager",
+      "target": "a:lagerdata",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/lagerdata/lager"
+      ],
+      "note": null
+    },
+    {
+      "id": "e56",
+      "source": "p:lager",
+      "target": "r:runtime",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/lagerdata/lager/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e57",
+      "source": "p:lager",
+      "target": "d:bench",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/lagerdata/lager/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e58",
+      "source": "p:lager",
+      "target": "s:bench",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/lagerdata/lager/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Agent / CI CLI → bench Linux box → named Net → instrument channel。",
+        "en": "This node groups related foundations; this project’s specific path is Agent / CI CLI → bench Linux box → named Net → instrument channel."
+      }
+    },
+    {
+      "id": "e59",
+      "source": "p:eaa",
+      "target": "a:AdvancedPhotonSource",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/EAA"
+      ],
+      "note": null
+    },
+    {
+      "id": "e60",
+      "source": "p:eaa",
+      "target": "r:runtime",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/EAA/blob/main/README.md",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC13633048/"
+      ],
+      "note": null
+    },
+    {
+      "id": "e61",
+      "source": "p:eaa",
+      "target": "d:cross",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/EAA/blob/main/README.md",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC13633048/"
+      ],
+      "note": null
+    },
+    {
+      "id": "e62",
+      "source": "p:eaa",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/EAA/blob/main/README.md",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC13633048/"
+      ],
+      "note": null
+    },
+    {
+      "id": "e63",
+      "source": "p:eaa-pi",
+      "target": "a:AdvancedPhotonSource",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/EAA-Pi"
+      ],
+      "note": null
+    },
+    {
+      "id": "e64",
+      "source": "p:eaa-pi",
+      "target": "r:runtime",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/EAA-Pi/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e65",
+      "source": "p:eaa-pi",
+      "target": "d:cross",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/EAA-Pi/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e66",
+      "source": "p:eaa-pi",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/EAA-Pi/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e67",
+      "source": "p:pi-experiment-ops",
+      "target": "a:AdvancedPhotonSource",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/pi-experiment-ops"
+      ],
+      "note": null
+    },
+    {
+      "id": "e68",
+      "source": "p:pi-experiment-ops",
+      "target": "r:runtime",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/pi-experiment-ops/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e69",
+      "source": "p:pi-experiment-ops",
+      "target": "d:cross",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/pi-experiment-ops/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e70",
+      "source": "p:pi-experiment-ops",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/pi-experiment-ops/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e71",
+      "source": "p:labmcp",
+      "target": "a:K-Dense-AI",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/K-Dense-AI/lab-instrument-mcps"
+      ],
+      "note": null
+    },
+    {
+      "id": "e72",
+      "source": "p:labmcp",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/README.md",
+        "https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/packages/labmcp/src/labmcp/catalog.json"
+      ],
+      "note": null
+    },
+    {
+      "id": "e73",
+      "source": "p:labmcp",
+      "target": "d:bench",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/README.md",
+        "https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/packages/labmcp/src/labmcp/catalog.json"
+      ],
+      "note": null
+    },
+    {
+      "id": "e74",
+      "source": "p:labmcp",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/README.md",
+        "https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/packages/labmcp/src/labmcp/catalog.json"
+      ],
+      "note": null
+    },
+    {
+      "id": "e75",
+      "source": "p:labmcp",
+      "target": "s:bench",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/README.md",
+        "https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/packages/labmcp/src/labmcp/catalog.json"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Agent → MCP server package → device protocol adapter → simulated backend。",
+        "en": "This node groups related foundations; this project’s specific path is Agent → MCP server package → device protocol adapter → simulated backend."
+      }
+    },
+    {
+      "id": "e76",
+      "source": "p:lablink",
+      "target": "a:techmanual-ai",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/techmanual-ai/lablink-mcp"
+      ],
+      "note": null
+    },
+    {
+      "id": "e77",
+      "source": "p:lablink",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/techmanual-ai/lablink-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e78",
+      "source": "p:lablink",
+      "target": "d:bench",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/techmanual-ai/lablink-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e79",
+      "source": "p:lablink",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/techmanual-ai/lablink-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e80",
+      "source": "p:lablink",
+      "target": "s:bench",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/techmanual-ai/lablink-mcp/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Agent → MCP → configured transport → VISA / SSH / REST / Serial / Python。",
+        "en": "This node groups related foundations; this project’s specific path is Agent → MCP → configured transport → VISA / SSH / REST / Serial / Python."
+      }
+    },
+    {
+      "id": "e81",
+      "source": "p:scpi-mcp",
+      "target": "a:armchairdeity",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/armchairdeity/mcp-server-scpi"
+      ],
+      "note": null
+    },
+    {
+      "id": "e82",
+      "source": "p:scpi-mcp",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/armchairdeity/mcp-server-scpi/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e83",
+      "source": "p:scpi-mcp",
+      "target": "d:bench",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/armchairdeity/mcp-server-scpi/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e84",
+      "source": "p:scpi-mcp",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/armchairdeity/mcp-server-scpi/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e85",
+      "source": "p:scpi-mcp",
+      "target": "s:bench",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/armchairdeity/mcp-server-scpi/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Agent → goal-level scope tools → Rigol backend → PyVISA / SCPI。",
+        "en": "This node groups related foundations; this project’s specific path is Agent → goal-level scope tools → Rigol backend → PyVISA / SCPI."
+      }
+    },
+    {
+      "id": "e86",
+      "source": "p:oscilloscope-mcp",
+      "target": "a:masahiro-999",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/masahiro-999/oscilloscope-mcp"
+      ],
+      "note": null
+    },
+    {
+      "id": "e87",
+      "source": "p:oscilloscope-mcp",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/masahiro-999/oscilloscope-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e88",
+      "source": "p:oscilloscope-mcp",
+      "target": "d:bench",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/masahiro-999/oscilloscope-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e89",
+      "source": "p:oscilloscope-mcp",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/masahiro-999/oscilloscope-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e90",
+      "source": "p:oscilloscope-mcp",
+      "target": "s:bench",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/masahiro-999/oscilloscope-mcp/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Agent → MCP acquisition tools → SCPI over TCP → oscilloscope。",
+        "en": "This node groups related foundations; this project’s specific path is Agent → MCP acquisition tools → SCPI over TCP → oscilloscope."
+      }
+    },
+    {
+      "id": "e91",
+      "source": "p:lecroy",
+      "target": "a:lucasgerads",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/lucasgerads/lecroy-mcp"
+      ],
+      "note": null
+    },
+    {
+      "id": "e92",
+      "source": "p:lecroy",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/lucasgerads/lecroy-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e93",
+      "source": "p:lecroy",
+      "target": "d:bench",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/lucasgerads/lecroy-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e94",
+      "source": "p:lecroy",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/lucasgerads/lecroy-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e95",
+      "source": "p:lecroy",
+      "target": "s:bench",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/lucasgerads/lecroy-mcp/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Agent → MCP → VXI-11 / USB SCPI → LeCroy oscilloscope。",
+        "en": "This node groups related foundations; this project’s specific path is Agent → MCP → VXI-11 / USB SCPI → LeCroy oscilloscope."
+      }
+    },
+    {
+      "id": "e96",
+      "source": "p:siglent",
+      "target": "a:mp911de",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/mp911de/siglent-scpi-mcp"
+      ],
+      "note": null
+    },
+    {
+      "id": "e97",
+      "source": "p:siglent",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/mp911de/siglent-scpi-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e98",
+      "source": "p:siglent",
+      "target": "d:bench",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/mp911de/siglent-scpi-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e99",
+      "source": "p:siglent",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/mp911de/siglent-scpi-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e100",
+      "source": "p:siglent",
+      "target": "s:bench",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/mp911de/siglent-scpi-mcp/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Agent → typed MCP tools → logged SCPI / TCP → scope & supply。",
+        "en": "This node groups related foundations; this project’s specific path is Agent → typed MCP tools → logged SCPI / TCP → scope & supply."
+      }
+    },
+    {
+      "id": "e101",
+      "source": "p:scope-mcp",
+      "target": "a:Netlist-Studio",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/Netlist-Studio/scope-mcp"
+      ],
+      "note": null
+    },
+    {
+      "id": "e102",
+      "source": "p:scope-mcp",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/Netlist-Studio/scope-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e103",
+      "source": "p:scope-mcp",
+      "target": "d:bench",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/Netlist-Studio/scope-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e104",
+      "source": "p:scope-mcp",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/Netlist-Studio/scope-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e105",
+      "source": "p:scope-mcp",
+      "target": "s:bench",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/Netlist-Studio/scope-mcp/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Agent → MCP → PyVISA / Ethernet SCPI → Keysight / Agilent scope。",
+        "en": "This node groups related foundations; this project’s specific path is Agent → MCP → PyVISA / Ethernet SCPI → Keysight / Agilent scope."
+      }
+    },
+    {
+      "id": "e106",
+      "source": "p:dwf",
+      "target": "a:KenosInc",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/KenosInc/dwf-mcp-server"
+      ],
+      "note": null
+    },
+    {
+      "id": "e107",
+      "source": "p:dwf",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/KenosInc/dwf-mcp-server/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e108",
+      "source": "p:dwf",
+      "target": "d:bench",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/KenosInc/dwf-mcp-server/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e109",
+      "source": "p:dwf",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/KenosInc/dwf-mcp-server/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e110",
+      "source": "p:dwf",
+      "target": "f:waveforms",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/KenosInc/dwf-mcp-server/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e111",
+      "source": "p:instrument-mcp",
+      "target": "a:zeng-andrew",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/zeng-andrew/instrument-mcp"
+      ],
+      "note": null
+    },
+    {
+      "id": "e112",
+      "source": "p:instrument-mcp",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/zeng-andrew/instrument-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e113",
+      "source": "p:instrument-mcp",
+      "target": "d:bench",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/zeng-andrew/instrument-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e114",
+      "source": "p:instrument-mcp",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/zeng-andrew/instrument-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e115",
+      "source": "p:instrument-mcp",
+      "target": "s:bench",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/zeng-andrew/instrument-mcp/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Agent → MCP sessions → YAML commands → SCPI / Modbus / USB devices。",
+        "en": "This node groups related foundations; this project’s specific path is Agent → MCP sessions → YAML commands → SCPI / Modbus / USB devices."
+      }
+    },
+    {
+      "id": "e116",
+      "source": "p:instrument-mcp",
+      "target": "f:modbus-interface",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/zeng-andrew/instrument-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e117",
+      "source": "p:daqmx",
+      "target": "a:BrianDavidCouch",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/BrianDavidCouch/daqmx-mcp"
+      ],
+      "note": null
+    },
+    {
+      "id": "e118",
+      "source": "p:daqmx",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/BrianDavidCouch/daqmx-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e119",
+      "source": "p:daqmx",
+      "target": "d:bench",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/BrianDavidCouch/daqmx-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e120",
+      "source": "p:daqmx",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/BrianDavidCouch/daqmx-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e121",
+      "source": "p:daqmx",
+      "target": "f:nidaqmx",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/BrianDavidCouch/daqmx-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e122",
+      "source": "p:daqifi",
+      "target": "a:daqifi",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/daqifi/daqifi-core"
+      ],
+      "note": null
+    },
+    {
+      "id": "e123",
+      "source": "p:daqifi",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/daqifi/daqifi-core/blob/main/README.md",
+        "https://github.com/daqifi/daqifi-core/tree/main/src/Daqifi.Mcp"
+      ],
+      "note": null
+    },
+    {
+      "id": "e124",
+      "source": "p:daqifi",
+      "target": "d:bench",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/daqifi/daqifi-core/blob/main/README.md",
+        "https://github.com/daqifi/daqifi-core/tree/main/src/Daqifi.Mcp"
+      ],
+      "note": null
+    },
+    {
+      "id": "e125",
+      "source": "p:daqifi",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/daqifi/daqifi-core/blob/main/README.md",
+        "https://github.com/daqifi/daqifi-core/tree/main/src/Daqifi.Mcp"
+      ],
+      "note": null
+    },
+    {
+      "id": "e126",
+      "source": "p:labview-toolkit",
+      "target": "a:JanGoebel",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/JanGoebel/LabVIEW-MCP-Server-Toolkit"
+      ],
+      "note": null
+    },
+    {
+      "id": "e127",
+      "source": "p:labview-toolkit",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/JanGoebel/LabVIEW-MCP-Server-Toolkit/blob/main/readme.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e128",
+      "source": "p:labview-toolkit",
+      "target": "d:bench",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/JanGoebel/LabVIEW-MCP-Server-Toolkit/blob/main/readme.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e129",
+      "source": "p:labview-toolkit",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/JanGoebel/LabVIEW-MCP-Server-Toolkit/blob/main/readme.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e130",
+      "source": "p:labview-toolkit",
+      "target": "f:labview",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/JanGoebel/LabVIEW-MCP-Server-Toolkit/blob/main/readme.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e131",
+      "source": "p:labview-dev",
+      "target": "a:Zuehlke",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/Zuehlke/labview-mcp"
+      ],
+      "note": null
+    },
+    {
+      "id": "e132",
+      "source": "p:labview-dev",
+      "target": "r:development",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/Zuehlke/labview-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e133",
+      "source": "p:labview-dev",
+      "target": "d:bench",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/Zuehlke/labview-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e134",
+      "source": "p:labview-dev",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/Zuehlke/labview-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e135",
+      "source": "p:labview-dev",
+      "target": "f:labview",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/Zuehlke/labview-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e136",
+      "source": "p:openflexure",
+      "target": "a:GSIBabu",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/GSIBabu/OpenFlexure-MCP"
+      ],
+      "note": null
+    },
+    {
+      "id": "e137",
+      "source": "p:openflexure",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/GSIBabu/OpenFlexure-MCP/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e138",
+      "source": "p:openflexure",
+      "target": "d:imaging",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/GSIBabu/OpenFlexure-MCP/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e139",
+      "source": "p:openflexure",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/GSIBabu/OpenFlexure-MCP/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e140",
+      "source": "p:openflexure",
+      "target": "f:openflexure-api",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/GSIBabu/OpenFlexure-MCP/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e141",
+      "source": "p:microscope-agent",
+      "target": "a:BioNanomics",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/BioNanomics/microscope-agent"
+      ],
+      "note": null
+    },
+    {
+      "id": "e142",
+      "source": "p:microscope-agent",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/BioNanomics/microscope-agent/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e143",
+      "source": "p:microscope-agent",
+      "target": "d:imaging",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/BioNanomics/microscope-agent/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e144",
+      "source": "p:microscope-agent",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/BioNanomics/microscope-agent/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e145",
+      "source": "p:microscope-agent",
+      "target": "s:microscopy-access",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/BioNanomics/microscope-agent/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Agent → MCP → Nikon / GenICam adapter → stage & camera。",
+        "en": "This node groups related foundations; this project’s specific path is Agent → MCP → Nikon / GenICam adapter → stage & camera."
+      }
+    },
+    {
+      "id": "e146",
+      "source": "p:agent-lens",
+      "target": "a:aicell-lab",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/aicell-lab/agent-lens"
+      ],
+      "note": null
+    },
+    {
+      "id": "e147",
+      "source": "p:agent-lens",
+      "target": "r:workflow",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/aicell-lab/agent-lens/blob/main/README.md",
+        "https://github.com/aicell-lab/agent-lens/blob/main/agent_lens/register_tools_service.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e148",
+      "source": "p:agent-lens",
+      "target": "d:imaging",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/aicell-lab/agent-lens/blob/main/README.md",
+        "https://github.com/aicell-lab/agent-lens/blob/main/agent_lens/register_tools_service.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e149",
+      "source": "p:agent-lens",
+      "target": "f:hypha",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/aicell-lab/agent-lens/blob/main/README.md",
+        "https://github.com/aicell-lab/agent-lens/blob/main/agent_lens/register_tools_service.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e150",
+      "source": "p:agentic-microscope",
+      "target": "a:kyu-softmatter",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/kyu-softmatter/agentic-microscope"
+      ],
+      "note": null
+    },
+    {
+      "id": "e151",
+      "source": "p:agentic-microscope",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/kyu-softmatter/agentic-microscope/blob/main/README.md",
+        "https://github.com/kyu-softmatter/agentic-microscope/blob/main/hardware/microscope.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e152",
+      "source": "p:agentic-microscope",
+      "target": "d:imaging",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/kyu-softmatter/agentic-microscope/blob/main/README.md",
+        "https://github.com/kyu-softmatter/agentic-microscope/blob/main/hardware/microscope.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e153",
+      "source": "p:agentic-microscope",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/kyu-softmatter/agentic-microscope/blob/main/README.md",
+        "https://github.com/kyu-softmatter/agentic-microscope/blob/main/hardware/microscope.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e154",
+      "source": "p:agentic-microscope",
+      "target": "s:microscopy-access",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/kyu-softmatter/agentic-microscope/blob/main/README.md",
+        "https://github.com/kyu-softmatter/agentic-microscope/blob/main/hardware/microscope.py"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Research goal → MCP configuration → calibrated device settings → apply & readback。",
+        "en": "This node groups related foundations; this project’s specific path is Research goal → MCP configuration → calibrated device settings → apply & readback."
+      }
+    },
+    {
+      "id": "e155",
+      "source": "p:soft-matter-agents",
+      "target": "a:kyu-softmatter",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/kyu-softmatter/soft-matter-agents"
+      ],
+      "note": null
+    },
+    {
+      "id": "e156",
+      "source": "p:soft-matter-agents",
+      "target": "r:workflow",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/kyu-softmatter/soft-matter-agents/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e157",
+      "source": "p:soft-matter-agents",
+      "target": "d:imaging",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/kyu-softmatter/soft-matter-agents/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e158",
+      "source": "p:aila",
+      "target": "a:M3RG-IITD",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/M3RG-IITD/AILA"
+      ],
+      "note": null
+    },
+    {
+      "id": "e159",
+      "source": "p:aila",
+      "target": "r:experiment",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/M3RG-IITD/AILA/blob/main/README.md",
+        "https://www.nature.com/articles/s41467-025-64105-7"
+      ],
+      "note": null
+    },
+    {
+      "id": "e160",
+      "source": "p:aila",
+      "target": "d:imaging",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/M3RG-IITD/AILA/blob/main/README.md",
+        "https://www.nature.com/articles/s41467-025-64105-7"
+      ],
+      "note": null
+    },
+    {
+      "id": "e161",
+      "source": "p:llm-spm",
+      "target": "a:DIAOZHUO",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/DIAOZHUO/LLM-directed-SPM"
+      ],
+      "note": null
+    },
+    {
+      "id": "e162",
+      "source": "p:llm-spm",
+      "target": "r:experiment",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/DIAOZHUO/LLM-directed-SPM/blob/main/readme.md",
+        "https://arxiv.org/abs/2602.20669"
+      ],
+      "note": null
+    },
+    {
+      "id": "e163",
+      "source": "p:llm-spm",
+      "target": "d:imaging",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/DIAOZHUO/LLM-directed-SPM/blob/main/readme.md",
+        "https://arxiv.org/abs/2602.20669"
+      ],
+      "note": null
+    },
+    {
+      "id": "e164",
+      "source": "p:quailbot",
+      "target": "a:BB-84C",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/BB-84C/quailbot-pi"
+      ],
+      "note": null
+    },
+    {
+      "id": "e165",
+      "source": "p:quailbot",
+      "target": "r:runtime",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/BB-84C/quailbot-pi/blob/main/README.md",
+        "https://arxiv.org/abs/2609.27302"
+      ],
+      "note": null
+    },
+    {
+      "id": "e166",
+      "source": "p:quailbot",
+      "target": "d:imaging",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/BB-84C/quailbot-pi/blob/main/README.md",
+        "https://arxiv.org/abs/2609.27302"
+      ],
+      "note": null
+    },
+    {
+      "id": "e167",
+      "source": "p:quailbot",
+      "target": "f:nqctl",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/BB-84C/quailbot-pi/blob/main/README.md",
+        "https://arxiv.org/abs/2609.27302"
+      ],
+      "note": null
+    },
+    {
+      "id": "e168",
+      "source": "p:vision",
+      "target": "a:CFN-softbio",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/CFN-softbio/VISION"
+      ],
+      "note": null
+    },
+    {
+      "id": "e169",
+      "source": "p:vision",
+      "target": "r:experiment",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/CFN-softbio/VISION/blob/main/README.md",
+        "https://doi.org/10.1088/2632-2153/add9e4"
+      ],
+      "note": null
+    },
+    {
+      "id": "e170",
+      "source": "p:vision",
+      "target": "d:facility",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/CFN-softbio/VISION/blob/main/README.md",
+        "https://doi.org/10.1088/2632-2153/add9e4"
+      ],
+      "note": null
+    },
+    {
+      "id": "e171",
+      "source": "p:vision",
+      "target": "s:bluesky",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/CFN-softbio/VISION/blob/main/README.md",
+        "https://doi.org/10.1088/2632-2153/add9e4"
+      ],
+      "note": null
+    },
+    {
+      "id": "e172",
+      "source": "p:leeq",
+      "target": "a:ShuxiangCao",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/ShuxiangCao/LeeQ"
+      ],
+      "note": null
+    },
+    {
+      "id": "e173",
+      "source": "p:leeq",
+      "target": "r:runtime",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/ShuxiangCao/LeeQ/blob/main/README.md",
+        "https://doi.org/10.1016/j.patter.2025.101372"
+      ],
+      "note": null
+    },
+    {
+      "id": "e174",
+      "source": "p:leeq",
+      "target": "d:quantum",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/ShuxiangCao/LeeQ/blob/main/README.md",
+        "https://doi.org/10.1016/j.patter.2025.101372"
+      ],
+      "note": null
+    },
+    {
+      "id": "e175",
+      "source": "p:k-agents",
+      "target": "a:EvoEvolver",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/EvoEvolver/k_agents"
+      ],
+      "note": null
+    },
+    {
+      "id": "e176",
+      "source": "p:k-agents",
+      "target": "r:experiment",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/EvoEvolver/k_agents/blob/main/README.md",
+        "https://arxiv.org/abs/2412.07978"
+      ],
+      "note": null
+    },
+    {
+      "id": "e177",
+      "source": "p:k-agents",
+      "target": "d:quantum",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/EvoEvolver/k_agents/blob/main/README.md",
+        "https://arxiv.org/abs/2412.07978"
+      ],
+      "note": null
+    },
+    {
+      "id": "e178",
+      "source": "p:nvidia-qca",
+      "target": "a:NVIDIA",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/NVIDIA/Quantum-Calibration-Agent-Blueprint"
+      ],
+      "note": null
+    },
+    {
+      "id": "e179",
+      "source": "p:nvidia-qca",
+      "target": "r:experiment",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/NVIDIA/Quantum-Calibration-Agent-Blueprint/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e180",
+      "source": "p:nvidia-qca",
+      "target": "d:quantum",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/NVIDIA/Quantum-Calibration-Agent-Blueprint/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e181",
+      "source": "p:calms",
+      "target": "a:mcherukara",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/mcherukara/CALMS"
+      ],
+      "note": null
+    },
+    {
+      "id": "e182",
+      "source": "p:calms",
+      "target": "r:experiment",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/mcherukara/CALMS/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e183",
+      "source": "p:calms",
+      "target": "d:facility",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/mcherukara/CALMS/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e184",
+      "source": "p:calms-aps",
+      "target": "a:AdvancedPhotonSource",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/CALMS"
+      ],
+      "note": null
+    },
+    {
+      "id": "e185",
+      "source": "p:calms-aps",
+      "target": "r:experiment",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/CALMS/blob/main/README.md",
+        "https://doi.org/10.1038/s41524-026-02005-0"
+      ],
+      "note": null
+    },
+    {
+      "id": "e186",
+      "source": "p:calms-aps",
+      "target": "d:facility",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/CALMS/blob/main/README.md",
+        "https://doi.org/10.1038/s41524-026-02005-0"
+      ],
+      "note": null
+    },
+    {
+      "id": "e187",
+      "source": "p:opentrons",
+      "target": "a:yerbymatey",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/yerbymatey/opentrons-mcp"
+      ],
+      "note": null
+    },
+    {
+      "id": "e188",
+      "source": "p:opentrons",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/yerbymatey/opentrons-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e189",
+      "source": "p:opentrons",
+      "target": "d:liquids",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/yerbymatey/opentrons-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e190",
+      "source": "p:opentrons",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/yerbymatey/opentrons-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e191",
+      "source": "p:opentrons",
+      "target": "s:liquid",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/yerbymatey/opentrons-mcp/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Agent → MCP → Opentrons HTTP API → OT-2 / Flex。",
+        "en": "This node groups related foundations; this project’s specific path is Agent → MCP → Opentrons HTTP API → OT-2 / Flex."
+      }
+    },
+    {
+      "id": "e192",
+      "source": "p:plr-mcp",
+      "target": "a:di-omics",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/di-omics/plr-mcp"
+      ],
+      "note": null
+    },
+    {
+      "id": "e193",
+      "source": "p:plr-mcp",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/di-omics/plr-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e194",
+      "source": "p:plr-mcp",
+      "target": "d:liquids",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/di-omics/plr-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e195",
+      "source": "p:plr-mcp",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/di-omics/plr-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e196",
+      "source": "p:plr-mcp",
+      "target": "s:liquid",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/di-omics/plr-mcp/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Agent → MCP → PyLabRobot → chatterbox / STAR backend。",
+        "en": "This node groups related foundations; this project’s specific path is Agent → MCP → PyLabRobot → chatterbox / STAR backend."
+      }
+    },
+    {
+      "id": "e197",
+      "source": "p:openlabai",
+      "target": "a:nygmeta",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/nygmeta/OpenLabAI"
+      ],
+      "note": null
+    },
+    {
+      "id": "e198",
+      "source": "p:openlabai",
+      "target": "r:workflow",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/nygmeta/OpenLabAI/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e199",
+      "source": "p:openlabai",
+      "target": "d:liquids",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/nygmeta/OpenLabAI/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e200",
+      "source": "p:openlabai",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/nygmeta/OpenLabAI/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e201",
+      "source": "p:openlabai",
+      "target": "s:liquid",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/nygmeta/OpenLabAI/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Agent → MCP workflow → robot-specific API / COM / PyLabRobot → robot。",
+        "en": "This node groups related foundations; this project’s specific path is Agent → MCP workflow → robot-specific API / COM / PyLabRobot → robot."
+      }
+    },
+    {
+      "id": "e202",
+      "source": "p:labscriptai",
+      "target": "a:KRATSZ",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/KRATSZ/labscriptai-ot"
+      ],
+      "note": null
+    },
+    {
+      "id": "e203",
+      "source": "p:labscriptai",
+      "target": "r:workflow",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/KRATSZ/labscriptai-ot/blob/main/README.md",
+        "https://doi.org/10.1101/2025.09.30.679666"
+      ],
+      "note": null
+    },
+    {
+      "id": "e204",
+      "source": "p:labscriptai",
+      "target": "d:liquids",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/KRATSZ/labscriptai-ot/blob/main/README.md",
+        "https://doi.org/10.1101/2025.09.30.679666"
+      ],
+      "note": null
+    },
+    {
+      "id": "e205",
+      "source": "p:labscriptai",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/KRATSZ/labscriptai-ot/blob/main/README.md",
+        "https://doi.org/10.1101/2025.09.30.679666"
+      ],
+      "note": null
+    },
+    {
+      "id": "e206",
+      "source": "p:labscriptai",
+      "target": "s:liquid",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/KRATSZ/labscriptai-ot/blob/main/README.md",
+        "https://doi.org/10.1101/2025.09.30.679666"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Agent plugin / Skills → protocol generation → local simulation → Opentrons。",
+        "en": "This node groups related foundations; this project’s specific path is Agent plugin / Skills → protocol generation → local simulation → Opentrons."
+      }
+    },
+    {
+      "id": "e207",
+      "source": "p:coscientist",
+      "target": "a:gomesgroup",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/gomesgroup/coscientist"
+      ],
+      "note": null
+    },
+    {
+      "id": "e208",
+      "source": "p:coscientist",
+      "target": "r:experiment",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/gomesgroup/coscientist/blob/main/README.md",
+        "https://doi.org/10.1038/s41586-023-06792-0"
+      ],
+      "note": null
+    },
+    {
+      "id": "e209",
+      "source": "p:coscientist",
+      "target": "d:liquids",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/gomesgroup/coscientist/blob/main/README.md",
+        "https://doi.org/10.1038/s41586-023-06792-0"
+      ],
+      "note": null
+    },
+    {
+      "id": "e210",
+      "source": "p:coscientist",
+      "target": "s:liquid",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/gomesgroup/coscientist/blob/main/README.md",
+        "https://doi.org/10.1038/s41586-023-06792-0"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Research goal → literature & code tools → laboratory API → robotic chemistry。",
+        "en": "This node groups related foundations; this project’s specific path is Research goal → literature & code tools → laboratory API → robotic chemistry."
+      }
+    },
+    {
+      "id": "e211",
+      "source": "p:chemagents",
+      "target": "a:pic-ai-robotic-chemistry",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/pic-ai-robotic-chemistry/ChemAgents"
+      ],
+      "note": null
+    },
+    {
+      "id": "e212",
+      "source": "p:chemagents",
+      "target": "r:experiment",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/pic-ai-robotic-chemistry/ChemAgents/blob/main/README.md",
+        "https://doi.org/10.1021/jacs.4c17738"
+      ],
+      "note": null
+    },
+    {
+      "id": "e213",
+      "source": "p:chemagents",
+      "target": "d:liquids",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/pic-ai-robotic-chemistry/ChemAgents/blob/main/README.md",
+        "https://doi.org/10.1021/jacs.4c17738"
+      ],
+      "note": null
+    },
+    {
+      "id": "e214",
+      "source": "p:chemagents",
+      "target": "s:ros",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/pic-ai-robotic-chemistry/ChemAgents/blob/main/README.md",
+        "https://doi.org/10.1021/jacs.4c17738"
+      ],
+      "note": null
+    },
+    {
+      "id": "e215",
+      "source": "p:organa",
+      "target": "a:ac-rad",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/ac-rad/organa"
+      ],
+      "note": null
+    },
+    {
+      "id": "e216",
+      "source": "p:organa",
+      "target": "r:experiment",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/ac-rad/organa/blob/main/README.md",
+        "https://arxiv.org/abs/2401.06949"
+      ],
+      "note": null
+    },
+    {
+      "id": "e217",
+      "source": "p:organa",
+      "target": "d:liquids",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/ac-rad/organa/blob/main/README.md",
+        "https://arxiv.org/abs/2401.06949"
+      ],
+      "note": null
+    },
+    {
+      "id": "e218",
+      "source": "p:clairify",
+      "target": "a:ac-rad",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/ac-rad/xdl-generation"
+      ],
+      "note": null
+    },
+    {
+      "id": "e219",
+      "source": "p:clairify",
+      "target": "r:workflow",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/ac-rad/xdl-generation/blob/master/README.md",
+        "https://arxiv.org/abs/2303.14100"
+      ],
+      "note": null
+    },
+    {
+      "id": "e220",
+      "source": "p:clairify",
+      "target": "d:liquids",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/ac-rad/xdl-generation/blob/master/README.md",
+        "https://arxiv.org/abs/2303.14100"
+      ],
+      "note": null
+    },
+    {
+      "id": "e221",
+      "source": "p:clairify",
+      "target": "f:xdl",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/ac-rad/xdl-generation/blob/master/README.md",
+        "https://arxiv.org/abs/2303.14100"
+      ],
+      "note": null
+    },
+    {
+      "id": "e222",
+      "source": "p:clairify-chemspeed",
+      "target": "a:ac-rad",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/ac-rad/clairify-chemspeed"
+      ],
+      "note": null
+    },
+    {
+      "id": "e223",
+      "source": "p:clairify-chemspeed",
+      "target": "r:workflow",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/ac-rad/clairify-chemspeed/blob/master/README.md",
+        "https://doi.org/10.1039/D4DD00046C"
+      ],
+      "note": null
+    },
+    {
+      "id": "e224",
+      "source": "p:clairify-chemspeed",
+      "target": "d:liquids",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/ac-rad/clairify-chemspeed/blob/master/README.md",
+        "https://doi.org/10.1039/D4DD00046C"
+      ],
+      "note": null
+    },
+    {
+      "id": "e225",
+      "source": "p:clairify-chemspeed",
+      "target": "f:chemspyd",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/ac-rad/clairify-chemspeed/blob/master/README.md",
+        "https://doi.org/10.1039/D4DD00046C"
+      ],
+      "note": null
+    },
+    {
+      "id": "e226",
+      "source": "p:synagent",
+      "target": "a:izumitkhr",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/izumitkhr/synagent"
+      ],
+      "note": null
+    },
+    {
+      "id": "e227",
+      "source": "p:synagent",
+      "target": "r:experiment",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/izumitkhr/synagent/blob/main/README.md",
+        "https://arxiv.org/abs/2609.18598"
+      ],
+      "note": null
+    },
+    {
+      "id": "e228",
+      "source": "p:synagent",
+      "target": "d:liquids",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/izumitkhr/synagent/blob/main/README.md",
+        "https://arxiv.org/abs/2609.18598"
+      ],
+      "note": null
+    },
+    {
+      "id": "e229",
+      "source": "p:synagent",
+      "target": "f:maiml",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/izumitkhr/synagent/blob/main/README.md",
+        "https://arxiv.org/abs/2609.18598"
+      ],
+      "note": null
+    },
+    {
+      "id": "e230",
+      "source": "p:autolabs",
+      "target": "a:pnnl",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/pnnl/autolabs"
+      ],
+      "note": null
+    },
+    {
+      "id": "e231",
+      "source": "p:autolabs",
+      "target": "r:experiment",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/pnnl/autolabs/blob/master/README.md",
+        "https://arxiv.org/abs/2509.25651"
+      ],
+      "note": null
+    },
+    {
+      "id": "e232",
+      "source": "p:autolabs",
+      "target": "d:liquids",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/pnnl/autolabs/blob/master/README.md",
+        "https://arxiv.org/abs/2509.25651"
+      ],
+      "note": null
+    },
+    {
+      "id": "e233",
+      "source": "p:opcua-kuka",
+      "target": "a:kukapay",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/kukapay/opcua-mcp"
+      ],
+      "note": null
+    },
+    {
+      "id": "e234",
+      "source": "p:opcua-kuka",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/kukapay/opcua-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e235",
+      "source": "p:opcua-kuka",
+      "target": "d:facility",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/kukapay/opcua-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e236",
+      "source": "p:opcua-kuka",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/kukapay/opcua-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e237",
+      "source": "p:opcua-kuka",
+      "target": "s:lads",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/kukapay/opcua-mcp/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "此关系指向 OPC UA 接口；所引工程未建立 LADS 信息模型实现。",
+        "en": "This relationship concerns OPC UA access; the cited project does not establish an implementation of the LADS information model."
+      }
+    },
+    {
+      "id": "e238",
+      "source": "p:opcua-industrial",
+      "target": "a:IndustriAgents",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/IndustriAgents/OPCUA-MCP"
+      ],
+      "note": null
+    },
+    {
+      "id": "e239",
+      "source": "p:opcua-industrial",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/IndustriAgents/OPCUA-MCP/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e240",
+      "source": "p:opcua-industrial",
+      "target": "d:facility",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/IndustriAgents/OPCUA-MCP/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e241",
+      "source": "p:opcua-industrial",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/IndustriAgents/OPCUA-MCP/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e242",
+      "source": "p:opcua-industrial",
+      "target": "s:lads",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/IndustriAgents/OPCUA-MCP/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "此关系指向 OPC UA 接口；所引工程未建立 LADS 信息模型实现。",
+        "en": "This relationship concerns OPC UA access; the cited project does not establish an implementation of the LADS information model."
+      }
+    },
+    {
+      "id": "e243",
+      "source": "p:modbus",
+      "target": "a:kukapay",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/kukapay/modbus-mcp"
+      ],
+      "note": null
+    },
+    {
+      "id": "e244",
+      "source": "p:modbus",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/kukapay/modbus-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e245",
+      "source": "p:modbus",
+      "target": "d:facility",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/kukapay/modbus-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e246",
+      "source": "p:modbus",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/kukapay/modbus-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e247",
+      "source": "p:modbus",
+      "target": "f:modbus-interface",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/kukapay/modbus-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e248",
+      "source": "p:tango",
+      "target": "a:abogani",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/abogani/tango-mcp"
+      ],
+      "note": null
+    },
+    {
+      "id": "e249",
+      "source": "p:tango",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/abogani/tango-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e250",
+      "source": "p:tango",
+      "target": "d:facility",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/abogani/tango-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e251",
+      "source": "p:tango",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/abogani/tango-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e252",
+      "source": "p:tango",
+      "target": "s:facility",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/abogani/tango-mcp/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Agent → MCP → PyTango database / device proxy → TANGO device server。",
+        "en": "This node groups related foundations; this project’s specific path is Agent → MCP → PyTango database / device proxy → TANGO device server."
+      }
+    },
+    {
+      "id": "e253",
+      "source": "p:epics-mcp",
+      "target": "a:sryu81",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/sryu81/mcp-server-for-epics"
+      ],
+      "note": null
+    },
+    {
+      "id": "e254",
+      "source": "p:epics-mcp",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/sryu81/mcp-server-for-epics/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e255",
+      "source": "p:epics-mcp",
+      "target": "d:facility",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/sryu81/mcp-server-for-epics/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e256",
+      "source": "p:epics-mcp",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/sryu81/mcp-server-for-epics/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e257",
+      "source": "p:epics-mcp",
+      "target": "s:facility",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/sryu81/mcp-server-for-epics/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Agent → MCP → standalone server / IOC library → CA / PVA → process variables。",
+        "en": "This node groups related foundations; this project’s specific path is Agent → MCP → standalone server / IOC library → CA / PVA → process variables."
+      }
+    },
+    {
+      "id": "e258",
+      "source": "p:mcp2serial",
+      "target": "a:mcp2everything",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/mcp2everything/mcp2serial"
+      ],
+      "note": null
+    },
+    {
+      "id": "e259",
+      "source": "p:mcp2serial",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/mcp2everything/mcp2serial/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e260",
+      "source": "p:mcp2serial",
+      "target": "d:embedded",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/mcp2everything/mcp2serial/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e261",
+      "source": "p:mcp2serial",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/mcp2everything/mcp2serial/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e262",
+      "source": "p:mcp2serial",
+      "target": "f:serial",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/mcp2everything/mcp2serial/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e263",
+      "source": "p:tinymcp",
+      "target": "a:golioth",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/golioth/tinymcp"
+      ],
+      "note": null
+    },
+    {
+      "id": "e264",
+      "source": "p:tinymcp",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/golioth/tinymcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e265",
+      "source": "p:tinymcp",
+      "target": "d:embedded",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/golioth/tinymcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e266",
+      "source": "p:tinymcp",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/golioth/tinymcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e267",
+      "source": "p:tinymcp",
+      "target": "f:golioth-api",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/golioth/tinymcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e268",
+      "source": "p:embedded-debugger",
+      "target": "a:Adancurusul",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/Adancurusul/embedded-debugger-mcp"
+      ],
+      "note": null
+    },
+    {
+      "id": "e269",
+      "source": "p:embedded-debugger",
+      "target": "r:development",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/Adancurusul/embedded-debugger-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e270",
+      "source": "p:embedded-debugger",
+      "target": "d:embedded",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/Adancurusul/embedded-debugger-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e271",
+      "source": "p:embedded-debugger",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/Adancurusul/embedded-debugger-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e272",
+      "source": "p:embedded-debugger",
+      "target": "f:debug-probe",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/Adancurusul/embedded-debugger-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e273",
+      "source": "p:saleae",
+      "target": "a:hsoffar",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/hsoffar/saleae-logic2-mcp"
+      ],
+      "note": null
+    },
+    {
+      "id": "e274",
+      "source": "p:saleae",
+      "target": "r:development",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/hsoffar/saleae-logic2-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e275",
+      "source": "p:saleae",
+      "target": "d:embedded",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/hsoffar/saleae-logic2-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e276",
+      "source": "p:saleae",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/hsoffar/saleae-logic2-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e277",
+      "source": "p:saleae",
+      "target": "f:logic2",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/hsoffar/saleae-logic2-mcp/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e278",
+      "source": "p:micropython",
+      "target": "a:SWITCHSCIENCE",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/SWITCHSCIENCE/mcp-micropython-bridge"
+      ],
+      "note": null
+    },
+    {
+      "id": "e279",
+      "source": "p:micropython",
+      "target": "r:development",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/SWITCHSCIENCE/mcp-micropython-bridge/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e280",
+      "source": "p:micropython",
+      "target": "d:embedded",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/SWITCHSCIENCE/mcp-micropython-bridge/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e281",
+      "source": "p:micropython",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/SWITCHSCIENCE/mcp-micropython-bridge/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e282",
+      "source": "p:micropython",
+      "target": "f:micropython-api",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/SWITCHSCIENCE/mcp-micropython-bridge/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e283",
+      "source": "p:ros-mcp",
+      "target": "a:robotmcp",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/robotmcp/ros-mcp-server"
+      ],
+      "note": null
+    },
+    {
+      "id": "e284",
+      "source": "p:ros-mcp",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/robotmcp/ros-mcp-server/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e285",
+      "source": "p:ros-mcp",
+      "target": "d:robotics",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/robotmcp/ros-mcp-server/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e286",
+      "source": "p:ros-mcp",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/robotmcp/ros-mcp-server/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e287",
+      "source": "p:ros-mcp",
+      "target": "s:ros",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/robotmcp/ros-mcp-server/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e288",
+      "source": "p:rosa",
+      "target": "a:nasa-jpl",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/nasa-jpl/rosa"
+      ],
+      "note": null
+    },
+    {
+      "id": "e289",
+      "source": "p:rosa",
+      "target": "r:experiment",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/nasa-jpl/rosa/blob/main/README.md",
+        "https://arxiv.org/abs/2410.06472"
+      ],
+      "note": null
+    },
+    {
+      "id": "e290",
+      "source": "p:rosa",
+      "target": "d:robotics",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/nasa-jpl/rosa/blob/main/README.md",
+        "https://arxiv.org/abs/2410.06472"
+      ],
+      "note": null
+    },
+    {
+      "id": "e291",
+      "source": "p:rosa",
+      "target": "s:ros",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/nasa-jpl/rosa/blob/main/README.md",
+        "https://arxiv.org/abs/2410.06472"
+      ],
+      "note": null
+    },
+    {
+      "id": "e292",
+      "source": "p:device-use",
+      "target": "a:labclaw",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/labclaw/device-use"
+      ],
+      "note": null
+    },
+    {
+      "id": "e293",
+      "source": "p:device-use",
+      "target": "r:gui",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/labclaw/device-use/blob/main/README.md",
+        "https://github.com/labclaw/device-use/blob/main/src/device_use/integrations/mcp_server.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e294",
+      "source": "p:device-use",
+      "target": "d:cross",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/labclaw/device-use/blob/main/README.md",
+        "https://github.com/labclaw/device-use/blob/main/src/device_use/integrations/mcp_server.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e295",
+      "source": "p:device-use",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/labclaw/device-use/blob/main/README.md",
+        "https://github.com/labclaw/device-use/blob/main/src/device_use/integrations/mcp_server.py"
+      ],
+      "note": null
+    },
+    {
+      "id": "e296",
+      "source": "p:device-skills",
+      "target": "a:labclaw",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/labclaw/device-skills"
+      ],
+      "note": null
+    },
+    {
+      "id": "e297",
+      "source": "p:device-skills",
+      "target": "r:knowledge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/labclaw/device-skills/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e298",
+      "source": "p:device-skills",
+      "target": "d:cross",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/labclaw/device-skills/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e299",
+      "source": "p:edge-mhs",
+      "target": "a:fastly",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/fastly/edge-mhs"
+      ],
+      "note": null
+    },
+    {
+      "id": "e300",
+      "source": "p:edge-mhs",
+      "target": "r:bridge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/fastly/edge-mhs/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e301",
+      "source": "p:edge-mhs",
+      "target": "d:cross",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/fastly/edge-mhs/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e302",
+      "source": "p:edge-mhs",
+      "target": "s:mcp",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/fastly/edge-mhs/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e303",
+      "source": "p:agent2device",
+      "target": "a:neogyk",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/neogyk/Agent2Device-Protocol"
+      ],
+      "note": null
+    },
+    {
+      "id": "e304",
+      "source": "p:agent2device",
+      "target": "r:contract",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/neogyk/Agent2Device-Protocol/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e305",
+      "source": "p:agent2device",
+      "target": "d:cross",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/neogyk/Agent2Device-Protocol/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e306",
+      "source": "p:chemcrow",
+      "target": "a:ur-whitelab",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/ur-whitelab/chemcrow-public"
+      ],
+      "note": null
+    },
+    {
+      "id": "e307",
+      "source": "p:chemcrow",
+      "target": "r:knowledge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/ur-whitelab/chemcrow-public/blob/main/README.md",
+        "https://doi.org/10.1038/s42256-024-00832-8"
+      ],
+      "note": null
+    },
+    {
+      "id": "e308",
+      "source": "p:chemcrow",
+      "target": "d:liquids",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/ur-whitelab/chemcrow-public/blob/main/README.md",
+        "https://doi.org/10.1038/s42256-024-00832-8"
+      ],
+      "note": null
+    },
+    {
+      "id": "e309",
+      "source": "p:nvagent",
+      "target": "a:takuyaisogawa",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/takuyaisogawa/nv-autonomous-experiments"
+      ],
+      "note": null
+    },
+    {
+      "id": "e310",
+      "source": "p:nvagent",
+      "target": "r:knowledge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/takuyaisogawa/nv-autonomous-experiments/blob/main/README.md",
+        "https://arxiv.org/abs/2607.25145"
+      ],
+      "note": null
+    },
+    {
+      "id": "e311",
+      "source": "p:nvagent",
+      "target": "d:quantum",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/takuyaisogawa/nv-autonomous-experiments/blob/main/README.md",
+        "https://arxiv.org/abs/2607.25145"
+      ],
+      "note": null
+    },
+    {
+      "id": "e312",
+      "source": "p:uc2-hackathon",
+      "target": "a:openUC2",
+      "kind": "maintained_by",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/openUC2/Hackathon-UC2-LLM"
+      ],
+      "note": null
+    },
+    {
+      "id": "e313",
+      "source": "p:uc2-hackathon",
+      "target": "r:knowledge",
+      "kind": "classified_route",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/openUC2/Hackathon-UC2-LLM/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e314",
+      "source": "p:uc2-hackathon",
+      "target": "d:imaging",
+      "kind": "classified_domain",
+      "basis": "analysis",
+      "sources": [
+        "https://github.com/openUC2/Hackathon-UC2-LLM/blob/main/README.md"
+      ],
+      "note": null
+    },
+    {
+      "id": "e315",
+      "source": "p:uc2-hackathon",
+      "target": "s:microscopy-access",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/openUC2/Hackathon-UC2-LLM/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "该节点合并展示同类基础生态；此工程的具体路径：Workshop material → Python / ImSwitch FastAPI → UC2 microscope。",
+        "en": "This node groups related foundations; this project’s specific path is Workshop material → Python / ImSwitch FastAPI → UC2 microscope."
+      }
+    },
+    {
+      "id": "e316",
+      "source": "p:eaa",
+      "target": "p:eaa-pi",
+      "kind": "successor",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/EAA/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "README 指向 EAA-Pi 后继工程。",
+        "en": "The README points to EAA-Pi as its successor."
+      }
+    },
+    {
+      "id": "e317",
+      "source": "p:eaa-pi",
+      "target": "p:pi-experiment-ops",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/EAA-Pi/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "EAA-Pi 基于 pi-experiment-ops。",
+        "en": "EAA-Pi is built on pi-experiment-ops."
+      }
+    },
+    {
+      "id": "e318",
+      "source": "p:agentic-microscope",
+      "target": "p:soft-matter-agents",
+      "kind": "successor",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/kyu-softmatter/agentic-microscope/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "显微镜模块迁入 soft-matter-agents。",
+        "en": "The microscope module moves into soft-matter-agents."
+      }
+    },
+    {
+      "id": "e319",
+      "source": "p:k-agents",
+      "target": "p:nvidia-qca",
+      "kind": "successor",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/EvoEvolver/k_agents/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "README 指向 NVIDIA 校准参考工程。",
+        "en": "The README points to NVIDIA’s calibration blueprint."
+      }
+    },
+    {
+      "id": "e320",
+      "source": "p:k-agents",
+      "target": "p:leeq",
+      "kind": "uses",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/EvoEvolver/k_agents/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "使用 LeeQ 实验库完成校准执行。",
+        "en": "Uses LeeQ experiment infrastructure for calibration."
+      }
+    },
+    {
+      "id": "e321",
+      "source": "p:device-skills",
+      "target": "p:device-use",
+      "kind": "documents",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/labclaw/device-skills/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "操作知识与 device-use 执行路径配套。",
+        "en": "Operating knowledge accompanies the device-use execution path."
+      }
+    },
+    {
+      "id": "e322",
+      "source": "p:calms",
+      "target": "p:calms-aps",
+      "kind": "related",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/mcherukara/CALMS/blob/main/README.md"
+      ],
+      "note": {
+        "zh": "后续 APS 机器人与束线实验工作。",
+        "en": "Subsequent APS robot and beamline work."
+      }
+    },
+    {
+      "id": "e323",
+      "source": "p:clairify",
+      "target": "p:clairify-chemspeed",
+      "kind": "related",
+      "basis": "documented",
+      "sources": [
+        "https://github.com/ac-rad/clairify-chemspeed/blob/master/README.md"
+      ],
+      "note": {
+        "zh": "面向 Chemspeed 的相关程序生成接口。",
+        "en": "A related program-generation interface for Chemspeed."
+      }
+    }
+  ]
+}

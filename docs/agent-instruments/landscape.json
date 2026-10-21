@@ -1,0 +1,4601 @@
+{
+  "schema_version": "1.0",
+  "updated": "2026-10-21",
+  "method": {
+    "zh": "工程事实来自逐项来源；路线划分、贡献比较与设计建议是本文分析。维护者以公开仓库命名空间为准，机构背景另附来源。",
+    "en": "Project facts follow linked sources; route classification, contribution comparisons and design recommendations are editorial analysis. Maintainers follow public repository namespaces, with separate sources for institutional context."
+  },
+  "routes": [
+    {
+      "id": "bridge",
+      "name": {
+        "zh": "设备桥接",
+        "en": "Device bridges"
+      },
+      "question": {
+        "zh": "Agent 怎样调用已经存在的设备接口？",
+        "en": "How does an agent call an existing device interface?"
+      },
+      "output": {
+        "zh": "可调用的工具、参数映射与结果返回。",
+        "en": "Callable tools, argument mappings and returned results."
+      },
+      "value": {
+        "zh": "把已可编程的仪器带入 Agent 工作流，价值首先是接入效率与正确的结果表达。",
+        "en": "Brings programmable instruments into agent workflows, contributing integration efficiency and correct result representation."
+      },
+      "comparison": {
+        "zh": "同类桥应比较实际型号、传输、动作覆盖和波形/图像解释；工具数量不能说明语义是否完整。",
+        "en": "Compare tested models, transports, operation coverage and waveform/image interpretation across bridges."
+      },
+      "verify": {
+        "zh": "在明确型号和固件上，把工具结果与直接驱动读数逐项对照。",
+        "en": "Compare tool results with direct-driver readings on a named model and firmware."
+      },
+      "color": "#397c78"
+    },
+    {
+      "id": "contract",
+      "name": {
+        "zh": "仪器契约",
+        "en": "Instrument contracts"
+      },
+      "question": {
+        "zh": "不同设备能否用共同含义描述能力和状态？",
+        "en": "Can different devices share capability and state meanings?"
+      },
+      "output": {
+        "zh": "设备描述、物理量、动作、任务和资源模型。",
+        "en": "Device descriptions, quantities, actions, jobs and resources."
+      },
+      "value": {
+        "zh": "把可互换的部分变成共同约定，让上层过程少依赖具体型号。",
+        "en": "Defines shared interchangeable capabilities so procedures depend less on a particular model."
+      },
+      "comparison": {
+        "zh": "比较语义、生命周期和扩展规则；公开规范、实现与实机采用分别观察。",
+        "en": "Compare semantics, lifecycles and extension rules, tracking specifications, implementations and physical adoption separately."
+      },
+      "verify": {
+        "zh": "两个独立驱动实现同一 profile，使用同一过程并保留各自可观测性的差异。",
+        "en": "Have two independent drivers implement one profile and run one procedure while preserving observable differences."
+      },
+      "color": "#9b7540"
+    },
+    {
+      "id": "runtime",
+      "name": {
+        "zh": "常驻执行",
+        "en": "Persistent execution"
+      },
+      "question": {
+        "zh": "谁持有连接、资源与长时间实验状态？",
+        "en": "Who owns connections, resources and long-running experiment state?"
+      },
+      "output": {
+        "zh": "设备会话、运行任务、事件、结果与工作区。",
+        "en": "Device sessions, jobs, events, results and workspaces."
+      },
+      "value": {
+        "zh": "把实验生命期从对话生命期中分离，使多人、多个 Agent 和不同前端共享可解释的运行状态。",
+        "en": "Separates experiment lifetime from conversation lifetime, supporting interpretable state across users, agents and frontends."
+      },
+      "comparison": {
+        "zh": "比较连接所有权、任务恢复、设备占用和现场部署；常驻进程与持久任务不是同一能力。",
+        "en": "Compare connection ownership, recovery, reservations and deployment; a running process alone does not make jobs durable."
+      },
+      "verify": {
+        "zh": "断开客户端并重新连接，能定位同一实验、已完成数据与当前设备状态。",
+        "en": "Disconnect and reconnect a client, then recover the same experiment, completed data and current device state."
+      },
+      "color": "#6269a1"
+    },
+    {
+      "id": "workflow",
+      "name": {
+        "zh": "过程编排",
+        "en": "Procedure composition"
+      },
+      "question": {
+        "zh": "多设备、多步骤和样品如何组成可复用实验？",
+        "en": "How do devices, steps and samples form reusable experiments?"
+      },
+      "output": {
+        "zh": "实验计划、依赖关系、资源流转与过程结果。",
+        "en": "Experiment plans, dependencies, resource movement and procedure results."
+      },
+      "value": {
+        "zh": "把一次成功操作固化成可修改、可检查、可迁移的实验过程。",
+        "en": "Turns successful operations into editable, inspectable and transferable procedures."
+      },
+      "comparison": {
+        "zh": "比较过程表示、并发与资源模型、设备替换成本，以及生成的程序如何被实际执行。",
+        "en": "Compare procedure representations, concurrency/resources, device replacement cost and execution of generated programs."
+      },
+      "verify": {
+        "zh": "替换一个适配器后重用同一过程，核对时序、样品与结果定义。",
+        "en": "Replace one adapter, reuse the procedure and check timing, samples and result definitions."
+      },
+      "color": "#a66b52"
+    },
+    {
+      "id": "experiment",
+      "name": {
+        "zh": "实验决策",
+        "en": "Experimental decisions"
+      },
+      "question": {
+        "zh": "物理结果怎样改变下一步实验？",
+        "en": "How do physical results change the next experiment?"
+      },
+      "output": {
+        "zh": "下一步条件、实验选择、假设更新与结果解释。",
+        "en": "Next conditions, experiment choices, updated hypotheses and interpretations."
+      },
+      "value": {
+        "zh": "把工具执行变成科学问题上的反馈过程；价值取决于完成什么实验任务、比基线改善什么。",
+        "en": "Turns tool execution into feedback on a scientific question; value depends on the task and improvement over a baseline."
+      },
+      "comparison": {
+        "zh": "比较任务、反馈、基线和公开范围；物理论文与可下载系统的边界需对应。",
+        "en": "Compare tasks, feedback, baselines and release scope, aligning physical results with what is publicly available."
+      },
+      "verify": {
+        "zh": "在相同仪器、预算与任务下，比较成功率、实验次数和结果质量，并保留完整轨迹。",
+        "en": "Under the same apparatus, budget and task, compare success, experiment count and result quality with full trajectories."
+      },
+      "color": "#49744e"
+    },
+    {
+      "id": "development",
+      "name": {
+        "zh": "仪器开发",
+        "en": "Instrument development"
+      },
+      "question": {
+        "zh": "Agent 如何修改软件或固件，并用真实硬件检验？",
+        "en": "How can agents modify software or firmware and check it on hardware?"
+      },
+      "output": {
+        "zh": "程序版本、调试状态、总线轨迹与故障定位。",
+        "en": "Program versions, debug state, bus traces and fault localization."
+      },
+      "value": {
+        "zh": "把开发循环接到物理反馈，让仪器本身成为可持续改进的研究对象。",
+        "en": "Connects development to physical feedback so instruments themselves can be improved."
+      },
+      "comparison": {
+        "zh": "区分编辑控制程序、调试芯片和观察信号；它们与运行期实验操作互补。",
+        "en": "Distinguish control-program editing, chip debugging and signal observation from runtime experiment operation."
+      },
+      "verify": {
+        "zh": "把一次代码改动与固件版本、真实信号变化和复现记录连接起来。",
+        "en": "Link a code change to a firmware version, physical signal change and reproduction record."
+      },
+      "color": "#657e99"
+    },
+    {
+      "id": "gui",
+      "name": {
+        "zh": "界面操作",
+        "en": "GUI operation"
+      },
+      "question": {
+        "zh": "没有可用 API 时，如何使用现有仪器软件？",
+        "en": "How can existing instrument software be used without a suitable API?"
+      },
+      "output": {
+        "zh": "屏幕观察、动作步骤、界面状态和结果文件。",
+        "en": "Screen observations, actions, UI state and output files."
+      },
+      "value": {
+        "zh": "扩大既有软件可接入范围，适合受限于封闭控制界面的设备。",
+        "en": "Extends access to software limited to a graphical control surface."
+      },
+      "comparison": {
+        "zh": "比较操作后验证、界面变化和数据读取成本，再与可用 SDK 路径比较。",
+        "en": "Compare post-action verification, UI changes and data access with any available SDK path."
+      },
+      "verify": {
+        "zh": "在明确软件版本上重放任务，以真实设备回读或结果文件判断动作效果。",
+        "en": "Replay tasks on a named software version and assess effects through device readback or result files."
+      },
+      "color": "#8f6e8e"
+    },
+    {
+      "id": "knowledge",
+      "name": {
+        "zh": "知识与资料",
+        "en": "Knowledge and artifacts"
+      },
+      "question": {
+        "zh": "操作经验与实验轨迹怎样成为可复用材料？",
+        "en": "How can operating experience and experiment trajectories be reused?"
+      },
+      "output": {
+        "zh": "Skills、案例、教程、分析代码与过程知识。",
+        "en": "Skills, cases, tutorials, analysis code and procedural knowledge."
+      },
+      "value": {
+        "zh": "缩短理解设备和实验流程的路径，为 Agent 和开发者保留上下文。",
+        "en": "Reduces the effort needed to understand devices and procedures and retains operational context."
+      },
+      "comparison": {
+        "zh": "比较知识对应的工具与版本、输入输出和实验条件；材料自身不持有设备连接。",
+        "en": "Compare referenced tools/versions, inputs, outputs and experimental conditions; the material does not own device connections."
+      },
+      "verify": {
+        "zh": "由另一位使用者按资料调用相同工具，得到可核对的结果。",
+        "en": "Have another user follow the material with the same tools and obtain comparable results."
+      },
+      "color": "#807b68"
+    }
+  ],
+  "actors": [
+    {
+      "id": "Abenor-Labs",
+      "name": {
+        "zh": "Abenor-Labs",
+        "en": "Abenor-Labs"
+      },
+      "kind": "collaboration",
+      "github_type": "Organization",
+      "url": "https://github.com/Abenor-Labs",
+      "projects": [
+        "open-mhs-abenor"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/Abenor-Labs/Open-MHS"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "abogani",
+      "name": {
+        "zh": "abogani",
+        "en": "abogani"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/abogani",
+      "projects": [
+        "tango"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/abogani/tango-mcp"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "ac-rad",
+      "name": {
+        "zh": "AC-RAD 研究合作团队",
+        "en": "AC-RAD research collaboration"
+      },
+      "kind": "research",
+      "github_type": "Organization",
+      "url": "https://github.com/ac-rad",
+      "projects": [
+        "organa",
+        "clairify",
+        "clairify-chemspeed"
+      ],
+      "context": {
+        "zh": "ORGANA 项目列出多伦多大学、Vector Institute 与 NVIDIA 的作者；本目录还收录其 CLAIRify 系列。",
+        "en": "The ORGANA project lists authors from Toronto, Vector Institute and NVIDIA; this collection also includes the CLAIRify projects."
+      },
+      "sources": [
+        "https://ac-rad.github.io/organa/"
+      ],
+      "reviewed": "2026-10-21",
+      "standards": []
+    },
+    {
+      "id": "Adancurusul",
+      "name": {
+        "zh": "Adancurusul",
+        "en": "Adancurusul"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/Adancurusul",
+      "projects": [
+        "embedded-debugger"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/Adancurusul/embedded-debugger-mcp"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "AdvancedPhotonSource",
+      "name": {
+        "zh": "Argonne · Advanced Photon Source",
+        "en": "Argonne · Advanced Photon Source"
+      },
+      "kind": "research",
+      "github_type": "Organization",
+      "url": "https://github.com/AdvancedPhotonSource",
+      "projects": [
+        "eaa",
+        "eaa-pi",
+        "pi-experiment-ops",
+        "calms-aps"
+      ],
+      "context": {
+        "zh": "EAA、EAA-Pi、pi-experiment-ops 与 CALMS 分别承担实验助手、运行组件和设施实验流程。",
+        "en": "EAA, EAA-Pi, pi-experiment-ops and CALMS provide experiment assistants, runtime components and facility workflows."
+      },
+      "sources": [
+        "https://github.com/AdvancedPhotonSource",
+        "https://www.aps.anl.gov/"
+      ],
+      "reviewed": "2026-10-21",
+      "standards": []
+    },
+    {
+      "id": "aicell-lab",
+      "name": {
+        "zh": "KTH / SciLifeLab · AICell Lab",
+        "en": "KTH / SciLifeLab · AICell Lab"
+      },
+      "kind": "research",
+      "github_type": "Organization",
+      "url": "https://github.com/aicell-lab",
+      "projects": [
+        "agent-lens"
+      ],
+      "context": {
+        "zh": "Agent-Lens 连接显微采集、图像分析服务与数据组织。",
+        "en": "Agent-Lens connects microscopy, image-analysis services and data organization."
+      },
+      "sources": [
+        "https://aicell.io/",
+        "https://github.com/aicell-lab/agent-lens"
+      ],
+      "reviewed": "2026-10-21",
+      "standards": []
+    },
+    {
+      "id": "als-apg",
+      "name": {
+        "zh": "Berkeley Lab · ALS 加速器物理组",
+        "en": "Berkeley Lab · ALS Accelerator Physics Group"
+      },
+      "kind": "research",
+      "github_type": "Organization",
+      "url": "https://github.com/als-apg",
+      "projects": [
+        "osprey"
+      ],
+      "context": {
+        "zh": "Osprey 将设施知识与控制通道接到 Agent 工作流。",
+        "en": "Osprey connects facility knowledge and control channels to agent workflows."
+      },
+      "sources": [
+        "https://github.com/als-apg",
+        "https://als-apg.github.io/osprey/"
+      ],
+      "reviewed": "2026-10-21",
+      "standards": []
+    },
+    {
+      "id": "armchairdeity",
+      "name": {
+        "zh": "armchairdeity",
+        "en": "armchairdeity"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/armchairdeity",
+      "projects": [
+        "scpi-mcp"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/armchairdeity/mcp-server-scpi"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "BB-84C",
+      "name": {
+        "zh": "BB-84C",
+        "en": "BB-84C"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/BB-84C",
+      "projects": [
+        "quailbot"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/BB-84C/quailbot-pi"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "BioNanomics",
+      "name": {
+        "zh": "BioNanomics",
+        "en": "BioNanomics"
+      },
+      "kind": "collaboration",
+      "github_type": "Organization",
+      "url": "https://github.com/BioNanomics",
+      "projects": [
+        "microscope-agent"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/BioNanomics/microscope-agent"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "BrianDavidCouch",
+      "name": {
+        "zh": "BrianDavidCouch",
+        "en": "BrianDavidCouch"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/BrianDavidCouch",
+      "projects": [
+        "daqmx"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/BrianDavidCouch/daqmx-mcp"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "caidish",
+      "name": {
+        "zh": "caidish",
+        "en": "caidish"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/caidish",
+      "projects": [
+        "instrmcp"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/caidish/instrMCP"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "CFN-softbio",
+      "name": {
+        "zh": "Brookhaven · CFN 团队",
+        "en": "Brookhaven · CFN team"
+      },
+      "kind": "research",
+      "github_type": "Organization",
+      "url": "https://github.com/CFN-softbio",
+      "projects": [
+        "vision"
+      ],
+      "context": {
+        "zh": "VISION 由 CFN 研究人员与束线团队合作，将自然语言操作接到 NSLS-II 工作站。",
+        "en": "VISION connects natural-language operation to an NSLS-II workstation through CFN/beamline collaboration."
+      },
+      "sources": [
+        "https://github.com/CFN-softbio/VISION",
+        "https://www.bnl.gov/newsroom/news.php?a=122449"
+      ],
+      "reviewed": "2026-10-21",
+      "standards": []
+    },
+    {
+      "id": "Cuntinum",
+      "name": {
+        "zh": "Cuntinum",
+        "en": "Cuntinum"
+      },
+      "kind": "collaboration",
+      "github_type": "Organization",
+      "url": "https://github.com/Cuntinum",
+      "projects": [
+        "mhp-cuntinum"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/Cuntinum/model-hardware-protocol"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "daqifi",
+      "name": {
+        "zh": "DAQiFi",
+        "en": "DAQiFi"
+      },
+      "kind": "industry",
+      "github_type": "Organization",
+      "url": "https://github.com/daqifi",
+      "projects": [
+        "daqifi"
+      ],
+      "context": {
+        "zh": "设备厂商在自身 .NET SDK 中同时提供 MCP 接口。",
+        "en": "The hardware vendor provides an MCP interface within its .NET SDK."
+      },
+      "sources": [
+        "https://github.com/daqifi/daqifi-core"
+      ],
+      "reviewed": "2026-10-21",
+      "standards": []
+    },
+    {
+      "id": "deepmodeling",
+      "name": {
+        "zh": "deepmodeling",
+        "en": "deepmodeling"
+      },
+      "kind": "collaboration",
+      "github_type": "Organization",
+      "url": "https://github.com/deepmodeling",
+      "projects": [
+        "unilabos"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/deepmodeling/Uni-Lab-OS"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "di-omics",
+      "name": {
+        "zh": "di-omics",
+        "en": "di-omics"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/di-omics",
+      "projects": [
+        "plr-mcp"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/di-omics/plr-mcp"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "DIAOZHUO",
+      "name": {
+        "zh": "DIAOZHUO",
+        "en": "DIAOZHUO"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/DIAOZHUO",
+      "projects": [
+        "llm-spm"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/DIAOZHUO/LLM-directed-SPM"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "EvoEvolver",
+      "name": {
+        "zh": "EvoEvolver",
+        "en": "EvoEvolver"
+      },
+      "kind": "collaboration",
+      "github_type": "Organization",
+      "url": "https://github.com/EvoEvolver",
+      "projects": [
+        "k-agents"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/EvoEvolver/k_agents"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "fastly",
+      "name": {
+        "zh": "Fastly",
+        "en": "Fastly"
+      },
+      "kind": "industry",
+      "github_type": "Organization",
+      "url": "https://github.com/fastly",
+      "projects": [
+        "edge-mhs"
+      ],
+      "context": {
+        "zh": "提供设备访问的边缘网关参考实现。",
+        "en": "Provides a reference edge gateway for device access."
+      },
+      "sources": [
+        "https://github.com/fastly/edge-mhs"
+      ],
+      "reviewed": "2026-10-21",
+      "standards": []
+    },
+    {
+      "id": "fredabila",
+      "name": {
+        "zh": "fredabila",
+        "en": "fredabila"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/fredabila",
+      "projects": [
+        "oahl"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/fredabila/oahl"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "golioth",
+      "name": {
+        "zh": "Golioth",
+        "en": "Golioth"
+      },
+      "kind": "industry",
+      "github_type": "Organization",
+      "url": "https://github.com/golioth",
+      "projects": [
+        "tinymcp"
+      ],
+      "context": {
+        "zh": "通过已有设备管理与 RPC 服务提供动态 MCP 工具。",
+        "en": "Provides dynamic MCP tools through existing device-management and RPC services."
+      },
+      "sources": [
+        "https://github.com/golioth/tinymcp"
+      ],
+      "reviewed": "2026-10-21",
+      "standards": []
+    },
+    {
+      "id": "gomesgroup",
+      "name": {
+        "zh": "Carnegie Mellon · Gomes Group",
+        "en": "Carnegie Mellon · Gomes Group"
+      },
+      "kind": "research",
+      "github_type": "Organization",
+      "url": "https://github.com/gomesgroup",
+      "projects": [
+        "coscientist"
+      ],
+      "context": {
+        "zh": "Coscientist 研究语言模型组合工具进行自主化学实验。",
+        "en": "Coscientist studies language models composing tools for autonomous chemical experiments."
+      },
+      "sources": [
+        "https://engineering.cmu.edu/news-events/news/2023/12/20-ai-coscientist.html"
+      ],
+      "reviewed": "2026-10-21",
+      "standards": []
+    },
+    {
+      "id": "GSIBabu",
+      "name": {
+        "zh": "GSIBabu",
+        "en": "GSIBabu"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/GSIBabu",
+      "projects": [
+        "openflexure"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/GSIBabu/OpenFlexure-MCP"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "hsoffar",
+      "name": {
+        "zh": "hsoffar",
+        "en": "hsoffar"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/hsoffar",
+      "projects": [
+        "saleae"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/hsoffar/saleae-logic2-mcp"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "IndustriAgents",
+      "name": {
+        "zh": "IndustriAgents",
+        "en": "IndustriAgents"
+      },
+      "kind": "collaboration",
+      "github_type": "Organization",
+      "url": "https://github.com/IndustriAgents",
+      "projects": [
+        "opcua-industrial"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/IndustriAgents/OPCUA-MCP"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "ivoryos-ai",
+      "name": {
+        "zh": "ivoryos-ai",
+        "en": "ivoryos-ai"
+      },
+      "kind": "collaboration",
+      "github_type": "Organization",
+      "url": "https://github.com/ivoryos-ai",
+      "projects": [
+        "ivoryos"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/ivoryos-ai/IvoryOS"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "izumitkhr",
+      "name": {
+        "zh": "izumitkhr",
+        "en": "izumitkhr"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/izumitkhr",
+      "projects": [
+        "synagent"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/izumitkhr/synagent"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "JanGoebel",
+      "name": {
+        "zh": "JanGoebel",
+        "en": "JanGoebel"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/JanGoebel",
+      "projects": [
+        "labview-toolkit"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/JanGoebel/LabVIEW-MCP-Server-Toolkit"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "jumpstarter-dev",
+      "name": {
+        "zh": "jumpstarter-dev",
+        "en": "jumpstarter-dev"
+      },
+      "kind": "collaboration",
+      "github_type": "Organization",
+      "url": "https://github.com/jumpstarter-dev",
+      "projects": [
+        "jumpstarter"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/jumpstarter-dev/jumpstarter"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "K-Dense-AI",
+      "name": {
+        "zh": "K-Dense",
+        "en": "K-Dense"
+      },
+      "kind": "industry",
+      "github_type": "Organization",
+      "url": "https://github.com/K-Dense-AI",
+      "projects": [
+        "labmcp"
+      ],
+      "context": {
+        "zh": "维护 LabMCP 适配集合，当前组件清单以模拟验证为主。",
+        "en": "Maintains the LabMCP adapter collection, whose current catalogue is simulator-validated."
+      },
+      "sources": [
+        "https://github.com/K-Dense-AI/lab-instrument-mcps"
+      ],
+      "reviewed": "2026-10-21",
+      "standards": []
+    },
+    {
+      "id": "KenosInc",
+      "name": {
+        "zh": "KenosInc",
+        "en": "KenosInc"
+      },
+      "kind": "collaboration",
+      "github_type": "Organization",
+      "url": "https://github.com/KenosInc",
+      "projects": [
+        "dwf"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/KenosInc/dwf-mcp-server"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "KRATSZ",
+      "name": {
+        "zh": "KRATSZ",
+        "en": "KRATSZ"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/KRATSZ",
+      "projects": [
+        "labscriptai"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/KRATSZ/labscriptai-ot"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "kukapay",
+      "name": {
+        "zh": "kukapay",
+        "en": "kukapay"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/kukapay",
+      "projects": [
+        "opcua-kuka",
+        "modbus"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/kukapay/opcua-mcp"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "kushalsinha",
+      "name": {
+        "zh": "kushalsinha",
+        "en": "kushalsinha"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/kushalsinha",
+      "projects": [
+        "openmhp"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/kushalsinha/openmhp"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "kyu-softmatter",
+      "name": {
+        "zh": "kyu-softmatter",
+        "en": "kyu-softmatter"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/kyu-softmatter",
+      "projects": [
+        "agentic-microscope",
+        "soft-matter-agents"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/kyu-softmatter/agentic-microscope"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "labclaw",
+      "name": {
+        "zh": "labclaw",
+        "en": "labclaw"
+      },
+      "kind": "collaboration",
+      "github_type": "Organization",
+      "url": "https://github.com/labclaw",
+      "projects": [
+        "device-use",
+        "device-skills"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/labclaw/device-use"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "lagerdata",
+      "name": {
+        "zh": "lagerdata",
+        "en": "lagerdata"
+      },
+      "kind": "collaboration",
+      "github_type": "Organization",
+      "url": "https://github.com/lagerdata",
+      "projects": [
+        "lager"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/lagerdata/lager"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "lucasgerads",
+      "name": {
+        "zh": "lucasgerads",
+        "en": "lucasgerads"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/lucasgerads",
+      "projects": [
+        "lecroy"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/lucasgerads/lecroy-mcp"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "M3RG-IITD",
+      "name": {
+        "zh": "IIT Delhi · M3RG",
+        "en": "IIT Delhi · M3RG"
+      },
+      "kind": "research",
+      "github_type": "Organization",
+      "url": "https://github.com/M3RG-IITD",
+      "projects": [
+        "aila"
+      ],
+      "context": {
+        "zh": "AILA 研究语言模型在实际原子力显微镜任务中的工具使用与表现。",
+        "en": "AILA studies language-model tool use and performance on physical AFM tasks."
+      },
+      "sources": [
+        "https://github.com/M3RG-IITD",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC12521570/"
+      ],
+      "reviewed": "2026-10-21",
+      "standards": []
+    },
+    {
+      "id": "masahiro-999",
+      "name": {
+        "zh": "masahiro-999",
+        "en": "masahiro-999"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/masahiro-999",
+      "projects": [
+        "oscilloscope-mcp"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/masahiro-999/oscilloscope-mcp"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "mcherukara",
+      "name": {
+        "zh": "mcherukara",
+        "en": "mcherukara"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/mcherukara",
+      "projects": [
+        "calms"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/mcherukara/CALMS"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "mcp2everything",
+      "name": {
+        "zh": "mcp2everything",
+        "en": "mcp2everything"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/mcp2everything",
+      "projects": [
+        "mcp2serial"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/mcp2everything/mcp2serial"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "mp911de",
+      "name": {
+        "zh": "mp911de",
+        "en": "mp911de"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/mp911de",
+      "projects": [
+        "siglent"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/mp911de/siglent-scpi-mcp"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "nasa-jpl",
+      "name": {
+        "zh": "NASA · Jet Propulsion Laboratory",
+        "en": "NASA · Jet Propulsion Laboratory"
+      },
+      "kind": "research",
+      "github_type": "Organization",
+      "url": "https://github.com/nasa-jpl",
+      "projects": [
+        "rosa"
+      ],
+      "context": {
+        "zh": "ROSA 将自然语言助手与 ROS 工具结合。",
+        "en": "ROSA combines a natural-language assistant with ROS tools."
+      },
+      "sources": [
+        "https://github.com/nasa-jpl",
+        "https://github.com/nasa-jpl/rosa"
+      ],
+      "reviewed": "2026-10-21",
+      "standards": []
+    },
+    {
+      "id": "neogyk",
+      "name": {
+        "zh": "neogyk",
+        "en": "neogyk"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/neogyk",
+      "projects": [
+        "agent2device"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/neogyk/Agent2Device-Protocol"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "Netlist-Studio",
+      "name": {
+        "zh": "Netlist-Studio",
+        "en": "Netlist-Studio"
+      },
+      "kind": "collaboration",
+      "github_type": "Organization",
+      "url": "https://github.com/Netlist-Studio",
+      "projects": [
+        "scope-mcp"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/Netlist-Studio/scope-mcp"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "NVIDIA",
+      "name": {
+        "zh": "NVIDIA",
+        "en": "NVIDIA"
+      },
+      "kind": "industry",
+      "github_type": "Organization",
+      "url": "https://github.com/NVIDIA",
+      "projects": [
+        "nvidia-qca"
+      ],
+      "context": {
+        "zh": "量子校准 Agent 参考工程；具体控制设备通过用户实验脚本接入。",
+        "en": "A quantum calibration agent blueprint; user experiment scripts integrate specific controllers."
+      },
+      "sources": [
+        "https://github.com/NVIDIA/Quantum-Calibration-Agent-Blueprint"
+      ],
+      "reviewed": "2026-10-21",
+      "standards": []
+    },
+    {
+      "id": "nygmeta",
+      "name": {
+        "zh": "nygmeta",
+        "en": "nygmeta"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/nygmeta",
+      "projects": [
+        "openlabai"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/nygmeta/OpenLabAI"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "openUC2",
+      "name": {
+        "zh": "openUC2",
+        "en": "openUC2"
+      },
+      "kind": "collaboration",
+      "github_type": "Organization",
+      "url": "https://github.com/openUC2",
+      "projects": [
+        "uc2-hackathon"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/openUC2/Hackathon-UC2-LLM"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "pic-ai-robotic-chemistry",
+      "name": {
+        "zh": "pic-ai-robotic-chemistry",
+        "en": "pic-ai-robotic-chemistry"
+      },
+      "kind": "collaboration",
+      "github_type": "Organization",
+      "url": "https://github.com/pic-ai-robotic-chemistry",
+      "projects": [
+        "chemagents"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/pic-ai-robotic-chemistry/ChemAgents"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "pnnl",
+      "name": {
+        "zh": "Pacific Northwest National Laboratory",
+        "en": "Pacific Northwest National Laboratory"
+      },
+      "kind": "research",
+      "github_type": "Organization",
+      "url": "https://github.com/pnnl",
+      "projects": [
+        "autolabs"
+      ],
+      "context": {
+        "zh": "AutoLabs 公开实验设计、步骤表示与评估材料。",
+        "en": "AutoLabs releases experimental-design, step-representation and evaluation material."
+      },
+      "sources": [
+        "https://github.com/pnnl",
+        "https://github.com/pnnl/autolabs"
+      ],
+      "reviewed": "2026-10-21",
+      "standards": []
+    },
+    {
+      "id": "PUDAP",
+      "name": {
+        "zh": "PUDAP",
+        "en": "PUDAP"
+      },
+      "kind": "collaboration",
+      "github_type": "Organization",
+      "url": "https://github.com/PUDAP",
+      "projects": [
+        "puda"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/PUDAP/puda"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "robotmcp",
+      "name": {
+        "zh": "robotmcp",
+        "en": "robotmcp"
+      },
+      "kind": "collaboration",
+      "github_type": "Organization",
+      "url": "https://github.com/robotmcp",
+      "projects": [
+        "ros-mcp"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/robotmcp/ros-mcp-server"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "SCUT-ESA",
+      "name": {
+        "zh": "SCUT-ESA",
+        "en": "SCUT-ESA"
+      },
+      "kind": "collaboration",
+      "github_type": "Organization",
+      "url": "https://github.com/SCUT-ESA",
+      "projects": [
+        "open-mhs-scut"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/SCUT-ESA/open-mhs"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "ShuxiangCao",
+      "name": {
+        "zh": "ShuxiangCao",
+        "en": "ShuxiangCao"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/ShuxiangCao",
+      "projects": [
+        "leeq"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/ShuxiangCao/LeeQ"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "sryu81",
+      "name": {
+        "zh": "sryu81",
+        "en": "sryu81"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/sryu81",
+      "projects": [
+        "epics-mcp"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/sryu81/mcp-server-for-epics"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "SWITCHSCIENCE",
+      "name": {
+        "zh": "SWITCHSCIENCE",
+        "en": "SWITCHSCIENCE"
+      },
+      "kind": "collaboration",
+      "github_type": "Organization",
+      "url": "https://github.com/SWITCHSCIENCE",
+      "projects": [
+        "micropython"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/SWITCHSCIENCE/mcp-micropython-bridge"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "takuyaisogawa",
+      "name": {
+        "zh": "takuyaisogawa",
+        "en": "takuyaisogawa"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/takuyaisogawa",
+      "projects": [
+        "nvagent"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/takuyaisogawa/nv-autonomous-experiments"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "techmanual-ai",
+      "name": {
+        "zh": "techmanual-ai",
+        "en": "techmanual-ai"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/techmanual-ai",
+      "projects": [
+        "lablink"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/techmanual-ai/lablink-mcp"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "tongriyaotxt",
+      "name": {
+        "zh": "tongriyaotxt",
+        "en": "tongriyaotxt"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/tongriyaotxt",
+      "projects": [
+        "open-mhs-tong"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/tongriyaotxt/open-mhs"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "ur-whitelab",
+      "name": {
+        "zh": "ur-whitelab",
+        "en": "ur-whitelab"
+      },
+      "kind": "collaboration",
+      "github_type": "Organization",
+      "url": "https://github.com/ur-whitelab",
+      "projects": [
+        "chemcrow"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/ur-whitelab/chemcrow-public"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "yerbymatey",
+      "name": {
+        "zh": "yerbymatey",
+        "en": "yerbymatey"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/yerbymatey",
+      "projects": [
+        "opentrons"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/yerbymatey/opentrons-mcp"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "zeng-andrew",
+      "name": {
+        "zh": "zeng-andrew",
+        "en": "zeng-andrew"
+      },
+      "kind": "account",
+      "github_type": "User",
+      "url": "https://github.com/zeng-andrew",
+      "projects": [
+        "instrument-mcp"
+      ],
+      "context": {
+        "zh": "公开维护归属以这些仓库的命名空间为准。",
+        "en": "Public maintenance is identified by the repository namespace."
+      },
+      "sources": [
+        "https://github.com/zeng-andrew/instrument-mcp"
+      ],
+      "reviewed": "2026-10-20",
+      "standards": []
+    },
+    {
+      "id": "Zuehlke",
+      "name": {
+        "zh": "Zühlke",
+        "en": "Zühlke"
+      },
+      "kind": "industry",
+      "github_type": "Organization",
+      "url": "https://github.com/Zuehlke",
+      "projects": [
+        "labview-dev"
+      ],
+      "context": {
+        "zh": "提供 LabVIEW 程序读取、修改和运行的 Agent 开发接口。",
+        "en": "Provides an agent development interface for reading, editing and running LabVIEW programs."
+      },
+      "sources": [
+        "https://github.com/Zuehlke/labview-mcp"
+      ],
+      "reviewed": "2026-10-21",
+      "standards": []
+    },
+    {
+      "id": "Anthropic",
+      "name": {
+        "zh": "Anthropic",
+        "en": "Anthropic"
+      },
+      "kind": "industry",
+      "github_type": null,
+      "url": "https://www.anthropic.com/news/model-hardware-standard-research-preview",
+      "projects": [],
+      "standards": [
+        "mhs"
+      ],
+      "context": {
+        "zh": "发布或维护本目录中的 Model Hardware Standard (MHS) 资料。",
+        "en": "Publishes or maintains the Model Hardware Standard (MHS) material in this collection."
+      },
+      "sources": [
+        "https://www.anthropic.com/news/model-hardware-standard-research-preview",
+        "https://modelhardwarestandard.com/"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "id": "MCP-project",
+      "name": {
+        "zh": "Model Context Protocol 项目",
+        "en": "Model Context Protocol project"
+      },
+      "kind": "standards",
+      "github_type": null,
+      "url": "https://modelcontextprotocol.io/",
+      "projects": [],
+      "standards": [
+        "mcp"
+      ],
+      "context": {
+        "zh": "发布或维护本目录中的 Model Context Protocol (MCP) 资料。",
+        "en": "Publishes or maintains the Model Context Protocol (MCP) material in this collection."
+      },
+      "sources": [
+        "https://modelcontextprotocol.io/docs/learn/architecture",
+        "https://tasks.extensions.modelcontextprotocol.io/",
+        "https://tasks.extensions.modelcontextprotocol.io/specification/draft/tasks"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "id": "SiLA",
+      "name": {
+        "zh": "SiLA 标准组织",
+        "en": "SiLA standards organization"
+      },
+      "kind": "standards",
+      "github_type": null,
+      "url": "https://sila-standard.com/",
+      "projects": [],
+      "standards": [
+        "sila"
+      ],
+      "context": {
+        "zh": "发布或维护本目录中的 SiLA 2 资料。",
+        "en": "Publishes or maintains the SiLA 2 material in this collection."
+      },
+      "sources": [
+        "https://sila2.gitlab.io/sila_python/",
+        "https://sila2.gitlab.io/sila_python/content/api/framework/index.html"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "id": "OPC-Foundation",
+      "name": {
+        "zh": "OPC Foundation",
+        "en": "OPC Foundation"
+      },
+      "kind": "standards",
+      "github_type": null,
+      "url": "https://opcfoundation.org/",
+      "projects": [],
+      "standards": [
+        "lads"
+      ],
+      "context": {
+        "zh": "发布或维护本目录中的 OPC UA / LADS 资料。",
+        "en": "Publishes or maintains the OPC UA / LADS material in this collection."
+      },
+      "sources": [
+        "https://reference.opcfoundation.org/specs/OPC-30500-1/4.1.2.2",
+        "https://reference.opcfoundation.org/specs/OPC-30500-1/7.2"
+      ],
+      "reviewed": "2026-10-20"
+    },
+    {
+      "id": "W3C",
+      "name": {
+        "zh": "World Wide Web Consortium",
+        "en": "World Wide Web Consortium"
+      },
+      "kind": "standards",
+      "github_type": null,
+      "url": "https://www.w3.org/TR/wot-thing-description/",
+      "projects": [],
+      "standards": [
+        "wot"
+      ],
+      "context": {
+        "zh": "发布或维护本目录中的 W3C Web of Things 资料。",
+        "en": "Publishes or maintains the W3C Web of Things material in this collection."
+      },
+      "sources": [
+        "https://www.w3.org/TR/wot-thing-description/"
+      ],
+      "reviewed": "2026-10-20"
+    }
+  ],
+  "profiles": [
+    {
+      "id": "openmhp",
+      "actor": "kushalsinha",
+      "route": "contract",
+      "domain": "cross",
+      "path": [
+        "Agent",
+        "MCP / CLI / SDK",
+        "OpenMHP jobs & leases",
+        "device adapter"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把一次工具调用扩展为有身份、资源占用、事件和结果的设备任务。",
+        "en": "Extends a tool call into a device job with identity, resource ownership, events and results."
+      },
+      "difference": {
+        "zh": "相较单设备 MCP 桥，重点在共同生命周期与按需能力描述；当前设备包的证据主要来自孪生测试。",
+        "en": "Compared with a device-specific MCP bridge, the emphasis is a shared lifecycle and on-demand capabilities; current device-package evidence is primarily twin testing."
+      },
+      "reuse": {
+        "zh": "借鉴任务、租约与结果结构；逐型号补齐真实读回和运行记录。",
+        "en": "Reuse job, lease and result structures; establish physical readback and run records for each model."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/kushalsinha/openmhp/blob/main/README.md",
+        "https://github.com/kushalsinha/openmhp/blob/main/SPEC.md",
+        "https://github.com/kushalsinha/openmhp/blob/main/supported-devices/README.md",
+        "https://github.com/kushalsinha/openmhp/blob/main/supported-devices/biologic-sp300/driver.py"
+      ]
+    },
+    {
+      "id": "open-mhs-abenor",
+      "actor": "Abenor-Labs",
+      "route": "contract",
+      "domain": "cross",
+      "path": [
+        "Agent",
+        "MCP / REST",
+        "capability tags",
+        "serial robotic-arm driver"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "用能力标签与基类，把不同设备的传感、动作和状态组织成可发现的接口。",
+        "en": "Uses capability tags and base classes to make sensing, actions and state discoverable."
+      },
+      "difference": {
+        "zh": "重点是设备表示与串口适配示例，规模与验证范围不同于完整的实验室执行系统。",
+        "en": "Focuses on device representation and a serial adapter example, with a different scope from a complete laboratory runtime."
+      },
+      "reuse": {
+        "zh": "研究能力标签怎样映射到驱动方法，并为每个标签定义返回语义。",
+        "en": "Study the mapping from capability tags to driver methods and define each return meaning."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/Abenor-Labs/Open-MHS/blob/main/README.md",
+        "https://github.com/Abenor-Labs/Open-MHS/blob/main/open_mhs/drivers/serial_robotic_arm.py",
+        "https://github.com/Abenor-Labs/Open-MHS/blob/main/schema/capability_schema.json"
+      ]
+    },
+    {
+      "id": "open-mhs-tong",
+      "actor": "tongriyaotxt",
+      "route": "contract",
+      "domain": "cross",
+      "path": [
+        "Agent",
+        "MCP dispatch",
+        "command / skill execution",
+        "robot backend"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "在注册和命令接口之上加入可组合的机器人动作与技能。",
+        "en": "Adds robot actions and skills above registration and command interfaces."
+      },
+      "difference": {
+        "zh": "与其他 Open-MHS 同名但代码独立；机器人后端与 MuJoCo 路径应分别评估。",
+        "en": "Shares the Open-MHS name but is independently implemented; robot and MuJoCo paths have distinct evidence."
+      },
+      "reuse": {
+        "zh": "参考命令分派与动作组合；把具体后端能力写进设备描述。",
+        "en": "Reuse command dispatch and action composition, with explicit backend capabilities."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/tongriyaotxt/open-mhs/blob/main/README.md",
+        "https://github.com/tongriyaotxt/open-mhs/blob/main/src/openmhs/mcp/server.py"
+      ]
+    },
+    {
+      "id": "open-mhs-scut",
+      "actor": "SCUT-ESA",
+      "route": "contract",
+      "domain": "cross",
+      "path": [
+        "Agent",
+        "MCP / REST / CLI",
+        "explicit backend",
+        "VISA device"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把统一接口落到可选择的后端，并公布两个具体型号的接机结果。",
+        "en": "Connects a common interface to explicit backends and reports tests on two named models."
+      },
+      "difference": {
+        "zh": "实机记录覆盖指定 UNI-T 示波器与信号源；其他 I/O 条目有不同状态。",
+        "en": "Hardware records cover specified UNI-T scope and generator models; other I/O entries have different statuses."
+      },
+      "reuse": {
+        "zh": "借鉴后端选择和型号级验证表，避免把模拟与实机混在同一状态。",
+        "en": "Reuse backend selection and model-level verification records."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/SCUT-ESA/open-mhs/blob/main/README.md",
+        "https://github.com/SCUT-ESA/open-mhs/blob/main/src/openmhs/core/backend.py"
+      ]
+    },
+    {
+      "id": "mhp-cuntinum",
+      "actor": "Cuntinum",
+      "route": "contract",
+      "domain": "cross",
+      "path": [
+        "Agent",
+        "MCP / Python / TypeScript",
+        "khp driver & state bus",
+        "device"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "以少量读、写、执行、发现操作和共享状态组织设备接口。",
+        "en": "Organizes device access around discovery, read, write, execute and shared state."
+      },
+      "difference": {
+        "zh": "与 OpenMHP 的任务/租约组织不同；应比较具体状态传播与驱动行为，而非相近名称。",
+        "en": "Differs from OpenMHP’s job/lease organization; compare state propagation and driver behavior."
+      },
+      "reuse": {
+        "zh": "比较四类操作是否足够表达设备模式、异步任务与外部状态变化。",
+        "en": "Evaluate how the operation set represents modes, asynchronous work and external state changes."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/Cuntinum/model-hardware-protocol/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "oahl",
+      "actor": "fredabila",
+      "route": "contract",
+      "domain": "cross",
+      "path": [
+        "Agent SDK",
+        "OAHL node & reservation",
+        "transport plugin",
+        "physical device"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把设备节点、适配器、传输与占用生命周期分开，支持本地和可选远程发现。",
+        "en": "Separates nodes, adapters, transport and reservation lifecycle, with local and optional remote discovery."
+      },
+      "difference": {
+        "zh": "公开演示是手机 ADB 操作；测量单位、校准和科学数据仍需领域层补充。",
+        "en": "The public demonstration uses phone ADB control; metrology and scientific data need a domain layer."
+      },
+      "reuse": {
+        "zh": "参考可插拔传输和设备占用机制，再增加测量对象与过程语义。",
+        "en": "Reuse pluggable transport and reservations, then add measurement and procedure semantics."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/fredabila/oahl/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "instrmcp",
+      "actor": "caidish",
+      "route": "runtime",
+      "domain": "cross",
+      "path": [
+        "Agent",
+        "MCP",
+        "live Jupyter kernel",
+        "QCoDeS Station",
+        "instrument driver"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "直接复用实验室已经初始化的内核、仪器连接与测量状态。",
+        "en": "Reuses an already initialized kernel, instrument connections and measurement state."
+      },
+      "difference": {
+        "zh": "与另起设备服务器相比，连接所有权留在现有 QCoDeS 会话；新鲜读数与缓存有明确路径。",
+        "en": "Unlike a separate device server, ownership remains in the existing QCoDeS session, with explicit fresh and cached read paths."
+      },
+      "reuse": {
+        "zh": "适合渐进接入已有实验室；继续定义内核重启、任务身份和共享资源行为。",
+        "en": "Useful for incremental integration; define kernel-restart, job-identity and shared-resource behavior."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/caidish/instrMCP/blob/main/README.md",
+        "https://github.com/caidish/instrMCP/blob/main/instrmcp/servers/jupyter_qcodes/backend/qcodes.py"
+      ]
+    },
+    {
+      "id": "puda",
+      "actor": "PUDAP",
+      "route": "runtime",
+      "domain": "cross",
+      "path": [
+        "Agent CLI / Skills",
+        "protocol runner",
+        "NATS",
+        "edge driver",
+        "machine"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "将通信、驱动、实验过程和结果记录分开，Agent 可以操作无头执行平台。",
+        "en": "Separates communication, drivers, procedures and records in a headless execution platform."
+      },
+      "difference": {
+        "zh": "相较单设备服务，更关心跨组件分发与运行环境；CLI 是主要 Agent 入口。",
+        "en": "Compared with single-device services, it emphasizes distributed dispatch and environments, with a CLI as the main agent surface."
+      },
+      "reuse": {
+        "zh": "参考边缘驱动与实验运行器的边界，以及过程文件到结果记录的对应关系。",
+        "en": "Reuse the boundary between edge drivers and experiment runners and the procedure-to-result mapping."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/PUDAP/puda/blob/main/README.md",
+        "https://github.com/PUDAP/puda/blob/main/apps/cli/internal/cli/protocol-run.go",
+        "https://arxiv.org/abs/2607.26464"
+      ]
+    },
+    {
+      "id": "unilabos",
+      "actor": "deepmodeling",
+      "route": "workflow",
+      "domain": "cross",
+      "path": [
+        "Agent / workflow",
+        "action-resource model",
+        "ROS 2",
+        "device modules"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把动作、资源和实验室拓扑放进统一编排模型，支持跨设备实验。",
+        "en": "Models actions, resources and laboratory topology together for multi-device workflows."
+      },
+      "difference": {
+        "zh": "需要理解实验室布局和设备角色；框架与设备目录的许可不同。",
+        "en": "Requires laboratory topology and device roles; framework and device-directory licenses differ."
+      },
+      "reuse": {
+        "zh": "借鉴资源图与工作流编译，同时为适配器定义独立可复用边界。",
+        "en": "Reuse resource graphs and workflow compilation while defining independently reusable adapter boundaries."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/README.md",
+        "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/NOTICE",
+        "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/unilabos/devices/LICENSE",
+        "https://github.com/deepmodeling/Uni-Lab-OS/blob/main/docs/developer_guide/add_device.md",
+        "https://arxiv.org/abs/2512.21766"
+      ]
+    },
+    {
+      "id": "osprey",
+      "actor": "als-apg",
+      "route": "runtime",
+      "domain": "facility",
+      "path": [
+        "Agent / MCP / CLI",
+        "semantic channel lookup",
+        "facility connector",
+        "EPICS / TANGO / DOOCS"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "让 Agent 在大量设施通道中按设备意义查找与调用，复用设施知识。",
+        "en": "Lets agents find and operate facility channels through semantic context and facility knowledge."
+      },
+      "difference": {
+        "zh": "比直接 PV/属性读写桥多出设施上下文与工作流组织；现有写入流程含人工批准。",
+        "en": "Adds facility context and workflow organization beyond raw PV/attribute bridges; the current write path includes human approval."
+      },
+      "reuse": {
+        "zh": "研究语义寻址怎样连接到真实通道，以及设施知识如何随运行记录更新。",
+        "en": "Study how semantic addresses resolve to real channels and how facility knowledge relates to run records."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/als-apg/osprey/blob/main/README.md",
+        "https://github.com/als-apg/osprey/blob/main/docs/source/architecture/mcp-servers.rst",
+        "https://doi.org/10.1063/5.0306302"
+      ]
+    },
+    {
+      "id": "ivoryos",
+      "actor": "ivoryos-ai",
+      "route": "workflow",
+      "domain": "cross",
+      "path": [
+        "Python automation objects",
+        "introspection",
+        "UI / workflow",
+        "existing device methods"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "从已有 Python 对象提取可操作功能，降低把脚本变成可组合实验的成本。",
+        "en": "Extracts operations from existing Python objects, lowering the cost of turning scripts into composable experiments."
+      },
+      "difference": {
+        "zh": "通过对象内省接入，而非要求先重写统一驱动；自然语言设计是可选能力。",
+        "en": "Integrates through introspection rather than requiring a rewritten driver interface; natural-language design is optional."
+      },
+      "reuse": {
+        "zh": "借鉴渐进接入方式，并给自动提取的方法补齐物理含义和结果字段。",
+        "en": "Reuse incremental adoption and attach physical meaning and result fields to extracted methods."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/ivoryos-ai/IvoryOS/blob/main/README.md",
+        "https://github.com/ivoryos-ai/IvoryOS/blob/main/ivoryos/parsers/introspection.py",
+        "https://www.nature.com/articles/s41467-025-60514-w"
+      ]
+    },
+    {
+      "id": "jumpstarter",
+      "actor": "jumpstarter-dev",
+      "route": "runtime",
+      "domain": "embedded",
+      "path": [
+        "Agent / test / CI",
+        "CLI / Python",
+        "lease & exporter",
+        "hardware interfaces"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把共享硬件变成可租用、可编程的测试资源，统一人工、CI 与 Agent 的入口。",
+        "en": "Makes shared hardware a leasable programmable test resource for humans, CI and agents."
+      },
+      "difference": {
+        "zh": "核心是硬件资源与测试基础设施；实验推理和科学量语义位于其上层。",
+        "en": "Focuses on hardware resources and test infrastructure; experiment reasoning and metrology sit above it."
+      },
+      "reuse": {
+        "zh": "借鉴设备占用、远程导出和复现测试环境。",
+        "en": "Reuse hardware leasing, remote exporters and reproducible test environments."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/jumpstarter-dev/jumpstarter/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "lager",
+      "actor": "lagerdata",
+      "route": "runtime",
+      "domain": "bench",
+      "path": [
+        "Agent / CI CLI",
+        "bench Linux box",
+        "named Net",
+        "instrument channel"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "用命名测试点抽象实际仪器通道，并把脚本放到台架主机执行。",
+        "en": "Abstracts instrument channels as named test points and executes scripts on the bench host."
+      },
+      "difference": {
+        "zh": "相较直接写厂商指令，程序面向供电轨、总线和探针；换仪器时可保留测试点名称。",
+        "en": "Programs address rails, buses and probes rather than vendor commands, preserving names when instruments change."
+      },
+      "reuse": {
+        "zh": "借鉴物理连接命名与本地过程执行，记录测试点到通道的版本映射。",
+        "en": "Reuse physical connection naming and local execution with versioned net-to-channel mappings."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/lagerdata/lager/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "eaa",
+      "actor": "AdvancedPhotonSource",
+      "route": "runtime",
+      "domain": "cross",
+      "path": [
+        "Experiment agent",
+        "image-aware tools",
+        "instrument services",
+        "experiment"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把图像结果、工作流与实验会话纳入同一 Agent 环境。",
+        "en": "Combines image results, workflows and experiment sessions in one agent environment."
+      },
+      "difference": {
+        "zh": "研究贡献在视觉实验运行方式；仓库已指向 EAA-Pi，应沿迁移关系阅读。",
+        "en": "Contributes an environment for visual experiments; the repository points to EAA-Pi as its successor."
+      },
+      "reuse": {
+        "zh": "研究实验上下文和视觉工具结果怎样跨步骤保留。",
+        "en": "Study persistence of experiment context and visual tool results."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/EAA/blob/main/README.md",
+        "https://pmc.ncbi.nlm.nih.gov/articles/PMC13633048/"
+      ]
+    },
+    {
+      "id": "eaa-pi",
+      "actor": "AdvancedPhotonSource",
+      "route": "runtime",
+      "domain": "cross",
+      "path": [
+        "Terminal / web UI",
+        "pi-experiment-ops",
+        "MCP instrument server",
+        "device"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "终端和网页共用实验工作区，使不同交互入口使用同一工具与会话。",
+        "en": "Shares an experiment workspace between terminal and web interfaces."
+      },
+      "difference": {
+        "zh": "它是应用入口；仪器驱动来自下游 MCP 服务，旧 EAA 实验结果不能自动转移。",
+        "en": "It is an application entry point; drivers are supplied by downstream MCP services and legacy EAA evidence does not transfer automatically."
+      },
+      "reuse": {
+        "zh": "借鉴界面与执行环境的分离，保留可替换的 Agent 前端。",
+        "en": "Reuse separation of interface and runtime to keep agent frontends replaceable."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/EAA-Pi/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "pi-experiment-ops",
+      "actor": "AdvancedPhotonSource",
+      "route": "runtime",
+      "domain": "cross",
+      "path": [
+        "Pi agent",
+        "extension / CodeMode",
+        "persistent tools",
+        "MCP services"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "为实验 Agent 提供后台运行、持久终端、会话检索及工具执行组件。",
+        "en": "Provides background work, persistent terminals, session retrieval and tool execution for experiment agents."
+      },
+      "difference": {
+        "zh": "相比 EAA-Pi 的界面，这里提供可复用运行组件；具体硬件由外部服务承担。",
+        "en": "Provides reusable runtime components beneath EAA-Pi; hardware is supplied by external services."
+      },
+      "reuse": {
+        "zh": "借鉴会话生命周期与仪器任务生命周期的分离。",
+        "en": "Reuse the distinction between conversation lifetime and instrument-job lifetime."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/pi-experiment-ops/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "labmcp",
+      "actor": "K-Dense-AI",
+      "route": "bridge",
+      "domain": "bench",
+      "path": [
+        "Agent",
+        "MCP server package",
+        "device protocol adapter",
+        "simulated backend"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把多个设备连接器按一致方式组织、安装和发现，形成可扩展的适配仓库。",
+        "en": "Packages multiple instrument connectors for consistent installation and discovery."
+      },
+      "difference": {
+        "zh": "覆盖面来自 32 个组件；当前目录全部为模拟状态，不能作为 32 类实机验证。",
+        "en": "Breadth comes from 32 components, all currently marked simulated rather than 32 hardware validations."
+      },
+      "reuse": {
+        "zh": "借鉴组件清单、工具命名和型号级贡献流程，用实机记录逐步扩展。",
+        "en": "Reuse component inventories, tool naming and model-specific contribution workflows."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/README.md",
+        "https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/packages/labmcp/src/labmcp/catalog.json"
+      ]
+    },
+    {
+      "id": "lablink",
+      "actor": "techmanual-ai",
+      "route": "bridge",
+      "domain": "bench",
+      "path": [
+        "Agent",
+        "MCP",
+        "configured transport",
+        "VISA / SSH / REST / Serial / Python"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "用一个服务汇合多种实验室已有通信入口，减少逐协议接线成本。",
+        "en": "Brings several existing laboratory transports into one service."
+      },
+      "difference": {
+        "zh": "传输通用性较强；设备的量、模式和操作结果仍由命令配置与驱动解释。",
+        "en": "Broad transport coverage leaves quantities, modes and outcomes to command configuration and drivers."
+      },
+      "reuse": {
+        "zh": "作为异构设备接入层，另行建立共同的测量与动作语义。",
+        "en": "Use as a heterogeneous access layer with a shared measurement and action model above it."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/techmanual-ai/lablink-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "scpi-mcp",
+      "actor": "armchairdeity",
+      "route": "bridge",
+      "domain": "bench",
+      "path": [
+        "Agent",
+        "goal-level scope tools",
+        "Rigol backend",
+        "PyVISA / SCPI"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把采集目标封装成示波器工具，减少 Agent 直接拼接底层命令。",
+        "en": "Packages acquisition goals as scope tools instead of asking an agent to assemble low-level commands."
+      },
+      "difference": {
+        "zh": "采用有边界的设备操作面，首个目标为 Rigol DS1054Z；不是任意 SCPI 透传。",
+        "en": "Uses a bounded operation surface targeting Rigol DS1054Z rather than arbitrary SCPI passthrough."
+      },
+      "reuse": {
+        "zh": "比较目标级操作与原始指令的分工，为稳定测量过程建立模板。",
+        "en": "Compare goal-level operations with raw commands and build reusable measurement procedures."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/armchairdeity/mcp-server-scpi/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "oscilloscope-mcp",
+      "actor": "masahiro-999",
+      "route": "bridge",
+      "domain": "bench",
+      "path": [
+        "Agent",
+        "MCP acquisition tools",
+        "SCPI over TCP",
+        "oscilloscope"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把示波器设置、触发与波形结果组织成 Agent 可读的反馈。",
+        "en": "Combines scope configuration, triggering and waveforms into agent-readable feedback."
+      },
+      "difference": {
+        "zh": "除数值外提供图像和独立波形页面，适合观察信号形状的调试任务。",
+        "en": "Provides images and standalone waveform pages as well as numerical results for signal-debugging tasks."
+      },
+      "reuse": {
+        "zh": "借鉴波形摘要与完整数据同时返回的方式。",
+        "en": "Reuse paired waveform summaries and full-data artifacts."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/masahiro-999/oscilloscope-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "lecroy",
+      "actor": "lucasgerads",
+      "route": "bridge",
+      "domain": "bench",
+      "path": [
+        "Agent",
+        "MCP",
+        "VXI-11 / USB SCPI",
+        "LeCroy oscilloscope"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "提供 LeCroy 示波器的具体连接与波形采集路径。",
+        "en": "Provides a concrete connection and waveform-acquisition path for LeCroy scopes."
+      },
+      "difference": {
+        "zh": "协议选择影响能否接通：该实现使用 VXI-11 / USB，不支持 VICP。",
+        "en": "Transport choice is decisive: this implementation uses VXI-11 / USB, not VICP."
+      },
+      "reuse": {
+        "zh": "为适配器同时记录品牌、型号、传输与模式，避免仅按品牌匹配。",
+        "en": "Record brand, model, transport and mode when matching an adapter."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/lucasgerads/lecroy-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "siglent",
+      "actor": "mp911de",
+      "route": "bridge",
+      "domain": "bench",
+      "path": [
+        "Agent",
+        "typed MCP tools",
+        "logged SCPI / TCP",
+        "scope & supply"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "同时覆盖示波器和电源，并把实际指令留在记录中。",
+        "en": "Covers scopes and supplies while recording the actual instrument commands."
+      },
+      "difference": {
+        "zh": "实测型号与波形缩放链有具体记录，便于定位数据解释错误。",
+        "en": "Named hardware tests and waveform scaling records help identify data-interpretation errors."
+      },
+      "reuse": {
+        "zh": "借鉴从原始波形到物理单位的转换记录及台架复现材料。",
+        "en": "Reuse waveform-to-unit conversion records and bench reproduction material."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/mp911de/siglent-scpi-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "scope-mcp",
+      "actor": "Netlist-Studio",
+      "route": "bridge",
+      "domain": "bench",
+      "path": [
+        "Agent",
+        "MCP",
+        "PyVISA / Ethernet SCPI",
+        "Keysight / Agilent scope"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "集中提供截图、波形、测量和解码，形成较完整的示波器操作面。",
+        "en": "Combines screenshots, waveforms, measurements and decoding into a scope operation surface."
+      },
+      "difference": {
+        "zh": "给出实测型号与固件版本；可据此判断兼容范围，而非依赖品牌标签。",
+        "en": "Names a tested model and firmware, enabling a concrete compatibility assessment."
+      },
+      "reuse": {
+        "zh": "建立带固件版本的驱动兼容表和测量结果格式。",
+        "en": "Build firmware-specific compatibility records and measurement-result formats."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/Netlist-Studio/scope-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "dwf",
+      "actor": "KenosInc",
+      "route": "bridge",
+      "domain": "bench",
+      "path": [
+        "Agent",
+        "MCP",
+        "dwfpy",
+        "WaveForms SDK",
+        "Digilent device"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "复用 WaveForms SDK，让同一设备的模拟与数字功能进入工具接口。",
+        "en": "Reuses the WaveForms SDK to expose analog and digital device functions."
+      },
+      "difference": {
+        "zh": "SDK 封装减少底层开发，但运行仍需要独立的厂商库。",
+        "en": "SDK wrapping reduces low-level work while retaining a separate vendor-runtime dependency."
+      },
+      "reuse": {
+        "zh": "清楚分开开源适配层、厂商运行库与设备能力描述。",
+        "en": "Separate the open adapter, vendor runtime and capability description."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/KenosInc/dwf-mcp-server/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "instrument-mcp",
+      "actor": "zeng-andrew",
+      "route": "bridge",
+      "domain": "bench",
+      "path": [
+        "Agent",
+        "MCP sessions",
+        "YAML commands",
+        "SCPI / Modbus / USB devices"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "用配置描述命令并管理多仪器会话，覆盖射频与环境测试设备。",
+        "en": "Uses configuration-defined commands and multi-instrument sessions for RF and environmental testing."
+      },
+      "difference": {
+        "zh": "核心差异是配置式适配；命令映射仍需给出单位、返回解析和型号约束。",
+        "en": "The distinguishing mechanism is configuration-driven adaptation, which still needs units, response parsing and model constraints."
+      },
+      "reuse": {
+        "zh": "研究哪些差异可配置化，哪些必须保留在驱动代码中。",
+        "en": "Determine which differences belong in configuration and which require driver code."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/zeng-andrew/instrument-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "daqmx",
+      "actor": "BrianDavidCouch",
+      "route": "bridge",
+      "domain": "bench",
+      "path": [
+        "Agent",
+        "MCP / plugin",
+        "nidaqmx",
+        "NI DAQ input channels"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把 NI 设备发现与有限长度输入采集做成紧凑工具集。",
+        "en": "Provides a compact toolset for NI device discovery and finite input acquisition."
+      },
+      "difference": {
+        "zh": "范围明确聚焦输入；输出、连续采集与任意属性写入不在当前实现内。",
+        "en": "Deliberately focuses on input; output, continuous acquisition and arbitrary property writes are outside its current scope."
+      },
+      "reuse": {
+        "zh": "为采集任务定义长度、时钟、输入类型和完成条件。",
+        "en": "Define acquisition length, timing, input types and completion conditions."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/BrianDavidCouch/daqmx-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "daqifi",
+      "actor": "daqifi",
+      "route": "bridge",
+      "domain": "bench",
+      "path": [
+        "Agent",
+        "MCP",
+        "DAQiFi .NET SDK",
+        "Wi-Fi / USB device"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "由设备厂商在同一 SDK 上提供 Agent 接口，贯通配置、采集与记录下载。",
+        "en": "The device vendor exposes agent access through its SDK, joining configuration, acquisition and record download."
+      },
+      "difference": {
+        "zh": "与外部社区包装不同，MCP 与设备 SDK 同仓维护；能力仍按型号区分。",
+        "en": "MCP and the device SDK share a vendor-maintained repository; capabilities remain model-specific."
+      },
+      "reuse": {
+        "zh": "借鉴厂商维护驱动与开放工具接口共同演进的方式。",
+        "en": "Reuse the pattern of co-evolving vendor drivers and open tool interfaces."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/daqifi/daqifi-core/blob/main/README.md",
+        "https://github.com/daqifi/daqifi-core/tree/main/src/Daqifi.Mcp"
+      ]
+    },
+    {
+      "id": "labview-toolkit",
+      "actor": "JanGoebel",
+      "route": "bridge",
+      "domain": "bench",
+      "path": [
+        "Agent",
+        "MCP HTTP toolkit",
+        "exposed VI",
+        "existing device code"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "让实验室直接暴露已有 VI，保留已经工作的仪器控制程序。",
+        "en": "Exposes existing VIs while preserving working instrument-control code."
+      },
+      "difference": {
+        "zh": "处理的是运行接口；与修改 VI 内部图形程序的开发工具不同。",
+        "en": "Provides a runtime interface, distinct from development tools that edit VI internals."
+      },
+      "reuse": {
+        "zh": "定义 VI 的参数、物理影响和结果契约，再包装成可发现能力。",
+        "en": "Define VI arguments, physical effects and results before publishing discoverable capabilities."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/JanGoebel/LabVIEW-MCP-Server-Toolkit/blob/main/readme.md"
+      ]
+    },
+    {
+      "id": "labview-dev",
+      "actor": "Zuehlke",
+      "route": "development",
+      "domain": "bench",
+      "path": [
+        "Agent",
+        "MCP",
+        "gRPC lvai.LVAI",
+        "LabVIEW program editing / running"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把 LabVIEW 程序本身纳入 Agent 的读取、修改与运行循环。",
+        "en": "Brings LabVIEW programs into an agent’s read-edit-run loop."
+      },
+      "difference": {
+        "zh": "它改变的是控制软件；真实设备能力取决于 VI，接口还依赖内部 LabVIEW 服务。",
+        "en": "It changes control software; hardware capability depends on the VI and access relies on an internal LabVIEW service."
+      },
+      "reuse": {
+        "zh": "区分开发期编辑与运行期仪器操作，分别保存程序版本和实验记录。",
+        "en": "Separate development-time editing from runtime device operation and retain both program versions and experiment records."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/Zuehlke/labview-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "openflexure",
+      "actor": "GSIBabu",
+      "route": "bridge",
+      "domain": "imaging",
+      "path": [
+        "Agent",
+        "MCP",
+        "OpenFlexure Python client",
+        "microscope HTTP API"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "在现有开源显微镜控制 API 上提供移动、成像与对焦工具。",
+        "en": "Adds motion, imaging and focus tools above an existing open microscope API."
+      },
+      "difference": {
+        "zh": "接入依赖已联网的 OpenFlexure 系统，主要新增的是 Agent 调用面。",
+        "en": "Builds on a networked OpenFlexure system; the principal addition is the agent-facing surface."
+      },
+      "reuse": {
+        "zh": "借鉴对焦与 Z-stack 等过程级能力，而不只暴露单步电机命令。",
+        "en": "Reuse procedure-level capabilities such as autofocus and Z-stacks."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/GSIBabu/OpenFlexure-MCP/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "microscope-agent",
+      "actor": "BioNanomics",
+      "route": "bridge",
+      "domain": "imaging",
+      "path": [
+        "Agent",
+        "MCP",
+        "Nikon / GenICam adapter",
+        "stage & camera"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "将图像、真实位置与状态修订号关联，让后续判断知道观察来自哪个配置。",
+        "en": "Associates images with actual position and state revisions so decisions can identify the observed configuration."
+      },
+      "difference": {
+        "zh": "比仅返回图片的工具多出测量上下文；开放的运动范围有明确约束。",
+        "en": "Adds measurement context beyond image-only tools, with a clearly bounded motion surface."
+      },
+      "reuse": {
+        "zh": "把图像与位置、曝光、配置版本作为同一次观测返回。",
+        "en": "Return image, position, exposure and configuration revision as one observation."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/BioNanomics/microscope-agent/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "agent-lens",
+      "actor": "aicell-lab",
+      "route": "workflow",
+      "domain": "imaging",
+      "path": [
+        "Agent / web UI",
+        "Hypha services",
+        "microscope & sample handling",
+        "OME-Zarr / BioEngine"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把显微采集、样品转移、分析服务和图像数据组织成一套工作平台。",
+        "en": "Combines microscopy, sample handling, analysis services and image data in one working platform."
+      },
+      "difference": {
+        "zh": "价值在服务协同和数据组织；接入主线是 Hypha，而非以 MCP 为唯一中心。",
+        "en": "Emphasizes service coordination and data organization, with Hypha as its main integration mechanism."
+      },
+      "reuse": {
+        "zh": "借鉴采集、分析与数据浏览共用同一实验对象的设计。",
+        "en": "Reuse shared experiment objects across acquisition, analysis and data browsing."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/aicell-lab/agent-lens/blob/main/README.md",
+        "https://github.com/aicell-lab/agent-lens/blob/main/agent_lens/register_tools_service.py"
+      ]
+    },
+    {
+      "id": "agentic-microscope",
+      "actor": "kyu-softmatter",
+      "route": "bridge",
+      "domain": "imaging",
+      "path": [
+        "Research goal",
+        "MCP configuration",
+        "calibrated device settings",
+        "apply & readback"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把研究目标转成校准范围内的显微配置，并检查应用后的实际状态。",
+        "en": "Translates research goals into calibrated microscope settings and checks the applied state."
+      },
+      "difference": {
+        "zh": "强调配置含义与实际回读，覆盖显微镜、光镊和压电平台；代码向后继仓库迁移。",
+        "en": "Emphasizes configuration meaning and readback across microscopy, tweezers and piezo stages; code is migrating to a successor repository."
+      },
+      "reuse": {
+        "zh": "建立目标参数、设备参数和观测状态之间可检查的映射。",
+        "en": "Build inspectable mappings among goal parameters, device parameters and observed state."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/kyu-softmatter/agentic-microscope/blob/main/README.md",
+        "https://github.com/kyu-softmatter/agentic-microscope/blob/main/hardware/microscope.py"
+      ]
+    },
+    {
+      "id": "soft-matter-agents",
+      "actor": "kyu-softmatter",
+      "route": "workflow",
+      "domain": "imaging",
+      "path": [
+        "Agent workflow",
+        "microscope_agent / simulation / literature modules",
+        "configured backend"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把显微控制、模拟与文献模块组合成软物质实验工作流。",
+        "en": "Combines microscope control, simulation and literature modules for soft-matter workflows."
+      },
+      "difference": {
+        "zh": "研究能力分布在多个模块；只有实际设备模块承担物理控制。",
+        "en": "Research capabilities are distributed across modules; physical control resides in the device module."
+      },
+      "reuse": {
+        "zh": "借鉴模块分工与迁移关系，分别记录模拟、知识和实机执行的产物。",
+        "en": "Reuse module separation and track simulation, knowledge and hardware outputs distinctly."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/kyu-softmatter/soft-matter-agents/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "aila",
+      "actor": "M3RG-IITD",
+      "route": "experiment",
+      "domain": "imaging",
+      "path": [
+        "Research request",
+        "planning & feedback agents",
+        "AFM control tools",
+        "AFM experiment"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把任务分解、工具执行与反馈判断用于实际 AFM 实验，并提供评测材料。",
+        "en": "Applies task decomposition, tool execution and feedback assessment to AFM experiments with evaluation material."
+      },
+      "difference": {
+        "zh": "主要贡献是实验任务上的 Agent 组织与表现；不是跨厂商 AFM 互操作规范。",
+        "en": "Contributes agent organization and performance on experimental tasks rather than a cross-vendor AFM standard."
+      },
+      "reuse": {
+        "zh": "借鉴真实任务、仪器环境与失败类型共同构成的评测方式。",
+        "en": "Reuse evaluations that tie tasks to the instrument environment and failure types."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/M3RG-IITD/AILA/blob/main/README.md",
+        "https://www.nature.com/articles/s41467-025-64105-7"
+      ]
+    },
+    {
+      "id": "llm-spm",
+      "actor": "DIAOZHUO",
+      "route": "experiment",
+      "domain": "imaging",
+      "path": [
+        "User task",
+        "domain model & knowledge",
+        "WebSocket / spmutil",
+        "scanning probe microscope"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把扫描探针知识、命令生成和专门小模型结合，研究领域模型如何操作仪器。",
+        "en": "Combines scanning-probe knowledge, command generation and specialized small models for instrument operation."
+      },
+      "difference": {
+        "zh": "与只调用通用大模型的桥接不同，公开材料包含模型训练与本地服务。",
+        "en": "Unlike a thin bridge to a general model, the release includes model-training and local-serving material."
+      },
+      "reuse": {
+        "zh": "研究领域知识应放进模型、技能还是设备描述，并用同一实验任务比较。",
+        "en": "Compare where domain knowledge belongs: model weights, skills or device descriptions."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/DIAOZHUO/LLM-directed-SPM/blob/main/readme.md",
+        "https://arxiv.org/abs/2602.20669"
+      ]
+    },
+    {
+      "id": "quailbot",
+      "actor": "BB-84C",
+      "route": "runtime",
+      "domain": "imaging",
+      "path": [
+        "Pi agent",
+        "workspace contract",
+        "instrument CLI / nqctl",
+        "Nanonis backend"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "用固定工作区契约组织参数、动作、图像与多步程序，分开记录动作和观察。",
+        "en": "Uses a workspace contract for parameters, actions, images and procedures, recording actions separately from observations."
+      },
+      "difference": {
+        "zh": "以 CLI 与工作区文件承接仪器能力；Nanonis 驱动仍由外部 nqctl 提供。",
+        "en": "Uses CLI and workspace files as its instrument surface; the Nanonis driver remains an external nqctl dependency."
+      },
+      "reuse": {
+        "zh": "借鉴工作区作为实验状态与操作知识载体，明确外部驱动版本。",
+        "en": "Reuse the workspace as a carrier of state and operating knowledge, with explicit driver versions."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/BB-84C/quailbot-pi/blob/main/README.md",
+        "https://arxiv.org/abs/2609.27302"
+      ]
+    },
+    {
+      "id": "vision",
+      "actor": "CFN-softbio",
+      "route": "experiment",
+      "domain": "facility",
+      "path": [
+        "Voice / text",
+        "classification & code generation",
+        "Bluesky workstation",
+        "beamline"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "将自然语言意图转成已有束线环境可执行的操作代码。",
+        "en": "Translates natural-language intent into operations executable in an existing beamline environment."
+      },
+      "difference": {
+        "zh": "重点在自然交互与模块化任务转换；确定性执行由 Bluesky 等既有系统承担。",
+        "en": "Focuses on natural interaction and modular intent translation, leaving deterministic execution to existing systems such as Bluesky."
+      },
+      "reuse": {
+        "zh": "借鉴意图到可审阅实验计划的转换，并保留生成代码与运行结果。",
+        "en": "Reuse intent-to-plan translation and retain generated code alongside execution results."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/CFN-softbio/VISION/blob/main/README.md",
+        "https://doi.org/10.1088/2632-2153/add9e4"
+      ]
+    },
+    {
+      "id": "leeq",
+      "actor": "ShuxiangCao",
+      "route": "runtime",
+      "domain": "quantum",
+      "path": [
+        "Experiment agent / Python",
+        "LeeQ experiment & sweep",
+        "pulse backend",
+        "quantum device"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "提供可被 Agent 发现和执行的量子实验对象、扫描、校准状态与结果分析。",
+        "en": "Provides discoverable quantum experiment objects, sweeps, calibration state and result analysis."
+      },
+      "difference": {
+        "zh": "它是实验与控制基础，而 k-agents 等负责选择和评价实验。",
+        "en": "It supplies experiment/control infrastructure while agents such as k-agents select and assess experiments."
+      },
+      "reuse": {
+        "zh": "借鉴可组合实验对象，以及实验描述与结果检查接口。",
+        "en": "Reuse composable experiment objects, descriptions and result-inspection interfaces."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/ShuxiangCao/LeeQ/blob/main/README.md",
+        "https://doi.org/10.1016/j.patter.2025.101372"
+      ]
+    },
+    {
+      "id": "k-agents",
+      "actor": "EvoEvolver",
+      "route": "experiment",
+      "domain": "quantum",
+      "path": [
+        "Calibration agent",
+        "experiment selection & inspection",
+        "LeeQ",
+        "quantum experiment"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "围绕已有实验库建立选择、执行和视觉判断的校准循环。",
+        "en": "Builds a calibration loop of selection, execution and visual inspection around an existing experiment library."
+      },
+      "difference": {
+        "zh": "把实验知识用于下一步决策；当前 README 指向 NVIDIA 后继参考工程。",
+        "en": "Uses experimental knowledge for subsequent decisions; its README points to NVIDIA’s successor reference project."
+      },
+      "reuse": {
+        "zh": "借鉴实验技能的描述、发现与校准结果判断。",
+        "en": "Reuse descriptions, discovery and outcome assessment of experiment skills."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/EvoEvolver/k_agents/blob/main/README.md",
+        "https://arxiv.org/abs/2412.07978"
+      ]
+    },
+    {
+      "id": "nvidia-qca",
+      "actor": "NVIDIA",
+      "route": "experiment",
+      "domain": "quantum",
+      "path": [
+        "Calibration agent",
+        "registered Python experiment",
+        "user control backend",
+        "results store"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "提供实验发现、执行、图像分析与结果存储的校准 Agent 参考结构。",
+        "en": "Provides a reference calibration-agent structure for experiment discovery, execution, image analysis and results."
+      },
+      "difference": {
+        "zh": "用户提供实验脚本完成设备接入；平台知名度不能替代具体控制器适配。",
+        "en": "User-supplied experiment scripts connect the hardware; controller integration remains explicit."
+      },
+      "reuse": {
+        "zh": "借鉴实验插件与结果模型，让控制器接入独立于 Agent 界面。",
+        "en": "Reuse experiment plugins and result models while keeping controller integration independent of the agent UI."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/NVIDIA/Quantum-Calibration-Agent-Blueprint/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "calms",
+      "actor": "mcherukara",
+      "route": "experiment",
+      "domain": "facility",
+      "path": [
+        "User task",
+        "retrieved instrument context",
+        "Python tool calls",
+        "facility device"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "将设施知识检索与可执行操作函数结合，减少纯对话与实际操作的脱节。",
+        "en": "Combines facility-context retrieval with executable functions to connect conversation to operations."
+      },
+      "difference": {
+        "zh": "相较纯手册问答，它能调用工具；后续 APS 版本进一步连接机器人与纳米探针。",
+        "en": "Goes beyond manual retrieval through tool calls; later APS work connects robots and nanoprobe tasks."
+      },
+      "reuse": {
+        "zh": "让操作知识与工具签名、设备上下文一起版本化。",
+        "en": "Version operating knowledge together with tool signatures and device context."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/mcherukara/CALMS/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "calms-aps",
+      "actor": "AdvancedPhotonSource",
+      "route": "experiment",
+      "domain": "facility",
+      "path": [
+        "Experiment agent",
+        "teachable workflow",
+        "robot / nanoprobe commands",
+        "experiment"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把可教学的实验流程连接到机器人与 X-ray nanoprobe 操作。",
+        "en": "Connects teachable experimental workflows to robot and X-ray nanoprobe operations."
+      },
+      "difference": {
+        "zh": "重点由通用设施助手转向具体实验流程；发布内容与早期 CALMS 分仓维护。",
+        "en": "Moves from a general facility assistant toward specific workflows and is maintained separately from early CALMS."
+      },
+      "reuse": {
+        "zh": "研究专家示范如何形成可读、可执行并可修改的实验过程。",
+        "en": "Study how expert demonstrations become readable, executable and editable procedures."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/CALMS/blob/main/README.md",
+        "https://doi.org/10.1038/s41524-026-02005-0"
+      ]
+    },
+    {
+      "id": "opentrons",
+      "actor": "yerbymatey",
+      "route": "bridge",
+      "domain": "liquids",
+      "path": [
+        "Agent",
+        "MCP",
+        "Opentrons HTTP API",
+        "OT-2 / Flex"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把机器人协议与运行管理直接接到 Agent，同时提供相关文档查询。",
+        "en": "Connects robot protocols and run management to agents alongside documentation lookup."
+      },
+      "difference": {
+        "zh": "依赖机器人已有 HTTP 服务；知识检索与真正驱动动作的工具承担不同职责。",
+        "en": "Relies on the robot’s existing HTTP service; retrieval and motion-causing tools have different roles."
+      },
+      "reuse": {
+        "zh": "把协议文件、运行 ID、步骤状态和样品信息连成同一记录。",
+        "en": "Connect protocol files, run IDs, step state and sample identity in one record."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/yerbymatey/opentrons-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "plr-mcp",
+      "actor": "di-omics",
+      "route": "bridge",
+      "domain": "liquids",
+      "path": [
+        "Agent",
+        "MCP",
+        "PyLabRobot",
+        "chatterbox / STAR backend"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "复用 PyLabRobot 的设备和资源模型，一次连接多类液体处理设备。",
+        "en": "Reuses PyLabRobot device/resource models across several liquid-handling devices."
+      },
+      "difference": {
+        "zh": "抽象层较高，默认验证来自模拟器；真实 STAR 后端是独立部署路径。",
+        "en": "Uses a higher-level abstraction with default simulator validation; a real STAR backend is a separate deployment path."
+      },
+      "reuse": {
+        "zh": "沿用既有甲板和容器模型，为真实液体过程补充运行记录。",
+        "en": "Reuse deck and container models and add records of real liquid-handling processes."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/di-omics/plr-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "openlabai",
+      "actor": "nygmeta",
+      "route": "workflow",
+      "domain": "liquids",
+      "path": [
+        "Agent",
+        "MCP workflow",
+        "robot-specific API / COM / PyLabRobot",
+        "robot"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "尝试把不同液体处理平台接到共同的自然语言工作流中。",
+        "en": "Connects several liquid-handling platforms to natural-language workflows."
+      },
+      "difference": {
+        "zh": "各后端进度不一致；已实测的 OT-2 读取与归位不能代表所有执行动作。",
+        "en": "Backend coverage differs; tested OT-2 reads and homing do not establish all execution actions."
+      },
+      "reuse": {
+        "zh": "按动作和后端维护能力矩阵，将接机与工作流复用分别验证。",
+        "en": "Maintain capability records per action/backend and verify integration separately from workflow reuse."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/nygmeta/OpenLabAI/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "labscriptai",
+      "actor": "KRATSZ",
+      "route": "workflow",
+      "domain": "liquids",
+      "path": [
+        "Agent plugin / Skills",
+        "protocol generation",
+        "local simulation",
+        "Opentrons"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把写协议、模拟和运行辅助放进同一 Agent 开发流程。",
+        "en": "Integrates protocol writing, simulation and run assistance in an agent development workflow."
+      },
+      "difference": {
+        "zh": "更偏实验程序开发与使用体验；其限制性许可影响商业复用。",
+        "en": "Emphasizes experimental-program development and operation; its restrictive license affects commercial reuse."
+      },
+      "reuse": {
+        "zh": "借鉴编写、检查、执行、回读之间的连续工作流。",
+        "en": "Reuse the continuous workflow from authoring and checking to execution and readback."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/KRATSZ/labscriptai-ot/blob/main/README.md",
+        "https://doi.org/10.1101/2025.09.30.679666"
+      ]
+    },
+    {
+      "id": "coscientist",
+      "actor": "gomesgroup",
+      "route": "experiment",
+      "domain": "liquids",
+      "path": [
+        "Research goal",
+        "literature & code tools",
+        "laboratory API",
+        "robotic chemistry"
+      ],
+      "path_scope": "research",
+      "contribution": {
+        "zh": "展示语言模型如何组合检索、编程和实验工具完成化学任务。",
+        "en": "Demonstrates a language model combining retrieval, programming and experiment tools for chemistry tasks."
+      },
+      "difference": {
+        "zh": "价值在端到端研究组织与实验展示；公共发布与论文完整实验环境不同。",
+        "en": "Contributes end-to-end research organization and experiments; the public release differs from the full paper environment."
+      },
+      "reuse": {
+        "zh": "借鉴研究任务的工具分解和实验反馈设计，另行落实实验室接入。",
+        "en": "Reuse task decomposition and feedback design while implementing laboratory integration separately."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/gomesgroup/coscientist/blob/main/README.md",
+        "https://doi.org/10.1038/s41586-023-06792-0"
+      ]
+    },
+    {
+      "id": "chemagents",
+      "actor": "pic-ai-robotic-chemistry",
+      "route": "experiment",
+      "domain": "liquids",
+      "path": [
+        "Research agents",
+        "robot instructions",
+        "ROS / robot drivers",
+        "chemistry workstation"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "将化学任务规划、机器人操作和实验数据连接为多 Agent 研究流程。",
+        "en": "Connects chemical planning, robot operations and experimental data in a multi-agent workflow."
+      },
+      "difference": {
+        "zh": "机器人指令集、AGV 和机械臂驱动分布在外部仓库，系统边界跨多个工程。",
+        "en": "Robot instructions, AGV and arm drivers live in external repositories, so the system spans several projects."
+      },
+      "reuse": {
+        "zh": "用依赖图明确每个模块的输入、输出和设备责任。",
+        "en": "Use dependency graphs to define each module’s inputs, outputs and device responsibilities."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/pic-ai-robotic-chemistry/ChemAgents/blob/main/README.md",
+        "https://doi.org/10.1021/jacs.4c17738"
+      ]
+    },
+    {
+      "id": "organa",
+      "actor": "ac-rad",
+      "route": "experiment",
+      "domain": "liquids",
+      "path": [
+        "User intent",
+        "perception & task planning",
+        "robot execution",
+        "experiment report"
+      ],
+      "path_scope": "research",
+      "contribution": {
+        "zh": "论文把用户意图、场景感知和实验进度用于机器人下一步决策。",
+        "en": "The paper uses user intent, scene perception and experiment progress to choose robot actions."
+      },
+      "difference": {
+        "zh": "所列公开仓库主要是网站源码；可学习系统方法与实验证据，不能据此取得完整控制软件。",
+        "en": "The listed repository mainly contains website source, providing methods and experiment evidence rather than a complete controller release."
+      },
+      "reuse": {
+        "zh": "借鉴感知、实验进度与报告之间的关系，控制实现需另找明确发布。",
+        "en": "Reuse the relationship among perception, experiment progress and reporting; locate a distinct release for controller code."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/ac-rad/organa/blob/main/README.md",
+        "https://arxiv.org/abs/2401.06949"
+      ]
+    },
+    {
+      "id": "clairify",
+      "actor": "ac-rad",
+      "route": "workflow",
+      "domain": "liquids",
+      "path": [
+        "Natural-language procedure",
+        "XDL generation",
+        "verification & revision",
+        "external executor"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把实验步骤转换为可检查的结构化过程，并用验证反馈修正生成结果。",
+        "en": "Converts experimental instructions into structured procedures and revises them using verification feedback."
+      },
+      "difference": {
+        "zh": "主要公开贡献是生成器与数据；过程语言的有效性与机器人执行能力是两层。",
+        "en": "The principal release is the generator and data; procedure validity and robot execution are separate layers."
+      },
+      "reuse": {
+        "zh": "借鉴生成、验证和修订循环，同时把设备可用能力接入验证器。",
+        "en": "Reuse the generate-verify-revise loop and connect the verifier to available device capabilities."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/ac-rad/xdl-generation/blob/master/README.md",
+        "https://arxiv.org/abs/2303.14100"
+      ]
+    },
+    {
+      "id": "clairify-chemspeed",
+      "actor": "ac-rad",
+      "route": "workflow",
+      "domain": "liquids",
+      "path": [
+        "Natural language",
+        "program generation",
+        "Chemspyd",
+        "Chemspeed platform"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "将语言到实验程序的转换具体连接到 Chemspyd 接口。",
+        "en": "Connects language-to-procedure generation specifically to Chemspyd."
+      },
+      "difference": {
+        "zh": "相较通用 XDL 生成，面向一个既有设备编程接口，迁移依赖平台能力。",
+        "en": "Targets an existing device programming interface rather than a general XDL generator."
+      },
+      "reuse": {
+        "zh": "借鉴在成熟实验 API 之上生成程序，并保存程序与运行版本。",
+        "en": "Reuse program generation above an established experiment API and retain program/run versions."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/ac-rad/clairify-chemspeed/blob/master/README.md",
+        "https://doi.org/10.1039/D4DD00046C"
+      ]
+    },
+    {
+      "id": "synagent",
+      "actor": "izumitkhr",
+      "route": "experiment",
+      "domain": "liquids",
+      "path": [
+        "XRD / SEM MaiML data",
+        "hypothesis & skill generation",
+        "output.txt",
+        "external dLab"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "用预测、实验反馈和证实/证伪交替更新对薄膜合成的理解。",
+        "en": "Updates its understanding of thin-film synthesis through predictions, feedback and alternating verification/falsification."
+      },
+      "difference": {
+        "zh": "公开程序是逐轮规划器，靠数据文件与 dLab 交换条件；不是沉积与搬运驱动集合。",
+        "en": "The public program is an iteration planner exchanging files with dLab, not a collection of deposition and transport drivers."
+      },
+      "reuse": {
+        "zh": "借鉴假设、预期结果、实测结果和下一轮条件的结构化关联。",
+        "en": "Reuse structured links among hypotheses, predicted outcomes, measurements and next conditions."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/izumitkhr/synagent/blob/main/README.md",
+        "https://arxiv.org/abs/2609.18598"
+      ]
+    },
+    {
+      "id": "autolabs",
+      "actor": "pnnl",
+      "route": "experiment",
+      "domain": "liquids",
+      "path": [
+        "Research prompt",
+        "multi-agent revision",
+        "Lab Step Representation",
+        "simulation / evaluation"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把实验设计输出为可检查的步骤表示，便于比较方案和迭代修订。",
+        "en": "Expresses experimental designs as inspectable steps for comparison and revision."
+      },
+      "difference": {
+        "zh": "公共应用偏规划、模拟与评估；真实设备执行不是该发布的完整交付。",
+        "en": "The public application emphasizes planning, simulation and evaluation rather than a complete hardware executor."
+      },
+      "reuse": {
+        "zh": "借鉴中间步骤表示，让规划输出能被独立检查与后续执行器消费。",
+        "en": "Reuse intermediate step representations that can be checked independently and consumed by an executor."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/pnnl/autolabs/blob/master/README.md",
+        "https://arxiv.org/abs/2509.25651"
+      ]
+    },
+    {
+      "id": "opcua-kuka",
+      "actor": "kukapay",
+      "route": "bridge",
+      "domain": "facility",
+      "path": [
+        "Agent",
+        "MCP",
+        "OPC UA client",
+        "server address space",
+        "industrial device"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "在已有 OPC UA 设备服务前增加浏览和读写工具，利用现有工业接入。",
+        "en": "Adds browse/read/write tools in front of existing OPC UA device services."
+      },
+      "difference": {
+        "zh": "主要完成协议桥接；变量的单位、模式与作用由服务端信息模型决定。",
+        "en": "Primarily bridges protocols; variable units, modes and effects come from the server information model."
+      },
+      "reuse": {
+        "zh": "优先保留 OPC UA 信息模型，把 Agent 参数准确映射到节点。",
+        "en": "Preserve the OPC UA information model and map agent arguments to nodes precisely."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/kukapay/opcua-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "opcua-industrial",
+      "actor": "IndustriAgents",
+      "route": "bridge",
+      "domain": "facility",
+      "path": [
+        "Agent",
+        "local MCP process",
+        "OPC UA subscriptions / methods",
+        "endpoint"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把订阅、历史与告警加入 Agent 的工业状态观察，并提供配置化写入。",
+        "en": "Adds subscriptions, history and alarms to industrial observation with configured write access."
+      },
+      "difference": {
+        "zh": "比只读写单点更关注持续状态；一个进程对应一个端点。",
+        "en": "Goes beyond single-point access toward ongoing state; one process connects to one endpoint."
+      },
+      "reuse": {
+        "zh": "借鉴事件驱动观察，并把端点会话与上层实验任务分开。",
+        "en": "Reuse event-driven observation while separating endpoint sessions from experiment jobs."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/IndustriAgents/OPCUA-MCP/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "modbus",
+      "actor": "kukapay",
+      "route": "bridge",
+      "domain": "facility",
+      "path": [
+        "Agent",
+        "MCP",
+        "Modbus client",
+        "coils / registers",
+        "PLC / sensor"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "为大量已有控制器提供简单的寄存器与线圈访问入口。",
+        "en": "Provides simple register/coil access to existing controllers."
+      },
+      "difference": {
+        "zh": "底层地址可读写不代表量纲与设备意图已描述；映射表仍是关键知识。",
+        "en": "Readable addresses do not encode physical units or intent; the device map remains essential."
+      },
+      "reuse": {
+        "zh": "把寄存器表提升为带单位、比例、模式和读回规则的能力描述。",
+        "en": "Turn register maps into capabilities with units, scaling, modes and readback rules."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/kukapay/modbus-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "tango",
+      "actor": "abogani",
+      "route": "bridge",
+      "domain": "facility",
+      "path": [
+        "Agent",
+        "MCP",
+        "PyTango database / device proxy",
+        "TANGO device server"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "复用设施数据库发现设备，并映射属性、状态、命令和批量读取。",
+        "en": "Reuses the facility database for discovery and maps attributes, state, commands and batch reads."
+      },
+      "difference": {
+        "zh": "在已有 TANGO 语义上适配，设备服务器继续承担底层控制。",
+        "en": "Adapts existing TANGO semantics while device servers retain low-level control."
+      },
+      "reuse": {
+        "zh": "保留设备名、属性与状态转换的原始含义，减少重复建模。",
+        "en": "Preserve original device names, attributes and state transitions to avoid duplicate modeling."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/abogani/tango-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "epics-mcp",
+      "actor": "sryu81",
+      "route": "bridge",
+      "domain": "facility",
+      "path": [
+        "Agent",
+        "MCP",
+        "standalone server / IOC library",
+        "CA / PVA",
+        "process variables"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "提供独立服务与 IOC 内嵌两种部署位置，使工具入口贴近现有控制系统。",
+        "en": "Offers standalone and IOC-embedded deployment so tool access can sit near the existing control system."
+      },
+      "difference": {
+        "zh": "部署拓扑与连接所有权是主要差异；PV 的科学含义仍需设施上下文。",
+        "en": "Deployment topology and connection ownership distinguish it; PV meaning still needs facility context."
+      },
+      "reuse": {
+        "zh": "比较在 IOC 内部和外部持有连接的代价与状态一致性。",
+        "en": "Compare connection ownership and state consistency inside versus outside an IOC."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/sryu81/mcp-server-for-epics/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "mcp2serial",
+      "actor": "mcp2everything",
+      "route": "bridge",
+      "domain": "embedded",
+      "path": [
+        "Agent",
+        "MCP",
+        "serial connection",
+        "MCU firmware",
+        "attached hardware"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "让自制仪器从串口获得基本 Agent 入口，接入门槛较低。",
+        "en": "Provides a basic serial agent interface for custom instruments."
+      },
+      "difference": {
+        "zh": "协议语义留在固件与串口命令中，需要自行定义完成状态与结果格式。",
+        "en": "Semantics remain in firmware and serial commands, including completion and result formats."
+      },
+      "reuse": {
+        "zh": "把串口桥作为起点，补齐设备能力、命令响应和测量时间。",
+        "en": "Use the serial bridge as a starting point and define capabilities, responses and measurement timing."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/mcp2everything/mcp2serial/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "tinymcp",
+      "actor": "golioth",
+      "route": "bridge",
+      "domain": "embedded",
+      "path": [
+        "Agent",
+        "MCP",
+        "Golioth management API",
+        "device RPC",
+        "embedded device"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "从已有设备 RPC 描述动态生成工具，复用设备管理平台。",
+        "en": "Generates tools dynamically from existing device RPC descriptions."
+      },
+      "difference": {
+        "zh": "新增入口较轻，但设备发现和通信依赖 Golioth 平台。",
+        "en": "Adds a lightweight interface while discovery and communication depend on Golioth."
+      },
+      "reuse": {
+        "zh": "借鉴设备发布能力 schema 的方式，明确平台服务的依赖边界。",
+        "en": "Reuse device-published capability schemas with explicit platform dependencies."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/golioth/tinymcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "embedded-debugger",
+      "actor": "Adancurusul",
+      "route": "development",
+      "domain": "embedded",
+      "path": [
+        "Agent",
+        "MCP / CLI",
+        "probe-rs / OpenOCD",
+        "debug probe",
+        "target MCU"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把编译后的固件与真实芯片状态连接，让 Agent 能观察断点、内存与故障。",
+        "en": "Connects firmware to real chip state so an agent can inspect breakpoints, memory and faults."
+      },
+      "difference": {
+        "zh": "操作对象是调试目标与固件，不等同于实验用的高层仪器动作。",
+        "en": "Operates on debug targets and firmware rather than high-level scientific instrument actions."
+      },
+      "reuse": {
+        "zh": "建立固件版本、刷写、运行与测量反馈之间的可追踪循环。",
+        "en": "Build traceable loops among firmware versions, flashing, execution and measurements."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/Adancurusul/embedded-debugger-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "saleae",
+      "actor": "hsoffar",
+      "route": "development",
+      "domain": "embedded",
+      "path": [
+        "Agent",
+        "MCP",
+        "Logic 2 automation",
+        "logic analyzer",
+        "physical bus"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把真实数字总线采样、协议解码和时序结果反馈给开发 Agent。",
+        "en": "Returns real bus captures, protocol decoding and timing results to development agents."
+      },
+      "difference": {
+        "zh": "价值在观察外部信号；设备程序的执行仍由被测系统完成。",
+        "en": "Contributes external signal observation while the target system executes its own program."
+      },
+      "reuse": {
+        "zh": "将源代码变化与总线轨迹对照，定位仪器控制链中的时序问题。",
+        "en": "Compare code changes with bus traces to locate timing problems in instrument control."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/hsoffar/saleae-logic2-mcp/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "micropython",
+      "actor": "SWITCHSCIENCE",
+      "route": "development",
+      "domain": "embedded",
+      "path": [
+        "Agent",
+        "MCP",
+        "serial / WebREPL",
+        "MicroPython helpers",
+        "MCU I/O"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "让 Agent 通过可编程固件直接操作板级 I/O，并保留硬件说明。",
+        "en": "Uses programmable firmware for board-level I/O and retains hardware descriptions."
+      },
+      "difference": {
+        "zh": "硬件能力可以通过设备侧代码扩展；它同时涉及开发接口和运行接口。",
+        "en": "Capabilities can be extended through device-side code, spanning development and runtime interfaces."
+      },
+      "reuse": {
+        "zh": "把引脚、接线和设备侧 helper 与固件版本一同管理。",
+        "en": "Manage pin maps, wiring and helpers together with firmware versions."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/SWITCHSCIENCE/mcp-micropython-bridge/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "ros-mcp",
+      "actor": "robotmcp",
+      "route": "bridge",
+      "domain": "robotics",
+      "path": [
+        "Agent",
+        "MCP",
+        "rosbridge",
+        "ROS topics / services / actions",
+        "robot"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把 ROS 图中的通信对象直接呈现给 Agent，复用既有机器人生态。",
+        "en": "Exposes ROS communication objects to agents and reuses the existing robotics ecosystem."
+      },
+      "difference": {
+        "zh": "解决发现和调用；运动规划、控制频率和执行反馈仍由机器人栈提供。",
+        "en": "Solves discovery and invocation while the robot stack supplies planning, timing and feedback."
+      },
+      "reuse": {
+        "zh": "保留 topic、service、action 的不同生命周期，不压成同一种同步调用。",
+        "en": "Preserve the distinct lifecycles of topics, services and actions."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/robotmcp/ros-mcp-server/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "rosa",
+      "actor": "nasa-jpl",
+      "route": "experiment",
+      "domain": "robotics",
+      "path": [
+        "Language agent",
+        "extensible ROS tools",
+        "ROS 1 / ROS 2",
+        "robot"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "将机器人状态诊断、信息查询与操作工具放入自然语言助手。",
+        "en": "Combines robot diagnosis, inspection and operation tools in a natural-language assistant."
+      },
+      "difference": {
+        "zh": "Agent 工具框架本身承担交互与推理，与纯 ROS 到 MCP 的适配角色不同。",
+        "en": "The framework owns interaction/reasoning, unlike a pure ROS-to-MCP adapter."
+      },
+      "reuse": {
+        "zh": "借鉴领域工具如何表达机器人状态和可操作范围。",
+        "en": "Reuse domain tools that express robot state and operation scope."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/nasa-jpl/rosa/blob/main/README.md",
+        "https://arxiv.org/abs/2410.06472"
+      ]
+    },
+    {
+      "id": "device-use",
+      "actor": "labclaw",
+      "route": "gui",
+      "domain": "cross",
+      "path": [
+        "Agent / VLM",
+        "observe-plan-act",
+        "mouse / keyboard",
+        "instrument software"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把没有可用 API 的仪器软件纳入屏幕观察和操作循环。",
+        "en": "Brings instrument software without usable APIs into an observe-and-operate loop."
+      },
+      "difference": {
+        "zh": "接口依赖可见界面与软件版本，适合与 SDK 路径比较维护和验证成本。",
+        "en": "Depends on the visible UI and software version, with different maintenance and verification costs from SDK access."
+      },
+      "reuse": {
+        "zh": "使用设备 profile 记录界面状态、操作步骤和动作后的结果检查。",
+        "en": "Use device profiles for UI state, actions and post-action result checks."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/labclaw/device-use/blob/main/README.md",
+        "https://github.com/labclaw/device-use/blob/main/src/device_use/integrations/mcp_server.py"
+      ]
+    },
+    {
+      "id": "device-skills",
+      "actor": "labclaw",
+      "route": "knowledge",
+      "domain": "cross",
+      "path": [
+        "Device operating knowledge",
+        "Agent Skills",
+        "agent",
+        "separate device-use runtime"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "把仪器操作知识作为可复用材料交给 Agent。",
+        "en": "Provides reusable instrument operating knowledge to agents."
+      },
+      "difference": {
+        "zh": "知识材料指导怎么操作；设备连接与执行由另一个组件完成。",
+        "en": "Knowledge guides operation while a separate component handles connection and execution."
+      },
+      "reuse": {
+        "zh": "让技能引用明确设备版本、所需工具和预期观测结果。",
+        "en": "Make skills reference device versions, required tools and expected observations."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/labclaw/device-skills/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "edge-mhs",
+      "actor": "fastly",
+      "route": "bridge",
+      "domain": "cross",
+      "path": [
+        "Agent",
+        "MCP edge gateway",
+        "backend proxy",
+        "mock driver"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "将远程访问的身份、参数约束与记录集中在边缘网关。",
+        "en": "Centralizes remote-access identity, argument constraints and records in an edge gateway."
+      },
+      "difference": {
+        "zh": "当前是基于 mock 的参考网关，后端合约仍需对应真实设备运行器。",
+        "en": "Currently a mock-backed reference gateway whose backend contract must be matched to a real device runtime."
+      },
+      "reuse": {
+        "zh": "把网关当作可选部署组件，保持仪器本地执行接口独立。",
+        "en": "Treat the gateway as an optional deployment component while preserving independent local execution."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/fastly/edge-mhs/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "agent2device",
+      "actor": "neogyk",
+      "route": "contract",
+      "domain": "cross",
+      "path": [
+        "Protocol concept",
+        "README design notes"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "提供 Agent 到设备连接问题的概念入口。",
+        "en": "Provides a conceptual entry point to agent-device connectivity."
+      },
+      "difference": {
+        "zh": "当前发布是设计笔记，没有驱动与运行器可供直接复用。",
+        "en": "The release consists of design notes, with no driver or runtime to reuse directly."
+      },
+      "reuse": {
+        "zh": "仅用于比较需求表述；实现依据需来自有具体代码和行为的工程。",
+        "en": "Use to compare requirements, drawing implementation decisions from concrete code and behavior."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/neogyk/Agent2Device-Protocol/blob/main/README.md"
+      ]
+    },
+    {
+      "id": "chemcrow",
+      "actor": "ur-whitelab",
+      "route": "knowledge",
+      "domain": "liquids",
+      "path": [
+        "Chemistry agent",
+        "public tool subset",
+        "external services"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "展示化学领域知识怎样通过工具组合进入语言模型的研究流程。",
+        "en": "Shows how chemical expertise enters model workflows through tool composition."
+      },
+      "difference": {
+        "zh": "公共包缺少论文中部分服务接口，论文实验范围大于可下载工具范围。",
+        "en": "The public package lacks some paper service interfaces, so experimental scope exceeds the downloadable tool set."
+      },
+      "reuse": {
+        "zh": "借鉴工具选择与领域任务组织，并逐项核查可公开复用的服务。",
+        "en": "Reuse tool selection and domain-task organization while checking each available service."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/ur-whitelab/chemcrow-public/blob/main/README.md",
+        "https://doi.org/10.1038/s42256-024-00832-8"
+      ]
+    },
+    {
+      "id": "nvagent",
+      "actor": "takuyaisogawa",
+      "route": "knowledge",
+      "domain": "quantum",
+      "path": [
+        "Released case studies",
+        "analysis & trajectories",
+        "external live backend"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "提供 NV 自主实验的案例和分析材料，帮助研究实验决策与反馈。",
+        "en": "Provides NV experiment case studies and analysis for studying decisions and feedback."
+      },
+      "difference": {
+        "zh": "发布说明排除了在线实验后端，适合作为实验轨迹资料而非驱动。",
+        "en": "The release excludes the live laboratory backend and serves as trajectory material rather than a driver."
+      },
+      "reuse": {
+        "zh": "借鉴轨迹、分析与实验环境之间的对应关系。",
+        "en": "Reuse the links among trajectories, analyses and the experimental environment."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/takuyaisogawa/nv-autonomous-experiments/blob/main/README.md",
+        "https://arxiv.org/abs/2607.25145"
+      ]
+    },
+    {
+      "id": "uc2-hackathon",
+      "actor": "openUC2",
+      "route": "knowledge",
+      "domain": "imaging",
+      "path": [
+        "Workshop material",
+        "Python / ImSwitch FastAPI",
+        "UC2 microscope"
+      ],
+      "path_scope": "public",
+      "contribution": {
+        "zh": "用开放显微镜和明确 API 给出从设备到实验任务的教学路径。",
+        "en": "Uses an open microscope and explicit API to connect hardware to experimental exercises."
+      },
+      "difference": {
+        "zh": "贡献是接入材料与实验任务，不是完整常驻 Agent 平台。",
+        "en": "Contributes integration material and experimental tasks rather than a complete persistent agent platform."
+      },
+      "reuse": {
+        "zh": "用小型可复现实验作为新适配器的入门和验收任务。",
+        "en": "Use compact reproducible experiments for adapter onboarding and acceptance."
+      },
+      "assessment": "editorial-analysis",
+      "sources": [
+        "https://github.com/openUC2/Hackathon-UC2-LLM/blob/main/README.md"
+      ]
+    }
+  ],
+  "foundations": {
+    "openmhp": [
+      "mcp"
+    ],
+    "open-mhs-abenor": [
+      "mcp"
+    ],
+    "open-mhs-tong": [
+      "mcp"
+    ],
+    "open-mhs-scut": [
+      "mcp",
+      "bench"
+    ],
+    "mhp-cuntinum": [
+      "mcp"
+    ],
+    "instrmcp": [
+      "mcp",
+      "qcodes"
+    ],
+    "puda": [
+      "nats"
+    ],
+    "unilabos": [
+      "ros"
+    ],
+    "osprey": [
+      "mcp",
+      "facility"
+    ],
+    "jumpstarter": [
+      "grpc"
+    ],
+    "lager": [
+      "bench"
+    ],
+    "eaa": [
+      "mcp"
+    ],
+    "eaa-pi": [
+      "mcp"
+    ],
+    "pi-experiment-ops": [
+      "mcp"
+    ],
+    "labmcp": [
+      "mcp",
+      "bench"
+    ],
+    "lablink": [
+      "mcp",
+      "bench"
+    ],
+    "scpi-mcp": [
+      "mcp",
+      "bench"
+    ],
+    "oscilloscope-mcp": [
+      "mcp",
+      "bench"
+    ],
+    "lecroy": [
+      "mcp",
+      "bench"
+    ],
+    "siglent": [
+      "mcp",
+      "bench"
+    ],
+    "scope-mcp": [
+      "mcp",
+      "bench"
+    ],
+    "dwf": [
+      "mcp",
+      "waveforms"
+    ],
+    "instrument-mcp": [
+      "mcp",
+      "bench",
+      "modbus-interface"
+    ],
+    "daqmx": [
+      "mcp",
+      "nidaqmx"
+    ],
+    "daqifi": [
+      "mcp"
+    ],
+    "labview-toolkit": [
+      "mcp",
+      "labview"
+    ],
+    "labview-dev": [
+      "mcp",
+      "labview"
+    ],
+    "openflexure": [
+      "mcp",
+      "openflexure-api"
+    ],
+    "microscope-agent": [
+      "mcp",
+      "microscopy-access"
+    ],
+    "agent-lens": [
+      "hypha"
+    ],
+    "agentic-microscope": [
+      "mcp",
+      "microscopy-access"
+    ],
+    "quailbot": [
+      "nqctl"
+    ],
+    "vision": [
+      "bluesky"
+    ],
+    "opentrons": [
+      "mcp",
+      "liquid"
+    ],
+    "plr-mcp": [
+      "mcp",
+      "liquid"
+    ],
+    "openlabai": [
+      "mcp",
+      "liquid"
+    ],
+    "labscriptai": [
+      "mcp",
+      "liquid"
+    ],
+    "coscientist": [
+      "liquid"
+    ],
+    "chemagents": [
+      "ros"
+    ],
+    "clairify": [
+      "xdl"
+    ],
+    "clairify-chemspeed": [
+      "chemspyd"
+    ],
+    "synagent": [
+      "maiml"
+    ],
+    "opcua-kuka": [
+      "mcp",
+      "lads"
+    ],
+    "opcua-industrial": [
+      "mcp",
+      "lads"
+    ],
+    "modbus": [
+      "mcp",
+      "modbus-interface"
+    ],
+    "tango": [
+      "mcp",
+      "facility"
+    ],
+    "epics-mcp": [
+      "mcp",
+      "facility"
+    ],
+    "mcp2serial": [
+      "mcp",
+      "serial"
+    ],
+    "tinymcp": [
+      "mcp",
+      "golioth-api"
+    ],
+    "embedded-debugger": [
+      "mcp",
+      "debug-probe"
+    ],
+    "saleae": [
+      "mcp",
+      "logic2"
+    ],
+    "micropython": [
+      "mcp",
+      "micropython-api"
+    ],
+    "ros-mcp": [
+      "mcp",
+      "ros"
+    ],
+    "rosa": [
+      "ros"
+    ],
+    "device-use": [
+      "mcp"
+    ],
+    "edge-mhs": [
+      "mcp"
+    ],
+    "uc2-hackathon": [
+      "microscopy-access"
+    ]
+  },
+  "extra_foundations": {
+    "nats": "NATS",
+    "grpc": "gRPC",
+    "waveforms": "WaveForms SDK",
+    "modbus-interface": "Modbus",
+    "nidaqmx": "NI-DAQmx",
+    "labview": "LabVIEW",
+    "openflexure-api": "OpenFlexure API",
+    "hypha": "Hypha / BioEngine",
+    "nqctl": "nqctl",
+    "xdl": "XDL",
+    "chemspyd": "Chemspyd",
+    "maiml": "MaiML / dLab",
+    "serial": "Serial / UART",
+    "golioth-api": "Golioth device RPC",
+    "debug-probe": "probe-rs / OpenOCD",
+    "logic2": "Saleae Logic 2",
+    "micropython-api": "MicroPython"
+  },
+  "relations": [
+    {
+      "source": "eaa",
+      "target": "eaa-pi",
+      "kind": "successor",
+      "note": {
+        "zh": "README 指向 EAA-Pi 后继工程。",
+        "en": "The README points to EAA-Pi as its successor."
+      },
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/EAA/blob/main/README.md"
+      ]
+    },
+    {
+      "source": "eaa-pi",
+      "target": "pi-experiment-ops",
+      "kind": "uses",
+      "note": {
+        "zh": "EAA-Pi 基于 pi-experiment-ops。",
+        "en": "EAA-Pi is built on pi-experiment-ops."
+      },
+      "sources": [
+        "https://github.com/AdvancedPhotonSource/EAA-Pi/blob/main/README.md"
+      ]
+    },
+    {
+      "source": "agentic-microscope",
+      "target": "soft-matter-agents",
+      "kind": "successor",
+      "note": {
+        "zh": "显微镜模块迁入 soft-matter-agents。",
+        "en": "The microscope module moves into soft-matter-agents."
+      },
+      "sources": [
+        "https://github.com/kyu-softmatter/agentic-microscope/blob/main/README.md"
+      ]
+    },
+    {
+      "source": "k-agents",
+      "target": "nvidia-qca",
+      "kind": "successor",
+      "note": {
+        "zh": "README 指向 NVIDIA 校准参考工程。",
+        "en": "The README points to NVIDIA’s calibration blueprint."
+      },
+      "sources": [
+        "https://github.com/EvoEvolver/k_agents/blob/main/README.md"
+      ]
+    },
+    {
+      "source": "k-agents",
+      "target": "leeq",
+      "kind": "uses",
+      "note": {
+        "zh": "使用 LeeQ 实验库完成校准执行。",
+        "en": "Uses LeeQ experiment infrastructure for calibration."
+      },
+      "sources": [
+        "https://github.com/EvoEvolver/k_agents/blob/main/README.md"
+      ]
+    },
+    {
+      "source": "device-skills",
+      "target": "device-use",
+      "kind": "documents",
+      "note": {
+        "zh": "操作知识与 device-use 执行路径配套。",
+        "en": "Operating knowledge accompanies the device-use execution path."
+      },
+      "sources": [
+        "https://github.com/labclaw/device-skills/blob/main/README.md"
+      ]
+    },
+    {
+      "source": "calms",
+      "target": "calms-aps",
+      "kind": "related",
+      "note": {
+        "zh": "后续 APS 机器人与束线实验工作。",
+        "en": "Subsequent APS robot and beamline work."
+      },
+      "sources": [
+        "https://github.com/mcherukara/CALMS/blob/main/README.md"
+      ]
+    },
+    {
+      "source": "clairify",
+      "target": "clairify-chemspeed",
+      "kind": "related",
+      "note": {
+        "zh": "面向 Chemspeed 的相关程序生成接口。",
+        "en": "A related program-generation interface for Chemspeed."
+      },
+      "sources": [
+        "https://github.com/ac-rad/clairify-chemspeed/blob/master/README.md"
+      ]
+    }
+  ],
+  "insights": [
+    {
+      "title": {
+        "zh": "同一入口，可能接着完全不同的系统",
+        "en": "The same entry point can lead to very different systems"
+      },
+      "body": {
+        "zh": "MCP 服务既可能只读一个寄存器，也可能把任务交给现有实验运行器。选型先看连接、状态和执行由谁持有，再看工具入口。",
+        "en": "An MCP service may read one register or submit work to an experiment runtime. Identify who owns connections, state and execution before comparing entry points."
+      },
+      "projects": [
+        "modbus",
+        "instrmcp",
+        "osprey"
+      ]
+    },
+    {
+      "title": {
+        "zh": "可移植性来自共同语义和过程",
+        "en": "Portability comes from shared meaning and procedures"
+      },
+      "body": {
+        "zh": "接口名称一致只是起点。单位、状态来源、任务完成、设备差异和结果格式一致，实验过程才可能跨型号复用。",
+        "en": "Shared names are a start. Reusable procedures need consistent units, provenance, completion semantics, device differences and result formats."
+      },
+      "projects": [
+        "openmhp",
+        "microscope-agent",
+        "lager"
+      ]
+    },
+    {
+      "title": {
+        "zh": "实验智能依赖可用的实验对象",
+        "en": "Experimental intelligence needs usable experiment objects"
+      },
+      "body": {
+        "zh": "校准与合成 Agent 的决策能力建立在实验库、仪器驱动和可解释结果之上。把这些对象做成可复用资产，是上层智能持续进步的基础。",
+        "en": "Calibration and synthesis agents depend on experiment libraries, drivers and interpretable results. Reusable experiment objects underpin improvements in decision-making."
+      },
+      "projects": [
+        "leeq",
+        "k-agents",
+        "synagent"
+      ]
+    },
+    {
+      "title": {
+        "zh": "研究贡献与公开交付分别衡量",
+        "en": "Assess research contributions and released artifacts separately"
+      },
+      "body": {
+        "zh": "论文可证明某种实验方法有效；公开包可能只包含规划器、数据或网站。复用决策应落到具体文件和外部依赖。",
+        "en": "A paper can establish an experimental method while its public package contains a planner, data or website. Reuse decisions should resolve to files and external dependencies."
+      },
+      "projects": [
+        "organa",
+        "nvagent",
+        "chemcrow"
+      ]
+    }
+  ],
+  "decisions": [
+    {
+      "name": {
+        "zh": "设备能力",
+        "en": "Device capabilities"
+      },
+      "question": {
+        "zh": "先统一什么？",
+        "en": "What should be shared first?"
+      },
+      "choice": {
+        "zh": "统一有明确含义的能力、物理量、动作和观察，再为设备类别建立小型 profile。",
+        "en": "Define capabilities, quantities, actions and observations, then small device-class profiles."
+      },
+      "why": {
+        "zh": "共同接口需要表达真实可观测性和型号差异。",
+        "en": "Shared interfaces need to express actual observability and model differences."
+      },
+      "verify": {
+        "zh": "两个不同型号能执行同一测量过程，额外功能仍可独立发现。",
+        "en": "Two models run the same measurement procedure while additional features remain discoverable."
+      },
+      "projects": [
+        "openmhp",
+        "microscope-agent",
+        "mhp-cuntinum"
+      ]
+    },
+    {
+      "name": {
+        "zh": "执行所有权",
+        "en": "Execution ownership"
+      },
+      "question": {
+        "zh": "谁持续持有设备？",
+        "en": "Who keeps ownership of the device?"
+      },
+      "choice": {
+        "zh": "让实验执行层持有连接、任务和结果；Agent 会话通过稳定 ID 操作这些对象。",
+        "en": "Let the experiment runtime own connections, jobs and results, accessed through stable IDs."
+      },
+      "why": {
+        "zh": "对话、网络连接和实验本身具有不同生命期。",
+        "en": "Conversations, network sessions and experiments have different lifetimes."
+      },
+      "verify": {
+        "zh": "客户端断开后能够恢复同一任务及已采集数据。",
+        "en": "Recover the same job and collected data after client disconnection."
+      },
+      "projects": [
+        "instrmcp",
+        "puda",
+        "jumpstarter"
+      ]
+    },
+    {
+      "name": {
+        "zh": "数据与观察",
+        "en": "Data and observations"
+      },
+      "question": {
+        "zh": "结果应怎样返回？",
+        "en": "How should results be returned?"
+      },
+      "choice": {
+        "zh": "小型结果带单位、时间、来源与配置；大图像和波形以可校验的引用返回。",
+        "en": "Return small results with units, time, provenance and configuration; reference large images/waveforms with integrity information."
+      },
+      "why": {
+        "zh": "结果需要被下一步决策解释，也需要被另一位研究者复核。",
+        "en": "Results must support subsequent decisions and independent inspection."
+      },
+      "verify": {
+        "zh": "从分析结果可定位原始采集及产生它的设备配置。",
+        "en": "Trace an analysis result to its acquisition and device configuration."
+      },
+      "projects": [
+        "microscope-agent",
+        "siglent",
+        "agent-lens"
+      ]
+    },
+    {
+      "name": {
+        "zh": "实验过程",
+        "en": "Experimental procedures"
+      },
+      "question": {
+        "zh": "什么应成为可复用能力？",
+        "en": "What should become reusable capability?"
+      },
+      "choice": {
+        "zh": "将有效的扫描、对焦和校准过程固化为可读程序，保留参数、适用条件与结果定义。",
+        "en": "Capture successful scans, focus and calibration procedures as readable programs with parameters, conditions and result definitions."
+      },
+      "why": {
+        "zh": "一次命令复用与一个实验过程复用带来的价值不同。",
+        "en": "Reusing a command and reusing an experimental procedure deliver different value."
+      },
+      "verify": {
+        "zh": "替换 Agent 入口后，同一过程产生一致结构的记录。",
+        "en": "Changing the agent entry point preserves procedure records and structure."
+      },
+      "projects": [
+        "ivoryos",
+        "leeq",
+        "clairify"
+      ]
+    },
+    {
+      "name": {
+        "zh": "接入方式",
+        "en": "Access surfaces"
+      },
+      "question": {
+        "zh": "要绑定哪种 Agent 协议？",
+        "en": "Which agent protocol should be required?"
+      },
+      "choice": {
+        "zh": "在同一能力服务上提供 MCP、CLI 与程序 API，保持模型和前端可替换。",
+        "en": "Expose MCP, CLI and program APIs above one capability service, keeping models/frontends replaceable."
+      },
+      "why": {
+        "zh": "已有工程通过不同入口实现物理控制，入口不能代替设备语义。",
+        "en": "Existing projects use different access surfaces; an entry point does not replace device meaning."
+      },
+      "verify": {
+        "zh": "三个入口执行同一动作，参数、任务 ID 和结果含义一致。",
+        "en": "All surfaces preserve argument, job-identity and result meanings for the same action."
+      },
+      "projects": [
+        "puda",
+        "lager",
+        "openmhp"
+      ]
+    },
+    {
+      "name": {
+        "zh": "适配与维护",
+        "en": "Adapters and maintenance"
+      },
+      "question": {
+        "zh": "如何让生态持续扩展？",
+        "en": "How can the ecosystem keep expanding?"
+      },
+      "choice": {
+        "zh": "驱动、类别 profile、操作知识和实机记录分别版本化，用统一贡献模板连接。",
+        "en": "Version drivers, profiles, operating knowledge and hardware records separately and connect them through contribution templates."
+      },
+      "why": {
+        "zh": "设备型号、固件、运行库和实验流程的更新速度不同。",
+        "en": "Models, firmware, runtimes and experimental procedures evolve at different rates."
+      },
+      "verify": {
+        "zh": "外部团队按模板增加一个型号，原有核心服务无需修改。",
+        "en": "An external team adds a model through the template without editing the core service."
+      },
+      "projects": [
+        "labmcp",
+        "daqifi",
+        "device-skills"
+      ]
+    },
+    {
+      "name": {
+        "zh": "互操作验证",
+        "en": "Interoperability"
+      },
+      "question": {
+        "zh": "怎样判断规范真正可用？",
+        "en": "How is a useful specification demonstrated?"
+      },
+      "choice": {
+        "zh": "用跨实现、跨型号的共同实验验证语义；分别保存模拟、接机和长时运行记录。",
+        "en": "Validate semantics through shared experiments across implementations/models, retaining distinct simulation, hardware and long-run records."
+      },
+      "why": {
+        "zh": "单个演示证明一条路径；生态需要独立实现之间的一致行为。",
+        "en": "A demonstration establishes one path; an ecosystem needs agreement among independent implementations."
+      },
+      "verify": {
+        "zh": "独立实验室可复现任务、解释部分完成，并提交兼容性记录。",
+        "en": "Independent laboratories reproduce tasks, interpret partial completion and contribute compatibility records."
+      },
+      "projects": [
+        "open-mhs-scut",
+        "scope-mcp",
+        "plr-mcp"
+      ]
+    },
+    {
+      "name": {
+        "zh": "研究反馈",
+        "en": "Research feedback"
+      },
+      "question": {
+        "zh": "接口如何反过来改进仪器？",
+        "en": "How can interfaces improve instruments?"
+      },
+      "choice": {
+        "zh": "保留未知状态、失败和人工介入的轨迹，用它们发现缺失的传感、回读和可编程能力。",
+        "en": "Retain unknown states, failures and manual interventions to reveal missing sensing, readback and programmable capabilities."
+      },
+      "why": {
+        "zh": "仪器设计可以由真实研究过程中的障碍驱动。",
+        "en": "Obstacles in real research can guide instrument design."
+      },
+      "verify": {
+        "zh": "一次仪器修订消除可复现的实验障碍，并在相同任务下验证。",
+        "en": "An instrument revision removes a reproducible obstacle under the same experimental task."
+      },
+      "projects": [
+        "embedded-debugger",
+        "saleae",
+        "aila"
+      ]
+    }
+  ],
+  "domains": {
+    "cross": {
+      "zh": "跨领域接口",
+      "en": "Cross-domain interfaces"
+    },
+    "bench": {
+      "zh": "电子测量与台架",
+      "en": "Measurement benches"
+    },
+    "imaging": {
+      "zh": "显微与成像",
+      "en": "Microscopy and imaging"
+    },
+    "facility": {
+      "zh": "束线与工业设施",
+      "en": "Beamlines and facilities"
+    },
+    "quantum": {
+      "zh": "量子实验",
+      "en": "Quantum experiments"
+    },
+    "liquids": {
+      "zh": "化学、材料与液体处理",
+      "en": "Chemistry, materials and liquids"
+    },
+    "embedded": {
+      "zh": "嵌入式与调试",
+      "en": "Embedded development"
+    },
+    "robotics": {
+      "zh": "机器人",
+      "en": "Robotics"
+    }
+  }
+}

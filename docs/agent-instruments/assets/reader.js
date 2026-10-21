@@ -228,7 +228,9 @@ function renderSlide(number){
  all('[data-slide]').forEach(el=>el.hidden=Number(el.dataset.slide)!==state.slide);
  $('deck-select').value=String(state.slide);$('deck-position').textContent=String(state.slide).padStart(2,'0')+' / '+String(count).padStart(2,'0');
  $('deck-prev').disabled=state.slide===1;$('deck-next').disabled=state.slide===count;
- $('deck-notes').textContent=tx(DATA.presentation.slides[state.slide-1].notes);
+ const chapter=DATA.presentation.slides[state.slide-1].chapter;
+ all('[data-chapter-nav]').forEach(el=>{const active=el.dataset.chapterNav===chapter;el.classList.toggle('active',active);if(active)el.setAttribute('aria-current','step');else el.removeAttribute('aria-current');});
+ all('[data-page-nav]').forEach(el=>{el.hidden=el.dataset.pageChapter!==chapter;const active=Number(el.dataset.pageNav)===state.slide;el.classList.toggle('active',active);if(active)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');});
  $('deck-exit').hidden=!document.body.classList.contains('deck-focus');
 }
 function moveSlide(delta){location.hash='presentation/'+Math.min(DATA.presentation.slides.length,Math.max(1,state.slide+delta));}
@@ -241,7 +243,6 @@ function openIsland(id){
 }
 $('deck-select').addEventListener('change',()=>location.hash='presentation/'+$('deck-select').value);
 $('deck-prev').addEventListener('click',()=>moveSlide(-1));$('deck-next').addEventListener('click',()=>moveSlide(1));
-$('deck-notes-toggle').addEventListener('click',()=>{const hidden=$('deck-notes').hidden;$('deck-notes').hidden=!hidden;$('deck-notes-toggle').setAttribute('aria-expanded',String(hidden));});
 $('deck-focus').addEventListener('click',()=>{document.body.classList.add('deck-focus');$('deck-exit').hidden=false;window.scrollTo(0,0);});
 $('deck-exit').addEventListener('click',()=>{document.body.classList.remove('deck-focus');$('deck-exit').hidden=true;if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});});
 $('deck-fullscreen').addEventListener('click',()=>{
@@ -252,7 +253,7 @@ $('deck-fullscreen').addEventListener('click',()=>{
 $('island-close').addEventListener('click',()=>$('island-detail').close());
 $('island-detail').addEventListener('click',event=>{if(event.target.closest('a'))$('island-detail').close();});
 $('island-detail').addEventListener('close',()=>{if(state.view==='presentation'&&location.hash.includes('?route='))history.replaceState(null,'','#presentation/'+state.slide);});
-const returnButton=document.createElement('button');returnButton.id='return-to-deck';returnButton.textContent=t('返回演示','Return to presentation');returnButton.hidden=true;
+const returnButton=document.createElement('button');returnButton.id='return-to-deck';returnButton.textContent=t('返回 IOP','Return to IOP');returnButton.hidden=true;
 returnButton.addEventListener('click',()=>location.hash='presentation/'+state.slide);document.querySelector('.reader-actions').prepend(returnButton);
 
 

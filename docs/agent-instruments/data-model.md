@@ -68,12 +68,14 @@ The bundle contains `catalogue`, `context`, `landscape`, `graph`, `sources`, `pr
 
 The builder checks unique IDs, profile coverage, valid actor/route references, bilingual contribution fields, graph endpoints and source presence on documented edges. When editing the reader, check section navigation, deep links, filters, comparison, graph selection, downloads and mobile overflow in both languages.
 
-The diagram on the opening page is an analytical role model. The relationship graph is a navigable view of the complete `graph.json`; dense neighborhoods show six neighbors per side while the paginated evidence list retains every adjacent edge.
+The landscape section contains an analytical role diagram. The relationship graph is a navigable view of the complete `graph.json`; dense neighborhoods show six neighbors per side while the paginated evidence list retains every adjacent edge.
 
-## Presentation hierarchy
+## IOP argument model
 
-`presentation.json` holds bilingual slide titles, speaker notes, the full-catalogue role grouping and the direct protocol comparison set. `groups` partitions the existing eight routes by primary system responsibility. `protocol_comparison.groups` separately groups comparable instrument-interface designs by their main mechanism. These are editorial classifications, not protocol inheritance or confirmed compatibility.
+The version 2 `presentation.json` uses one hierarchy: `levels.1` is existing designs, `levels.2` is mechanism families, and `levels.3` is the IOP operation model. `mechanism_families` records each family's defining mechanism, primary reference designs and corresponding IOP objects. Contributions can overlap; these links describe the analysis, not software compatibility.
 
-References beginning `p:` identify catalogue projects; `s:` identify standards/design records. MHS and AIP use `s:` and are not among the 73 project records. Agent2Device is retained under `unassigned_concepts` because its public description does not establish a sufficiently detailed mechanism. Projects can span several responsibilities; primary assignments avoid duplicate counts. The reading hierarchy and Basic/Standard/Workflow Operations describe different dimensions.
+`slides` contains bilingual titles, short navigation labels, source keys, artifact status and full authored HTML bodies. `chapters` supplies the four navigation groups. `sources` resolves source keys to labels and URLs. The two HTML files embed the same object and display the selected language. No content depends on remotely loaded scripts or fonts.
 
-The HTML bundle includes the `presentation` object. `#presentation/3` opens the direct comparison inventory; `#presentation/6?route=bridge` opens the full-ecosystem island with its bridge records expanded.
+References beginning `p:` identify catalogue projects; `s:` identify standards/design records. MHS and AIP use `s:` and remain outside the 73 project records. Agent2Device is recorded under `additional_concepts`.
+
+The URL `#presentation/3` opens the design inventory; `#presentation/10` the complete hierarchy; `#presentation/13` the IOP object model. The original `presentation` route and filenames remain stable for existing links.

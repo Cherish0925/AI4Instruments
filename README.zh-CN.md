@@ -62,7 +62,7 @@ AI4Instruments 探索一套面向 AI 的仪器方法论、设计规范与开放�
 | 如何描述、组合和扩展操作 | [Operations](docs/operations.md) |
 | AI 如何参与仪器全生命周期 | [仪器设计](docs/instrument-design.md) |
 | 通用原则如何落到实际实验 | [实验关系与实例](docs/examples.md) |
-| IOP 如何连接仪器知识、操作与实验 | [IOP 定义](docs/iop.md) · [中文演示](docs/agent-instruments/index.zh-CN.html?raw=1#presentation/1) · [English](docs/agent-instruments/index.en.html?raw=1#presentation/1) |
+| IOP 如何连接仪器知识、操作与实验 | [IOP 定义](docs/iop.md) · [IOP 原理与结构](docs/agent-instruments/index.zh-CN.html?raw=1#presentation/1) · [English](docs/agent-instruments/index.en.html?raw=1#presentation/1) |
 | Agent 怎样连接与操作真实仪器 | [仪器接口与生态全景](docs/agent-instruments/README.zh-CN.md) · [中文 HTML](docs/agent-instruments/index.zh-CN.html?raw=1) · [English HTML](docs/agent-instruments/index.en.html?raw=1) |
 | 与已有标准和研究的联系 | [相关工作](docs/related-work.md) |
 | 哪些进展值得推进与验证 | [研究议程](docs/research-agenda.md) |

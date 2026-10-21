@@ -1,5 +1,13 @@
 # Changes
 
+## 2026-10-21 · IOP-02
+
+- Rewrote the opening argument around one hierarchy: existing designs, mechanism families and the IOP operation model.
+- Added design anatomy, execution paths and source links for each substantive comparison family; removed competing full-catalogue groupings from the argument.
+- Developed a continuous polarization-scan example, operation definition, physical execution/readback model, adapter mappings and a cross-device validation target.
+- Replaced repeated presentation labels, speaker notes and generic cards with chapter navigation, an outline, technical diagrams and object relationships.
+- Published full bilingual page content and source mappings in version 2 of the embedded data.
+
 
 ## 2026-10-21 · IOP presentation
 

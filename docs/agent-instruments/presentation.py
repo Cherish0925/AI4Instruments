@@ -1,4 +1,4 @@
-"""IOP presentation: a curated reading hierarchy over the research catalogue."""
+"""Bilingual IOP argument: existing designs → mechanisms → a shared operation model."""
 import html
 
 
@@ -6,185 +6,239 @@ def pair(zh, en):
     return {'zh': zh, 'en': en}
 
 
-GROUPS = [
-    {'id': 'understand', 'name': pair('仪器知识与能力描述', 'Instrument knowledge and capabilities'),
-     'short': pair('理解仪器', 'Understand'), 'color': '#a6803a',
-     'question': pair('仪器能做什么，这些能力意味着什么？', 'What can an instrument do, and what does each capability mean?'),
-     'routes': ['knowledge', 'contract']},
-    {'id': 'execute', 'name': pair('设备接入与操作执行', 'Device access and operation execution'),
-     'short': pair('执行操作', 'Execute'), 'color': '#39796e',
-     'question': pair('怎样让操作在真实设备上完成，并获得读回？', 'How does an operation run on real equipment and return observations?'),
-     'routes': ['bridge', 'runtime', 'development', 'gui']},
-    {'id': 'experiment', 'name': pair('实验方法与闭环组织', 'Experimental methods and feedback'),
-     'short': pair('组织实验', 'Experiment'), 'color': '#74719b',
-     'question': pair('怎样组合操作，并根据观测决定下一步？', 'How are operations composed, and how do observations guide the next step?'),
-     'routes': ['workflow', 'experiment']},
+CHAPTERS = [
+    {'id': 'question', 'name': pair('问题与全图', 'The problem'), 'start': 1},
+    {'id': 'designs', 'name': pair('一级 · 具体方案', 'I · Existing designs'), 'start': 3},
+    {'id': 'mechanisms', 'name': pair('二级 · 机制归纳', 'II · Mechanisms'), 'start': 10},
+    {'id': 'iop', 'name': pair('三级 · IOP', 'III · IOP'), 'start': 13},
+]
+SOURCES = {
+    'mhs': ('MHS · Anthropic', 'https://www.anthropic.com/news/model-hardware-standard-research-preview'),
+    'mhs-site': ('MHS · Research preview', 'https://modelhardwarestandard.com/'),
+    'aip': ('AIP PRD v1.1 · 2026-10-18', '#standards/aip'),
+    'openmhp': ('OpenMHP · SPEC', 'https://github.com/kushalsinha/openmhp/blob/main/SPEC.md'),
+    'openmhp-devices': ('OpenMHP · Devices', 'https://github.com/kushalsinha/openmhp/blob/main/supported-devices/README.md'),
+    'lap': ('LAP · §3–5', 'https://arxiv.org/html/2606.03755v1'),
+    'oahl': ('OAHL · Architecture', 'https://github.com/fredabila/oahl'),
+    'abenor': ('Abenor Labs', 'https://github.com/Abenor-Labs/Open-MHS'),
+    'tong': ('tongriyaotxt', 'https://github.com/tongriyaotxt/open-mhs'),
+    'scut': ('SCUT-ESA', 'https://github.com/SCUT-ESA/open-mhs'),
+    'cuntinum': ('Cuntinum · MHP', 'https://github.com/Cuntinum/model-hardware-protocol'),
+    'sila': ('SiLA 2', 'https://sila-standard.com/standards/'),
+    'lads': ('OPC UA · LADS', 'https://reference.opcfoundation.org/specs/OPC-30500-1/4.1.2.2'),
+    'wot': ('W3C · WoT TD 1.1', 'https://www.w3.org/TR/wot-thing-description11/'),
+    'operations': ('AI4Instruments · Operations', 'https://github.com/Cherish0925/AI4Instruments/blob/main/docs/operations.md'),
+}
+ISLANDS = [
+    {'id':'capability', 'name':pair('设备能力模型','Device capability models'),
+     'mechanism':pair('把型号接口翻译成可发现、可理解、可调用的能力。','Translate model-specific interfaces into discoverable, interpretable capabilities.'),
+     'members':['s:mhs','p:open-mhs-abenor','p:open-mhs-tong','p:open-mhs-scut','p:mhp-cuntinum'],
+     'iop_objects':['instrument','capability','operation','binding']},
+    {'id':'execution', 'name':pair('操作执行与结果契约','Execution and result contracts'),
+     'mechanism':pair('把一次调用延伸为有身份、状态、资源与结果的物理过程。','Give a physical process identity, state, resources and results beyond a single call.'),
+     'members':['s:aip','p:openmhp','s:lap'],
+     'iop_objects':['operation','run','observation','method']},
+    {'id':'access', 'name':pair('设备发现与资源协作','Discovery and resource coordination'),
+     'mechanism':pair('找到能力所在的位置，并安排调用者对设备的使用。','Locate capabilities and coordinate callers’ use of equipment.'),
+     'members':['p:oahl'], 'iop_objects':['instrument','resource','binding']},
 ]
 
-# Titles make the argument; notes provide the detail for a speaker or a reader.
-SLIDES = [
-    ('purpose', pair('IOP：让仪器知识与操作相互对应', 'IOP connects instrument knowledge with operation'),
-     pair('Instrument Operations Protocol · 仪器操作协议', 'Instrument Operations Protocol'),
-     pair('从一台仪器开始：知道它为什么这样工作、哪些变量可控可测、怎样执行一个方法，以及怎样解释观测。人和 Agent 使用同一套定义，通过各自适合的入口访问。', 'Begin with an instrument: its physical principles, controllable and observable variables, executable methods and interpretation of observations. People and agents use the same definitions through appropriate interfaces.')),
-    ('scope', pair('73 条工程记录，与标准材料分别收录', 'Projects and standards use separate inventories'),
-     pair('MHS 和 AIP 在标准与设计材料中，均未计入 73 条工程记录', 'MHS and AIP are in the standards and design collection, outside the 73 project records'),
-     pair('73 是本资料库工程与研究条目的数量，不是全网协议总数。14 组标准与基础生态中包含 MHS 和 AIP。维护主体、关系和来源是不同维度，不能与项目数量相加。', 'The 73 entries are projects and research artifacts in this collection, not a worldwide protocol count. The 14 standards and foundation groups include MHS and AIP. Actors, relationships and sources count different things and cannot be added to projects.')),
-    ('islands', pair('具体工作，归入八条路线与三个部分', 'Specific work, eight approaches, three responsibilities'),
-     pair('一级：具体工作　　二级：方法路线　　三级：系统分工', 'Level 1: individual work   Level 2: approaches   Level 3: system responsibilities'),
-     pair('这是按主要贡献建立的人工分类，用于理解与讲解。一个工程可以跨越多个部分。主归属使计数不重复，具体接入关系仍在来源图谱中。三个部分共同构成 IOP 的建设范围，不代表三种协议或成熟度等级。点击路线可以展开全部项目。', 'This is an editorial classification by primary contribution. A project may span several responsibilities. A primary assignment avoids double counting; the sourced graph separately records actual integrations. The three responsibilities organize IOP development, not three protocols or maturity levels. Select an approach to inspect every assigned project.')),
-    ('knowledge', pair('知识解释能力，契约明确操作含义', 'Knowledge explains capabilities; contracts define operations'),
-     pair('第一部分：仪器知识与能力描述', 'Responsibility A: instrument knowledge and capabilities'),
-     pair('知识材料提供原理、使用条件、方法与经验。能力契约把其中需要执行的部分写成明确的参数、物理量、前置条件和结果定义。人读说明，程序读结构，二者引用相同的操作身份和版本。OpenMHP 是公开契约样本，device-skills 是配套知识样本。', 'Knowledge resources explain principles, conditions, methods and experience. Capability contracts make parameters, quantities, preconditions and result meanings explicit. Human documentation and programmatic descriptions refer to the same operation identity and version. OpenMHP illustrates public contracts; device-skills illustrates supporting knowledge.')),
-    ('execution', pair('接入、执行与设备开发各有职责', 'Access, execution and device development have distinct roles'),
-     pair('第二部分：设备接入与操作执行', 'Responsibility B: device access and operation execution'),
-     pair('桥接把已有接口暴露给调用者。常驻运行环境持有设备连接和执行状态。仪器开发涉及固件、调试与可编程能力的形成。GUI 路线用于已有软件缺少可用接口的情况。四者互补，不能用工具数来比较整体能力。', 'Bridges expose existing interfaces. Persistent runtimes own connections and execution state. Instrument development creates or changes programmable capabilities through firmware and debugging. GUI access serves software without a usable programmatic interface. These roles are complementary; tool counts do not measure their overall capability.')),
-    ('methods', pair('方法组织执行，实验决策使用反馈', 'Methods organize execution; decisions use feedback'),
-     pair('第三部分：实验方法与闭环组织', 'Responsibility C: experimental methods and feedback'),
-     pair('过程编排解决设备、样品、资源与步骤之间的关系。实验决策根据结果提出或选择下一步。Uni-Lab-OS 是多设备编排样本，AILA 是真实 AFM 实验样本。IOP 应使过程与观测可表达、可复用，研究目标和决策策略由研究系统持有。', 'Workflow orchestration handles devices, samples, resources and dependencies. Experimental decision systems use observations to choose or propose the next step. Uni-Lab-OS illustrates multi-device workflows; AILA illustrates physical AFM experiments. IOP should make procedures and observations reusable while research systems retain objectives and decision policies.')),
-    ('mhs', pair('MHS、AIP 与 OpenMHP 提供不同的参照', 'MHS, AIP and OpenMHP serve different reference roles'),
-     pair('分别比较产业协作、设计思想和公开实现', 'Compare ecosystem participation, design ideas and public implementation separately'),
-     pair('MHS 是 Anthropic 与 HHMI Janelia 发起的研究预览，公开材料列出科学机构与设备厂商的试用和集成计划，因此值得重点跟踪生态发展。它的发布主体不能单独证明技术覆盖或规模第一。AIP 是用户提供的设计材料。OpenMHP 是独立的公开规范与实现，当前设备包主要以孪生测试为证据。', 'MHS is a research preview initiated by Anthropic and HHMI Janelia. Public materials describe trials and integration plans across research groups and vendors, making it important to track for ecosystem development. Sponsorship alone does not establish technical or deployment leadership. AIP is a supplied design document. OpenMHP is an independent public specification and implementation with primarily twin-tested device packages.')),
-    ('representatives', pair('汇报围绕五个问题选择代表工作', 'Five questions organize the representative work'),
-     pair('选择依据是对 IOP 的建设作用', 'Selection follows the decisions needed to build IOP'),
-     pair('这五项不是全球排名。MHS 帮助观察跨机构生态，OpenMHP 提供可检查的契约样本，Osprey 展示既有设施的语义接入，Uni-Lab-OS 展示多设备流程，AILA 展示实机实验中的判断与反馈。其余条目按设备和实现需要查询。', 'These five entries are not a global ranking. MHS informs ecosystem analysis, OpenMHP provides an inspectable contract, Osprey demonstrates semantic access to existing facilities, Uni-Lab-OS illustrates multi-device procedures, and AILA grounds decisions and feedback in physical experiments. Other records remain available for device selection and implementation.')),
-    ('architecture', pair('IOP 用共同定义连接知识、执行与实验', 'IOP connects knowledge, execution and experiments through shared definitions'),
-     pair('拟议架构：保留现有设备接口，统一操作与结果的含义', 'Proposed architecture: retain device interfaces and share operation and result meanings'),
-     pair('共同定义至少连接设备身份、能力、物理量、操作、任务、观测与数据。知识材料解释这些对象，运行服务执行它们，方法库组合它们。API、CLI、MCP 和人工界面可以使用相同定义。驱动与适配层映射到现有控制系统。图示为设计方向，兼容性需要具体映射与实机验证。', 'Shared definitions connect device identity, capabilities, quantities, operations, jobs, observations and data. Knowledge explains them, services execute them and method libraries compose them. APIs, CLIs, MCP and human interfaces can share those definitions. Adapters map to existing control systems. This is a proposed design; compatibility requires concrete mappings and physical validation.')),
-    ('composition', pair('操作可以从基本能力组合成实验工作流', 'Operations compose from basic capabilities into experimental workflows'),
-     pair('Basic Operations · Standard Operations · Workflow Operations', 'Basic Operations · Standard Operations · Workflow Operations'),
-     pair('这三种操作角色与三级阅读分类是两件事。基础操作表达控制或观测，标准操作表达有实验意义的可复用方法，工作流操作组织仪器、样品与决策。每一类操作都需要明确含义、可执行实现和结果记录。这里的 Standard 表示文档化的可复用方法，不是行业认证。', 'These operation roles differ from the three reading levels. Basic Operations express controls or observations. Standard Operations express reusable experimental methods. Workflow Operations organize instruments, samples and decisions. Every role needs meaning, execution and records. Standard denotes a documented reusable method, not industry certification.')),
-    ('example', pair('一个偏振扫描，贯通整个结构', 'One polarization scan connects the whole design'),
-     pair('设计示例：线偏振入射、半波片、固定检偏器与功率计', 'Design example: linear input, a half-wave plate, a fixed analyzer and a power meter'),
-     pair('明确工作波长、波片轴零点、转台角度与读回、探测器校准和等待条件。方法逐点设角、等待稳定、读取实际角度和功率，并记录时间与采集条件。工作流可增加复测或比较不同条件。这个示例说明接口设计，不声称本仓库已完成这套实机实验。', 'Specify wavelength, wave-plate axis zero, stage angle and readback, detector calibration and settling conditions. The method sets each angle, waits, reads actual angle and power, and records time and acquisition conditions. A workflow may repeat measurements or compare conditions. This illustrates interface design, not an already completed hardware experiment in this repository.')),
-    ('build', pair('从现有操作模型走向跨设备复用', 'From operations to reuse across devices'),
-     pair('每一步交付一个可以使用的能力', 'Each step delivers a usable capability'),
-     pair('当前仓库已经有操作模型与模拟参考实现。下一阶段先给具体仪器建立共同定义和人工可读说明，再连接真实设备，最后让同一方法跨设备实现运行。协议映射应记录已支持的能力和差异。生态建设来自真实设备包、可复用方法和共同维护，不以增加术语或仓库数量衡量。', 'The repository already contains an operation model and a simulated reference implementation. Next, define concrete instruments with readable documentation, connect real devices and run the same method through different implementations. Protocol mappings record supported capabilities and differences. Ecosystem development comes from usable device packages, methods and shared maintenance.')),
-    ('reading', pair('演示讲清判断，资料库支持深入使用', 'The presentation explains decisions; the catalogue supports deeper work'),
-     pair('按问题进入项目、标准、关系和来源', 'Explore projects, standards, relationships and sources by question'),
-     pair('对公司讲清接入与复用成本，对课题组讲清可执行的方法，对科学家讲清物理含义与实验依据，对工程师讲清接口边界与适配方式。全部条目和来源保留在后续栏目中，演示不要求逐项朗读。', 'For a company, explain integration and reuse. For a research group, explain executable methods. For scientists, explain physical meaning and experimental evidence. For engineers, explain interfaces and mappings. The full catalogue remains available without requiring a presentation of every record.')),
-]
 
-PROTOCOL_GROUPS = [
-    {'id': 'capabilities', 'name': pair('共同能力与设备驱动', 'Shared capabilities and drivers'),
-     'question': pair('不同设备怎样用共同语言表达和调用？', 'How can different devices describe and expose capabilities consistently?'),
-     'members': ['s:mhs', 'p:open-mhs-abenor', 'p:open-mhs-tong', 'p:open-mhs-scut', 'p:mhp-cuntinum']},
-    {'id': 'jobs', 'name': pair('操作、任务与测量契约', 'Operations, jobs and measurement contracts'),
-     'question': pair('一次真实操作怎样执行、跟踪并解释结果？', 'How is a physical operation executed, tracked and interpreted?'),
-     'members': ['s:aip', 's:lap', 'p:openmhp']},
-    {'id': 'access', 'name': pair('设备发现与资源访问', 'Device discovery and resource access'),
-     'question': pair('怎样找到、取得和释放分布式设备资源？', 'How are distributed devices discovered, acquired and released?'),
-     'members': ['p:oahl']},
-]
-PROTOCOL_PENDING = ['p:agent2device']
-EXTRA_SLIDES = [
-    ('protocols', pair('直接比较的十项接口与契约方案', 'Ten approaches to instrument interfaces'),
-     pair('当前资料库中的比较集合，按主要设计重心分组', 'A comparison set from this collection, grouped by primary design emphasis'),
-     pair('集合由 7 条工程记录与 3 条标准/设计材料组成：MHS、AIP、LAP、OpenMHP、三个独立 Open-MHS 工程、Cuntinum MHP、OAHL、Agent2Device。它不是十个同等成熟的标准。edge-mhs 属于相邻的边缘网关工程，MCP 属于通用 Agent 接口，均单独放回其职责位置。', 'The set combines seven project records and three standards/design references: MHS, AIP, LAP, OpenMHP, three independent Open-MHS projects, Cuntinum MHP, OAHL and Agent2Device. Their maturity differs. edge-mhs is an adjacent gateway project; MCP is a general agent interface. Both retain their separate roles.')),
-    ('protocol-islands', pair('三个机制岛屿，形成 IOP 的共同结构', 'Three mechanism groups inform a shared IOP structure'),
-     pair('一级是具体方案，二级是机制归纳，三级是我们的设计综合', 'Level 1: approaches   Level 2: mechanism groups   Level 3: our design synthesis'),
-     pair('第一岛统一能力与驱动，第二岛统一操作、任务与结果，第三岛组织设备发现与资源访问。这是按公开设计进行的人工归纳，不是自动聚类或已存在的协议继承关系。OpenMHP 同时涉及资源发现，MHS 的公开范围也跨越执行与流程。Agent2Device 目前公开细节不足，保留为概念提案而不强行归类。三个岛帮助提出共同模型，还需要通过设备实现检验组合是否合理。', 'One group emphasizes capabilities and drivers, another operations, jobs and results, and a third discovery and resource access. This is an editorial synthesis of public designs, not automated clustering or a protocol inheritance tree. OpenMHP also addresses discovery, and MHS spans execution and workflows. Agent2Device remains a concept with insufficient public detail for mechanism assignment. The grouping guides a shared model whose composition must be exercised through device implementations.')),
-    ('foundations', pair('已有规范为 IOP 提供可复用基础', 'Existing specifications provide reusable foundations'),
-     pair('把已有设备语义、交互模型与 Agent 入口接起来', 'Connect existing device semantics, interaction models and agent interfaces'),
-     pair('SiLA 2 提供 Feature、Command、Property 与可观测执行。OPC UA/LADS 提供设备信息模型、状态与程序管理。W3C WoT 分离设备交互描述和协议绑定。这些规范早于或独立于 LLM Agent，仍是关键基础。MCP 提供通用工具与资源入口。具体适配必须保留各自的物理含义和执行差异。', 'SiLA 2 provides features, commands, properties and observable execution. OPC UA/LADS supplies device information models, states and program management. W3C WoT separates interaction descriptions from protocol bindings. These specifications precede or are independent of LLM agents. MCP supplies general tool and resource access. Concrete mappings must preserve physical meaning and execution differences.')),
-]
-SLIDES[2:2] = EXTRA_SLIDES
+def content(lang):
+    z = lang == 'zh'
+    t = lambda a,b: a if z else b
+    E = lambda s: html.escape(str(s), quote=True)
+    pages = []
+    def add(id, chapter, title, short, body, refs=(), status=''):
+        pages.append(dict(id=id,chapter=chapter,title=title,short=short,body=body,sources=list(refs),status=status))
+    def insight(text): return '<p class="thesis">'+text+'</p>'
+    def note(title, text): return '<div class="explanation"><h3>'+title+'</h3><p>'+text+'</p></div>'
+    def flow(items):
+        return '<div class="process">'+''.join('<div><b>'+a+'</b><span>'+b+'</span></div>' for a,b in items)+'</div>'
+    def table(head,rows,cls=''):
+        return '<div class="argument-table '+cls+'"><table><thead><tr>'+''.join('<th>'+x+'</th>' for x in head)+'</tr></thead><tbody>'+''.join('<tr>'+''.join('<td>'+x+'</td>' for x in row)+'</tr>' for row in rows)+'</tbody></table></div>'
+    def entity(name, detail, cls=''): return '<div class="entity '+cls+'"><b>'+name+'</b><span>'+detail+'</span></div>'
+    def link(target,label): return '<a href="'+target+'">'+label+'</a>'
+
+    # 01: the entire argument, before the catalogue.
+    rows=[
+        ('I',t('具体方案','Existing designs'), 'MHS · AIP · OpenMHP · LAP · OAHL',t('各家用什么对象和机制连接仪器','How each design represents and operates instruments'),'#presentation/3'),
+        ('II',t('共同机制','Shared mechanisms'),t('能力模型 · 执行契约 · 资源协作','Capabilities · Execution · Resources'),t('把相似实现归到同一问题，把互补机制接起来','Group similar solutions; connect complementary mechanisms'),'#presentation/10'),
+        ('III','IOP',t('一套操作定义，连接知识、执行与结果','One operation model linking knowledge, execution and results'),t('人和 Agent 使用同一个方法，驱动适配不同设备','People and agents share methods; adapters connect devices'),'#presentation/13'),
+    ]
+    body='<p class="opening-definition">'+t('仪器操作协议，定义一件实验操作的<b>物理含义、执行方式与结果依据</b>，使它能被人理解、被程序执行，并在不同设备之间复用。','IOP defines an operation’s <b>physical meaning, execution and evidence</b>. People and software share the definition; adapters make methods reusable across devices.')+'</p>'
+    body+='<div class="argument-map">'+''.join('<a href="'+href+'"><span class="roman">'+num+'</span><div><h3>'+title+'</h3><b>'+line+'</b><p>'+desc+'</p></div><span class="map-arrow">↗</span></a>' for num,title,line,desc,href in rows)+'</div>'
+    add('argument','question',t('IOP · 仪器操作协议','IOP · Instrument Operations Protocol'),t('三级关系','The three levels'),body,status=t('AI4Instruments · 设计研究','AI4Instruments · Design study'))
+
+    # 02: one physical experiment, with a genuinely useful technical diagram.
+    labels=[t('线偏振光','Linear input'),t('半波片','Half-wave plate'),t('固定检偏器','Fixed analyzer'),t('功率计','Power meter')]
+    svg='<svg class="bench-diagram" viewBox="0 0 1000 200" role="img" aria-label="'+t('线偏振光经过旋转半波片和固定检偏器到达功率计','Linear light passes a rotating half-wave plate and a fixed analyzer to a power meter')+'"><path d="M70 92H905" class="beam"/><path d="M900 87l12 5-12 5" class="beam-fill"/><rect x="90" y="62" width="70" height="60" rx="4"/><path d="M115 75v34m10-34v34m10-34v34" class="fine"/><circle cx="360" cy="92" r="37"/><path d="M335 118l50-52" class="axis"/><path d="M397 46a58 58 0 0 1 20 47" class="fine"/><text x="424" y="70">θ</text><rect x="570" y="50" width="32" height="84" rx="3"/><path d="M580 62v59m11-59v59" class="fine"/><path d="M820 58h70v68h-70z"/><circle cx="855" cy="92" r="21" class="fine"/>'
+    svg+=''.join('<text class="bench-label" x="'+str(x)+'" y="173" text-anchor="middle">'+v+'</text>' for x,v in zip([125,360,586,855],labels))+'</svg>'
+    body=svg+'<div class="split equal"><div><div class="formula">P(θ) = P₀ cos²(2θ − φ)</div><p class="figure-caption">'+t('理想半波片、固定检偏器；φ 包含入射偏振与轴零点。实际测量还受波长、损耗与探测器响应影响。','Ideal half-wave plate and fixed analyzer; φ includes input polarization and axis zero. Wavelength, loss and detector response affect the physical measurement.')+'</p></div><div>'+note(t('任务','Task'),t('改变波片角度，测量透射功率，得到角度—功率曲线。','Vary the plate angle, measure transmitted power and obtain an angle–power curve.'))+'</div></div>'
+    body+=flow([(t('定义','Define'),t('θ 的零点、单位与范围','Angle origin, units and range')),(t('执行','Execute'),t('转动 → 到位 → 采集','Move → settle → acquire')),(t('解释','Interpret'),t('实际角度、功率与校准条件','Actual angle, power and calibration'))])
+    add('physical-problem','question',t('一次偏振扫描，需要比“调用成功”更多的信息','A polarization scan needs more than a successful call'),t('从真实操作出发','Start with a physical operation'),body,status=t('贯穿案例 · 物理模型与接口设计','Running example · Physical model and interface design'))
+
+    # 03: compact, exact inventory. Each substantive design has an explanation next.
+    rows=[
+        [link('#presentation/4','MHS'),t('共享驱动与设备能力描述','Shared drivers and capability descriptions'),t('Anthropic + HHMI Janelia','Anthropic + HHMI Janelia'),t('研究预览','Research preview')],
+        [link('#presentation/5','Open-MHS × 3 · MHP'),t('把共同设备接口实现为代码','Implement common device interfaces'),t('四个独立维护项目','Four independent projects'),t('公开代码','Public code')],
+        [link('#presentation/6','AIP'),t('持久运行的仪器操作服务','Persistent instrument-operation service'),t('本项目所用 PRD','Supplied PRD'),t('设计材料','Design document')],
+        [link('#presentation/7','OpenMHP'),t('设备包、动作、任务和运行记录','Device packages, actions, jobs and run records'),'kushalsinha/openmhp',t('公开草案与实现','Public draft and code')],
+        [link('#presentation/8','LAP'),t('带资源占用与测量语义的任务','Tasks with reservations and measurement semantics'),'Shiyanjia Lab',t('v0.1 设计论文','v0.1 design paper')],
+        [link('#presentation/9','OAHL'),t('节点、设备发现与会话占用','Nodes, discovery and exclusive sessions'),'fredabila/oahl',t('公开代码','Public code')],
+    ]
+    body=table([t('方案','Design'),t('统一的核心对象','Core abstraction'),t('维护者 / 来源','Maintainer / source'),t('材料形态','Artifact')],rows,'inventory')
+    body+='<p class="small-note">'+t('三个 Open-MHS 分别由 Abenor Labs、tongriyaotxt、SCUT-ESA 维护；MHP 指 Cuntinum 的项目。另有 Agent2Device 概念提案，现有内容为 README。','The three Open-MHS projects are maintained by Abenor Labs, tongriyaotxt and SCUT-ESA. MHP refers to Cuntinum’s project. Agent2Device is an additional concept proposal documented in a README.')+'</p>'
+    add('designs','designs',t('现有方案，首先在“统一什么”上不同','Existing designs differ first in what they unify'),t('方案全表','Design inventory'),body,('mhs','aip','openmhp','lap','oahl'))
+
+    # 04: MHS anatomy, not sponsor praise.
+    body='<div class="split"><div class="system-drawing">'+entity(t('人 / Agent / 自动化程序','People / agents / automation'),'MCP · CLI · API','top')+'<div class="connector">↓</div>'+entity(t('共同设备接口','Shared device interface'),t('发现设备 · 读状态 · 写控制量','Discover devices · Read state · Write controls'),'core')+'<div class="driver-grid">'+entity(t('激光器驱动','Laser driver'),t('功率、开关','Power, enable'))+entity(t('转台驱动','Stage driver'),t('角度、位置','Angle, position'))+entity(t('相机驱动','Camera driver'),t('曝光、图像','Exposure, image'))+'</div><div class="device-strip">'+t('物理设备与各自的编程接口','Physical devices and their programming interfaces')+'</div></div><div>'+note(t('定义','Definition'),t('MHS（Model Hardware Standard）把设备包装为共同驱动接口；物理说明标签描述设备能力及操作条件。','MHS wraps equipment in a shared driver interface. Physical-description tags explain capabilities and operating conditions.'))+note(t('改变了什么','What changes'),t('上层程序按能力发现和操作仪器，型号差异由驱动承担。同一套设备能力可从不同入口访问。','Callers operate named capabilities. Drivers translate them for each device; MCP, CLI and API expose the same interface.'))+note(t('在扫描中','In the scan'),t('找到能旋转波片的轴和能读取光功率的通道，再通过共同接口操作。','Find an axis that rotates the plate and a channel that measures optical power, then operate both through a common interface.'))+'</div></div>'
+    body+=insight(t('可继承的机制：让设备“自我描述”，让上层程序脱离厂商函数名。','Self-describing capabilities let callers work independently of vendor function names.'))
+    add('mhs','designs',t('MHS：把不同设备接到共同能力接口','MHS: a shared capability interface for heterogeneous devices'),'MHS',body,('mhs','mhs-site'),t('Anthropic × HHMI Janelia · 研究预览','Anthropic × HHMI Janelia · Research preview'))
+
+    # 05: the four implementations have different engineering choices.
+    body=table([t('独立项目','Independent project'),t('实现的组织方式','Implementation structure'),t('具体区别','Concrete distinction')],[
+        [link('#projects/open-mhs-abenor','Open-MHS · Abenor Labs'),t('能力标签 → 设备基类 → 传输驱动','Capability tags → device base class → transport'),t('标签随设备提供；读写检查集中在运行层；支持生成设备说明。','Device-owned tags; centralized read/write checks; generated device documentation.')],
+        [link('#projects/open-mhs-tong','Open MHS · tongriyaotxt'),t('设备注册 → 命令分派 → 运动技能','Registry → command dispatch → motion skills'),t('在读写之上增加机器人技能，把连续动作交给本地控制。','Robot skills add local continuous control above individual reads and writes.')],
+        [link('#projects/open-mhs-scut','Open MHS · SCUT-ESA'),t('共同接口 → 显式后端 → VISA 仪器','Common interface → explicit backend → VISA instrument'),t('分别管理实机、实验性与模拟后端；维护者列出两款 UNI-T 仪器的实机记录。','Separates hardware, experimental and simulated backends; reports hardware work with two UNI-T models.')],
+        [link('#projects/mhp-cuntinum','MHP · Cuntinum'),t('discover / read / write / execute<br>+ State Bus','discover / read / write / execute<br>+ State Bus'),t('以四类原语组织 SDK 和驱动，用共享状态组织设备协作；包名 khp。','Four primitive families organize SDKs and drivers; a shared state bus supports coordination. Package: khp.')],
+    ])
+    body+=insight(t('共同点是“能力—驱动”映射；差异在状态共享、动作组织和设备后端。选择依据应落实到所需设备与操作。','The common mechanism is capability-to-driver mapping. State sharing, action composition and device backends distinguish the implementations.'))
+    add('implementations','designs',t('同样叫设备接口，实现重心仍然不同','Device interfaces differ in their implementation choices'),t('Open-MHS 与 MHP','Open-MHS and MHP'),body,('abenor','tong','scut','cuntinum'),t('三个 Open-MHS 独立维护；Cuntinum MHP 为另一项目','Three independently maintained Open-MHS projects; Cuntinum MHP is a separate project'))
+
+    # 06: persistent state, resource declarations, observation provenance.
+    body='<div class="split"><div class="system-drawing">'+entity(t('客户端请求','Client request'),'read · write · ramp · act','top')+'<div class="connector">↓</div><div class="runtime-box"><h3>'+t('常驻仪器服务','Persistent instrument service')+'</h3><div>'+entity(t('量 / 动作 / 活动','Quantity / action / activity'),t('单位、参数、进度、完成条件','Units, parameters, progress, completion'))+entity(t('资源与状态','Resources and state'),'touches · occupies · events')+'</div></div><div class="connector">↓ ↑</div>'+entity(t('型号驱动 + 通信 channel','Model driver + communication channel'),t('下发操作；读取实际状态','Issue operations; read actual state'))+'</div><div>'+note(t('定义','Definition'),t('AIP（Agent–Instrument Protocol）把仪器连接、长活动与执行记录放进持续运行的服务；客户端提交工作并查询结果。','AIP places device connections, long-running activities and execution records in a persistent service. Clients submit work and retrieve results.'))+note(t('关键区别','Key distinction'),t('“动作已受理”与“物理目标已达成”分别记录。资源声明描述操作会影响什么；读数区分仪器报告、驱动记账与推断。','Acceptance and physical achievement are recorded separately. Resource declarations describe effects; readings distinguish device reports, tracked values and inference.'))+note(t('在扫描中','In the scan'),t('转台移动期间，服务持续跟踪到位条件；调用者离开后，活动和观测仍有明确身份。','The service tracks arrival while the stage moves. Activities and observations retain identities beyond the initiating call.'))+'</div></div>'
+    body+=insight(t('可继承的机制：由运行服务持有操作生命周期，供不同调用者持续查询和使用。','Mechanism to carry forward: the runtime owns the physical operation’s lifecycle across individual tool calls.'))
+    add('aip','designs',t('AIP：把一次调用变成持续可追踪的操作','AIP: track physical operations beyond a single call'),'AIP',body,('aip',),t('Agent–Instrument Protocol · 用户提供的 PRD v1.1','Agent–Instrument Protocol · Supplied PRD v1.1'))
+
+    # 07: the public specification's actual object and method names.
+    body='<div class="split"><div class="package-diagram"><div><b>DEVICE.md</b><span>'+t('身份、摘要、操作说明','Identity, summary and instructions')+'</span></div><div><b>descriptor.yaml</b><span>signals · settings · actions</span></div><div><b>driver.py</b><span>'+t('读写与动作的设备实现','Device implementation of reads, writes and actions')+'</span></div><div><b>references / scripts / methods</b><span>'+t('知识材料、过程脚本与方法参数','References, procedures and method parameters')+'</span></div></div><div>'+note(t('定义','Definition'),t('OpenMHP 用设备包把操作说明、机器可读描述与驱动放在一起，再以统一请求操作设备。','OpenMHP packages instructions, machine-readable descriptions and drivers, then exposes devices through common requests.'))+note(t('执行路径','Execution path'),'<code>device/describe</code> → '+t('选择能力','select capabilities')+' → '+t('读取 / 写入 / 调用动作','read / write / invoke')+' → '+t('查询任务和运行文件','inspect jobs and run files'))+note(t('关键区别','Key distinction'),t('描述按需加载；长动作交给任务；过程脚本与产出的文件关联到 run。参考设备包主要经过孪生测试。','Descriptions load on demand; jobs handle long actions; runs associate scripts with output files. Reference device packages are primarily twin-tested.'))+'</div></div>'
+    body+=insight(t('可继承的机制：一个可分发的设备包，把“怎么理解、怎么运行、产出在哪里”连在一起。','Mechanism to carry forward: a distributable device package connecting understanding, execution and outputs.'))
+    add('openmhp','designs',t('OpenMHP：让设备说明、驱动与运行记录相互关联','OpenMHP: connect descriptions, drivers and run records'),'OpenMHP',body,('openmhp','openmhp-devices'),t('公开规范草案与 Python 实现','Public draft specification and Python implementation'))
+
+    # 08: four physical-world primitives, named accurately and concisely.
+    body='<div class="lap-contract">'+entity('InstrumentCard',t('能力、设备身份与物理限制','Capabilities, identity and physical limits'))+'<span>↓</span>'+entity(t('Reservation + task','Reservation + task'),t('设备 / 样品占用，任务状态与参数绑定的执行确认','Device/sample reservation, task state and task-bound confirmation'),'core')+'<span>↓</span>'+entity('MeasurementResult',t('数值、单位、校准、不确定度与来源','Values, units, calibration, uncertainty and provenance'))+'</div>'
+    body+='<div class="split equal">'+note(t('定义','Definition'),t('LAP（Lab Agent Protocol）沿用 Agent 之间发现和任务协作的结构，把仪器作为有物理状态和测量结果的参与者。','LAP retains agent discovery and task collaboration while treating instruments as participants with physical state and measurement results.'))+note(t('在扫描中','In the scan'),t('取得转台与探测器的使用权；提交扫描任务；返回带角度单位、探测器校准信息及测量来源的结果。','Reserve the stage and detector, submit a scan task, and return results with angle units, detector calibration and measurement provenance.'))+'</div>'
+    body+=insight(t('可继承的机制：让“结果是什么、在什么条件下产生”成为任务契约的一部分。','Mechanism to carry forward: make the meaning and conditions of a measurement part of the task contract.'))
+    add('lap','designs',t('LAP：把资源占用和测量含义写进任务契约','LAP: include reservations and measurement meaning in task contracts'),'LAP',body,('lap',),t('Shiyanjia Lab · LAP v0.1 设计论文','Shiyanjia Lab · LAP v0.1 design paper'))
+
+    # 09: a topology rather than a capabilities buzzword list.
+    body='<div class="split"><div class="system-drawing">'+entity(t('调用者','Caller'),'JavaScript / Python SDK','top')+'<div class="connector">↓</div>'+entity(t('本地节点 / 可选注册与中继','Local node / optional registry and relay'),t('发现能力与节点地址','Find capabilities and node addresses'),'core')+'<div class="connector">↓</div>'+entity(t('会话管理 → 设备适配器 → 传输','Session → adapter → transport'),'Serial · ADB · MQTT · TCP')+'<div class="device-strip">'+t('节点所在位置的真实设备','Physical equipment attached to the node')+'</div></div><div>'+note(t('定义','Definition'),t('OAHL（Open Agent Hardware Layer）把设备暴露为节点中的能力，调用者通过会话取得使用权，再由适配器和传输插件执行。','OAHL exposes capabilities through hardware nodes. Callers reserve sessions; adapters and transport plugins perform the operation.'))+note(t('它重点解决什么','Primary problem'),t('设备在哪里、通过哪个节点访问、当前由谁使用。README 展示了通过 ADB 操作手机的路径。','Where equipment is, which node exposes it and who is using it. The README demonstrates an Android device through ADB.'))+'</div></div>'
+    body+=flow([('discover',t('找到设备','Find equipment')),('reserve',t('取得会话','Acquire a session')),('execute',t('执行能力','Run a capability')),('release',t('释放占用','Release the resource'))])
+    add('oahl','designs',t('OAHL：把分散的设备组织成可访问的资源','OAHL: make distributed devices accessible resources'),'OAHL',body,('oahl',),t('MIT · 节点、SDK 与传输插件','MIT · Nodes, SDKs and transport plugins'))
+
+    # 10: one hierarchy, one criterion. No second taxonomy of the 73 records.
+    families=[
+        ('A',t('设备能力模型','Device capability models'),'MHS · Open-MHS × 3 · MHP',t('设备能做什么？','What can the device do?'),t('共同描述 + 驱动映射','Shared description + driver mapping'),t('设备、能力、操作定义','Instrument, capability, operation'),'#presentation/4'),
+        ('B',t('操作执行与结果契约','Execution and result contracts'),'AIP · OpenMHP · LAP',t('怎样完成，又怎样证明？','How does it finish, and what is the evidence?'),t('任务状态 + 资源 + 观测','Task state + resources + observations'),t('执行实例、观测、方法','Run, observation, method'),'#presentation/6'),
+        ('C',t('设备发现与资源协作','Discovery and resource coordination'),'OAHL',t('设备在哪里，由谁使用？','Where is it, and who can use it now?'),t('发现 + 会话 + 访问路径','Discovery + sessions + access paths'),t('身份、占用、绑定','Identity, reservation, binding'),'#presentation/9'),
+    ]
+    body='<div class="island-headings"><span>'+t('一级 · 具体方案','I · Existing designs')+'</span><span>'+t('二级 · 共同机制','II · Shared mechanisms')+'</span><span>'+t('三级 · IOP 对象','III · IOP objects')+'</span></div><div class="island-map">'
+    for id,name,examples,question,mechanism,objects,href in families:
+        body+='<div class="island-row tone-'+id+'"><a class="island-origin" href="'+href+'">'+examples+'</a><div class="island-mechanism"><span class="island-letter">'+id+'</span><h3>'+name+'</h3><p>'+question+'</p><b>'+mechanism+'</b></div><div class="island-output">'+objects+'</div></div>'
+    body+='</div><p class="figure-caption">'+t('按主要设计重心归纳。OpenMHP 和 LAP 也包含发现与资源机制；分组表达贡献重心，这些机制在同一次操作中协作。','Grouped by primary design emphasis. OpenMHP and LAP also include discovery and resources; these overlapping mechanisms work together in a physical operation.')+'</p>'
+    add('islands','mechanisms',t('九项有具体机制的方案，归纳为三个机制岛屿','Nine substantive designs reveal three mechanism families'),t('三级关系全图','The complete hierarchy'),body,('mhs','aip','openmhp','lap','oahl'),t('由具体设计归纳','Synthesis of the reviewed designs'))
+
+    # 11: interaction among islands, keeping the same physical example.
+    body='<div class="mechanism-trace"><div class="trace-row"><span class="island-letter">C</span><div><h3>'+t('取得可用设备','Acquire available equipment')+'</h3><p>'+t('按旋转轴与功率测量能力找到设备，建立会话，确认资源占用。','Find rotational and power-measurement capabilities, establish a session and reserve resources.')+'</p></div><code>'+t('设备身份 + 可访问端点','identity + endpoint')+'</code></div><div class="trace-row"><span class="island-letter">A</span><div><h3>'+t('建立操作的共同含义','Establish shared operation meanings')+'</h3><p>'+t('把转台位置定义为半波片角度 θ；把探测器通道定义为光功率 P。','Define the stage position as plate angle θ and the detector channel as optical power P.')+'</p></div><code>'+t('能力 + 单位 + 轴零点','capability + unit + origin')+'</code></div><div class="trace-row"><span class="island-letter">B</span><div><h3>'+t('执行并保存物理结果','Execute and retain physical results')+'</h3><p>'+t('每点设角、确认到位、采集功率；将实际读数与同一次 run 关联。','Set each angle, confirm arrival and acquire power; associate actual readings with the same run.')+'</p></div><code>run → observations</code></div></div>'
+    body+=insight(t('IOP 的连接点是共同的操作身份：设备描述、执行请求、实际观测和方法知识，始终指向同一件事。','IOP joins these mechanisms through shared operation identities: descriptions, requests, observations and methods refer to the same operation.'))
+    add('mechanism-composition','mechanisms',t('三个岛屿，分别承担同一次操作的不同责任','Three mechanism families serve the same physical operation'),t('机制怎样协作','How mechanisms connect'),body,status=t('偏振扫描 · 机制组合','Polarization scan · Mechanism composition'))
+
+    # 12: standards are not just logos. Separate information model from binding.
+    body=table([t('既有基础','Existing foundation'),t('它已经提供的对象','Objects it already provides'),t('IOP 可映射的部分','What IOP can map')],[
+        ['SiLA 2','Feature · Command · Property',t('能力集合、属性读取、命令与可观测执行。把仪器类语义映射到这些交互。','Capability sets, property access, commands and observable execution. Map instrument-class semantics onto these interactions.')],
+        ['OPC UA / LADS','Device · FunctionalUnit · ProgramManager',t('仪器与功能单元、程序及结果管理。复用设备信息模型与状态。','Devices, functional units, program and result management. Reuse information models and device state.')],
+        ['W3C WoT','Thing Description · Property · Action · Event',t('把能力描述与具体通信绑定分开。IOP 操作可对应 Action，观测可对应 Property / Event。','Separate capability descriptions from transport bindings. Map operations to Actions and observations to Properties or Events.')],
+    ])
+    body+='<div class="interface-ribbon"><b>'+t('调用入口','Client entry points')+'</b><span>MCP · API · CLI · '+t('人工界面','Human UI')+'</span><p>'+t('共享操作模型；入口选择由使用场景决定。','Share the operation model; choose an interface for the use case.')+'</p></div>'
+    add('foundations','mechanisms',t('共同语义可以复用已有设备标准','Shared semantics can build on existing device standards'),t('既有标准的位置','Where existing standards fit'),body,('sila','lads','wot'),t('接口映射设计','Interface mapping design'))
+
+    # 13: this is the actual thesis, with object relations and cardinality meanings.
+    body='<div class="object-model"><div class="object-row">'+entity(t('仪器 Instrument','Instrument'),t('物理身份、能力与资源','Physical identity, capabilities and resources'))+'<span class="relation-word">'+t('提供','provides')+'</span>'+entity(t('操作 Operation','Operation'),t('输入、作用、完成条件、输出','Inputs, effects, completion and outputs'),'core')+'<span class="relation-word">'+t('被组合为','composes into')+'</span>'+entity(t('方法 Method','Method'),t('适用条件、步骤与分析','Applicability, procedure and analysis'))+'</div><div class="object-connectors"><span>'+t('驱动绑定 ↓','Driver binding ↓')+'</span><span>'+t('每次调用实例化 ↓','Each invocation creates ↓')+'</span><span>'+t('方法规定观测 ↓','Specifies acquisition ↓')+'</span></div><div class="object-row">'+entity(t('设备实现 Binding','Binding'),t('厂商命令、现有控制系统','Vendor commands and control systems'))+'<span class="relation-word">'+t('执行','executes')+'</span>'+entity(t('执行实例 Run','Run'),t('参数、占用、状态与事件','Parameters, reservations, state and events'),'core')+'<span class="relation-word">'+t('产出','produces')+'</span>'+entity(t('观测 Observation','Observation'),t('读回、单位、时间与条件','Readback, units, time and conditions'))+'</div></div>'
+    body+='<div class="model-definition"><b>'+t('IOP 的核心约束','The central IOP contract')+'</b><p>'+t('一次操作必须能从“它的物理含义”追到“这次如何执行”，再追到“结果由哪些观测支持”。原理与经验通过操作身份关联；方法复用这些操作；驱动实现它们。','An operation must connect its physical meaning to a particular execution and the observations supporting its result. Principles and practical knowledge link to operation identities; methods compose operations; drivers implement them.')+'</p></div>'
+    add('iop-model','iop',t('IOP：以操作为中心，把知识、执行和观测连成整体','IOP: connect knowledge, execution and observations around operations'),t('IOP 的核心模型','The IOP model'),body,('operations',),t('AI4Instruments · IOP 设计','AI4Instruments · IOP design'))
+
+    # 14: human and machine are views of the SAME definition.
+    code='''id: optics.polarization_scan
+version: 0.1
+requires:
+  angle: {unit: deg, origin: plate_axis_zero}
+  power: {unit: W}
+context: [wavelength, calibration_ref]
+inputs: {angles: {type: array, unit: deg}}
+procedure:
+  for_each: {angle_target: angles}
+  steps:
+    - move_to: angle_target
+    - wait_for: stage_settled
+    - read: [angle_actual, power, time]
+result: {columns: [angle_actual, power, time]}'''
+    body='<div class="split equal definition-pair"><div><span class="margin-label">'+t('人看到的操作定义','Human-readable operation')+'</span><h3>'+t('偏振扫描','Polarization scan')+'</h3><p>'+t('沿给定角度序列旋转半波片，每点确认转台到位后采集透射功率。','Rotate the half-wave plate through the requested angles. At each point, confirm stage settling before acquiring transmitted power.')+'</p><dl><dt>'+t('角度','Angle')+'</dt><dd>'+t('单位为度；零点对应波片轴的标定位置。','Degrees relative to the calibrated plate-axis origin.')+'</dd><dt>'+t('功率','Power')+'</dt><dd>'+t('单位为瓦；记录工作波长与探测器校准引用。','Watts, with wavelength and a detector calibration reference.')+'</dd><dt>'+t('输出','Output')+'</dt><dd>'+t('保存实际角度、功率与采集时间，形成同一份扫描记录。','Actual angle, power and acquisition time in one scan record.')+'</dd></dl></div><div><span class="margin-label">'+t('程序读取的同一份定义','The same definition for software')+'</span><pre class="contract-code"><code>'+E(code)+'</code></pre></div></div>'
+    body+=insight(t('原理、说明、参数与程序共享同一个 id 和版本；修改方法时，同时更新它们的对应关系。','Principles, instructions, parameters and execution share one id and version. Method changes update their relationships together.'))
+    add('shared-definition','iop',t('一个操作定义，供人理解，也供程序执行','One operation definition for people and software'),t('共同定义的具体形态','A concrete operation definition'),body,status=t('IOP 定义示意 · YAML','Illustrative IOP definition · YAML'))
+
+    # 15: physical and software states are different, shown in parallel lanes.
+    body='<div class="execution-timeline"><div class="timeline-heading"><span>'+t('过程','Process')+'</span><b>01</b><b>02</b><b>03</b><b>04</b></div><div class="timeline-row"><b>'+t('软件记录','Software')+'</b>'+''.join('<div>'+x+'</div>' for x in [t('请求受理<br><small>固定参数与方法版本</small>','Accepted<br><small>Parameters and method version fixed</small>'),t('操作执行<br><small>下发移动，跟踪活动</small>','Running<br><small>Move issued, activity tracked</small>'),t('条件成立<br><small>到位读回满足约定</small>','Condition met<br><small>Arrival readback meets criteria</small>'),t('结果形成<br><small>观测写入 run</small>','Result recorded<br><small>Observations linked to run</small>')])+'</div><div class="timeline-row physical"><b>'+t('物理过程','Physical')+'</b>'+''.join('<div>'+x+'</div>' for x in [t('转台仍在原位置','Stage at its initial position'),t('波片转动','Plate moving'),t('实际位置稳定','Actual position settled'),t('探测器完成采集','Detector acquisition complete')])+'</div></div>'
+    body+='<div class="split equal">'+note(t('完成条件来自仪器行为','Completion follows device behavior'),t('驱动给出到位状态或读回判据；方法定义需要满足的条件，然后才采集功率。','The driver supplies a settled state or readback criterion. The method specifies the required condition before power acquisition.'))+note(t('中断后根据读回恢复认知','Reconcile from readback after interruption'),t('连接中断时保留 run。重连后先检查位置与活动状态，再决定继续、结束或保留未完成记录。','Retain the run across disconnection. Read position and activity state on reconnection before continuing, ending or retaining a partial record.'))+'</div>'
+    body+=insight(t('执行记录回答“发出了什么”；观测记录回答“物理上发生了什么”。IOP 用同一个 run 将两者关联。','Execution records state what was issued; observations state what physically occurred. A shared run links both.'))
+    add('execution','iop',t('一次执行，必须走到实际状态和测量读回','Follow execution through to physical state and readback'),t('执行与观测','Execution and observation'),body,status=t('IOP 执行语义设计','IOP execution semantics design'))
+
+    # 16: concrete compatibility boundaries, not a promise of universal support.
+    body='<div class="reuse-banner"><b>optics.polarization_scan</b><span>'+t('同一个方法与结果格式','One method and result format')+'</span></div>'+table([t('IOP 要求','IOP requirement'),t('设备实现 A','Device implementation A'),t('设备实现 B','Device implementation B')],[
+        [t('角度设定，单位 deg','Set angle in deg'),t('厂商 SDK：将角度转换为原生位置单位','Vendor SDK: convert angle to native position units'),t('EPICS：映射设定值通道和单位','EPICS: map setpoint channel and units')],
+        [t('实际位置与到位条件','Actual position and settling'),t('读取编码器与运动状态','Read encoder and motion state'),t('映射读回及到位状态通道','Map readback and done-state channels')],
+        [t('光功率，单位 W','Optical power in W'),t('SCPI / VISA：读取并统一单位','SCPI / VISA: query and normalize units'),t('已有采集服务：读取功率与时间','Acquisition service: read power and time')],
+        [t('方法所需条件','Method requirements'),t('波长、轴零点、量程与校准引用','Wavelength, origin, range and calibration'),t('提供相同含义；缺失能力显式返回','Expose the same meanings; report missing capabilities')],
+    ])
+    body+=insight(t('兼容性落实到能力：输入含义相同、完成判据相同、结果可解释。传输方式与内部实现可以不同。','Compatibility is capability-specific: equivalent input meaning, completion criteria and interpretable results across different transports and implementations.'))
+    add('compatibility','iop',t('跨设备复用，靠明确的语义映射','Reuse across devices requires explicit semantic mappings'),t('怎样兼容现有系统','Compatibility with existing systems'),body,status=t('两种设备组合的适配设计','Adapter design for two equipment configurations'))
+
+    # 17: the ecosystem has tangible, linked artifacts.
+    body='<div class="instrument-package"><div class="package-spine"><span>IOP</span><h3>'+t('仪器包','Instrument package')+'</h3><p>'+t('共同身份<br>明确版本','Shared identity<br>Explicit version')+'</p></div><div class="package-sections">'
+    for title,what,use in [
+        (t('原理与知识','Principles and knowledge'),t('物理量、作用机制、适用条件与实践经验','Quantities, physical mechanisms, applicability and practice'),t('解释操作的含义与选择依据','Explain meaning and method choices')),
+        (t('能力与操作定义','Capability and operation definitions'),t('参数、单位、状态、作用与结果结构','Parameters, units, state, effects and result structure'),t('供界面、脚本与 Agent 共同读取','Shared by interfaces, scripts and agents')),
+        (t('驱动与方法实现','Drivers and methods'),t('设备适配、步骤组合、分析与复测','Adapters, procedure composition, analysis and repetition'),t('把定义落实到真实设备','Execute definitions on real devices')),
+        (t('测量与一致性记录','Measurement and conformance records'),t('校准引用、实机读回、测试条件与数据','Calibration references, readbacks, test conditions and data'),t('支持复用、比较与持续维护','Support reuse, comparison and maintenance')),
+    ]:body+='<div><h3>'+title+'</h3><p>'+what+'</p><span>'+use+'</span></div>'
+    body+='</div></div>'
+    body+=insight(t('生态的基本单位是可使用、可理解、可验证的仪器包；共享词汇和一致性测试，使不同作者的仪器包能够协作。','The ecosystem grows through usable, understandable and testable instrument packages, joined by shared vocabulary and conformance tests.'))
+    add('ecosystem','iop',t('知识、方法、代码与数据，围绕同一台仪器组织','Organize knowledge, methods, code and data around the instrument'),t('生态由什么组成','What the ecosystem contains'),body,status=t('IOP 仪器包设计','IOP instrument-package design'))
+
+    # 18: an experimentally assessable end state; no meta-discussion of the medium.
+    body='<div class="validation-map"><div class="common-method"><span>'+t('同一份操作定义与方法','One operation definition and method')+'</span><b>optics.polarization_scan</b></div><div class="parallel-setups"><div><b>'+t('设备组合 A','Equipment configuration A')+'</b><span>'+t('SDK 转台 + VISA 功率计','SDK stage + VISA power meter')+'</span></div><div><b>'+t('设备组合 B','Equipment configuration B')+'</b><span>'+t('控制系统转台 + 采集服务','Control-system stage + acquisition service')+'</span></div></div><div class="comparison-output"><b>'+t('可解释、可对照的扫描记录','Interpretable, comparable scan records')+'</b><span>angle_actual · power · time · calibration_ref · method_version</span></div></div>'
+    body+='<div class="validation-criteria">'+note(t('语义一致','Consistent meaning'),t('同一角度定义、单位与方法条件。','Same angle definition, units and method conditions.'))+note(t('执行成立','Valid execution'),t('到位判据由实机读回满足。','Physical readback satisfies arrival criteria.'))+note(t('结果可解释','Interpretable results'),t('差异能追溯到设备、校准与实验条件。','Differences trace to devices, calibration and conditions.'))+'</div>'
+    body+=insight(t('IOP 的价值：保留仪器的物理真实性，同时减少人和程序在理解、接入与复用方法时的重复工作。','IOP preserves physical meaning while making instrument knowledge, connections and methods reusable.'))
+    add('validation','iop',t('IOP 的成立条件：同一方法，跨设备保持同一含义','The IOP test: preserve method meaning across devices'),t('如何判断 IOP 做成了','What demonstrates that IOP works'),body,('operations',),t('建设目标 · 仓库现有基础：操作模型与模拟参考实现','Development target · Current foundation: operation model and simulated reference implementation'))
+    return pages
 
 
 def metadata(data):
-    profiles = data['landscape']['profiles']
-    routes = {r['id'] for r in data['landscape']['routes']}
-    grouped = [r for g in GROUPS for r in g['routes']]
-    assert set(grouped) == routes and len(grouped) == len(routes)
-    groups = [{**g, 'projects': [p['id'] for p in profiles if p['route'] in g['routes']]} for g in GROUPS]
-    assert sum(len(g['projects']) for g in groups) == len(data['catalogue']['projects'])
-    return {'schema_version': '1.0', 'updated': '2026-10-21', 'name': 'Instrument Operations Protocol',
-            'abbreviation': 'IOP', 'basis': 'editorial-classification', 'groups': groups,
-            'levels': {'1': 'individual work', '2': 'contribution route', '3': 'system responsibility'},
-            'context_placement': [
-                {'id': 'mhs', 'record': 'context.standards', 'roles': ['understand', 'execute', 'experiment'], 'basis': 'announced-scope'},
-                {'id': 'aip', 'record': 'context.standards', 'roles': ['understand', 'execute'], 'basis': 'supplied-design'}],
-            'protocol_comparison': {'basis': 'editorial-classification', 'groups': PROTOCOL_GROUPS,
-                'unassigned_concepts': PROTOCOL_PENDING,
-                'selection': 'Seven instrument-contract projects plus MHS, AIP and LAP; adjacent gateways and general agent protocols are separate.'},
-            'slides': [{'id': s[0], 'title': s[1], 'subtitle': s[2], 'notes': s[3]} for s in SLIDES]}
-
-
-def render(data, lang):
-    e = lambda x: html.escape(str(x), quote=True)
-    t = lambda zh, en: zh if lang == 'zh' else en
-    tx = lambda x: e(x[lang])
-    D = data['presentation']; groups = D['groups']; profiles = data['landscape']['profiles']
-    projects = {p['id']: p for p in data['catalogue']['projects']}
-    routes = {r['id']: r for r in data['landscape']['routes']}
-    a = lambda target, text: f'<a href="{e(target)}">{e(text)}</a>'
-    p = lambda id: a('#projects/' + id, projects[id]['name'])
-    s = lambda id, label: a('#standards/' + id, label)
-    def card(title, body, tail='', cls=''):
-        return f'<section class="deck-card {cls}"><h3>{title}</h3><p>{body}</p>{"<div class=deck-card-tail>"+tail+"</div>" if tail else ""}</section>'
-    def conclusion(zh, en):
-        return '<p class="deck-conclusion">'+e(t(zh,en))+'</p>'
-    def table(headers, rows):
-        return '<table class="deck-table"><thead><tr>'+''.join('<th>'+x+'</th>' for x in headers)+'</tr></thead><tbody>'+''.join('<tr>'+''.join('<td>'+x+'</td>' for x in row)+'</tr>' for row in rows)+'</tbody></table>'
-    bodies=[]
-    bodies.append('<div class="deck-opening"><div class="iop-word">IOP</div><div class="deck-opening-copy"><p>'+t('人能够理解和学习<br>程序能够调用和组合<br>实验能够留下可解释的结果','People understand and learn<br>Programs invoke and compose<br>Experiments return interpretable results')+'</p></div></div><div class="deck-three">'+''.join(card(tx(g['short']),tx(g['question']),cls='island-'+g['id']) for g in groups)+'</div>')
-    bodies.append('<div class="deck-two">'+card(t('工程与研究资料','Projects and research'),t('73 条记录，包含桥接、契约、运行环境、工作流及实验研究。','73 records: bridges, contracts, runtimes, workflows and research.'),a('#projects',t('打开工程目录','Open project directory')))+card(t('标准与基础生态','Standards and foundations'),t('14 组材料。MHS 是研究预览，AIP 是用户提供的设计材料。','14 groups, including MHS (preview) and AIP (supplied design).'),s('mhs','MHS')+' '+s('aip','AIP'))+'</div>'+table([t('另行统计','Separate counts'),t('含义','Meaning')],[['70',t('维护者与标准主体，包括个人账号和组织','Maintainers and standards actors, including accounts and organizations')],['323',t('关系：177 条来源记录，146 条分析分类','Relationships: 177 documented and 146 analytical classifications')],['316',t('来源地址，同一工程可有多个来源','Source addresses; one project can have several sources')]])+conclusion('数量描述资料规模；贡献与可复用能力决定阅读顺序。','Counts describe the collection. Contributions and reusable capabilities guide reading.'))
-    island_slide = next(i+1 for i,slide in enumerate(D['slides']) if slide['id']=='islands')
-    svg=['<svg class="islands-svg" viewBox="0 0 1140 360" role="img" aria-labelledby="islands-title"><title id="islands-title">'+t('73 项工作、8 条路线、3 个系统部分','73 records, eight approaches, three responsibilities')+'</title>']
-    for gi,g in enumerate(groups):
-        x=gi*382; svg.append(f'<g style="--island:{g["color"]}"><rect x="{x+2}" y="3" width="371" height="350" rx="18" class="island-background"/><text x="{x+22}" y="35" class="island-heading">{tx(g["short"])}</text><text x="{x+349}" y="35" text-anchor="end" class="island-total">{len(g["projects"])}</text>')
-        y=68
-        for rid in g['routes']:
-            ids=[pf['id'] for pf in profiles if pf['route']==rid]
-            svg.append(f'<a href="#presentation/{island_slide}?route={rid}" aria-label="{tx(routes[rid]["name"])}"><rect x="{x+16}" y="{y-18}" width="339" height="26" rx="4" class="island-route-hit"/><text x="{x+25}" y="{y}" class="island-route">{tx(routes[rid]["name"])} · {len(ids)}</text><text x="{x+338}" y="{y}">+</text></a>')
-            for j,pid in enumerate(ids):
-                cx=x+31+(j%12)*27; cy=y+24+(j//12)*25
-                svg.append(f'<a href="#projects/{pid}" aria-label="{e(projects[pid]["name"])}"><title>{e(projects[pid]["name"])}</title><circle cx="{cx}" cy="{cy}" r="8" class="island-project"/></a>')
-            y+=48+((len(ids)-1)//12)*25
-        svg.append('</g>')
-    svg.append('</svg>')
-    bodies.append(''.join(svg)+'<div class="deck-legend"><span>'+t('每个圆点是一项工作，点击查看详情','Each dot opens one project')+'</span><span>'+t('点击路线名称，展开该岛中的项目','Select an approach to expand its projects')+'</span></div>'+conclusion('按主要贡献归类，项目可以跨岛；三个部分通过 IOP 相互连接。','Primary contributions determine the grouping. Projects can span islands; IOP connects the responsibilities.'))
-    bodies.append('<div class="deck-two">'+card(t('知识与资料 · 4 项','Knowledge resources · 4'),t('原理、适用条件、操作经验与预期观测，让能力可以理解和学习。','Principles, applicability, operating experience and expected observations make capabilities understandable.'),p('device-skills'))+card(t('仪器契约 · 7 项','Instrument contracts · 7'),t('能力、物理量、参数、状态和结果定义，让操作可以被程序准确调用。','Capabilities, quantities, parameters, state and result definitions make operations callable.'),p('openmhp')+' '+p('oahl'))+'</div><div class="shared-definition"><span>'+t('人读：原理与方法','Human view: principles and methods')+'</span><b>'+t('同一操作身份与版本','One operation identity and version')+'</b><span>'+t('程序读：结构与接口','Program view: structure and interface')+'</span></div>'+conclusion('IOP 的知识与接口应引用彼此，让说明、参数和实际行为保持对应。','Knowledge and interfaces should reference each other so descriptions, parameters and behavior stay aligned.'))
-    bodies.append('<div class="deck-grid-four">'+card(t('设备桥接 · 26 项','Device bridges · 26'),t('把现有驱动或控制接口变成可调用能力。','Expose capabilities through existing drivers or control interfaces.'),p('scpi-mcp')+' '+p('epics-mcp'))+card(t('常驻执行 · 10 项','Persistent execution · 10'),t('持有连接、任务和状态，支持持续运行与结果读回。','Own connections, jobs and state across sustained execution.'),p('instrmcp')+' '+p('osprey'))+card(t('仪器开发 · 4 项','Instrument development · 4'),t('读写固件、观察总线、调试设备，形成新的控制能力。','Develop firmware and inspect buses to create new control capabilities.'),p('embedded-debugger')+' '+p('saleae'))+card(t('界面操作 · 1 项','GUI operation · 1'),t('通过已有仪器软件的界面完成操作。','Operate through the interface of existing instrument software.'),p('device-use'))+'</div>'+conclusion('IOP 需要明确操作与读回的关系，并复用这些已有接入路径。','IOP should relate operations to observations while reusing existing access paths.'))
-    bodies.append('<div class="deck-two">'+card(t('过程编排 · 8 项','Workflow orchestration · 8'),t('描述步骤依赖、资源使用、样品流转和跨设备过程。','Express dependencies, resource use, sample transfers and multi-device procedures.'),p('unilabos')+' '+p('ivoryos'))+card(t('实验决策 · 13 项','Experimental decisions · 13'),t('依据目标和观测选择方法、调整参数或提出下一次实验。','Choose methods, adjust parameters or propose experiments using objectives and observations.'),p('aila')+' '+p('k-agents'))+'</div><div class="feedback-cycle"><div>'+t('方法与条件','Method and conditions')+'</div><span>→</span><div>'+t('仪器执行','Instrument execution')+'</div><span>→</span><div>'+t('观测与判断','Observations and judgment')+'</div><p>'+t('反馈回到下一次方法选择','Feedback informs the next method choice')+'</p></div>'+conclusion('接口提供可解释的实验能力，研究系统决定用它研究什么。','Interfaces expose interpretable experimental capabilities; research systems choose how to use them.'))
-    bodies.append('<div class="deck-three reference-cards">'+card('MHS',t('Anthropic / HHMI Janelia<br><strong>研究预览</strong><br>共同驱动、能力说明与多种入口。公开材料列出跨机构试用和厂商集成计划。','Anthropic / HHMI Janelia<br><strong>Research preview</strong><br>Shared drivers, capability descriptions and multiple interfaces. Public materials describe institutional trials and vendor plans.'),s('mhs',t('生态发展参照','Ecosystem reference')))+card('AIP',t('用户提供的 PRD v1.1<br><strong>设计材料</strong><br>类型化物理量、持久执行、状态来源及控制与数据分离。','Supplied PRD v1.1<br><strong>Design reference</strong><br>Typed quantities, persistent execution, state provenance and separate control/data paths.'),s('aip',t('执行架构参照','Execution design reference')))+card('OpenMHP',t('独立社区工程<br><strong>公开规范与实现</strong><br>描述、操作、任务、租约与结果。当前设备包主要为孪生测试。','Independent community project<br><strong>Public specification and code</strong><br>Descriptors, operations, jobs, leases and results. Current device packages are primarily twin-tested.'),p('openmhp'))+'</div>'+conclusion('MHS 值得重点跟踪；技术价值仍要看能力覆盖、实现、采用和实验成果。','MHS warrants close attention. Technical value still depends on coverage, implementation, adoption and experimental results.'))
-    bodies.append(table([t('代表','Example'),t('抓住的问题','Question'),t('对 IOP 的作用','Relevance to IOP')],[
-        [s('mhs','MHS'),t('跨机构与厂商如何协作？','How can institutions and vendors collaborate?'),t('共同接入与生态组织','Shared access and ecosystem participation')],
-        [p('openmhp'),t('一个设备任务如何完整表达？','How is a device job represented?'),t('可检查的操作与执行契约','Inspectable operation and execution contracts')],
-        [p('osprey'),t('怎样使用已有大型设施？','How can existing facilities be used?'),t('设施知识与真实通道的对应','Mapping facility knowledge to control channels')],
-        [p('unilabos'),t('多台设备怎样组成实验？','How do devices form an experiment?'),t('资源与过程的组合','Resource and procedure composition')],
-        [p('aila'),t('观测怎样影响下一步？','How do observations inform the next step?'),t('实机实验与反馈判断','Physical experiments and feedback')],
-    ])+conclusion('详细讲贡献不同的代表；相似实现按具体设备需求查询。','Explain representatives with distinct contributions; consult similar implementations for specific device needs.'))
-    bodies.append('<div class="architecture"><div class="architecture-users"><span>'+t('人：界面 / 文档 / 脚本','People: interface / docs / scripts')+'</span><span>'+t('Agent：API / MCP / CLI','Agents: API / MCP / CLI')+'</span></div><div class="architecture-core"><b>'+t('IOP 共同定义','IOP shared definitions')+'</b><span>'+t('设备与能力　物理量与操作　任务与观测　结果与数据','Devices and capabilities · Quantities and operations · Jobs and observations · Results and data')+'</span></div><div class="architecture-roles">'+''.join('<div style="--island:'+g['color']+'"><b>'+tx(g['short'])+'</b><span>'+t(*v)+'</span></div>' for g,v in zip(groups,[('原理、描述、知识','Principles, descriptions, knowledge'),('运行、状态、读回','Execution, state, readback'),('方法、过程、反馈','Methods, procedures, feedback')]))+'</div><div class="architecture-adapters">'+t('适配器与协议绑定：SCPI / VISA、EPICS、TANGO、ROS、厂商 SDK','Adapters and bindings: SCPI / VISA, EPICS, TANGO, ROS, vendor SDKs')+'</div><div class="architecture-physical">'+t('真实仪器、样品与物理环境','Physical instruments, samples and environment')+'</div></div>'+conclusion('对应关系要落实到物理意义、状态和结果，而不只转换函数名。','Mappings must preserve physical meaning, state and results, beyond translating function names.'))
-    bodies.append(table([t('操作角色','Operation role'),t('含义','Meaning'),t('光学示例','Optical example')],[
-        ['Basic Operations',t('一个明确的控制或观测','An explicit control or observation'),t('设置转台角度；读取功率','Set stage angle; read optical power')],
-        ['Standard Operations',t('可复用、有适用条件的方法','A reusable method with stated applicability'),t('完成一次偏振扫描，返回校准条件与测量记录','Run a polarization scan and return acquisition and calibration records')],
-        ['Workflow Operations',t('组织方法、仪器和实验决策','Organize methods, instruments and decisions'),t('改变实验条件，复测并选择下一组参数','Change conditions, repeat measurements and select the next parameters')],
-    ])+'<div class="composition-grid">'+''.join('<span>'+tx(g['short'])+'</span>' for g in groups)+'</div>'+conclusion('每种操作都需要含义、执行与结果。阅读层级与操作组合角色分别表达。','Every operation needs meaning, execution and results. Reading levels and operation roles describe different dimensions.'))
-    bodies.append('<div class="optical-bench"><span>'+t('线偏振入射','Linear input')+'</span><i>→</i><span>'+t('可旋转半波片','Rotating half-wave plate')+'</span><i>→</i><span>'+t('固定检偏器','Fixed analyzer')+'</span><i>→</i><span>'+t('功率计','Power meter')+'</span></div><div class="deck-three">'+card(t('理解','Understand'),t('工作波长<br>轴零点与角度定义<br>探测器校准与量程','Wavelength<br>Axis zero and angle definition<br>Detector calibration and range'))+card(t('执行','Execute'),t('设置目标角度<br>等待并读取实际位置<br>采集功率和时间','Set target angle<br>Settle and read actual position<br>Acquire power and time'))+card(t('组织实验','Experiment'),t('遍历扫描点<br>记录条件与观测<br>复测或调整下一轮','Traverse scan points<br>Record conditions and observations<br>Repeat or adjust the next run'))+'</div>'+conclusion('人工界面与 Agent 工具调用引用同一方法定义，生成相同结构的实验记录。','Human interfaces and agent tools refer to one method definition and produce the same record structure.'))
-    bodies.append('<div class="build-status">'+t('现有基础：操作模型与模拟参考实现','Existing foundation: operation model and simulated reference implementation')+'</div>'+table([t('建设步骤','Step'),t('可交付内容','Deliverable')],[
-        ['01 '+t('描述具体仪器','Describe an instrument'),t('能力与操作定义，关联原理、校准和人工可读说明','Capability and operation definitions linked to principles, calibration and readable documentation')],
-        ['02 '+t('接入真实设备','Connect physical equipment'),t('驱动适配与持久执行，真实读回和结果记录','Driver adapters, persistent execution, physical readback and results')],
-        ['03 '+t('复用实验方法','Reuse experimental methods'),t('同一方法在不同设备实现上运行，保留特有能力','One method running through different device implementations, retaining device-specific capabilities')],
-        ['04 '+t('扩展共同生态','Extend the shared ecosystem'),t('设备包、方法库、映射说明与可重复的互操作示例','Device packages, method libraries, mapping specifications and repeatable interoperability examples')],
-    ])+conclusion('以真实设备和可复用方法检验设计，再扩展规范覆盖。','Exercise the design through real devices and reusable methods, then extend its coverage.'))
-    bodies.append('<div class="deck-grid-four">'+card(t('比较具体工程','Compare projects'),t('贡献、差异、连接路径与实验记录','Contributions, distinctions, access paths and experiment records'),a('#projects',t('工程与比较','Projects and comparison')))+card(t('理解已有规范','Understand existing specifications'),t('MHS、AIP、SiLA、OPC UA 等的角色与状态','Roles and status of MHS, AIP, SiLA, OPC UA and other foundations'),a('#standards',t('标准与组件','Standards and components')))+card(t('追踪实际关系','Trace actual relationships'),t('维护、复用、接入与后续发展','Maintenance, reuse, integration and successors'),a('#relations',t('关系图谱','Relationship graph')))+card(t('阅读和复用原始资料','Read and reuse the evidence'),t('来源链接、结构化数据与中英文正文','Source links, structured data and bilingual text'),a('#sources',t('来源与数据','Sources and data')))+'</div>'+conclusion('IOP 的目标：让人和 Agent 理解仪器、执行方法，并使用有物理意义的实验结果。','IOP aims to help people and agents understand instruments, execute methods and use physically meaningful results.'))
-    names={'s:mhs':'MHS','s:aip':'AIP','s:lap':'LAP','p:open-mhs-abenor':'Open-MHS · Abenor','p:open-mhs-tong':'Open MHS · tongriyaotxt','p:open-mhs-scut':'Open MHS · SCUT-ESA','p:mhp-cuntinum':'MHP · Cuntinum','p:openmhp':'OpenMHP','p:oahl':'OAHL','p:agent2device':'Agent2Device'}
-    status={'s:mhs':t('研究预览','Preview'),'s:aip':t('设计材料','Design'),'s:lap':t('设计论文','Design paper'),'p:openmhp':t('规范与代码','Spec + code'),'p:agent2device':t('概念提案','Concept')}
-    def ref(key):
-        kind,id=key.split(':',1)
-        return a(('#standards/' if kind=='s' else '#projects/')+id,names[key])
-    protocol_cards=[]
-    for g in PROTOCOL_GROUPS:
-        items=''.join('<li>'+ref(key)+'<span>'+status.get(key,t('公开工程','Public code'))+'</span></li>' for key in g['members'])
-        protocol_cards.append('<section class="deck-card protocol-list"><h3>'+tx(g['name'])+'</h3><ul>'+items+'</ul></section>')
-    inventory='<div class="deck-three">'+''.join(protocol_cards)+'</div><p class="protocol-pending">'+ref('p:agent2device')+' · '+t('概念提案，公开细节尚不足以归入具体机制','Concept proposal; public details do not yet support a mechanism assignment')+'</p>'+conclusion('三项 Open-MHS 是不同维护者的独立工程，不是官方 MHS 的三个版本。','The three Open-MHS entries are independently maintained projects, not three versions of official MHS.')
-    mechanisms='<div class="deck-three">'+''.join(card(tx(g['name']),tx(g['question']),t('代表：','Examples: ')+', '.join(ref(key) for key in (g['members'][:1] if g['id']!='jobs' else g['members']))) for g in PROTOCOL_GROUPS)+'</div><div class="synthesis-core"><b>'+t('IOP 的共同模型','Shared IOP model')+'</b><p>'+t('仪器与能力　操作与任务　资源与状态　观测与结果','Instruments and capabilities · Operations and jobs · Resources and state · Observations and results')+'</p></div>'+conclusion('机制可以跨岛组合。共同模型的价值取决于实际映射和跨设备方法复用。','Mechanisms can span groups. The shared model earns its value through actual mappings and reusable methods.')
-    foundations='<div class="deck-three">'+card('SiLA 2',t('实验室服务与功能<br>命令、属性与可观测执行','Laboratory services and features<br>Commands, properties and observable execution'),s('sila',t('复用服务与执行语义','Reuse service and execution semantics')))+card('OPC UA / LADS',t('设备信息模型<br>功能单元、状态与程序管理','Device information models<br>Functional units, states and program management'),s('lads',t('复用设备与程序模型','Reuse device and program models')))+card('W3C WoT',t('设备交互描述<br>属性、动作、事件与协议绑定','Interaction descriptions<br>Properties, actions, events and protocol bindings'),s('wot',t('复用描述与绑定分离','Reuse description/binding separation')))+'</div><div class="shared-definition"><b>MCP / API / CLI</b><span>'+t('面向 Agent 与程序的调用入口','Invocation interfaces for agents and programs')+'</span></div>'+conclusion('IOP 的建设先识别能直接采用的已有语义，再补充需要共同约定的部分。','IOP development starts by identifying reusable semantics, then defines the additional shared requirements.')
-    bodies[2:2]=[inventory,mechanisms,foundations]
-    refs={6:[('projects/device-skills','device-skills'),('projects/openmhp','OpenMHP')],7:[('projects/instrmcp','instrMCP'),('projects/osprey','Osprey')],8:[('projects/unilabos','Uni-Lab-OS'),('projects/aila','AILA')],9:[('standards/mhs','MHS'),('standards/aip','AIP'),('projects/openmhp','OpenMHP')],10:[('standards/mhs','MHS'),('projects/openmhp','OpenMHP'),('projects/osprey','Osprey'),('projects/unilabos','Uni-Lab-OS'),('projects/aila','AILA')]}
+    zh,en=content('zh'),content('en')
+    assert [x['id'] for x in zh]==[x['id'] for x in en]
     slides=[]
-    for i,(info,body) in enumerate(zip(D['slides'],bodies)):
-        sources=' '.join(a('#'+path,label) for path,label in refs.get(i,[]))
-        slides.append(f'<article class="deck-slide" data-slide="{i+1}" aria-label="{i+1}. {tx(info["title"])}"><header><p class="deck-subtitle">{tx(info["subtitle"])}</p><h2>{tx(info["title"])}</h2></header><div class="deck-body">{body}</div><footer><span>AI4Instruments · IOP</span><span class="deck-refs">{sources}</span><span>{i+1:02} / {len(D["slides"]):02}</span></footer></article>')
-    options=''.join(f'<option value="{i+1}">{i+1:02}　{tx(info["title"])}</option>' for i,info in enumerate(D['slides']))
-    return f'''<section class="view" id="view-presentation" data-view="presentation"><div class="deck-shell" id="deck-shell"><div class="deck-controls"><label for="deck-select">{t('IOP 演示','IOP presentation')}</label><select id="deck-select">{options}</select><button id="deck-focus">{t('演示模式','Present')}</button><button id="deck-fullscreen">{t('全屏','Fullscreen')}</button><button id="deck-exit" hidden>{t('退出演示','Exit')}</button></div><div class="deck-stage" id="deck-stage">{''.join(slides)}</div><div class="deck-pagination"><button id="deck-prev">← {t('上一页','Previous')}</button><span id="deck-position" aria-live="polite"></span><button id="deck-notes-toggle" aria-expanded="false">{t('讲解备注','Speaker notes')}</button><button id="deck-next">{t('下一页','Next')} →</button></div><aside id="deck-notes" hidden></aside></div><dialog id="island-detail"><div class="section-line"><h2 id="island-detail-title"></h2><button id="island-close">{t('关闭','Close')}</button></div><p id="island-detail-question"></p><div id="island-detail-projects"></div></dialog></section>'''
+    for a,b in zip(zh,en):
+        slides.append({'id':a['id'],'chapter':a['chapter'],'title':pair(a['title'],b['title']),
+            'short':pair(a['short'],b['short']),'status':pair(a['status'],b['status']),
+            'body':pair(a['body'],b['body']),'sources':a['sources']})
+    return {'schema_version':'2.0','updated':'2026-10-21','edition':'IOP-02',
+        'name':'Instrument Operations Protocol','abbreviation':'IOP',
+        'levels':{'1':'existing designs','2':'mechanism families','3':'IOP operation model'},
+        'chapters':CHAPTERS,'mechanism_families':ISLANDS,
+        'classification_basis':'primary design emphasis; mechanisms may overlap',
+        'additional_concepts':['p:agent2device'],
+        'sources':{k:{'label':v[0],'url':v[1]} for k,v in SOURCES.items()},'slides':slides}
+
+
+def render(data,lang):
+    E=lambda x:html.escape(str(x),quote=True)
+    t=lambda a,b:a if lang=='zh' else b
+    d=data['presentation']; slides=[]
+    chapter_names={c['id']:c['name'][lang] for c in CHAPTERS}
+    for i,s in enumerate(d['slides'],1):
+        refs=''.join('<a href="'+E(SOURCES[r][1])+'">'+E(SOURCES[r][0])+' ↗</a>' for r in s['sources'])
+        slides.append(f'<article class="deck-slide" data-slide="{i}" data-chapter="{s["chapter"]}" aria-label="{i}. {E(s["title"][lang])}"><header><div class="slide-meta"><span>{E(chapter_names[s["chapter"]])}</span><span>{i:02} / {len(d["slides"]):02}</span></div><h2>{s["title"][lang]}</h2></header><div class="deck-body">{s["body"][lang]}</div><footer><span>{E(s["status"][lang]) or "AI4Instruments · IOP"}</span><div class="deck-refs">{refs}</div></footer></article>')
+    tabs=''.join('<a data-chapter-nav="'+c['id']+'" href="#presentation/'+str(c['start'])+'">'+E(c['name'][lang])+'</a>' for c in CHAPTERS)
+    options=''.join('<option value="'+str(i)+'">'+f'{i:02}　'+E(s['short'][lang])+'</option>' for i,s in enumerate(d['slides'],1))
+    outline=''.join('<a data-page-nav="'+str(i)+'" data-page-chapter="'+s['chapter']+'" href="#presentation/'+str(i)+'"><span>'+f'{i:02}'+'</span>'+E(s['short'][lang])+'</a>' for i,s in enumerate(d['slides'],1))
+    return f'''<section class="view" id="view-presentation" data-view="presentation"><div class="deck-shell" id="deck-shell"><nav class="chapter-tabs" aria-label="{t('论述结构','Argument structure')}">{tabs}</nav><div class="deck-workspace"><nav class="chapter-outline" aria-label="{t('本章内容','Chapter contents')}">{outline}</nav><div class="deck-reading"><div class="deck-stage" id="deck-stage">{''.join(slides)}</div><div class="deck-controls"><button id="deck-prev" aria-label="{t('上一页','Previous page')}">←</button><label class="sr-only" for="deck-select">{t('选择页面','Select a page')}</label><select id="deck-select">{options}</select><button id="deck-next" aria-label="{t('下一页','Next page')}">→</button><span id="deck-position" aria-live="polite"></span><button id="deck-focus">{t('展开','Expand')}</button><button id="deck-fullscreen">{t('全屏','Fullscreen')}</button><button id="deck-exit" hidden>{t('还原','Restore')}</button></div></div></div></div><dialog id="island-detail"><div class="section-line"><h2 id="island-detail-title"></h2><button id="island-close">{t('关闭','Close')}</button></div><p id="island-detail-question"></p><div id="island-detail-projects"></div></dialog></section>'''

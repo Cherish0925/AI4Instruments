@@ -62,7 +62,7 @@ Experimental trajectories connect questions, apparatus revisions, interventions,
 | How can capabilities be described and composed? | [Operations](docs/operations.md) |
 | How does AI participate throughout instrument development? | [Instrument design](docs/instrument-design.md) |
 | How do the principles appear in different experiments? | [Illustrative experimental relationships](docs/examples.md) |
-| How does IOP connect instrument knowledge, operations and experiments? | [IOP design](docs/iop.md) · [Presentation](docs/agent-instruments/index.en.html?raw=1#presentation/1) · [中文](docs/agent-instruments/index.zh-CN.html?raw=1#presentation/1) |
+| How does IOP connect instrument knowledge, operations and experiments? | [IOP design](docs/iop.md) · [IOP model](docs/agent-instruments/index.en.html?raw=1#presentation/1) · [中文](docs/agent-instruments/index.zh-CN.html?raw=1#presentation/1) |
 | Which interfaces connect agents to physical instruments? | [Agent–instrument landscape](docs/agent-instruments/README.md) · [English HTML](docs/agent-instruments/index.en.html?raw=1) · [中文 HTML](docs/agent-instruments/index.zh-CN.html?raw=1) |
 | How does this connect to existing research and standards? | [Related work](docs/related-work.md) |
 | What would constitute substantive progress? | [Research agenda](docs/research-agenda.md) |

@@ -1,475 +1,596 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "2.0",
   "updated": "2026-10-21",
+  "edition": "IOP-02",
   "name": "Instrument Operations Protocol",
   "abbreviation": "IOP",
-  "basis": "editorial-classification",
-  "groups": [
-    {
-      "id": "understand",
-      "name": {
-        "zh": "仪器知识与能力描述",
-        "en": "Instrument knowledge and capabilities"
-      },
-      "short": {
-        "zh": "理解仪器",
-        "en": "Understand"
-      },
-      "color": "#a6803a",
-      "question": {
-        "zh": "仪器能做什么，这些能力意味着什么？",
-        "en": "What can an instrument do, and what does each capability mean?"
-      },
-      "routes": [
-        "knowledge",
-        "contract"
-      ],
-      "projects": [
-        "openmhp",
-        "open-mhs-abenor",
-        "open-mhs-tong",
-        "open-mhs-scut",
-        "mhp-cuntinum",
-        "oahl",
-        "device-skills",
-        "agent2device",
-        "chemcrow",
-        "nvagent",
-        "uc2-hackathon"
-      ]
-    },
-    {
-      "id": "execute",
-      "name": {
-        "zh": "设备接入与操作执行",
-        "en": "Device access and operation execution"
-      },
-      "short": {
-        "zh": "执行操作",
-        "en": "Execute"
-      },
-      "color": "#39796e",
-      "question": {
-        "zh": "怎样让操作在真实设备上完成，并获得读回？",
-        "en": "How does an operation run on real equipment and return observations?"
-      },
-      "routes": [
-        "bridge",
-        "runtime",
-        "development",
-        "gui"
-      ],
-      "projects": [
-        "instrmcp",
-        "puda",
-        "osprey",
-        "jumpstarter",
-        "lager",
-        "eaa",
-        "eaa-pi",
-        "pi-experiment-ops",
-        "labmcp",
-        "lablink",
-        "scpi-mcp",
-        "oscilloscope-mcp",
-        "lecroy",
-        "siglent",
-        "scope-mcp",
-        "dwf",
-        "instrument-mcp",
-        "daqmx",
-        "daqifi",
-        "labview-toolkit",
-        "labview-dev",
-        "openflexure",
-        "microscope-agent",
-        "agentic-microscope",
-        "quailbot",
-        "leeq",
-        "opentrons",
-        "plr-mcp",
-        "opcua-kuka",
-        "opcua-industrial",
-        "modbus",
-        "tango",
-        "epics-mcp",
-        "mcp2serial",
-        "tinymcp",
-        "embedded-debugger",
-        "saleae",
-        "micropython",
-        "ros-mcp",
-        "device-use",
-        "edge-mhs"
-      ]
-    },
-    {
-      "id": "experiment",
-      "name": {
-        "zh": "实验方法与闭环组织",
-        "en": "Experimental methods and feedback"
-      },
-      "short": {
-        "zh": "组织实验",
-        "en": "Experiment"
-      },
-      "color": "#74719b",
-      "question": {
-        "zh": "怎样组合操作，并根据观测决定下一步？",
-        "en": "How are operations composed, and how do observations guide the next step?"
-      },
-      "routes": [
-        "workflow",
-        "experiment"
-      ],
-      "projects": [
-        "unilabos",
-        "ivoryos",
-        "agent-lens",
-        "soft-matter-agents",
-        "aila",
-        "llm-spm",
-        "vision",
-        "k-agents",
-        "nvidia-qca",
-        "calms",
-        "calms-aps",
-        "openlabai",
-        "labscriptai",
-        "coscientist",
-        "chemagents",
-        "organa",
-        "clairify",
-        "clairify-chemspeed",
-        "synagent",
-        "autolabs",
-        "rosa"
-      ]
-    }
-  ],
   "levels": {
-    "1": "individual work",
-    "2": "contribution route",
-    "3": "system responsibility"
+    "1": "existing designs",
+    "2": "mechanism families",
+    "3": "IOP operation model"
   },
-  "context_placement": [
+  "chapters": [
     {
-      "id": "mhs",
-      "record": "context.standards",
-      "roles": [
-        "understand",
-        "execute",
-        "experiment"
-      ],
-      "basis": "announced-scope"
+      "id": "question",
+      "name": {
+        "zh": "问题与全图",
+        "en": "The problem"
+      },
+      "start": 1
     },
     {
-      "id": "aip",
-      "record": "context.standards",
-      "roles": [
-        "understand",
-        "execute"
-      ],
-      "basis": "supplied-design"
+      "id": "designs",
+      "name": {
+        "zh": "一级 · 具体方案",
+        "en": "I · Existing designs"
+      },
+      "start": 3
+    },
+    {
+      "id": "mechanisms",
+      "name": {
+        "zh": "二级 · 机制归纳",
+        "en": "II · Mechanisms"
+      },
+      "start": 10
+    },
+    {
+      "id": "iop",
+      "name": {
+        "zh": "三级 · IOP",
+        "en": "III · IOP"
+      },
+      "start": 13
     }
   ],
-  "protocol_comparison": {
-    "basis": "editorial-classification",
-    "groups": [
-      {
-        "id": "capabilities",
-        "name": {
-          "zh": "共同能力与设备驱动",
-          "en": "Shared capabilities and drivers"
-        },
-        "question": {
-          "zh": "不同设备怎样用共同语言表达和调用？",
-          "en": "How can different devices describe and expose capabilities consistently?"
-        },
-        "members": [
-          "s:mhs",
-          "p:open-mhs-abenor",
-          "p:open-mhs-tong",
-          "p:open-mhs-scut",
-          "p:mhp-cuntinum"
-        ]
-      },
-      {
-        "id": "jobs",
-        "name": {
-          "zh": "操作、任务与测量契约",
-          "en": "Operations, jobs and measurement contracts"
-        },
-        "question": {
-          "zh": "一次真实操作怎样执行、跟踪并解释结果？",
-          "en": "How is a physical operation executed, tracked and interpreted?"
-        },
-        "members": [
-          "s:aip",
-          "s:lap",
-          "p:openmhp"
-        ]
-      },
-      {
-        "id": "access",
-        "name": {
-          "zh": "设备发现与资源访问",
-          "en": "Device discovery and resource access"
-        },
-        "question": {
-          "zh": "怎样找到、取得和释放分布式设备资源？",
-          "en": "How are distributed devices discovered, acquired and released?"
-        },
-        "members": [
-          "p:oahl"
-        ]
-      }
-    ],
-    "unassigned_concepts": [
-      "p:agent2device"
-    ],
-    "selection": "Seven instrument-contract projects plus MHS, AIP and LAP; adjacent gateways and general agent protocols are separate."
-  },
-  "slides": [
+  "mechanism_families": [
     {
-      "id": "purpose",
-      "title": {
-        "zh": "IOP：让仪器知识与操作相互对应",
-        "en": "IOP connects instrument knowledge with operation"
+      "id": "capability",
+      "name": {
+        "zh": "设备能力模型",
+        "en": "Device capability models"
       },
-      "subtitle": {
-        "zh": "Instrument Operations Protocol · 仪器操作协议",
-        "en": "Instrument Operations Protocol"
+      "mechanism": {
+        "zh": "把型号接口翻译成可发现、可理解、可调用的能力。",
+        "en": "Translate model-specific interfaces into discoverable, interpretable capabilities."
       },
-      "notes": {
-        "zh": "从一台仪器开始：知道它为什么这样工作、哪些变量可控可测、怎样执行一个方法，以及怎样解释观测。人和 Agent 使用同一套定义，通过各自适合的入口访问。",
-        "en": "Begin with an instrument: its physical principles, controllable and observable variables, executable methods and interpretation of observations. People and agents use the same definitions through appropriate interfaces."
-      }
-    },
-    {
-      "id": "scope",
-      "title": {
-        "zh": "73 条工程记录，与标准材料分别收录",
-        "en": "Projects and standards use separate inventories"
-      },
-      "subtitle": {
-        "zh": "MHS 和 AIP 在标准与设计材料中，均未计入 73 条工程记录",
-        "en": "MHS and AIP are in the standards and design collection, outside the 73 project records"
-      },
-      "notes": {
-        "zh": "73 是本资料库工程与研究条目的数量，不是全网协议总数。14 组标准与基础生态中包含 MHS 和 AIP。维护主体、关系和来源是不同维度，不能与项目数量相加。",
-        "en": "The 73 entries are projects and research artifacts in this collection, not a worldwide protocol count. The 14 standards and foundation groups include MHS and AIP. Actors, relationships and sources count different things and cannot be added to projects."
-      }
-    },
-    {
-      "id": "protocols",
-      "title": {
-        "zh": "直接比较的十项接口与契约方案",
-        "en": "Ten approaches to instrument interfaces"
-      },
-      "subtitle": {
-        "zh": "当前资料库中的比较集合，按主要设计重心分组",
-        "en": "A comparison set from this collection, grouped by primary design emphasis"
-      },
-      "notes": {
-        "zh": "集合由 7 条工程记录与 3 条标准/设计材料组成：MHS、AIP、LAP、OpenMHP、三个独立 Open-MHS 工程、Cuntinum MHP、OAHL、Agent2Device。它不是十个同等成熟的标准。edge-mhs 属于相邻的边缘网关工程，MCP 属于通用 Agent 接口，均单独放回其职责位置。",
-        "en": "The set combines seven project records and three standards/design references: MHS, AIP, LAP, OpenMHP, three independent Open-MHS projects, Cuntinum MHP, OAHL and Agent2Device. Their maturity differs. edge-mhs is an adjacent gateway project; MCP is a general agent interface. Both retain their separate roles."
-      }
-    },
-    {
-      "id": "protocol-islands",
-      "title": {
-        "zh": "三个机制岛屿，形成 IOP 的共同结构",
-        "en": "Three mechanism groups inform a shared IOP structure"
-      },
-      "subtitle": {
-        "zh": "一级是具体方案，二级是机制归纳，三级是我们的设计综合",
-        "en": "Level 1: approaches   Level 2: mechanism groups   Level 3: our design synthesis"
-      },
-      "notes": {
-        "zh": "第一岛统一能力与驱动，第二岛统一操作、任务与结果，第三岛组织设备发现与资源访问。这是按公开设计进行的人工归纳，不是自动聚类或已存在的协议继承关系。OpenMHP 同时涉及资源发现，MHS 的公开范围也跨越执行与流程。Agent2Device 目前公开细节不足，保留为概念提案而不强行归类。三个岛帮助提出共同模型，还需要通过设备实现检验组合是否合理。",
-        "en": "One group emphasizes capabilities and drivers, another operations, jobs and results, and a third discovery and resource access. This is an editorial synthesis of public designs, not automated clustering or a protocol inheritance tree. OpenMHP also addresses discovery, and MHS spans execution and workflows. Agent2Device remains a concept with insufficient public detail for mechanism assignment. The grouping guides a shared model whose composition must be exercised through device implementations."
-      }
-    },
-    {
-      "id": "foundations",
-      "title": {
-        "zh": "已有规范为 IOP 提供可复用基础",
-        "en": "Existing specifications provide reusable foundations"
-      },
-      "subtitle": {
-        "zh": "把已有设备语义、交互模型与 Agent 入口接起来",
-        "en": "Connect existing device semantics, interaction models and agent interfaces"
-      },
-      "notes": {
-        "zh": "SiLA 2 提供 Feature、Command、Property 与可观测执行。OPC UA/LADS 提供设备信息模型、状态与程序管理。W3C WoT 分离设备交互描述和协议绑定。这些规范早于或独立于 LLM Agent，仍是关键基础。MCP 提供通用工具与资源入口。具体适配必须保留各自的物理含义和执行差异。",
-        "en": "SiLA 2 provides features, commands, properties and observable execution. OPC UA/LADS supplies device information models, states and program management. W3C WoT separates interaction descriptions from protocol bindings. These specifications precede or are independent of LLM agents. MCP supplies general tool and resource access. Concrete mappings must preserve physical meaning and execution differences."
-      }
-    },
-    {
-      "id": "islands",
-      "title": {
-        "zh": "具体工作，归入八条路线与三个部分",
-        "en": "Specific work, eight approaches, three responsibilities"
-      },
-      "subtitle": {
-        "zh": "一级：具体工作　　二级：方法路线　　三级：系统分工",
-        "en": "Level 1: individual work   Level 2: approaches   Level 3: system responsibilities"
-      },
-      "notes": {
-        "zh": "这是按主要贡献建立的人工分类，用于理解与讲解。一个工程可以跨越多个部分。主归属使计数不重复，具体接入关系仍在来源图谱中。三个部分共同构成 IOP 的建设范围，不代表三种协议或成熟度等级。点击路线可以展开全部项目。",
-        "en": "This is an editorial classification by primary contribution. A project may span several responsibilities. A primary assignment avoids double counting; the sourced graph separately records actual integrations. The three responsibilities organize IOP development, not three protocols or maturity levels. Select an approach to inspect every assigned project."
-      }
-    },
-    {
-      "id": "knowledge",
-      "title": {
-        "zh": "知识解释能力，契约明确操作含义",
-        "en": "Knowledge explains capabilities; contracts define operations"
-      },
-      "subtitle": {
-        "zh": "第一部分：仪器知识与能力描述",
-        "en": "Responsibility A: instrument knowledge and capabilities"
-      },
-      "notes": {
-        "zh": "知识材料提供原理、使用条件、方法与经验。能力契约把其中需要执行的部分写成明确的参数、物理量、前置条件和结果定义。人读说明，程序读结构，二者引用相同的操作身份和版本。OpenMHP 是公开契约样本，device-skills 是配套知识样本。",
-        "en": "Knowledge resources explain principles, conditions, methods and experience. Capability contracts make parameters, quantities, preconditions and result meanings explicit. Human documentation and programmatic descriptions refer to the same operation identity and version. OpenMHP illustrates public contracts; device-skills illustrates supporting knowledge."
-      }
+      "members": [
+        "s:mhs",
+        "p:open-mhs-abenor",
+        "p:open-mhs-tong",
+        "p:open-mhs-scut",
+        "p:mhp-cuntinum"
+      ],
+      "iop_objects": [
+        "instrument",
+        "capability",
+        "operation",
+        "binding"
+      ]
     },
     {
       "id": "execution",
-      "title": {
-        "zh": "接入、执行与设备开发各有职责",
-        "en": "Access, execution and device development have distinct roles"
+      "name": {
+        "zh": "操作执行与结果契约",
+        "en": "Execution and result contracts"
       },
-      "subtitle": {
-        "zh": "第二部分：设备接入与操作执行",
-        "en": "Responsibility B: device access and operation execution"
+      "mechanism": {
+        "zh": "把一次调用延伸为有身份、状态、资源与结果的物理过程。",
+        "en": "Give a physical process identity, state, resources and results beyond a single call."
       },
-      "notes": {
-        "zh": "桥接把已有接口暴露给调用者。常驻运行环境持有设备连接和执行状态。仪器开发涉及固件、调试与可编程能力的形成。GUI 路线用于已有软件缺少可用接口的情况。四者互补，不能用工具数来比较整体能力。",
-        "en": "Bridges expose existing interfaces. Persistent runtimes own connections and execution state. Instrument development creates or changes programmable capabilities through firmware and debugging. GUI access serves software without a usable programmatic interface. These roles are complementary; tool counts do not measure their overall capability."
-      }
+      "members": [
+        "s:aip",
+        "p:openmhp",
+        "s:lap"
+      ],
+      "iop_objects": [
+        "operation",
+        "run",
+        "observation",
+        "method"
+      ]
     },
     {
-      "id": "methods",
+      "id": "access",
+      "name": {
+        "zh": "设备发现与资源协作",
+        "en": "Discovery and resource coordination"
+      },
+      "mechanism": {
+        "zh": "找到能力所在的位置，并安排调用者对设备的使用。",
+        "en": "Locate capabilities and coordinate callers’ use of equipment."
+      },
+      "members": [
+        "p:oahl"
+      ],
+      "iop_objects": [
+        "instrument",
+        "resource",
+        "binding"
+      ]
+    }
+  ],
+  "classification_basis": "primary design emphasis; mechanisms may overlap",
+  "additional_concepts": [
+    "p:agent2device"
+  ],
+  "sources": {
+    "mhs": {
+      "label": "MHS · Anthropic",
+      "url": "https://www.anthropic.com/news/model-hardware-standard-research-preview"
+    },
+    "mhs-site": {
+      "label": "MHS · Research preview",
+      "url": "https://modelhardwarestandard.com/"
+    },
+    "aip": {
+      "label": "AIP PRD v1.1 · 2026-10-18",
+      "url": "#standards/aip"
+    },
+    "openmhp": {
+      "label": "OpenMHP · SPEC",
+      "url": "https://github.com/kushalsinha/openmhp/blob/main/SPEC.md"
+    },
+    "openmhp-devices": {
+      "label": "OpenMHP · Devices",
+      "url": "https://github.com/kushalsinha/openmhp/blob/main/supported-devices/README.md"
+    },
+    "lap": {
+      "label": "LAP · §3–5",
+      "url": "https://arxiv.org/html/2606.03755v1"
+    },
+    "oahl": {
+      "label": "OAHL · Architecture",
+      "url": "https://github.com/fredabila/oahl"
+    },
+    "abenor": {
+      "label": "Abenor Labs",
+      "url": "https://github.com/Abenor-Labs/Open-MHS"
+    },
+    "tong": {
+      "label": "tongriyaotxt",
+      "url": "https://github.com/tongriyaotxt/open-mhs"
+    },
+    "scut": {
+      "label": "SCUT-ESA",
+      "url": "https://github.com/SCUT-ESA/open-mhs"
+    },
+    "cuntinum": {
+      "label": "Cuntinum · MHP",
+      "url": "https://github.com/Cuntinum/model-hardware-protocol"
+    },
+    "sila": {
+      "label": "SiLA 2",
+      "url": "https://sila-standard.com/standards/"
+    },
+    "lads": {
+      "label": "OPC UA · LADS",
+      "url": "https://reference.opcfoundation.org/specs/OPC-30500-1/4.1.2.2"
+    },
+    "wot": {
+      "label": "W3C · WoT TD 1.1",
+      "url": "https://www.w3.org/TR/wot-thing-description11/"
+    },
+    "operations": {
+      "label": "AI4Instruments · Operations",
+      "url": "https://github.com/Cherish0925/AI4Instruments/blob/main/docs/operations.md"
+    }
+  },
+  "slides": [
+    {
+      "id": "argument",
+      "chapter": "question",
       "title": {
-        "zh": "方法组织执行，实验决策使用反馈",
-        "en": "Methods organize execution; decisions use feedback"
+        "zh": "IOP · 仪器操作协议",
+        "en": "IOP · Instrument Operations Protocol"
       },
-      "subtitle": {
-        "zh": "第三部分：实验方法与闭环组织",
-        "en": "Responsibility C: experimental methods and feedback"
+      "short": {
+        "zh": "三级关系",
+        "en": "The three levels"
       },
-      "notes": {
-        "zh": "过程编排解决设备、样品、资源与步骤之间的关系。实验决策根据结果提出或选择下一步。Uni-Lab-OS 是多设备编排样本，AILA 是真实 AFM 实验样本。IOP 应使过程与观测可表达、可复用，研究目标和决策策略由研究系统持有。",
-        "en": "Workflow orchestration handles devices, samples, resources and dependencies. Experimental decision systems use observations to choose or propose the next step. Uni-Lab-OS illustrates multi-device workflows; AILA illustrates physical AFM experiments. IOP should make procedures and observations reusable while research systems retain objectives and decision policies."
-      }
+      "status": {
+        "zh": "AI4Instruments · 设计研究",
+        "en": "AI4Instruments · Design study"
+      },
+      "body": {
+        "zh": "<p class=\"opening-definition\">仪器操作协议，定义一件实验操作的<b>物理含义、执行方式与结果依据</b>，使它能被人理解、被程序执行，并在不同设备之间复用。</p><div class=\"argument-map\"><a href=\"#presentation/3\"><span class=\"roman\">I</span><div><h3>具体方案</h3><b>MHS · AIP · OpenMHP · LAP · OAHL</b><p>各家用什么对象和机制连接仪器</p></div><span class=\"map-arrow\">↗</span></a><a href=\"#presentation/10\"><span class=\"roman\">II</span><div><h3>共同机制</h3><b>能力模型 · 执行契约 · 资源协作</b><p>把相似实现归到同一问题，把互补机制接起来</p></div><span class=\"map-arrow\">↗</span></a><a href=\"#presentation/13\"><span class=\"roman\">III</span><div><h3>IOP</h3><b>一套操作定义，连接知识、执行与结果</b><p>人和 Agent 使用同一个方法，驱动适配不同设备</p></div><span class=\"map-arrow\">↗</span></a></div>",
+        "en": "<p class=\"opening-definition\">IOP defines an operation’s <b>physical meaning, execution and evidence</b>. People and software share the definition; adapters make methods reusable across devices.</p><div class=\"argument-map\"><a href=\"#presentation/3\"><span class=\"roman\">I</span><div><h3>Existing designs</h3><b>MHS · AIP · OpenMHP · LAP · OAHL</b><p>How each design represents and operates instruments</p></div><span class=\"map-arrow\">↗</span></a><a href=\"#presentation/10\"><span class=\"roman\">II</span><div><h3>Shared mechanisms</h3><b>Capabilities · Execution · Resources</b><p>Group similar solutions; connect complementary mechanisms</p></div><span class=\"map-arrow\">↗</span></a><a href=\"#presentation/13\"><span class=\"roman\">III</span><div><h3>IOP</h3><b>One operation model linking knowledge, execution and results</b><p>People and agents share methods; adapters connect devices</p></div><span class=\"map-arrow\">↗</span></a></div>"
+      },
+      "sources": []
+    },
+    {
+      "id": "physical-problem",
+      "chapter": "question",
+      "title": {
+        "zh": "一次偏振扫描，需要比“调用成功”更多的信息",
+        "en": "A polarization scan needs more than a successful call"
+      },
+      "short": {
+        "zh": "从真实操作出发",
+        "en": "Start with a physical operation"
+      },
+      "status": {
+        "zh": "贯穿案例 · 物理模型与接口设计",
+        "en": "Running example · Physical model and interface design"
+      },
+      "body": {
+        "zh": "<svg class=\"bench-diagram\" viewBox=\"0 0 1000 200\" role=\"img\" aria-label=\"线偏振光经过旋转半波片和固定检偏器到达功率计\"><path d=\"M70 92H905\" class=\"beam\"/><path d=\"M900 87l12 5-12 5\" class=\"beam-fill\"/><rect x=\"90\" y=\"62\" width=\"70\" height=\"60\" rx=\"4\"/><path d=\"M115 75v34m10-34v34m10-34v34\" class=\"fine\"/><circle cx=\"360\" cy=\"92\" r=\"37\"/><path d=\"M335 118l50-52\" class=\"axis\"/><path d=\"M397 46a58 58 0 0 1 20 47\" class=\"fine\"/><text x=\"424\" y=\"70\">θ</text><rect x=\"570\" y=\"50\" width=\"32\" height=\"84\" rx=\"3\"/><path d=\"M580 62v59m11-59v59\" class=\"fine\"/><path d=\"M820 58h70v68h-70z\"/><circle cx=\"855\" cy=\"92\" r=\"21\" class=\"fine\"/><text class=\"bench-label\" x=\"125\" y=\"173\" text-anchor=\"middle\">线偏振光</text><text class=\"bench-label\" x=\"360\" y=\"173\" text-anchor=\"middle\">半波片</text><text class=\"bench-label\" x=\"586\" y=\"173\" text-anchor=\"middle\">固定检偏器</text><text class=\"bench-label\" x=\"855\" y=\"173\" text-anchor=\"middle\">功率计</text></svg><div class=\"split equal\"><div><div class=\"formula\">P(θ) = P₀ cos²(2θ − φ)</div><p class=\"figure-caption\">理想半波片、固定检偏器；φ 包含入射偏振与轴零点。实际测量还受波长、损耗与探测器响应影响。</p></div><div><div class=\"explanation\"><h3>任务</h3><p>改变波片角度，测量透射功率，得到角度—功率曲线。</p></div></div></div><div class=\"process\"><div><b>定义</b><span>θ 的零点、单位与范围</span></div><div><b>执行</b><span>转动 → 到位 → 采集</span></div><div><b>解释</b><span>实际角度、功率与校准条件</span></div></div>",
+        "en": "<svg class=\"bench-diagram\" viewBox=\"0 0 1000 200\" role=\"img\" aria-label=\"Linear light passes a rotating half-wave plate and a fixed analyzer to a power meter\"><path d=\"M70 92H905\" class=\"beam\"/><path d=\"M900 87l12 5-12 5\" class=\"beam-fill\"/><rect x=\"90\" y=\"62\" width=\"70\" height=\"60\" rx=\"4\"/><path d=\"M115 75v34m10-34v34m10-34v34\" class=\"fine\"/><circle cx=\"360\" cy=\"92\" r=\"37\"/><path d=\"M335 118l50-52\" class=\"axis\"/><path d=\"M397 46a58 58 0 0 1 20 47\" class=\"fine\"/><text x=\"424\" y=\"70\">θ</text><rect x=\"570\" y=\"50\" width=\"32\" height=\"84\" rx=\"3\"/><path d=\"M580 62v59m11-59v59\" class=\"fine\"/><path d=\"M820 58h70v68h-70z\"/><circle cx=\"855\" cy=\"92\" r=\"21\" class=\"fine\"/><text class=\"bench-label\" x=\"125\" y=\"173\" text-anchor=\"middle\">Linear input</text><text class=\"bench-label\" x=\"360\" y=\"173\" text-anchor=\"middle\">Half-wave plate</text><text class=\"bench-label\" x=\"586\" y=\"173\" text-anchor=\"middle\">Fixed analyzer</text><text class=\"bench-label\" x=\"855\" y=\"173\" text-anchor=\"middle\">Power meter</text></svg><div class=\"split equal\"><div><div class=\"formula\">P(θ) = P₀ cos²(2θ − φ)</div><p class=\"figure-caption\">Ideal half-wave plate and fixed analyzer; φ includes input polarization and axis zero. Wavelength, loss and detector response affect the physical measurement.</p></div><div><div class=\"explanation\"><h3>Task</h3><p>Vary the plate angle, measure transmitted power and obtain an angle–power curve.</p></div></div></div><div class=\"process\"><div><b>Define</b><span>Angle origin, units and range</span></div><div><b>Execute</b><span>Move → settle → acquire</span></div><div><b>Interpret</b><span>Actual angle, power and calibration</span></div></div>"
+      },
+      "sources": []
+    },
+    {
+      "id": "designs",
+      "chapter": "designs",
+      "title": {
+        "zh": "现有方案，首先在“统一什么”上不同",
+        "en": "Existing designs differ first in what they unify"
+      },
+      "short": {
+        "zh": "方案全表",
+        "en": "Design inventory"
+      },
+      "status": {
+        "zh": "",
+        "en": ""
+      },
+      "body": {
+        "zh": "<div class=\"argument-table inventory\"><table><thead><tr><th>方案</th><th>统一的核心对象</th><th>维护者 / 来源</th><th>材料形态</th></tr></thead><tbody><tr><td><a href=\"#presentation/4\">MHS</a></td><td>共享驱动与设备能力描述</td><td>Anthropic + HHMI Janelia</td><td>研究预览</td></tr><tr><td><a href=\"#presentation/5\">Open-MHS × 3 · MHP</a></td><td>把共同设备接口实现为代码</td><td>四个独立维护项目</td><td>公开代码</td></tr><tr><td><a href=\"#presentation/6\">AIP</a></td><td>持久运行的仪器操作服务</td><td>本项目所用 PRD</td><td>设计材料</td></tr><tr><td><a href=\"#presentation/7\">OpenMHP</a></td><td>设备包、动作、任务和运行记录</td><td>kushalsinha/openmhp</td><td>公开草案与实现</td></tr><tr><td><a href=\"#presentation/8\">LAP</a></td><td>带资源占用与测量语义的任务</td><td>Shiyanjia Lab</td><td>v0.1 设计论文</td></tr><tr><td><a href=\"#presentation/9\">OAHL</a></td><td>节点、设备发现与会话占用</td><td>fredabila/oahl</td><td>公开代码</td></tr></tbody></table></div><p class=\"small-note\">三个 Open-MHS 分别由 Abenor Labs、tongriyaotxt、SCUT-ESA 维护；MHP 指 Cuntinum 的项目。另有 Agent2Device 概念提案，现有内容为 README。</p>",
+        "en": "<div class=\"argument-table inventory\"><table><thead><tr><th>Design</th><th>Core abstraction</th><th>Maintainer / source</th><th>Artifact</th></tr></thead><tbody><tr><td><a href=\"#presentation/4\">MHS</a></td><td>Shared drivers and capability descriptions</td><td>Anthropic + HHMI Janelia</td><td>Research preview</td></tr><tr><td><a href=\"#presentation/5\">Open-MHS × 3 · MHP</a></td><td>Implement common device interfaces</td><td>Four independent projects</td><td>Public code</td></tr><tr><td><a href=\"#presentation/6\">AIP</a></td><td>Persistent instrument-operation service</td><td>Supplied PRD</td><td>Design document</td></tr><tr><td><a href=\"#presentation/7\">OpenMHP</a></td><td>Device packages, actions, jobs and run records</td><td>kushalsinha/openmhp</td><td>Public draft and code</td></tr><tr><td><a href=\"#presentation/8\">LAP</a></td><td>Tasks with reservations and measurement semantics</td><td>Shiyanjia Lab</td><td>v0.1 design paper</td></tr><tr><td><a href=\"#presentation/9\">OAHL</a></td><td>Nodes, discovery and exclusive sessions</td><td>fredabila/oahl</td><td>Public code</td></tr></tbody></table></div><p class=\"small-note\">The three Open-MHS projects are maintained by Abenor Labs, tongriyaotxt and SCUT-ESA. MHP refers to Cuntinum’s project. Agent2Device is an additional concept proposal documented in a README.</p>"
+      },
+      "sources": [
+        "mhs",
+        "aip",
+        "openmhp",
+        "lap",
+        "oahl"
+      ]
     },
     {
       "id": "mhs",
+      "chapter": "designs",
       "title": {
-        "zh": "MHS、AIP 与 OpenMHP 提供不同的参照",
-        "en": "MHS, AIP and OpenMHP serve different reference roles"
+        "zh": "MHS：把不同设备接到共同能力接口",
+        "en": "MHS: a shared capability interface for heterogeneous devices"
       },
-      "subtitle": {
-        "zh": "分别比较产业协作、设计思想和公开实现",
-        "en": "Compare ecosystem participation, design ideas and public implementation separately"
+      "short": {
+        "zh": "MHS",
+        "en": "MHS"
       },
-      "notes": {
-        "zh": "MHS 是 Anthropic 与 HHMI Janelia 发起的研究预览，公开材料列出科学机构与设备厂商的试用和集成计划，因此值得重点跟踪生态发展。它的发布主体不能单独证明技术覆盖或规模第一。AIP 是用户提供的设计材料。OpenMHP 是独立的公开规范与实现，当前设备包主要以孪生测试为证据。",
-        "en": "MHS is a research preview initiated by Anthropic and HHMI Janelia. Public materials describe trials and integration plans across research groups and vendors, making it important to track for ecosystem development. Sponsorship alone does not establish technical or deployment leadership. AIP is a supplied design document. OpenMHP is an independent public specification and implementation with primarily twin-tested device packages."
-      }
+      "status": {
+        "zh": "Anthropic × HHMI Janelia · 研究预览",
+        "en": "Anthropic × HHMI Janelia · Research preview"
+      },
+      "body": {
+        "zh": "<div class=\"split\"><div class=\"system-drawing\"><div class=\"entity top\"><b>人 / Agent / 自动化程序</b><span>MCP · CLI · API</span></div><div class=\"connector\">↓</div><div class=\"entity core\"><b>共同设备接口</b><span>发现设备 · 读状态 · 写控制量</span></div><div class=\"driver-grid\"><div class=\"entity \"><b>激光器驱动</b><span>功率、开关</span></div><div class=\"entity \"><b>转台驱动</b><span>角度、位置</span></div><div class=\"entity \"><b>相机驱动</b><span>曝光、图像</span></div></div><div class=\"device-strip\">物理设备与各自的编程接口</div></div><div><div class=\"explanation\"><h3>定义</h3><p>MHS（Model Hardware Standard）把设备包装为共同驱动接口；物理说明标签描述设备能力及操作条件。</p></div><div class=\"explanation\"><h3>改变了什么</h3><p>上层程序按能力发现和操作仪器，型号差异由驱动承担。同一套设备能力可从不同入口访问。</p></div><div class=\"explanation\"><h3>在扫描中</h3><p>找到能旋转波片的轴和能读取光功率的通道，再通过共同接口操作。</p></div></div></div><p class=\"thesis\">可继承的机制：让设备“自我描述”，让上层程序脱离厂商函数名。</p>",
+        "en": "<div class=\"split\"><div class=\"system-drawing\"><div class=\"entity top\"><b>People / agents / automation</b><span>MCP · CLI · API</span></div><div class=\"connector\">↓</div><div class=\"entity core\"><b>Shared device interface</b><span>Discover devices · Read state · Write controls</span></div><div class=\"driver-grid\"><div class=\"entity \"><b>Laser driver</b><span>Power, enable</span></div><div class=\"entity \"><b>Stage driver</b><span>Angle, position</span></div><div class=\"entity \"><b>Camera driver</b><span>Exposure, image</span></div></div><div class=\"device-strip\">Physical devices and their programming interfaces</div></div><div><div class=\"explanation\"><h3>Definition</h3><p>MHS wraps equipment in a shared driver interface. Physical-description tags explain capabilities and operating conditions.</p></div><div class=\"explanation\"><h3>What changes</h3><p>Callers operate named capabilities. Drivers translate them for each device; MCP, CLI and API expose the same interface.</p></div><div class=\"explanation\"><h3>In the scan</h3><p>Find an axis that rotates the plate and a channel that measures optical power, then operate both through a common interface.</p></div></div></div><p class=\"thesis\">Self-describing capabilities let callers work independently of vendor function names.</p>"
+      },
+      "sources": [
+        "mhs",
+        "mhs-site"
+      ]
     },
     {
-      "id": "representatives",
+      "id": "implementations",
+      "chapter": "designs",
       "title": {
-        "zh": "汇报围绕五个问题选择代表工作",
-        "en": "Five questions organize the representative work"
+        "zh": "同样叫设备接口，实现重心仍然不同",
+        "en": "Device interfaces differ in their implementation choices"
       },
-      "subtitle": {
-        "zh": "选择依据是对 IOP 的建设作用",
-        "en": "Selection follows the decisions needed to build IOP"
+      "short": {
+        "zh": "Open-MHS 与 MHP",
+        "en": "Open-MHS and MHP"
       },
-      "notes": {
-        "zh": "这五项不是全球排名。MHS 帮助观察跨机构生态，OpenMHP 提供可检查的契约样本，Osprey 展示既有设施的语义接入，Uni-Lab-OS 展示多设备流程，AILA 展示实机实验中的判断与反馈。其余条目按设备和实现需要查询。",
-        "en": "These five entries are not a global ranking. MHS informs ecosystem analysis, OpenMHP provides an inspectable contract, Osprey demonstrates semantic access to existing facilities, Uni-Lab-OS illustrates multi-device procedures, and AILA grounds decisions and feedback in physical experiments. Other records remain available for device selection and implementation."
-      }
+      "status": {
+        "zh": "三个 Open-MHS 独立维护；Cuntinum MHP 为另一项目",
+        "en": "Three independently maintained Open-MHS projects; Cuntinum MHP is a separate project"
+      },
+      "body": {
+        "zh": "<div class=\"argument-table \"><table><thead><tr><th>独立项目</th><th>实现的组织方式</th><th>具体区别</th></tr></thead><tbody><tr><td><a href=\"#projects/open-mhs-abenor\">Open-MHS · Abenor Labs</a></td><td>能力标签 → 设备基类 → 传输驱动</td><td>标签随设备提供；读写检查集中在运行层；支持生成设备说明。</td></tr><tr><td><a href=\"#projects/open-mhs-tong\">Open MHS · tongriyaotxt</a></td><td>设备注册 → 命令分派 → 运动技能</td><td>在读写之上增加机器人技能，把连续动作交给本地控制。</td></tr><tr><td><a href=\"#projects/open-mhs-scut\">Open MHS · SCUT-ESA</a></td><td>共同接口 → 显式后端 → VISA 仪器</td><td>分别管理实机、实验性与模拟后端；维护者列出两款 UNI-T 仪器的实机记录。</td></tr><tr><td><a href=\"#projects/mhp-cuntinum\">MHP · Cuntinum</a></td><td>discover / read / write / execute<br>+ State Bus</td><td>以四类原语组织 SDK 和驱动，用共享状态组织设备协作；包名 khp。</td></tr></tbody></table></div><p class=\"thesis\">共同点是“能力—驱动”映射；差异在状态共享、动作组织和设备后端。选择依据应落实到所需设备与操作。</p>",
+        "en": "<div class=\"argument-table \"><table><thead><tr><th>Independent project</th><th>Implementation structure</th><th>Concrete distinction</th></tr></thead><tbody><tr><td><a href=\"#projects/open-mhs-abenor\">Open-MHS · Abenor Labs</a></td><td>Capability tags → device base class → transport</td><td>Device-owned tags; centralized read/write checks; generated device documentation.</td></tr><tr><td><a href=\"#projects/open-mhs-tong\">Open MHS · tongriyaotxt</a></td><td>Registry → command dispatch → motion skills</td><td>Robot skills add local continuous control above individual reads and writes.</td></tr><tr><td><a href=\"#projects/open-mhs-scut\">Open MHS · SCUT-ESA</a></td><td>Common interface → explicit backend → VISA instrument</td><td>Separates hardware, experimental and simulated backends; reports hardware work with two UNI-T models.</td></tr><tr><td><a href=\"#projects/mhp-cuntinum\">MHP · Cuntinum</a></td><td>discover / read / write / execute<br>+ State Bus</td><td>Four primitive families organize SDKs and drivers; a shared state bus supports coordination. Package: khp.</td></tr></tbody></table></div><p class=\"thesis\">The common mechanism is capability-to-driver mapping. State sharing, action composition and device backends distinguish the implementations.</p>"
+      },
+      "sources": [
+        "abenor",
+        "tong",
+        "scut",
+        "cuntinum"
+      ]
     },
     {
-      "id": "architecture",
+      "id": "aip",
+      "chapter": "designs",
       "title": {
-        "zh": "IOP 用共同定义连接知识、执行与实验",
-        "en": "IOP connects knowledge, execution and experiments through shared definitions"
+        "zh": "AIP：把一次调用变成持续可追踪的操作",
+        "en": "AIP: track physical operations beyond a single call"
       },
-      "subtitle": {
-        "zh": "拟议架构：保留现有设备接口，统一操作与结果的含义",
-        "en": "Proposed architecture: retain device interfaces and share operation and result meanings"
+      "short": {
+        "zh": "AIP",
+        "en": "AIP"
       },
-      "notes": {
-        "zh": "共同定义至少连接设备身份、能力、物理量、操作、任务、观测与数据。知识材料解释这些对象，运行服务执行它们，方法库组合它们。API、CLI、MCP 和人工界面可以使用相同定义。驱动与适配层映射到现有控制系统。图示为设计方向，兼容性需要具体映射与实机验证。",
-        "en": "Shared definitions connect device identity, capabilities, quantities, operations, jobs, observations and data. Knowledge explains them, services execute them and method libraries compose them. APIs, CLIs, MCP and human interfaces can share those definitions. Adapters map to existing control systems. This is a proposed design; compatibility requires concrete mappings and physical validation."
-      }
+      "status": {
+        "zh": "Agent–Instrument Protocol · 用户提供的 PRD v1.1",
+        "en": "Agent–Instrument Protocol · Supplied PRD v1.1"
+      },
+      "body": {
+        "zh": "<div class=\"split\"><div class=\"system-drawing\"><div class=\"entity top\"><b>客户端请求</b><span>read · write · ramp · act</span></div><div class=\"connector\">↓</div><div class=\"runtime-box\"><h3>常驻仪器服务</h3><div><div class=\"entity \"><b>量 / 动作 / 活动</b><span>单位、参数、进度、完成条件</span></div><div class=\"entity \"><b>资源与状态</b><span>touches · occupies · events</span></div></div></div><div class=\"connector\">↓ ↑</div><div class=\"entity \"><b>型号驱动 + 通信 channel</b><span>下发操作；读取实际状态</span></div></div><div><div class=\"explanation\"><h3>定义</h3><p>AIP（Agent–Instrument Protocol）把仪器连接、长活动与执行记录放进持续运行的服务；客户端提交工作并查询结果。</p></div><div class=\"explanation\"><h3>关键区别</h3><p>“动作已受理”与“物理目标已达成”分别记录。资源声明描述操作会影响什么；读数区分仪器报告、驱动记账与推断。</p></div><div class=\"explanation\"><h3>在扫描中</h3><p>转台移动期间，服务持续跟踪到位条件；调用者离开后，活动和观测仍有明确身份。</p></div></div></div><p class=\"thesis\">可继承的机制：由运行服务持有操作生命周期，供不同调用者持续查询和使用。</p>",
+        "en": "<div class=\"split\"><div class=\"system-drawing\"><div class=\"entity top\"><b>Client request</b><span>read · write · ramp · act</span></div><div class=\"connector\">↓</div><div class=\"runtime-box\"><h3>Persistent instrument service</h3><div><div class=\"entity \"><b>Quantity / action / activity</b><span>Units, parameters, progress, completion</span></div><div class=\"entity \"><b>Resources and state</b><span>touches · occupies · events</span></div></div></div><div class=\"connector\">↓ ↑</div><div class=\"entity \"><b>Model driver + communication channel</b><span>Issue operations; read actual state</span></div></div><div><div class=\"explanation\"><h3>Definition</h3><p>AIP places device connections, long-running activities and execution records in a persistent service. Clients submit work and retrieve results.</p></div><div class=\"explanation\"><h3>Key distinction</h3><p>Acceptance and physical achievement are recorded separately. Resource declarations describe effects; readings distinguish device reports, tracked values and inference.</p></div><div class=\"explanation\"><h3>In the scan</h3><p>The service tracks arrival while the stage moves. Activities and observations retain identities beyond the initiating call.</p></div></div></div><p class=\"thesis\">Mechanism to carry forward: the runtime owns the physical operation’s lifecycle across individual tool calls.</p>"
+      },
+      "sources": [
+        "aip"
+      ]
     },
     {
-      "id": "composition",
+      "id": "openmhp",
+      "chapter": "designs",
       "title": {
-        "zh": "操作可以从基本能力组合成实验工作流",
-        "en": "Operations compose from basic capabilities into experimental workflows"
+        "zh": "OpenMHP：让设备说明、驱动与运行记录相互关联",
+        "en": "OpenMHP: connect descriptions, drivers and run records"
       },
-      "subtitle": {
-        "zh": "Basic Operations · Standard Operations · Workflow Operations",
-        "en": "Basic Operations · Standard Operations · Workflow Operations"
+      "short": {
+        "zh": "OpenMHP",
+        "en": "OpenMHP"
       },
-      "notes": {
-        "zh": "这三种操作角色与三级阅读分类是两件事。基础操作表达控制或观测，标准操作表达有实验意义的可复用方法，工作流操作组织仪器、样品与决策。每一类操作都需要明确含义、可执行实现和结果记录。这里的 Standard 表示文档化的可复用方法，不是行业认证。",
-        "en": "These operation roles differ from the three reading levels. Basic Operations express controls or observations. Standard Operations express reusable experimental methods. Workflow Operations organize instruments, samples and decisions. Every role needs meaning, execution and records. Standard denotes a documented reusable method, not industry certification."
-      }
+      "status": {
+        "zh": "公开规范草案与 Python 实现",
+        "en": "Public draft specification and Python implementation"
+      },
+      "body": {
+        "zh": "<div class=\"split\"><div class=\"package-diagram\"><div><b>DEVICE.md</b><span>身份、摘要、操作说明</span></div><div><b>descriptor.yaml</b><span>signals · settings · actions</span></div><div><b>driver.py</b><span>读写与动作的设备实现</span></div><div><b>references / scripts / methods</b><span>知识材料、过程脚本与方法参数</span></div></div><div><div class=\"explanation\"><h3>定义</h3><p>OpenMHP 用设备包把操作说明、机器可读描述与驱动放在一起，再以统一请求操作设备。</p></div><div class=\"explanation\"><h3>执行路径</h3><p><code>device/describe</code> → 选择能力 → 读取 / 写入 / 调用动作 → 查询任务和运行文件</p></div><div class=\"explanation\"><h3>关键区别</h3><p>描述按需加载；长动作交给任务；过程脚本与产出的文件关联到 run。参考设备包主要经过孪生测试。</p></div></div></div><p class=\"thesis\">可继承的机制：一个可分发的设备包，把“怎么理解、怎么运行、产出在哪里”连在一起。</p>",
+        "en": "<div class=\"split\"><div class=\"package-diagram\"><div><b>DEVICE.md</b><span>Identity, summary and instructions</span></div><div><b>descriptor.yaml</b><span>signals · settings · actions</span></div><div><b>driver.py</b><span>Device implementation of reads, writes and actions</span></div><div><b>references / scripts / methods</b><span>References, procedures and method parameters</span></div></div><div><div class=\"explanation\"><h3>Definition</h3><p>OpenMHP packages instructions, machine-readable descriptions and drivers, then exposes devices through common requests.</p></div><div class=\"explanation\"><h3>Execution path</h3><p><code>device/describe</code> → select capabilities → read / write / invoke → inspect jobs and run files</p></div><div class=\"explanation\"><h3>Key distinction</h3><p>Descriptions load on demand; jobs handle long actions; runs associate scripts with output files. Reference device packages are primarily twin-tested.</p></div></div></div><p class=\"thesis\">Mechanism to carry forward: a distributable device package connecting understanding, execution and outputs.</p>"
+      },
+      "sources": [
+        "openmhp",
+        "openmhp-devices"
+      ]
     },
     {
-      "id": "example",
+      "id": "lap",
+      "chapter": "designs",
       "title": {
-        "zh": "一个偏振扫描，贯通整个结构",
-        "en": "One polarization scan connects the whole design"
+        "zh": "LAP：把资源占用和测量含义写进任务契约",
+        "en": "LAP: include reservations and measurement meaning in task contracts"
       },
-      "subtitle": {
-        "zh": "设计示例：线偏振入射、半波片、固定检偏器与功率计",
-        "en": "Design example: linear input, a half-wave plate, a fixed analyzer and a power meter"
+      "short": {
+        "zh": "LAP",
+        "en": "LAP"
       },
-      "notes": {
-        "zh": "明确工作波长、波片轴零点、转台角度与读回、探测器校准和等待条件。方法逐点设角、等待稳定、读取实际角度和功率，并记录时间与采集条件。工作流可增加复测或比较不同条件。这个示例说明接口设计，不声称本仓库已完成这套实机实验。",
-        "en": "Specify wavelength, wave-plate axis zero, stage angle and readback, detector calibration and settling conditions. The method sets each angle, waits, reads actual angle and power, and records time and acquisition conditions. A workflow may repeat measurements or compare conditions. This illustrates interface design, not an already completed hardware experiment in this repository."
-      }
+      "status": {
+        "zh": "Shiyanjia Lab · LAP v0.1 设计论文",
+        "en": "Shiyanjia Lab · LAP v0.1 design paper"
+      },
+      "body": {
+        "zh": "<div class=\"lap-contract\"><div class=\"entity \"><b>InstrumentCard</b><span>能力、设备身份与物理限制</span></div><span>↓</span><div class=\"entity core\"><b>Reservation + task</b><span>设备 / 样品占用，任务状态与参数绑定的执行确认</span></div><span>↓</span><div class=\"entity \"><b>MeasurementResult</b><span>数值、单位、校准、不确定度与来源</span></div></div><div class=\"split equal\"><div class=\"explanation\"><h3>定义</h3><p>LAP（Lab Agent Protocol）沿用 Agent 之间发现和任务协作的结构，把仪器作为有物理状态和测量结果的参与者。</p></div><div class=\"explanation\"><h3>在扫描中</h3><p>取得转台与探测器的使用权；提交扫描任务；返回带角度单位、探测器校准信息及测量来源的结果。</p></div></div><p class=\"thesis\">可继承的机制：让“结果是什么、在什么条件下产生”成为任务契约的一部分。</p>",
+        "en": "<div class=\"lap-contract\"><div class=\"entity \"><b>InstrumentCard</b><span>Capabilities, identity and physical limits</span></div><span>↓</span><div class=\"entity core\"><b>Reservation + task</b><span>Device/sample reservation, task state and task-bound confirmation</span></div><span>↓</span><div class=\"entity \"><b>MeasurementResult</b><span>Values, units, calibration, uncertainty and provenance</span></div></div><div class=\"split equal\"><div class=\"explanation\"><h3>Definition</h3><p>LAP retains agent discovery and task collaboration while treating instruments as participants with physical state and measurement results.</p></div><div class=\"explanation\"><h3>In the scan</h3><p>Reserve the stage and detector, submit a scan task, and return results with angle units, detector calibration and measurement provenance.</p></div></div><p class=\"thesis\">Mechanism to carry forward: make the meaning and conditions of a measurement part of the task contract.</p>"
+      },
+      "sources": [
+        "lap"
+      ]
     },
     {
-      "id": "build",
+      "id": "oahl",
+      "chapter": "designs",
       "title": {
-        "zh": "从现有操作模型走向跨设备复用",
-        "en": "From operations to reuse across devices"
+        "zh": "OAHL：把分散的设备组织成可访问的资源",
+        "en": "OAHL: make distributed devices accessible resources"
       },
-      "subtitle": {
-        "zh": "每一步交付一个可以使用的能力",
-        "en": "Each step delivers a usable capability"
+      "short": {
+        "zh": "OAHL",
+        "en": "OAHL"
       },
-      "notes": {
-        "zh": "当前仓库已经有操作模型与模拟参考实现。下一阶段先给具体仪器建立共同定义和人工可读说明，再连接真实设备，最后让同一方法跨设备实现运行。协议映射应记录已支持的能力和差异。生态建设来自真实设备包、可复用方法和共同维护，不以增加术语或仓库数量衡量。",
-        "en": "The repository already contains an operation model and a simulated reference implementation. Next, define concrete instruments with readable documentation, connect real devices and run the same method through different implementations. Protocol mappings record supported capabilities and differences. Ecosystem development comes from usable device packages, methods and shared maintenance."
-      }
+      "status": {
+        "zh": "MIT · 节点、SDK 与传输插件",
+        "en": "MIT · Nodes, SDKs and transport plugins"
+      },
+      "body": {
+        "zh": "<div class=\"split\"><div class=\"system-drawing\"><div class=\"entity top\"><b>调用者</b><span>JavaScript / Python SDK</span></div><div class=\"connector\">↓</div><div class=\"entity core\"><b>本地节点 / 可选注册与中继</b><span>发现能力与节点地址</span></div><div class=\"connector\">↓</div><div class=\"entity \"><b>会话管理 → 设备适配器 → 传输</b><span>Serial · ADB · MQTT · TCP</span></div><div class=\"device-strip\">节点所在位置的真实设备</div></div><div><div class=\"explanation\"><h3>定义</h3><p>OAHL（Open Agent Hardware Layer）把设备暴露为节点中的能力，调用者通过会话取得使用权，再由适配器和传输插件执行。</p></div><div class=\"explanation\"><h3>它重点解决什么</h3><p>设备在哪里、通过哪个节点访问、当前由谁使用。README 展示了通过 ADB 操作手机的路径。</p></div></div></div><div class=\"process\"><div><b>discover</b><span>找到设备</span></div><div><b>reserve</b><span>取得会话</span></div><div><b>execute</b><span>执行能力</span></div><div><b>release</b><span>释放占用</span></div></div>",
+        "en": "<div class=\"split\"><div class=\"system-drawing\"><div class=\"entity top\"><b>Caller</b><span>JavaScript / Python SDK</span></div><div class=\"connector\">↓</div><div class=\"entity core\"><b>Local node / optional registry and relay</b><span>Find capabilities and node addresses</span></div><div class=\"connector\">↓</div><div class=\"entity \"><b>Session → adapter → transport</b><span>Serial · ADB · MQTT · TCP</span></div><div class=\"device-strip\">Physical equipment attached to the node</div></div><div><div class=\"explanation\"><h3>Definition</h3><p>OAHL exposes capabilities through hardware nodes. Callers reserve sessions; adapters and transport plugins perform the operation.</p></div><div class=\"explanation\"><h3>Primary problem</h3><p>Where equipment is, which node exposes it and who is using it. The README demonstrates an Android device through ADB.</p></div></div></div><div class=\"process\"><div><b>discover</b><span>Find equipment</span></div><div><b>reserve</b><span>Acquire a session</span></div><div><b>execute</b><span>Run a capability</span></div><div><b>release</b><span>Release the resource</span></div></div>"
+      },
+      "sources": [
+        "oahl"
+      ]
     },
     {
-      "id": "reading",
+      "id": "islands",
+      "chapter": "mechanisms",
       "title": {
-        "zh": "演示讲清判断，资料库支持深入使用",
-        "en": "The presentation explains decisions; the catalogue supports deeper work"
+        "zh": "九项有具体机制的方案，归纳为三个机制岛屿",
+        "en": "Nine substantive designs reveal three mechanism families"
       },
-      "subtitle": {
-        "zh": "按问题进入项目、标准、关系和来源",
-        "en": "Explore projects, standards, relationships and sources by question"
+      "short": {
+        "zh": "三级关系全图",
+        "en": "The complete hierarchy"
       },
-      "notes": {
-        "zh": "对公司讲清接入与复用成本，对课题组讲清可执行的方法，对科学家讲清物理含义与实验依据，对工程师讲清接口边界与适配方式。全部条目和来源保留在后续栏目中，演示不要求逐项朗读。",
-        "en": "For a company, explain integration and reuse. For a research group, explain executable methods. For scientists, explain physical meaning and experimental evidence. For engineers, explain interfaces and mappings. The full catalogue remains available without requiring a presentation of every record."
-      }
+      "status": {
+        "zh": "由具体设计归纳",
+        "en": "Synthesis of the reviewed designs"
+      },
+      "body": {
+        "zh": "<div class=\"island-headings\"><span>一级 · 具体方案</span><span>二级 · 共同机制</span><span>三级 · IOP 对象</span></div><div class=\"island-map\"><div class=\"island-row tone-A\"><a class=\"island-origin\" href=\"#presentation/4\">MHS · Open-MHS × 3 · MHP</a><div class=\"island-mechanism\"><span class=\"island-letter\">A</span><h3>设备能力模型</h3><p>设备能做什么？</p><b>共同描述 + 驱动映射</b></div><div class=\"island-output\">设备、能力、操作定义</div></div><div class=\"island-row tone-B\"><a class=\"island-origin\" href=\"#presentation/6\">AIP · OpenMHP · LAP</a><div class=\"island-mechanism\"><span class=\"island-letter\">B</span><h3>操作执行与结果契约</h3><p>怎样完成，又怎样证明？</p><b>任务状态 + 资源 + 观测</b></div><div class=\"island-output\">执行实例、观测、方法</div></div><div class=\"island-row tone-C\"><a class=\"island-origin\" href=\"#presentation/9\">OAHL</a><div class=\"island-mechanism\"><span class=\"island-letter\">C</span><h3>设备发现与资源协作</h3><p>设备在哪里，由谁使用？</p><b>发现 + 会话 + 访问路径</b></div><div class=\"island-output\">身份、占用、绑定</div></div></div><p class=\"figure-caption\">按主要设计重心归纳。OpenMHP 和 LAP 也包含发现与资源机制；分组表达贡献重心，这些机制在同一次操作中协作。</p>",
+        "en": "<div class=\"island-headings\"><span>I · Existing designs</span><span>II · Shared mechanisms</span><span>III · IOP objects</span></div><div class=\"island-map\"><div class=\"island-row tone-A\"><a class=\"island-origin\" href=\"#presentation/4\">MHS · Open-MHS × 3 · MHP</a><div class=\"island-mechanism\"><span class=\"island-letter\">A</span><h3>Device capability models</h3><p>What can the device do?</p><b>Shared description + driver mapping</b></div><div class=\"island-output\">Instrument, capability, operation</div></div><div class=\"island-row tone-B\"><a class=\"island-origin\" href=\"#presentation/6\">AIP · OpenMHP · LAP</a><div class=\"island-mechanism\"><span class=\"island-letter\">B</span><h3>Execution and result contracts</h3><p>How does it finish, and what is the evidence?</p><b>Task state + resources + observations</b></div><div class=\"island-output\">Run, observation, method</div></div><div class=\"island-row tone-C\"><a class=\"island-origin\" href=\"#presentation/9\">OAHL</a><div class=\"island-mechanism\"><span class=\"island-letter\">C</span><h3>Discovery and resource coordination</h3><p>Where is it, and who can use it now?</p><b>Discovery + sessions + access paths</b></div><div class=\"island-output\">Identity, reservation, binding</div></div></div><p class=\"figure-caption\">Grouped by primary design emphasis. OpenMHP and LAP also include discovery and resources; these overlapping mechanisms work together in a physical operation.</p>"
+      },
+      "sources": [
+        "mhs",
+        "aip",
+        "openmhp",
+        "lap",
+        "oahl"
+      ]
+    },
+    {
+      "id": "mechanism-composition",
+      "chapter": "mechanisms",
+      "title": {
+        "zh": "三个岛屿，分别承担同一次操作的不同责任",
+        "en": "Three mechanism families serve the same physical operation"
+      },
+      "short": {
+        "zh": "机制怎样协作",
+        "en": "How mechanisms connect"
+      },
+      "status": {
+        "zh": "偏振扫描 · 机制组合",
+        "en": "Polarization scan · Mechanism composition"
+      },
+      "body": {
+        "zh": "<div class=\"mechanism-trace\"><div class=\"trace-row\"><span class=\"island-letter\">C</span><div><h3>取得可用设备</h3><p>按旋转轴与功率测量能力找到设备，建立会话，确认资源占用。</p></div><code>设备身份 + 可访问端点</code></div><div class=\"trace-row\"><span class=\"island-letter\">A</span><div><h3>建立操作的共同含义</h3><p>把转台位置定义为半波片角度 θ；把探测器通道定义为光功率 P。</p></div><code>能力 + 单位 + 轴零点</code></div><div class=\"trace-row\"><span class=\"island-letter\">B</span><div><h3>执行并保存物理结果</h3><p>每点设角、确认到位、采集功率；将实际读数与同一次 run 关联。</p></div><code>run → observations</code></div></div><p class=\"thesis\">IOP 的连接点是共同的操作身份：设备描述、执行请求、实际观测和方法知识，始终指向同一件事。</p>",
+        "en": "<div class=\"mechanism-trace\"><div class=\"trace-row\"><span class=\"island-letter\">C</span><div><h3>Acquire available equipment</h3><p>Find rotational and power-measurement capabilities, establish a session and reserve resources.</p></div><code>identity + endpoint</code></div><div class=\"trace-row\"><span class=\"island-letter\">A</span><div><h3>Establish shared operation meanings</h3><p>Define the stage position as plate angle θ and the detector channel as optical power P.</p></div><code>capability + unit + origin</code></div><div class=\"trace-row\"><span class=\"island-letter\">B</span><div><h3>Execute and retain physical results</h3><p>Set each angle, confirm arrival and acquire power; associate actual readings with the same run.</p></div><code>run → observations</code></div></div><p class=\"thesis\">IOP joins these mechanisms through shared operation identities: descriptions, requests, observations and methods refer to the same operation.</p>"
+      },
+      "sources": []
+    },
+    {
+      "id": "foundations",
+      "chapter": "mechanisms",
+      "title": {
+        "zh": "共同语义可以复用已有设备标准",
+        "en": "Shared semantics can build on existing device standards"
+      },
+      "short": {
+        "zh": "既有标准的位置",
+        "en": "Where existing standards fit"
+      },
+      "status": {
+        "zh": "接口映射设计",
+        "en": "Interface mapping design"
+      },
+      "body": {
+        "zh": "<div class=\"argument-table \"><table><thead><tr><th>既有基础</th><th>它已经提供的对象</th><th>IOP 可映射的部分</th></tr></thead><tbody><tr><td>SiLA 2</td><td>Feature · Command · Property</td><td>能力集合、属性读取、命令与可观测执行。把仪器类语义映射到这些交互。</td></tr><tr><td>OPC UA / LADS</td><td>Device · FunctionalUnit · ProgramManager</td><td>仪器与功能单元、程序及结果管理。复用设备信息模型与状态。</td></tr><tr><td>W3C WoT</td><td>Thing Description · Property · Action · Event</td><td>把能力描述与具体通信绑定分开。IOP 操作可对应 Action，观测可对应 Property / Event。</td></tr></tbody></table></div><div class=\"interface-ribbon\"><b>调用入口</b><span>MCP · API · CLI · 人工界面</span><p>共享操作模型；入口选择由使用场景决定。</p></div>",
+        "en": "<div class=\"argument-table \"><table><thead><tr><th>Existing foundation</th><th>Objects it already provides</th><th>What IOP can map</th></tr></thead><tbody><tr><td>SiLA 2</td><td>Feature · Command · Property</td><td>Capability sets, property access, commands and observable execution. Map instrument-class semantics onto these interactions.</td></tr><tr><td>OPC UA / LADS</td><td>Device · FunctionalUnit · ProgramManager</td><td>Devices, functional units, program and result management. Reuse information models and device state.</td></tr><tr><td>W3C WoT</td><td>Thing Description · Property · Action · Event</td><td>Separate capability descriptions from transport bindings. Map operations to Actions and observations to Properties or Events.</td></tr></tbody></table></div><div class=\"interface-ribbon\"><b>Client entry points</b><span>MCP · API · CLI · Human UI</span><p>Share the operation model; choose an interface for the use case.</p></div>"
+      },
+      "sources": [
+        "sila",
+        "lads",
+        "wot"
+      ]
+    },
+    {
+      "id": "iop-model",
+      "chapter": "iop",
+      "title": {
+        "zh": "IOP：以操作为中心，把知识、执行和观测连成整体",
+        "en": "IOP: connect knowledge, execution and observations around operations"
+      },
+      "short": {
+        "zh": "IOP 的核心模型",
+        "en": "The IOP model"
+      },
+      "status": {
+        "zh": "AI4Instruments · IOP 设计",
+        "en": "AI4Instruments · IOP design"
+      },
+      "body": {
+        "zh": "<div class=\"object-model\"><div class=\"object-row\"><div class=\"entity \"><b>仪器 Instrument</b><span>物理身份、能力与资源</span></div><span class=\"relation-word\">提供</span><div class=\"entity core\"><b>操作 Operation</b><span>输入、作用、完成条件、输出</span></div><span class=\"relation-word\">被组合为</span><div class=\"entity \"><b>方法 Method</b><span>适用条件、步骤与分析</span></div></div><div class=\"object-connectors\"><span>驱动绑定 ↓</span><span>每次调用实例化 ↓</span><span>方法规定观测 ↓</span></div><div class=\"object-row\"><div class=\"entity \"><b>设备实现 Binding</b><span>厂商命令、现有控制系统</span></div><span class=\"relation-word\">执行</span><div class=\"entity core\"><b>执行实例 Run</b><span>参数、占用、状态与事件</span></div><span class=\"relation-word\">产出</span><div class=\"entity \"><b>观测 Observation</b><span>读回、单位、时间与条件</span></div></div></div><div class=\"model-definition\"><b>IOP 的核心约束</b><p>一次操作必须能从“它的物理含义”追到“这次如何执行”，再追到“结果由哪些观测支持”。原理与经验通过操作身份关联；方法复用这些操作；驱动实现它们。</p></div>",
+        "en": "<div class=\"object-model\"><div class=\"object-row\"><div class=\"entity \"><b>Instrument</b><span>Physical identity, capabilities and resources</span></div><span class=\"relation-word\">provides</span><div class=\"entity core\"><b>Operation</b><span>Inputs, effects, completion and outputs</span></div><span class=\"relation-word\">composes into</span><div class=\"entity \"><b>Method</b><span>Applicability, procedure and analysis</span></div></div><div class=\"object-connectors\"><span>Driver binding ↓</span><span>Each invocation creates ↓</span><span>Specifies acquisition ↓</span></div><div class=\"object-row\"><div class=\"entity \"><b>Binding</b><span>Vendor commands and control systems</span></div><span class=\"relation-word\">executes</span><div class=\"entity core\"><b>Run</b><span>Parameters, reservations, state and events</span></div><span class=\"relation-word\">produces</span><div class=\"entity \"><b>Observation</b><span>Readback, units, time and conditions</span></div></div></div><div class=\"model-definition\"><b>The central IOP contract</b><p>An operation must connect its physical meaning to a particular execution and the observations supporting its result. Principles and practical knowledge link to operation identities; methods compose operations; drivers implement them.</p></div>"
+      },
+      "sources": [
+        "operations"
+      ]
+    },
+    {
+      "id": "shared-definition",
+      "chapter": "iop",
+      "title": {
+        "zh": "一个操作定义，供人理解，也供程序执行",
+        "en": "One operation definition for people and software"
+      },
+      "short": {
+        "zh": "共同定义的具体形态",
+        "en": "A concrete operation definition"
+      },
+      "status": {
+        "zh": "IOP 定义示意 · YAML",
+        "en": "Illustrative IOP definition · YAML"
+      },
+      "body": {
+        "zh": "<div class=\"split equal definition-pair\"><div><span class=\"margin-label\">人看到的操作定义</span><h3>偏振扫描</h3><p>沿给定角度序列旋转半波片，每点确认转台到位后采集透射功率。</p><dl><dt>角度</dt><dd>单位为度；零点对应波片轴的标定位置。</dd><dt>功率</dt><dd>单位为瓦；记录工作波长与探测器校准引用。</dd><dt>输出</dt><dd>保存实际角度、功率与采集时间，形成同一份扫描记录。</dd></dl></div><div><span class=\"margin-label\">程序读取的同一份定义</span><pre class=\"contract-code\"><code>id: optics.polarization_scan\nversion: 0.1\nrequires:\n  angle: {unit: deg, origin: plate_axis_zero}\n  power: {unit: W}\ncontext: [wavelength, calibration_ref]\ninputs: {angles: {type: array, unit: deg}}\nprocedure:\n  for_each: {angle_target: angles}\n  steps:\n    - move_to: angle_target\n    - wait_for: stage_settled\n    - read: [angle_actual, power, time]\nresult: {columns: [angle_actual, power, time]}</code></pre></div></div><p class=\"thesis\">原理、说明、参数与程序共享同一个 id 和版本；修改方法时，同时更新它们的对应关系。</p>",
+        "en": "<div class=\"split equal definition-pair\"><div><span class=\"margin-label\">Human-readable operation</span><h3>Polarization scan</h3><p>Rotate the half-wave plate through the requested angles. At each point, confirm stage settling before acquiring transmitted power.</p><dl><dt>Angle</dt><dd>Degrees relative to the calibrated plate-axis origin.</dd><dt>Power</dt><dd>Watts, with wavelength and a detector calibration reference.</dd><dt>Output</dt><dd>Actual angle, power and acquisition time in one scan record.</dd></dl></div><div><span class=\"margin-label\">The same definition for software</span><pre class=\"contract-code\"><code>id: optics.polarization_scan\nversion: 0.1\nrequires:\n  angle: {unit: deg, origin: plate_axis_zero}\n  power: {unit: W}\ncontext: [wavelength, calibration_ref]\ninputs: {angles: {type: array, unit: deg}}\nprocedure:\n  for_each: {angle_target: angles}\n  steps:\n    - move_to: angle_target\n    - wait_for: stage_settled\n    - read: [angle_actual, power, time]\nresult: {columns: [angle_actual, power, time]}</code></pre></div></div><p class=\"thesis\">Principles, instructions, parameters and execution share one id and version. Method changes update their relationships together.</p>"
+      },
+      "sources": []
+    },
+    {
+      "id": "execution",
+      "chapter": "iop",
+      "title": {
+        "zh": "一次执行，必须走到实际状态和测量读回",
+        "en": "Follow execution through to physical state and readback"
+      },
+      "short": {
+        "zh": "执行与观测",
+        "en": "Execution and observation"
+      },
+      "status": {
+        "zh": "IOP 执行语义设计",
+        "en": "IOP execution semantics design"
+      },
+      "body": {
+        "zh": "<div class=\"execution-timeline\"><div class=\"timeline-heading\"><span>过程</span><b>01</b><b>02</b><b>03</b><b>04</b></div><div class=\"timeline-row\"><b>软件记录</b><div>请求受理<br><small>固定参数与方法版本</small></div><div>操作执行<br><small>下发移动，跟踪活动</small></div><div>条件成立<br><small>到位读回满足约定</small></div><div>结果形成<br><small>观测写入 run</small></div></div><div class=\"timeline-row physical\"><b>物理过程</b><div>转台仍在原位置</div><div>波片转动</div><div>实际位置稳定</div><div>探测器完成采集</div></div></div><div class=\"split equal\"><div class=\"explanation\"><h3>完成条件来自仪器行为</h3><p>驱动给出到位状态或读回判据；方法定义需要满足的条件，然后才采集功率。</p></div><div class=\"explanation\"><h3>中断后根据读回恢复认知</h3><p>连接中断时保留 run。重连后先检查位置与活动状态，再决定继续、结束或保留未完成记录。</p></div></div><p class=\"thesis\">执行记录回答“发出了什么”；观测记录回答“物理上发生了什么”。IOP 用同一个 run 将两者关联。</p>",
+        "en": "<div class=\"execution-timeline\"><div class=\"timeline-heading\"><span>Process</span><b>01</b><b>02</b><b>03</b><b>04</b></div><div class=\"timeline-row\"><b>Software</b><div>Accepted<br><small>Parameters and method version fixed</small></div><div>Running<br><small>Move issued, activity tracked</small></div><div>Condition met<br><small>Arrival readback meets criteria</small></div><div>Result recorded<br><small>Observations linked to run</small></div></div><div class=\"timeline-row physical\"><b>Physical</b><div>Stage at its initial position</div><div>Plate moving</div><div>Actual position settled</div><div>Detector acquisition complete</div></div></div><div class=\"split equal\"><div class=\"explanation\"><h3>Completion follows device behavior</h3><p>The driver supplies a settled state or readback criterion. The method specifies the required condition before power acquisition.</p></div><div class=\"explanation\"><h3>Reconcile from readback after interruption</h3><p>Retain the run across disconnection. Read position and activity state on reconnection before continuing, ending or retaining a partial record.</p></div></div><p class=\"thesis\">Execution records state what was issued; observations state what physically occurred. A shared run links both.</p>"
+      },
+      "sources": []
+    },
+    {
+      "id": "compatibility",
+      "chapter": "iop",
+      "title": {
+        "zh": "跨设备复用，靠明确的语义映射",
+        "en": "Reuse across devices requires explicit semantic mappings"
+      },
+      "short": {
+        "zh": "怎样兼容现有系统",
+        "en": "Compatibility with existing systems"
+      },
+      "status": {
+        "zh": "两种设备组合的适配设计",
+        "en": "Adapter design for two equipment configurations"
+      },
+      "body": {
+        "zh": "<div class=\"reuse-banner\"><b>optics.polarization_scan</b><span>同一个方法与结果格式</span></div><div class=\"argument-table \"><table><thead><tr><th>IOP 要求</th><th>设备实现 A</th><th>设备实现 B</th></tr></thead><tbody><tr><td>角度设定，单位 deg</td><td>厂商 SDK：将角度转换为原生位置单位</td><td>EPICS：映射设定值通道和单位</td></tr><tr><td>实际位置与到位条件</td><td>读取编码器与运动状态</td><td>映射读回及到位状态通道</td></tr><tr><td>光功率，单位 W</td><td>SCPI / VISA：读取并统一单位</td><td>已有采集服务：读取功率与时间</td></tr><tr><td>方法所需条件</td><td>波长、轴零点、量程与校准引用</td><td>提供相同含义；缺失能力显式返回</td></tr></tbody></table></div><p class=\"thesis\">兼容性落实到能力：输入含义相同、完成判据相同、结果可解释。传输方式与内部实现可以不同。</p>",
+        "en": "<div class=\"reuse-banner\"><b>optics.polarization_scan</b><span>One method and result format</span></div><div class=\"argument-table \"><table><thead><tr><th>IOP requirement</th><th>Device implementation A</th><th>Device implementation B</th></tr></thead><tbody><tr><td>Set angle in deg</td><td>Vendor SDK: convert angle to native position units</td><td>EPICS: map setpoint channel and units</td></tr><tr><td>Actual position and settling</td><td>Read encoder and motion state</td><td>Map readback and done-state channels</td></tr><tr><td>Optical power in W</td><td>SCPI / VISA: query and normalize units</td><td>Acquisition service: read power and time</td></tr><tr><td>Method requirements</td><td>Wavelength, origin, range and calibration</td><td>Expose the same meanings; report missing capabilities</td></tr></tbody></table></div><p class=\"thesis\">Compatibility is capability-specific: equivalent input meaning, completion criteria and interpretable results across different transports and implementations.</p>"
+      },
+      "sources": []
+    },
+    {
+      "id": "ecosystem",
+      "chapter": "iop",
+      "title": {
+        "zh": "知识、方法、代码与数据，围绕同一台仪器组织",
+        "en": "Organize knowledge, methods, code and data around the instrument"
+      },
+      "short": {
+        "zh": "生态由什么组成",
+        "en": "What the ecosystem contains"
+      },
+      "status": {
+        "zh": "IOP 仪器包设计",
+        "en": "IOP instrument-package design"
+      },
+      "body": {
+        "zh": "<div class=\"instrument-package\"><div class=\"package-spine\"><span>IOP</span><h3>仪器包</h3><p>共同身份<br>明确版本</p></div><div class=\"package-sections\"><div><h3>原理与知识</h3><p>物理量、作用机制、适用条件与实践经验</p><span>解释操作的含义与选择依据</span></div><div><h3>能力与操作定义</h3><p>参数、单位、状态、作用与结果结构</p><span>供界面、脚本与 Agent 共同读取</span></div><div><h3>驱动与方法实现</h3><p>设备适配、步骤组合、分析与复测</p><span>把定义落实到真实设备</span></div><div><h3>测量与一致性记录</h3><p>校准引用、实机读回、测试条件与数据</p><span>支持复用、比较与持续维护</span></div></div></div><p class=\"thesis\">生态的基本单位是可使用、可理解、可验证的仪器包；共享词汇和一致性测试，使不同作者的仪器包能够协作。</p>",
+        "en": "<div class=\"instrument-package\"><div class=\"package-spine\"><span>IOP</span><h3>Instrument package</h3><p>Shared identity<br>Explicit version</p></div><div class=\"package-sections\"><div><h3>Principles and knowledge</h3><p>Quantities, physical mechanisms, applicability and practice</p><span>Explain meaning and method choices</span></div><div><h3>Capability and operation definitions</h3><p>Parameters, units, state, effects and result structure</p><span>Shared by interfaces, scripts and agents</span></div><div><h3>Drivers and methods</h3><p>Adapters, procedure composition, analysis and repetition</p><span>Execute definitions on real devices</span></div><div><h3>Measurement and conformance records</h3><p>Calibration references, readbacks, test conditions and data</p><span>Support reuse, comparison and maintenance</span></div></div></div><p class=\"thesis\">The ecosystem grows through usable, understandable and testable instrument packages, joined by shared vocabulary and conformance tests.</p>"
+      },
+      "sources": []
+    },
+    {
+      "id": "validation",
+      "chapter": "iop",
+      "title": {
+        "zh": "IOP 的成立条件：同一方法，跨设备保持同一含义",
+        "en": "The IOP test: preserve method meaning across devices"
+      },
+      "short": {
+        "zh": "如何判断 IOP 做成了",
+        "en": "What demonstrates that IOP works"
+      },
+      "status": {
+        "zh": "建设目标 · 仓库现有基础：操作模型与模拟参考实现",
+        "en": "Development target · Current foundation: operation model and simulated reference implementation"
+      },
+      "body": {
+        "zh": "<div class=\"validation-map\"><div class=\"common-method\"><span>同一份操作定义与方法</span><b>optics.polarization_scan</b></div><div class=\"parallel-setups\"><div><b>设备组合 A</b><span>SDK 转台 + VISA 功率计</span></div><div><b>设备组合 B</b><span>控制系统转台 + 采集服务</span></div></div><div class=\"comparison-output\"><b>可解释、可对照的扫描记录</b><span>angle_actual · power · time · calibration_ref · method_version</span></div></div><div class=\"validation-criteria\"><div class=\"explanation\"><h3>语义一致</h3><p>同一角度定义、单位与方法条件。</p></div><div class=\"explanation\"><h3>执行成立</h3><p>到位判据由实机读回满足。</p></div><div class=\"explanation\"><h3>结果可解释</h3><p>差异能追溯到设备、校准与实验条件。</p></div></div><p class=\"thesis\">IOP 的价值：保留仪器的物理真实性，同时减少人和程序在理解、接入与复用方法时的重复工作。</p>",
+        "en": "<div class=\"validation-map\"><div class=\"common-method\"><span>One operation definition and method</span><b>optics.polarization_scan</b></div><div class=\"parallel-setups\"><div><b>Equipment configuration A</b><span>SDK stage + VISA power meter</span></div><div><b>Equipment configuration B</b><span>Control-system stage + acquisition service</span></div></div><div class=\"comparison-output\"><b>Interpretable, comparable scan records</b><span>angle_actual · power · time · calibration_ref · method_version</span></div></div><div class=\"validation-criteria\"><div class=\"explanation\"><h3>Consistent meaning</h3><p>Same angle definition, units and method conditions.</p></div><div class=\"explanation\"><h3>Valid execution</h3><p>Physical readback satisfies arrival criteria.</p></div><div class=\"explanation\"><h3>Interpretable results</h3><p>Differences trace to devices, calibration and conditions.</p></div></div><p class=\"thesis\">IOP preserves physical meaning while making instrument knowledge, connections and methods reusable.</p>"
+      },
+      "sources": [
+        "operations"
+      ]
     }
   ]
 }

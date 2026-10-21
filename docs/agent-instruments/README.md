@@ -8,19 +8,24 @@ This edition contains **73 project and research-artifact records, 70 maintainer/
 
 Download either HTML file and open it locally. Fonts, diagrams, text and structured records are embedded, supporting offline search, pagination, comparison and export.
 
-## IOP presentation
+## IOP: from existing designs to a shared operation model
 
-The opening section contains 16 slides, moving from specific approaches through mechanism groups to an IOP design synthesis. It supports slide selection, arrow keys, Page Up / Page Down, presentation mode, fullscreen and speaker notes. Slide 3 lists ten directly comparable approaches, slide 4 synthesizes mechanisms, slide 5 covers existing specifications and slide 6 expands the full 73-record ecosystem.
+The argument uses three fixed levels: **existing designs → shared mechanisms → the IOP operation model**. A polarization scan connects capability definitions, execution, observations and device adaptation.
 
-The direct comparison set combines seven project records with MHS, AIP and LAP from the standards/design collection. MHS and AIP are outside the 73 project records. Three independent Open-MHS projects retain their maintainer identities. Mechanism groups are an editorial classification by primary emphasis; concepts with insufficient detail remain separate.
+- Pages 1–2: the hierarchy and the physical operation.
+- Pages 3–9: the objects, execution paths and distinctions of MHS, three independent Open-MHS projects, Cuntinum MHP, AIP, OpenMHP, LAP and OAHL.
+- Pages 10–12: capability models, execution/result contracts, discovery/resource coordination, and their relationship to SiLA 2, OPC UA/LADS and W3C WoT.
+- Pages 13–18: IOP object relationships, a shared operation definition, execution/readback, cross-device mappings, instrument packages and validation targets.
 
-[English presentation](index.en.html#presentation/1) · [中文演示](index.zh-CN.html#presentation/1) · [Presentation and classification data](presentation.json)
+Chapter navigation and a chapter-specific outline support keyboard navigation, direct page selection and fullscreen. Sources accompany relevant pages. Nine designs with concrete mechanisms inform the synthesis; the Agent2Device concept is listed separately. The wider project catalogue remains available in the other sections.
+
+[English IOP](index.en.html#presentation/1) · [中文 IOP](index.zh-CN.html#presentation/1) · [Content and mechanism data](presentation.json)
 
 ## Nine reading sections
 
 | Section | Question |
 | --- | --- |
-| IOP presentation | Which approaches are directly comparable, which mechanisms do they share, and how can they inform IOP? |
+| IOP | Which approaches are directly comparable, which mechanisms do they share, and how can they inform IOP? |
 | Landscape | How do device bridges, contracts, persistent execution, procedures, experimental decisions, instrument development, GUI operation and knowledge resources fit together? |
 | Relationships | Who maintains what; which foundations does a project use; how have projects developed or migrated? |
 | Approaches | What problem does each route solve, what does it produce, and how should it be compared and verified? |
@@ -74,4 +79,4 @@ Original prose and catalogue annotations follow [CC BY 4.0](../../LICENSE-docs.m
 
 The embedded font is a renamed subset of Noto Sans CJK SC under the [SIL Open Font License](assets/FONT_LICENSE.txt). Original papers and manuals are linked.
 
-Presentation content and classifications are in `presentation.py`; layout is in `assets/presentation.css`. The build generates `presentation.json` and embeds it in both HTML editions.
+IOP content and mechanism synthesis are in `presentation.py`; layout is in `assets/presentation.css`. The build generates `presentation.json` and embeds it in both HTML editions.

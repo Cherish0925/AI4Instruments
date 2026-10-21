@@ -10,30 +10,13 @@ Existing projects demonstrate several integration routes: MCP wrappers over driv
 
 The central design problem is connecting requests to physical facts. A server receiving a command, a device accepting a setting, execution ending and an experimental objective being achieved are distinct events. Successful transport establishes only part of that chain.
 
-## 02 · Names and status
-
-| Name | What the available material establishes | Useful contribution |
-| --- | --- | --- |
-| **MHS** | Anthropic’s Model Hardware Standard is presented as a research preview with an application entry point; the announcement places open sourcing in a later phase. | Common drivers, discovery, physical descriptions and MCP / CLI / API access. |
-| **AIP** | The Agent–Instrument Protocol PRD v1.1 supplied for this discussion; a corresponding public implementation has not been verified. | Persistent execution, typed quantities and activities, class profiles, observation provenance, resource relationships and recovery. |
-| **OpenMHP** | Independent public specification and code; its supported-device packages are currently primarily twin-tested. | A compact tool surface, on-demand descriptions, actions, jobs, leases, method packages and run records. |
-| **Several Open-MHS projects** | Community projects maintained by different authors. Inspiration does not establish official status or verified compatibility. | Compare each device model, adapter and hardware record separately. |
-| **LAP** | A Lab Agent Protocol design paper, explicitly without normative or implemented status. | Combining InstrumentCard, reservations, tasks and measurement results. |
-| **MCP** | A general agent/tool protocol with public SDKs and a Tasks extension. | Discovery, structured arguments, resources, capability negotiation and asynchronous results. |
-
-[MHS announcement](https://www.anthropic.com/news/model-hardware-standard-research-preview) · [MHS website](https://modelhardwarestandard.com/) · [OpenMHP specification](https://github.com/kushalsinha/openmhp/blob/main/SPEC.md) · [LAP paper](https://arxiv.org/html/2606.03755v1) · [MCP Tasks](https://tasks.extensions.modelcontextprotocol.io/)
-
-Acronyms do not establish institutional affiliation. The two MHP projects here are maintained by kushalsinha and Cuntinum. AIP is also used by unrelated identity, communication and workflow projects. Catalogue entries identify authors and full repository addresses.
-
-MCP schemas can represent units, ranges and device-specific fields, and asynchronous tasks already have an extension. Instrument integration needs agreed meanings, device-side implementations and verifiable behavior. Adding fields alone is insufficient, as is changing transport alone.
-
-## 03 · Responsibilities along the integration path
+## 02 · Responsibilities along the integration path
 
 | Layer | Responsibility | Existing material |
 | --- | --- | --- |
 | **Research and reasoning** | Objectives, experiment selection, interpretation and program generation. | Coscientist, AILA, SynAgent, quantum calibration agents. |
 | **Agent access** | Discovery, invocation, knowledge access and result delivery. | MCP, CLI, Python APIs, Skills. |
-| **Instrument contract** | Capabilities, units, modes, state, physical outcomes, jobs and resources. | AIP design, OpenMHP, public MHS material, SiLA 2, LADS, WoT. |
+| **Instrument contract** | Capabilities, units, modes, state, physical outcomes, jobs and resources. | SiLA 2, LADS, WoT, OpenMHP, AIP / LAP designs and public MHS material. |
 | **Execution and orchestration** | Connection ownership, long experiments, coordination and records. | QCoDeS/Jupyter, Bluesky, Osprey, PUDA, Uni-Lab-OS, IvoryOS. |
 | **Device access** | Actual calls and model/firmware differences. | SCPI/VISA, EPICS, TANGO, ROS, vendor SDKs, serial, GUI. |
 | **Physical apparatus** | Motion, excitation, acquisition, triggers and physical feedback. | Instruments, controllers, sensors, samples and connections. |
@@ -42,12 +25,29 @@ Organize knowledge, control and data separately. Manuals and skills explain oper
 
 Hard real-time triggers, servos and acquisition timing belong in instruments, FPGAs or local control programs. Agents select objectives and procedures, checking feedback at meaningful points. The MHS announcement’s example of turning exploratory laser alignment into a deterministic program illustrates this division.
 
+## 03 · Names and status
+
+| Name | What the available material establishes | Useful contribution |
+| --- | --- | --- |
+| **AIP** | The Agent–Instrument Protocol PRD v1.1 supplied for this discussion; a corresponding public implementation has not been verified. | Persistent execution, typed quantities and activities, class profiles, observation provenance, resource relationships and recovery. |
+| **LAP** | A Lab Agent Protocol design paper, explicitly without normative or implemented status. | Combining InstrumentCard, reservations, tasks and measurement results. |
+| **MCP** | A general agent/tool protocol with public SDKs and a Tasks extension. | Discovery, structured arguments, resources, capability negotiation and asynchronous results. |
+| **MHS** | Anthropic’s Model Hardware Standard is presented as a research preview with an application entry point; the announcement places open sourcing in a later phase. | Common drivers, discovery, physical descriptions and MCP / CLI / API access. |
+| **Several Open-MHS projects** | Community projects maintained by different authors. Inspiration does not establish official status or verified compatibility. | Compare each device model, adapter and hardware record separately. |
+| **OpenMHP** | Independent public specification and code; its supported-device packages are currently primarily twin-tested. | A compact tool surface, on-demand descriptions, actions, jobs, leases, method packages and run records. |
+
+[MHS announcement](https://www.anthropic.com/news/model-hardware-standard-research-preview) · [MHS website](https://modelhardwarestandard.com/) · [OpenMHP specification](https://github.com/kushalsinha/openmhp/blob/main/SPEC.md) · [LAP paper](https://arxiv.org/html/2606.03755v1) · [MCP Tasks](https://tasks.extensions.modelcontextprotocol.io/)
+
+Acronyms do not establish institutional affiliation. The two MHP projects here are maintained by kushalsinha and Cuntinum. AIP is also used by unrelated identity, communication and workflow projects. Catalogue entries identify authors and full repository addresses.
+
+MCP schemas can represent units, ranges and device-specific fields, and asynchronous tasks already have an extension. Instrument integration needs agreed meanings, device-side implementations and verifiable behavior. Adding fields alone is insufficient, as is changing transport alone.
+
 ## 04 · Where to start reading
 
 | Existing environment or question | Read first | Contract work that remains |
 | --- | --- | --- |
-| QCoDeS instruments and Jupyter measurements | instrMCP; AIP design | Fresh versus cached values, durable jobs and shared-resource boundaries. |
-| Portable device descriptions and operations | OpenMHP; the Open-MHS projects; WoT; SiLA 2; LADS | Required class capabilities, optional features and version compatibility. |
+| QCoDeS instruments and Jupyter measurements | instrMCP; QCoDeS | Fresh versus cached values, durable jobs and shared-resource boundaries. |
+| Portable device descriptions and operations | SiLA 2; LADS; WoT; OpenMHP; the Open-MHS projects | Required class capabilities, optional features and version compatibility. |
 | Facilities using EPICS / TANGO / DOOCS | Osprey; TANGO MCP; EPICS MCP; VISION | Channel semantics, facility context, plan execution and records. |
 | Multi-device experiments and edge execution | PUDA; Uni-Lab-OS; IvoryOS | Topology, contention, sample movement and job recovery. |
 | Scopes, DAQ, supplies and embedded development | LabLink; scope-mcp; Siglent MCP; DAQiFi; Embedded Debugger | Waveform scaling, triggers, timing, configuration and firmware. |
@@ -117,6 +117,6 @@ Retain failed, unknown and partially completed trajectories. They reveal missing
 
 Read the naming and responsibility maps first, then filter by existing equipment. Inspect interfaces, the physical path, experimental status, license and implementation entry points. Compare the missing mappings to the laboratory’s current runtime. There is no need to fork every project: retain upstream links, creating a branch or fork when making an actual contribution.
 
-Project records and protocol/component context live in `catalogue.json` and `context.json`. Both HTML files embed those same datasets. `sources.json` indexes sources; `catalogue.schema.json` defines the fields; `build.py` uses the Python standard library to rebuild both languages, catalogues and indexes. Download either HTML file for offline search; primary materials remain accessible through source links.
+Project records and protocol/component context live in `catalogue.json` and `context.json`. Both HTML files embed those same datasets. `sources.json` indexes sources; `catalogue.schema.json` defines the fields; `build.py` uses the Python standard library to rebuild both languages, catalogues and indexes. Both HTML files integrate the analysis, catalogue, source index, field schema and contract example for standalone reading, offline search and export; primary documents remain accessible through source links.
 
 Review date: 2026-10-20. Sources include public repositories, official documentation, papers and selected implementation paths. Physical-validation status cites author or maintainer records. Components and forks are not counted as independent projects. Future changes should record the specific new evidence and status transitions so the collection remains traceable.

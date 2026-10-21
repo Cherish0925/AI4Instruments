@@ -1,5 +1,12 @@
 # Changes
 
+## 2026-10-21
+
+- Organized the homepage around device access, experiment execution and physical feedback.
+- Grouped protocol entries by function with equal visual treatment; placed the system model before acronym comparisons.
+- Embedded the measurement-contract example, catalogue schema and both analysis texts, with offline exports.
+- Clarified the HTML files as the integrated reading editions and removed repeated method text from the project legend.
+
 ## 2026-10-20
 
 - Added 73 project and supporting-material records, 14 protocol/foundation entries and 40 separately indexed components.

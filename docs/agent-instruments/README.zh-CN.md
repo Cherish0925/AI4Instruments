@@ -16,7 +16,7 @@
 | 数据字段定义 | [catalogue.schema.json](catalogue.schema.json) |
 | 设备与测量契约示例 | [examples/](examples/README.md) |
 
-MHS 官方研究预览、用户提供的 AIP 设计、社区 Open-MHS/OpenMHP 工程、LAP 设计论文，与已有 MCP、SiLA 2、LADS、WoT 生态分别标明，不按相似名称合并。
+两份 HTML 是本专题的完整阅读版，贯通系统分工、工程选型、协议比较、设计分析、实验案例与可复用资料。正文、目录字段规范和测量契约示例均内嵌，可离线导出。协议按功能组织，各自的实现与公开状态保留在对应条目中。
 
 ## 如何判断与使用
 

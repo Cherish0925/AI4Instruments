@@ -10,30 +10,13 @@ AI4Instruments · 协议、接口与开源工程研究 · 2026-10-20
 
 协议设计的重点是连接“请求”与“物理事实”。服务器收到命令、设备接受设定、执行结束、达到实验目标，是四件不同的事。成功的传输只能证明其中一部分。
 
-## 02 · 先把名称和地位分清
-
-| 名称 | 当前材料能支持的判断 | 适合借鉴的部分 |
-| --- | --- | --- |
-| **MHS** | Anthropic 的 Model Hardware Standard，仍以研究预览及申请入口对外展示；公告将开源放在后续阶段。 | 标准化驱动、设备发现、物理说明，以及 MCP / CLI / API 多种入口。 |
-| **AIP** | 本次讨论的 Agent–Instrument Protocol PRD v1.1；是用户提供的设计参考，未核实对应公开实现。 | 常驻执行服务、类型化量与活动、设备类 profile、读数来源、资源关系和恢复语义。 |
-| **OpenMHP** | 独立的公开规范与代码；设备包当前以模拟孪生验证为主。 | 精简工具面、按需描述、动作与任务、租约、方法包和结果记录。 |
-| **多个 Open-MHS** | 不同作者维护的社区工程；“受 MHS 启发”不等于官方实现或已验证兼容。 | 分别比较设备模型、适配器和真实运行记录。 |
-| **LAP** | Lab Agent Protocol 的设计论文；论文明确没有规范性或已实现地位。 | InstrumentCard、预留、任务与测量结果的组合。 |
-| **MCP** | 通用 Agent 工具协议，已有公开 SDK 与 Tasks 扩展。 | 工具发现、结构化参数、资源、能力协商和异步结果入口。 |
-
-[MHS 公告](https://www.anthropic.com/news/model-hardware-standard-research-preview) · [MHS 官网](https://modelhardwarestandard.com/) · [OpenMHP 规范](https://github.com/kushalsinha/openmhp/blob/main/SPEC.md) · [LAP 原文](https://arxiv.org/html/2606.03755v1) · [MCP Tasks](https://tasks.extensions.modelcontextprotocol.io/)
-
-不能仅凭缩写推断机构归属。这里两个名为 MHP 的工程分别来自 kushalsinha 与 Cuntinum；AIP 也被多个身份、通信与工作流项目使用。目录按作者和完整仓库地址消歧。
-
-MCP 可以通过 schema 表达单位、范围和设备字段，也已有异步任务扩展。仪器层需要补充的是这些字段的共同含义、设备端实现和可验证行为。仅增加字段不够；仅改用另一种传输也不够。
-
-## 03 · 一条完整接入链的分工
+## 02 · 一条完整接入链的分工
 
 | 层 | 负责什么 | 典型已有材料 |
 | --- | --- | --- |
 | **研究与推理** | 研究目标、下一步实验、结果解释、程序生成。 | Coscientist、AILA、SynAgent、量子校准 Agent。 |
 | **Agent 接入** | 工具发现、调用、知识读取与结果返回。 | MCP、CLI、Python API、Skills。 |
-| **仪器契约** | 能力、量纲、模式、状态、动作结果、任务与资源含义。 | AIP 设计、OpenMHP、MHS 公开材料、SiLA 2、LADS、WoT。 |
+| **仪器契约** | 能力、量纲、模式、状态、动作结果、任务与资源含义。 | SiLA 2、LADS、WoT、OpenMHP，以及 AIP / LAP 设计与 MHS 公开材料。 |
 | **执行与编排** | 持有连接、运行长实验、协调设备、记录状态和结果。 | QCoDeS/Jupyter、Bluesky、Osprey、PUDA、Uni-Lab-OS、IvoryOS。 |
 | **设备接入** | 把操作变为实际设备调用；处理型号和固件差异。 | SCPI/VISA、EPICS、TANGO、ROS、厂商 SDK、串口、GUI。 |
 | **物理装置** | 运动、激励、采集、触发与真正的物理反馈。 | 仪器、控制器、传感器、样品和实验连接。 |
@@ -42,12 +25,29 @@ MCP 可以通过 schema 表达单位、范围和设备字段，也已有异步�
 
 硬实时触发、伺服和采集时序由仪器、FPGA 或本地控制程序完成。Agent 选择目标和过程，并在有意义的时间点检查反馈。MHS 公告中把探索得到的激光对准过程固化为确定性程序，说明了这种分工。
 
+## 03 · 协议名称与实现状态
+
+| 名称 | 当前材料能支持的判断 | 适合借鉴的部分 |
+| --- | --- | --- |
+| **AIP** | 本次讨论的 Agent–Instrument Protocol PRD v1.1；是用户提供的设计参考，未核实对应公开实现。 | 常驻执行服务、类型化量与活动、设备类 profile、读数来源、资源关系和恢复语义。 |
+| **LAP** | Lab Agent Protocol 的设计论文；论文明确没有规范性或已实现地位。 | InstrumentCard、预留、任务与测量结果的组合。 |
+| **MCP** | 通用 Agent 工具协议，已有公开 SDK 与 Tasks 扩展。 | 工具发现、结构化参数、资源、能力协商和异步结果入口。 |
+| **MHS** | Anthropic 的 Model Hardware Standard，仍以研究预览及申请入口对外展示；公告将开源放在后续阶段。 | 标准化驱动、设备发现、物理说明，以及 MCP / CLI / API 多种入口。 |
+| **多个 Open-MHS** | 不同作者维护的社区工程；“受 MHS 启发”不等于官方实现或已验证兼容。 | 分别比较设备模型、适配器和真实运行记录。 |
+| **OpenMHP** | 独立的公开规范与代码；设备包当前以模拟孪生验证为主。 | 精简工具面、按需描述、动作与任务、租约、方法包和结果记录。 |
+
+[MHS 公告](https://www.anthropic.com/news/model-hardware-standard-research-preview) · [MHS 官网](https://modelhardwarestandard.com/) · [OpenMHP 规范](https://github.com/kushalsinha/openmhp/blob/main/SPEC.md) · [LAP 原文](https://arxiv.org/html/2606.03755v1) · [MCP Tasks](https://tasks.extensions.modelcontextprotocol.io/)
+
+不能仅凭缩写推断机构归属。这里两个名为 MHP 的工程分别来自 kushalsinha 与 Cuntinum；AIP 也被多个身份、通信与工作流项目使用。目录按作者和完整仓库地址消歧。
+
+MCP 可以通过 schema 表达单位、范围和设备字段，也已有异步任务扩展。仪器层需要补充的是这些字段的共同含义、设备端实现和可验证行为。仅增加字段不够；仅改用另一种传输也不够。
+
 ## 04 · 哪些工程值得优先深入
 
 | 已有条件或研究问题 | 优先阅读 | 需要补齐的契约 |
 | --- | --- | --- |
-| 已有 QCoDeS 仪器和 Jupyter 测量 | instrMCP；AIP 设计 | 实时值与缓存、持久任务、共享仪器的资源边界。 |
-| 想研究可移植的设备描述和操作模型 | OpenMHP；三个 Open-MHS；WoT；SiLA 2；LADS | 同类设备的必选能力、可选功能与版本兼容。 |
+| 已有 QCoDeS 仪器和 Jupyter 测量 | instrMCP；QCoDeS | 实时值与缓存、持久任务、共享仪器的资源边界。 |
+| 想研究可移植的设备描述和操作模型 | SiLA 2；LADS；WoT；OpenMHP；三个 Open-MHS | 同类设备的必选能力、可选功能与版本兼容。 |
 | 大型设施已有 EPICS / TANGO / DOOCS | Osprey；TANGO MCP；EPICS MCP；VISION | 通道语义、设施上下文、计划执行与操作记录。 |
 | 多设备实验和边缘执行 | PUDA；Uni-Lab-OS；IvoryOS | 拓扑、资源争用、样品流转、长任务恢复。 |
 | 示波器、DAQ、电源与嵌入式开发 | LabLink；scope-mcp；Siglent MCP；DAQiFi；Embedded Debugger | 波形缩放、触发、采样时间、配置快照与固件信息。 |
@@ -117,6 +117,6 @@ Agent 提交扫描计划，常驻执行层返回 job ID；程序拥有仪器连�
 
 先读名称与分工，再按已有设备筛选目录。对入选项目依次查看接口、物理路径、实验状态、许可证和源码入口。最后比较它与实验室现有运行器之间缺少哪些映射。无需 fork 每个仓库；保留上游地址，只有实际修改和贡献时才建立工作分支或 fork。
 
-项目目录、协议生态和设备组件分别存于 `catalogue.json`、`context.json`，网页内嵌同一份数据。`sources.json` 汇总来源；`catalogue.schema.json` 定义字段；`build.py` 使用 Python 标准库重建中英 HTML、目录和索引。两份 HTML 可下载后离线检索，原始资料通过来源链接访问。
+项目目录、协议生态和设备组件分别存于 `catalogue.json`、`context.json`，网页内嵌同一份数据。`sources.json` 汇总来源；`catalogue.schema.json` 定义字段；`build.py` 使用 Python 标准库重建中英 HTML、目录和索引。两份 HTML 集成正文、目录、来源、字段规范和契约示例，可独立阅读、离线检索并导出内嵌资料；原始文档通过来源链接访问。
 
 本次核查日期为 2026-10-20。收录依据是公开仓库、官方资料、论文和选定实现路径；实机状态引用作者或维护者的记录。组件和 fork 不重复计为独立工程。后续更新应记录具体的新增来源和状态变化，让这份资料继续可追溯地增长。

@@ -19,7 +19,7 @@ The collection contains **73 project and supporting-material records**, **14 pro
 | Machine-readable field definitions | [catalogue.schema.json](catalogue.schema.json) |
 | Illustrative device/measurement contract | [examples/](examples/README.md) |
 
-The main comparison separates Anthropic’s MHS research preview, the AIP design supplied for this project, community Open-MHS/OpenMHP implementations, LAP’s design paper, and the established MCP, SiLA 2, LADS and WoT ecosystems.
+The HTML files are the integrated reading editions: system responsibilities, project selection, protocol comparisons, design analysis, experimental examples and reusable records. The catalogue schema, measurement-contract example and both analysis texts are embedded and can be exported offline. Protocols are grouped by their role; each entry retains its own implementation and publication status.
 
 ## How records are evaluated
 
@@ -50,7 +50,7 @@ From the repository root:
 python docs/agent-instruments/build.py
 ```
 
-The build uses only Python’s standard library. It regenerates both self-contained HTML files, Markdown catalogues, CSV and `sources.json`. Project descriptions remain readable in HTML without JavaScript; JavaScript supplies filtering and export. The embedded JSON is in `script#research-data[type="application/json"]`.
+The build uses only Python’s standard library. It regenerates both self-contained HTML files, Markdown catalogues, CSV and `sources.json`. Project descriptions remain readable in HTML without JavaScript; JavaScript supplies filtering and export. The embedded JSON is in `script#research-data[type="application/json"]`; its `documents` field holds the analysis texts, catalogue schema and contract example.
 
 When adding a project, check for an actual physical-device path, an existing upstream entry, a separate license file and a simulator-only demonstration. If a useful project lacks a complete control release, retain it as a clearly scoped reference rather than extending its claims. Change records belong in [CHANGELOG.md](CHANGELOG.md).
 

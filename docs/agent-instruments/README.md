@@ -8,10 +8,19 @@ This edition contains **73 project and research-artifact records, 70 maintainer/
 
 Download either HTML file and open it locally. Fonts, diagrams, text and structured records are embedded, supporting offline search, pagination, comparison and export.
 
-## Eight reading sections
+## IOP presentation
+
+The opening section contains 16 slides, moving from specific approaches through mechanism groups to an IOP design synthesis. It supports slide selection, arrow keys, Page Up / Page Down, presentation mode, fullscreen and speaker notes. Slide 3 lists ten directly comparable approaches, slide 4 synthesizes mechanisms, slide 5 covers existing specifications and slide 6 expands the full 73-record ecosystem.
+
+The direct comparison set combines seven project records with MHS, AIP and LAP from the standards/design collection. MHS and AIP are outside the 73 project records. Three independent Open-MHS projects retain their maintainer identities. Mechanism groups are an editorial classification by primary emphasis; concepts with insufficient detail remain separate.
+
+[English presentation](index.en.html#presentation/1) · [中文演示](index.zh-CN.html#presentation/1) · [Presentation and classification data](presentation.json)
+
+## Nine reading sections
 
 | Section | Question |
 | --- | --- |
+| IOP presentation | Which approaches are directly comparable, which mechanisms do they share, and how can they inform IOP? |
 | Landscape | How do device bridges, contracts, persistent execution, procedures, experimental decisions, instrument development, GUI operation and knowledge resources fit together? |
 | Relationships | Who maintains what; which foundations does a project use; how have projects developed or migrated? |
 | Approaches | What problem does each route solve, what does it produce, and how should it be compared and verified? |
@@ -64,3 +73,5 @@ The HTML’s `script#research-data` contains the complete dataset. Its `document
 Original prose and catalogue annotations follow [CC BY 4.0](../../LICENSE-docs.md); build code follows [MIT](../../LICENSE). Upstream software retains its own license. LabMCP component names, protocol identifiers and tool counts are indexed from its Apache-2.0 [catalogue](https://github.com/K-Dense-AI/lab-instrument-mcps/blob/main/packages/labmcp/src/labmcp/catalog.json). OpenMHP component status comes from its [supported-device index](https://github.com/kushalsinha/openmhp/blob/main/supported-devices/README.md).
 
 The embedded font is a renamed subset of Noto Sans CJK SC under the [SIL Open Font License](assets/FONT_LICENSE.txt). Original papers and manuals are linked.
+
+Presentation content and classifications are in `presentation.py`; layout is in `assets/presentation.css`. The build generates `presentation.json` and embeds it in both HTML editions.

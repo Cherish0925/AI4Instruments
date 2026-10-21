@@ -5,6 +5,7 @@ import io
 import json
 from pathlib import Path
 from reader import render, CATEGORIES, EVIDENCE, ROLES
+from presentation import metadata
 
 ROOT=Path(__file__).resolve().parent
 read=lambda name:json.loads((ROOT/name).read_text())
@@ -103,5 +104,7 @@ for p in PROJECTS:writer.writerow([p['id'],p['name'],p['repository'],p['category
 (ROOT/'catalogue.csv').write_text(output.getvalue(),encoding='utf-8-sig')
 DOCUMENTS={name:(ROOT/name).read_bytes().decode('utf-8') for name in ['guide.zh-CN.md','guide.en.md','profiles.zh-CN.md','profiles.en.md','catalogue.schema.json','landscape.schema.json','graph.schema.json','data-model.md','catalogue.csv','examples/measurement-contract.json','examples/README.md']}
 DATA={'catalogue':CAT,'context':CTX,'landscape':LAND,'graph':GRAPH,'sources':SOURCES,'documents':DOCUMENTS}
+DATA['presentation']=metadata(DATA)
+(ROOT/'presentation.json').write_text(json.dumps(DATA['presentation'],ensure_ascii=False,indent=2)+'\n')
 for lang in ['zh','en']:(ROOT/f'index.{"zh-CN" if lang=="zh" else "en"}.html').write_text(render(ROOT,DATA,lang))
 print(f'Built 2 editions · {len(PROJECTS)} profiles · {len(ACTORS)} actors · {len(nodes)} nodes · {len(edges)} edges · {len(SOURCES)} sources')

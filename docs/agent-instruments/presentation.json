@@ -1,0 +1,475 @@
+{
+  "schema_version": "1.0",
+  "updated": "2026-10-21",
+  "name": "Instrument Operations Protocol",
+  "abbreviation": "IOP",
+  "basis": "editorial-classification",
+  "groups": [
+    {
+      "id": "understand",
+      "name": {
+        "zh": "仪器知识与能力描述",
+        "en": "Instrument knowledge and capabilities"
+      },
+      "short": {
+        "zh": "理解仪器",
+        "en": "Understand"
+      },
+      "color": "#a6803a",
+      "question": {
+        "zh": "仪器能做什么，这些能力意味着什么？",
+        "en": "What can an instrument do, and what does each capability mean?"
+      },
+      "routes": [
+        "knowledge",
+        "contract"
+      ],
+      "projects": [
+        "openmhp",
+        "open-mhs-abenor",
+        "open-mhs-tong",
+        "open-mhs-scut",
+        "mhp-cuntinum",
+        "oahl",
+        "device-skills",
+        "agent2device",
+        "chemcrow",
+        "nvagent",
+        "uc2-hackathon"
+      ]
+    },
+    {
+      "id": "execute",
+      "name": {
+        "zh": "设备接入与操作执行",
+        "en": "Device access and operation execution"
+      },
+      "short": {
+        "zh": "执行操作",
+        "en": "Execute"
+      },
+      "color": "#39796e",
+      "question": {
+        "zh": "怎样让操作在真实设备上完成，并获得读回？",
+        "en": "How does an operation run on real equipment and return observations?"
+      },
+      "routes": [
+        "bridge",
+        "runtime",
+        "development",
+        "gui"
+      ],
+      "projects": [
+        "instrmcp",
+        "puda",
+        "osprey",
+        "jumpstarter",
+        "lager",
+        "eaa",
+        "eaa-pi",
+        "pi-experiment-ops",
+        "labmcp",
+        "lablink",
+        "scpi-mcp",
+        "oscilloscope-mcp",
+        "lecroy",
+        "siglent",
+        "scope-mcp",
+        "dwf",
+        "instrument-mcp",
+        "daqmx",
+        "daqifi",
+        "labview-toolkit",
+        "labview-dev",
+        "openflexure",
+        "microscope-agent",
+        "agentic-microscope",
+        "quailbot",
+        "leeq",
+        "opentrons",
+        "plr-mcp",
+        "opcua-kuka",
+        "opcua-industrial",
+        "modbus",
+        "tango",
+        "epics-mcp",
+        "mcp2serial",
+        "tinymcp",
+        "embedded-debugger",
+        "saleae",
+        "micropython",
+        "ros-mcp",
+        "device-use",
+        "edge-mhs"
+      ]
+    },
+    {
+      "id": "experiment",
+      "name": {
+        "zh": "实验方法与闭环组织",
+        "en": "Experimental methods and feedback"
+      },
+      "short": {
+        "zh": "组织实验",
+        "en": "Experiment"
+      },
+      "color": "#74719b",
+      "question": {
+        "zh": "怎样组合操作，并根据观测决定下一步？",
+        "en": "How are operations composed, and how do observations guide the next step?"
+      },
+      "routes": [
+        "workflow",
+        "experiment"
+      ],
+      "projects": [
+        "unilabos",
+        "ivoryos",
+        "agent-lens",
+        "soft-matter-agents",
+        "aila",
+        "llm-spm",
+        "vision",
+        "k-agents",
+        "nvidia-qca",
+        "calms",
+        "calms-aps",
+        "openlabai",
+        "labscriptai",
+        "coscientist",
+        "chemagents",
+        "organa",
+        "clairify",
+        "clairify-chemspeed",
+        "synagent",
+        "autolabs",
+        "rosa"
+      ]
+    }
+  ],
+  "levels": {
+    "1": "individual work",
+    "2": "contribution route",
+    "3": "system responsibility"
+  },
+  "context_placement": [
+    {
+      "id": "mhs",
+      "record": "context.standards",
+      "roles": [
+        "understand",
+        "execute",
+        "experiment"
+      ],
+      "basis": "announced-scope"
+    },
+    {
+      "id": "aip",
+      "record": "context.standards",
+      "roles": [
+        "understand",
+        "execute"
+      ],
+      "basis": "supplied-design"
+    }
+  ],
+  "protocol_comparison": {
+    "basis": "editorial-classification",
+    "groups": [
+      {
+        "id": "capabilities",
+        "name": {
+          "zh": "共同能力与设备驱动",
+          "en": "Shared capabilities and drivers"
+        },
+        "question": {
+          "zh": "不同设备怎样用共同语言表达和调用？",
+          "en": "How can different devices describe and expose capabilities consistently?"
+        },
+        "members": [
+          "s:mhs",
+          "p:open-mhs-abenor",
+          "p:open-mhs-tong",
+          "p:open-mhs-scut",
+          "p:mhp-cuntinum"
+        ]
+      },
+      {
+        "id": "jobs",
+        "name": {
+          "zh": "操作、任务与测量契约",
+          "en": "Operations, jobs and measurement contracts"
+        },
+        "question": {
+          "zh": "一次真实操作怎样执行、跟踪并解释结果？",
+          "en": "How is a physical operation executed, tracked and interpreted?"
+        },
+        "members": [
+          "s:aip",
+          "s:lap",
+          "p:openmhp"
+        ]
+      },
+      {
+        "id": "access",
+        "name": {
+          "zh": "设备发现与资源访问",
+          "en": "Device discovery and resource access"
+        },
+        "question": {
+          "zh": "怎样找到、取得和释放分布式设备资源？",
+          "en": "How are distributed devices discovered, acquired and released?"
+        },
+        "members": [
+          "p:oahl"
+        ]
+      }
+    ],
+    "unassigned_concepts": [
+      "p:agent2device"
+    ],
+    "selection": "Seven instrument-contract projects plus MHS, AIP and LAP; adjacent gateways and general agent protocols are separate."
+  },
+  "slides": [
+    {
+      "id": "purpose",
+      "title": {
+        "zh": "IOP：让仪器知识与操作相互对应",
+        "en": "IOP connects instrument knowledge with operation"
+      },
+      "subtitle": {
+        "zh": "Instrument Operations Protocol · 仪器操作协议",
+        "en": "Instrument Operations Protocol"
+      },
+      "notes": {
+        "zh": "从一台仪器开始：知道它为什么这样工作、哪些变量可控可测、怎样执行一个方法，以及怎样解释观测。人和 Agent 使用同一套定义，通过各自适合的入口访问。",
+        "en": "Begin with an instrument: its physical principles, controllable and observable variables, executable methods and interpretation of observations. People and agents use the same definitions through appropriate interfaces."
+      }
+    },
+    {
+      "id": "scope",
+      "title": {
+        "zh": "73 条工程记录，与标准材料分别收录",
+        "en": "Projects and standards use separate inventories"
+      },
+      "subtitle": {
+        "zh": "MHS 和 AIP 在标准与设计材料中，均未计入 73 条工程记录",
+        "en": "MHS and AIP are in the standards and design collection, outside the 73 project records"
+      },
+      "notes": {
+        "zh": "73 是本资料库工程与研究条目的数量，不是全网协议总数。14 组标准与基础生态中包含 MHS 和 AIP。维护主体、关系和来源是不同维度，不能与项目数量相加。",
+        "en": "The 73 entries are projects and research artifacts in this collection, not a worldwide protocol count. The 14 standards and foundation groups include MHS and AIP. Actors, relationships and sources count different things and cannot be added to projects."
+      }
+    },
+    {
+      "id": "protocols",
+      "title": {
+        "zh": "直接比较的十项接口与契约方案",
+        "en": "Ten approaches to instrument interfaces"
+      },
+      "subtitle": {
+        "zh": "当前资料库中的比较集合，按主要设计重心分组",
+        "en": "A comparison set from this collection, grouped by primary design emphasis"
+      },
+      "notes": {
+        "zh": "集合由 7 条工程记录与 3 条标准/设计材料组成：MHS、AIP、LAP、OpenMHP、三个独立 Open-MHS 工程、Cuntinum MHP、OAHL、Agent2Device。它不是十个同等成熟的标准。edge-mhs 属于相邻的边缘网关工程，MCP 属于通用 Agent 接口，均单独放回其职责位置。",
+        "en": "The set combines seven project records and three standards/design references: MHS, AIP, LAP, OpenMHP, three independent Open-MHS projects, Cuntinum MHP, OAHL and Agent2Device. Their maturity differs. edge-mhs is an adjacent gateway project; MCP is a general agent interface. Both retain their separate roles."
+      }
+    },
+    {
+      "id": "protocol-islands",
+      "title": {
+        "zh": "三个机制岛屿，形成 IOP 的共同结构",
+        "en": "Three mechanism groups inform a shared IOP structure"
+      },
+      "subtitle": {
+        "zh": "一级是具体方案，二级是机制归纳，三级是我们的设计综合",
+        "en": "Level 1: approaches   Level 2: mechanism groups   Level 3: our design synthesis"
+      },
+      "notes": {
+        "zh": "第一岛统一能力与驱动，第二岛统一操作、任务与结果，第三岛组织设备发现与资源访问。这是按公开设计进行的人工归纳，不是自动聚类或已存在的协议继承关系。OpenMHP 同时涉及资源发现，MHS 的公开范围也跨越执行与流程。Agent2Device 目前公开细节不足，保留为概念提案而不强行归类。三个岛帮助提出共同模型，还需要通过设备实现检验组合是否合理。",
+        "en": "One group emphasizes capabilities and drivers, another operations, jobs and results, and a third discovery and resource access. This is an editorial synthesis of public designs, not automated clustering or a protocol inheritance tree. OpenMHP also addresses discovery, and MHS spans execution and workflows. Agent2Device remains a concept with insufficient public detail for mechanism assignment. The grouping guides a shared model whose composition must be exercised through device implementations."
+      }
+    },
+    {
+      "id": "foundations",
+      "title": {
+        "zh": "已有规范为 IOP 提供可复用基础",
+        "en": "Existing specifications provide reusable foundations"
+      },
+      "subtitle": {
+        "zh": "把已有设备语义、交互模型与 Agent 入口接起来",
+        "en": "Connect existing device semantics, interaction models and agent interfaces"
+      },
+      "notes": {
+        "zh": "SiLA 2 提供 Feature、Command、Property 与可观测执行。OPC UA/LADS 提供设备信息模型、状态与程序管理。W3C WoT 分离设备交互描述和协议绑定。这些规范早于或独立于 LLM Agent，仍是关键基础。MCP 提供通用工具与资源入口。具体适配必须保留各自的物理含义和执行差异。",
+        "en": "SiLA 2 provides features, commands, properties and observable execution. OPC UA/LADS supplies device information models, states and program management. W3C WoT separates interaction descriptions from protocol bindings. These specifications precede or are independent of LLM agents. MCP supplies general tool and resource access. Concrete mappings must preserve physical meaning and execution differences."
+      }
+    },
+    {
+      "id": "islands",
+      "title": {
+        "zh": "具体工作，归入八条路线与三个部分",
+        "en": "Specific work, eight approaches, three responsibilities"
+      },
+      "subtitle": {
+        "zh": "一级：具体工作　　二级：方法路线　　三级：系统分工",
+        "en": "Level 1: individual work   Level 2: approaches   Level 3: system responsibilities"
+      },
+      "notes": {
+        "zh": "这是按主要贡献建立的人工分类，用于理解与讲解。一个工程可以跨越多个部分。主归属使计数不重复，具体接入关系仍在来源图谱中。三个部分共同构成 IOP 的建设范围，不代表三种协议或成熟度等级。点击路线可以展开全部项目。",
+        "en": "This is an editorial classification by primary contribution. A project may span several responsibilities. A primary assignment avoids double counting; the sourced graph separately records actual integrations. The three responsibilities organize IOP development, not three protocols or maturity levels. Select an approach to inspect every assigned project."
+      }
+    },
+    {
+      "id": "knowledge",
+      "title": {
+        "zh": "知识解释能力，契约明确操作含义",
+        "en": "Knowledge explains capabilities; contracts define operations"
+      },
+      "subtitle": {
+        "zh": "第一部分：仪器知识与能力描述",
+        "en": "Responsibility A: instrument knowledge and capabilities"
+      },
+      "notes": {
+        "zh": "知识材料提供原理、使用条件、方法与经验。能力契约把其中需要执行的部分写成明确的参数、物理量、前置条件和结果定义。人读说明，程序读结构，二者引用相同的操作身份和版本。OpenMHP 是公开契约样本，device-skills 是配套知识样本。",
+        "en": "Knowledge resources explain principles, conditions, methods and experience. Capability contracts make parameters, quantities, preconditions and result meanings explicit. Human documentation and programmatic descriptions refer to the same operation identity and version. OpenMHP illustrates public contracts; device-skills illustrates supporting knowledge."
+      }
+    },
+    {
+      "id": "execution",
+      "title": {
+        "zh": "接入、执行与设备开发各有职责",
+        "en": "Access, execution and device development have distinct roles"
+      },
+      "subtitle": {
+        "zh": "第二部分：设备接入与操作执行",
+        "en": "Responsibility B: device access and operation execution"
+      },
+      "notes": {
+        "zh": "桥接把已有接口暴露给调用者。常驻运行环境持有设备连接和执行状态。仪器开发涉及固件、调试与可编程能力的形成。GUI 路线用于已有软件缺少可用接口的情况。四者互补，不能用工具数来比较整体能力。",
+        "en": "Bridges expose existing interfaces. Persistent runtimes own connections and execution state. Instrument development creates or changes programmable capabilities through firmware and debugging. GUI access serves software without a usable programmatic interface. These roles are complementary; tool counts do not measure their overall capability."
+      }
+    },
+    {
+      "id": "methods",
+      "title": {
+        "zh": "方法组织执行，实验决策使用反馈",
+        "en": "Methods organize execution; decisions use feedback"
+      },
+      "subtitle": {
+        "zh": "第三部分：实验方法与闭环组织",
+        "en": "Responsibility C: experimental methods and feedback"
+      },
+      "notes": {
+        "zh": "过程编排解决设备、样品、资源与步骤之间的关系。实验决策根据结果提出或选择下一步。Uni-Lab-OS 是多设备编排样本，AILA 是真实 AFM 实验样本。IOP 应使过程与观测可表达、可复用，研究目标和决策策略由研究系统持有。",
+        "en": "Workflow orchestration handles devices, samples, resources and dependencies. Experimental decision systems use observations to choose or propose the next step. Uni-Lab-OS illustrates multi-device workflows; AILA illustrates physical AFM experiments. IOP should make procedures and observations reusable while research systems retain objectives and decision policies."
+      }
+    },
+    {
+      "id": "mhs",
+      "title": {
+        "zh": "MHS、AIP 与 OpenMHP 提供不同的参照",
+        "en": "MHS, AIP and OpenMHP serve different reference roles"
+      },
+      "subtitle": {
+        "zh": "分别比较产业协作、设计思想和公开实现",
+        "en": "Compare ecosystem participation, design ideas and public implementation separately"
+      },
+      "notes": {
+        "zh": "MHS 是 Anthropic 与 HHMI Janelia 发起的研究预览，公开材料列出科学机构与设备厂商的试用和集成计划，因此值得重点跟踪生态发展。它的发布主体不能单独证明技术覆盖或规模第一。AIP 是用户提供的设计材料。OpenMHP 是独立的公开规范与实现，当前设备包主要以孪生测试为证据。",
+        "en": "MHS is a research preview initiated by Anthropic and HHMI Janelia. Public materials describe trials and integration plans across research groups and vendors, making it important to track for ecosystem development. Sponsorship alone does not establish technical or deployment leadership. AIP is a supplied design document. OpenMHP is an independent public specification and implementation with primarily twin-tested device packages."
+      }
+    },
+    {
+      "id": "representatives",
+      "title": {
+        "zh": "汇报围绕五个问题选择代表工作",
+        "en": "Five questions organize the representative work"
+      },
+      "subtitle": {
+        "zh": "选择依据是对 IOP 的建设作用",
+        "en": "Selection follows the decisions needed to build IOP"
+      },
+      "notes": {
+        "zh": "这五项不是全球排名。MHS 帮助观察跨机构生态，OpenMHP 提供可检查的契约样本，Osprey 展示既有设施的语义接入，Uni-Lab-OS 展示多设备流程，AILA 展示实机实验中的判断与反馈。其余条目按设备和实现需要查询。",
+        "en": "These five entries are not a global ranking. MHS informs ecosystem analysis, OpenMHP provides an inspectable contract, Osprey demonstrates semantic access to existing facilities, Uni-Lab-OS illustrates multi-device procedures, and AILA grounds decisions and feedback in physical experiments. Other records remain available for device selection and implementation."
+      }
+    },
+    {
+      "id": "architecture",
+      "title": {
+        "zh": "IOP 用共同定义连接知识、执行与实验",
+        "en": "IOP connects knowledge, execution and experiments through shared definitions"
+      },
+      "subtitle": {
+        "zh": "拟议架构：保留现有设备接口，统一操作与结果的含义",
+        "en": "Proposed architecture: retain device interfaces and share operation and result meanings"
+      },
+      "notes": {
+        "zh": "共同定义至少连接设备身份、能力、物理量、操作、任务、观测与数据。知识材料解释这些对象，运行服务执行它们，方法库组合它们。API、CLI、MCP 和人工界面可以使用相同定义。驱动与适配层映射到现有控制系统。图示为设计方向，兼容性需要具体映射与实机验证。",
+        "en": "Shared definitions connect device identity, capabilities, quantities, operations, jobs, observations and data. Knowledge explains them, services execute them and method libraries compose them. APIs, CLIs, MCP and human interfaces can share those definitions. Adapters map to existing control systems. This is a proposed design; compatibility requires concrete mappings and physical validation."
+      }
+    },
+    {
+      "id": "composition",
+      "title": {
+        "zh": "操作可以从基本能力组合成实验工作流",
+        "en": "Operations compose from basic capabilities into experimental workflows"
+      },
+      "subtitle": {
+        "zh": "Basic Operations · Standard Operations · Workflow Operations",
+        "en": "Basic Operations · Standard Operations · Workflow Operations"
+      },
+      "notes": {
+        "zh": "这三种操作角色与三级阅读分类是两件事。基础操作表达控制或观测，标准操作表达有实验意义的可复用方法，工作流操作组织仪器、样品与决策。每一类操作都需要明确含义、可执行实现和结果记录。这里的 Standard 表示文档化的可复用方法，不是行业认证。",
+        "en": "These operation roles differ from the three reading levels. Basic Operations express controls or observations. Standard Operations express reusable experimental methods. Workflow Operations organize instruments, samples and decisions. Every role needs meaning, execution and records. Standard denotes a documented reusable method, not industry certification."
+      }
+    },
+    {
+      "id": "example",
+      "title": {
+        "zh": "一个偏振扫描，贯通整个结构",
+        "en": "One polarization scan connects the whole design"
+      },
+      "subtitle": {
+        "zh": "设计示例：线偏振入射、半波片、固定检偏器与功率计",
+        "en": "Design example: linear input, a half-wave plate, a fixed analyzer and a power meter"
+      },
+      "notes": {
+        "zh": "明确工作波长、波片轴零点、转台角度与读回、探测器校准和等待条件。方法逐点设角、等待稳定、读取实际角度和功率，并记录时间与采集条件。工作流可增加复测或比较不同条件。这个示例说明接口设计，不声称本仓库已完成这套实机实验。",
+        "en": "Specify wavelength, wave-plate axis zero, stage angle and readback, detector calibration and settling conditions. The method sets each angle, waits, reads actual angle and power, and records time and acquisition conditions. A workflow may repeat measurements or compare conditions. This illustrates interface design, not an already completed hardware experiment in this repository."
+      }
+    },
+    {
+      "id": "build",
+      "title": {
+        "zh": "从现有操作模型走向跨设备复用",
+        "en": "From operations to reuse across devices"
+      },
+      "subtitle": {
+        "zh": "每一步交付一个可以使用的能力",
+        "en": "Each step delivers a usable capability"
+      },
+      "notes": {
+        "zh": "当前仓库已经有操作模型与模拟参考实现。下一阶段先给具体仪器建立共同定义和人工可读说明，再连接真实设备，最后让同一方法跨设备实现运行。协议映射应记录已支持的能力和差异。生态建设来自真实设备包、可复用方法和共同维护，不以增加术语或仓库数量衡量。",
+        "en": "The repository already contains an operation model and a simulated reference implementation. Next, define concrete instruments with readable documentation, connect real devices and run the same method through different implementations. Protocol mappings record supported capabilities and differences. Ecosystem development comes from usable device packages, methods and shared maintenance."
+      }
+    },
+    {
+      "id": "reading",
+      "title": {
+        "zh": "演示讲清判断，资料库支持深入使用",
+        "en": "The presentation explains decisions; the catalogue supports deeper work"
+      },
+      "subtitle": {
+        "zh": "按问题进入项目、标准、关系和来源",
+        "en": "Explore projects, standards, relationships and sources by question"
+      },
+      "notes": {
+        "zh": "对公司讲清接入与复用成本，对课题组讲清可执行的方法，对科学家讲清物理含义与实验依据，对工程师讲清接口边界与适配方式。全部条目和来源保留在后续栏目中，演示不要求逐项朗读。",
+        "en": "For a company, explain integration and reuse. For a research group, explain executable methods. For scientists, explain physical meaning and experimental evidence. For engineers, explain interfaces and mappings. The full catalogue remains available without requiring a presentation of every record."
+      }
+    }
+  ]
+}

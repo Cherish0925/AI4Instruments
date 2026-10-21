@@ -1,5 +1,14 @@
 # Changes
 
+
+## 2026-10-21 · IOP presentation
+
+- Added a bilingual 16-slide IOP presentation as the opening section, with fullscreen, keyboard navigation, notes, deep links and return from project details.
+- Separated ten directly comparable interface/design records from the broader 73-record catalogue. MHS and AIP remain standards/design records, outside the project count.
+- Added a mechanism grouping for the direct comparison set and an expandable three-part map of the complete ecosystem. Kept editorial classification separate from sourced integration relationships.
+- Connected existing device standards, operation composition, a worked optical example and a proposed IOP architecture. Moved collection counts to the data section.
+- Embedded reusable presentation data and refreshed the Chinese font subset for the new material.
+
 ## 2026-10-21 — Landscape reader
 
 - Replaced the stacked report with eight navigable sections, deep-linked project profiles, independent directory pagination and previous/next controls.

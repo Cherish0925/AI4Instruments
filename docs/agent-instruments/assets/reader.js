@@ -12,8 +12,8 @@ const link = (url, label) => `<a href="${esc(url)}">${esc(label)}</a>`;
 const P = DATA.catalogue.projects, L = DATA.landscape, G = DATA.graph;
 const index = (items, key = 'id') => new Map(items.map(item => [item[key], item]));
 const projects = index(P), profiles = index(L.profiles), actors = index(L.actors), routes = index(L.routes), nodes = index(G.nodes);
-const views = ['landscape','relations','approaches','participants','projects','standards','design','sources'];
-const state = {view:'landscape', pages:{}, pagination:{}, selected:new Set(), filtered:P, foundation:'', graphFocus:'p:instrmcp', graphEdges:[], sourceQuery:'', decision:0};
+const views = ['presentation','landscape','relations','approaches','participants','projects','standards','design','sources'];
+const state = {view:'presentation', slide:1, pages:{}, pagination:{}, selected:new Set(), filtered:P, foundation:'', graphFocus:'p:instrmcp', graphEdges:[], sourceQuery:'', decision:0};
 const labels = {
  evidence:{experiment:t('论文实机案例','Published experiment'),hardware:t('维护者实机记录','Maintainer hardware record'),adapter:t('接入实现 / 文档','Adapter / documentation'),simulation:t('模拟验证','Simulation-verified'),artifact:t('配套代码 / 资料','Supporting artifact'),proposal:t('构想 / 提案','Concept / proposal')},
  kind:{project:t('工程与研究资料','Project / research artifact'),actor:t('维护者 / 标准主体','Maintainer / standards actor'),standard:t('标准 / 基础生态','Standard / foundation'),foundation:t('设备侧基础接口','Device-side foundation'),route:t('贡献路线','Contribution route'),domain:t('作用领域','Domain')},
@@ -137,13 +137,15 @@ function closeMenu() {document.body.classList.remove('menu-open');$('menu-toggle
 function route(){
  clearTimeout(toastTimer);$('toast').classList.remove('show');
  let raw=location.hash.slice(1);let decoded;
- try{decoded=decodeURIComponent(raw);}catch{decoded='landscape';}
- const [path,query='']=decoded.split('?'),parts=path.split('/'),view=views.includes(parts[0])?parts[0]:'landscape',sub=parts.slice(1).join('/'),params=new URLSearchParams(query);
- state.view=view;all('[data-view]').forEach(el=>el.hidden=el.dataset.view!==view);
+ try{decoded=decodeURIComponent(raw);}catch{decoded='presentation';}
+ const [path,query='']=decoded.split('?'),parts=path.split('/'),view=views.includes(parts[0])?parts[0]:'presentation',sub=parts.slice(1).join('/'),params=new URLSearchParams(query);
+ state.view=view;document.body.classList.toggle('presentation-active',view==='presentation');if(view!=='presentation'){document.body.classList.remove('deck-focus');if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});}
+ all('[data-view]').forEach(el=>el.hidden=el.dataset.view!==view);
  all('[data-nav]').forEach(el=>{const active=el.dataset.nav===view;el.classList.toggle('active',active);if(active)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');});
- const i=views.indexOf(view),position=String(i+1).padStart(2,'0')+' / 08';$('top-position').textContent=position;$('footer-position').textContent=position;
+ const i=views.indexOf(view),position=String(i+1).padStart(2,'0')+' / '+String(views.length).padStart(2,'0');$('top-position').textContent=position;$('footer-position').textContent=position;
  $('current-section').textContent=document.querySelector(`[data-nav="${view}"]`).textContent.replace(/^\d+/, '').trim();
- $('language-link').href=`index.${lang==='zh'?'en':'zh-CN'}.html#${raw||'landscape'}`;$('view-prev').disabled=i===0;$('view-next').disabled=i===views.length-1;
+ $('language-link').href=`index.${lang==='zh'?'en':'zh-CN'}.html#${raw||'presentation/1'}`;$('view-prev').disabled=i===0;$('view-next').disabled=i===views.length-1;
+ if(view==='presentation'){renderSlide(Number(sub)||1);if(params.has('route'))openIsland(params.get('route'));}
  if(view==='relations'){
   if(nodes.has(sub))state.graphFocus=sub;
   if(state.graphFocus.startsWith('r:')||state.graphFocus.startsWith('d:'))$('graph-classification').checked=true;
@@ -202,12 +204,59 @@ $('design-chapter-select').addEventListener('change',()=>location.hash='design/'
 all('[data-decision]').forEach(el=>el.addEventListener('click',()=>selectDecision(el.dataset.decision)));
 const renderPages={projects:filterProjects,actors:filterActors,components:filterComponents,sources:filterSources,edges:renderEdges};
 all('[data-page-prev],[data-page-next]').forEach(button=>button.addEventListener('click',()=>{const id=button.dataset.pagePrev||button.dataset.pageNext;state.pages[id]=(state.pages[id]||1)+(button.dataset.pagePrev?-1:1);renderPages[id]();const start={projects:$('project-list'),actors:document.querySelector('.actor-grid'),components:$('component-browser'),sources:$('source-list'),edges:$('edge-list')}[id];start.scrollIntoView({block:'start',behavior:'instant'});}));
-function moveView(delta){const next=views.indexOf(state.view)+delta;if(next>=0&&next<views.length)location.hash=views[next];}
+function moveView(delta){if(state.view==='presentation'){moveSlide(delta);return;}const next=views.indexOf(state.view)+delta;if(next>=0&&next<views.length)location.hash=views[next];}
 $('view-prev').addEventListener('click',()=>moveView(-1));$('view-next').addEventListener('click',()=>moveView(1));
 $('menu-toggle').addEventListener('click',()=>{const open=document.body.classList.toggle('menu-open');$('menu-toggle').setAttribute('aria-expanded',String(open));});
 document.addEventListener('click',event=>{if(document.body.classList.contains('menu-open')&&!event.target.closest('.sidebar,#menu-toggle'))closeMenu();});
-document.addEventListener('keydown',event=>{if(event.key==='Escape')closeMenu();if(event.altKey||event.ctrlKey||event.metaKey||event.shiftKey||event.target.closest('input,select,textarea,[contenteditable="true"],button,a'))return;if(event.key==='ArrowLeft'){event.preventDefault();moveView(-1);}if(event.key==='ArrowRight'){event.preventDefault();moveView(1);}});
-window.addEventListener('hashchange',route);
+document.addEventListener('keydown',event=>{
+ if(event.key==='Escape'){closeMenu();document.body.classList.remove('deck-focus');$('deck-exit').hidden=true;}
+ if(event.altKey||event.ctrlKey||event.metaKey||event.shiftKey||event.target.closest('input,select,textarea,[contenteditable="true"]')||$('island-detail').open)return;
+ if(state.view==='presentation'){
+  if(['ArrowLeft','PageUp'].includes(event.key)){event.preventDefault();moveSlide(-1);}
+  if(['ArrowRight','PageDown'].includes(event.key)){event.preventDefault();moveSlide(1);}
+  if(event.key==='Home'){event.preventDefault();location.hash='presentation/1';}
+  if(event.key==='End'){event.preventDefault();location.hash='presentation/'+DATA.presentation.slides.length;}
+ } else if(!event.target.closest('button,a')){
+  if(event.key==='ArrowLeft'){event.preventDefault();moveView(-1);}
+  if(event.key==='ArrowRight'){event.preventDefault();moveView(1);}
+ }
+});
+
+function renderSlide(number){
+ const count=DATA.presentation.slides.length;
+ state.slide=Math.min(count,Math.max(1,Number.isFinite(number)?Math.floor(number):1));
+ all('[data-slide]').forEach(el=>el.hidden=Number(el.dataset.slide)!==state.slide);
+ $('deck-select').value=String(state.slide);$('deck-position').textContent=String(state.slide).padStart(2,'0')+' / '+String(count).padStart(2,'0');
+ $('deck-prev').disabled=state.slide===1;$('deck-next').disabled=state.slide===count;
+ $('deck-notes').textContent=tx(DATA.presentation.slides[state.slide-1].notes);
+ $('deck-exit').hidden=!document.body.classList.contains('deck-focus');
+}
+function moveSlide(delta){location.hash='presentation/'+Math.min(DATA.presentation.slides.length,Math.max(1,state.slide+delta));}
+function openIsland(id){
+ const r=routes.get(id);if(!r)return;
+ $('island-detail-title').textContent=tx(r.name);
+ $('island-detail-question').textContent=tx(r.question);
+ $('island-detail-projects').innerHTML=L.profiles.filter(pf=>pf.route===id).map(pf=>`<a href="#projects/${esc(pf.id)}"><b>${esc(projects.get(pf.id).name)}</b><span>${esc(tx(pf.contribution))}</span></a>`).join('');
+ if(!$('island-detail').open)$('island-detail').showModal();
+}
+$('deck-select').addEventListener('change',()=>location.hash='presentation/'+$('deck-select').value);
+$('deck-prev').addEventListener('click',()=>moveSlide(-1));$('deck-next').addEventListener('click',()=>moveSlide(1));
+$('deck-notes-toggle').addEventListener('click',()=>{const hidden=$('deck-notes').hidden;$('deck-notes').hidden=!hidden;$('deck-notes-toggle').setAttribute('aria-expanded',String(hidden));});
+$('deck-focus').addEventListener('click',()=>{document.body.classList.add('deck-focus');$('deck-exit').hidden=false;window.scrollTo(0,0);});
+$('deck-exit').addEventListener('click',()=>{document.body.classList.remove('deck-focus');$('deck-exit').hidden=true;if(document.fullscreenElement)document.exitFullscreen().catch(()=>{});});
+$('deck-fullscreen').addEventListener('click',()=>{
+ if(document.fullscreenElement){document.exitFullscreen().catch(()=>{});return;}
+ if($('deck-shell').requestFullscreen)$('deck-shell').requestFullscreen().catch(()=>{document.body.classList.add('deck-focus');$('deck-exit').hidden=false;});
+ else {document.body.classList.add('deck-focus');$('deck-exit').hidden=false;}
+});
+$('island-close').addEventListener('click',()=>$('island-detail').close());
+$('island-detail').addEventListener('click',event=>{if(event.target.closest('a'))$('island-detail').close();});
+$('island-detail').addEventListener('close',()=>{if(state.view==='presentation'&&location.hash.includes('?route='))history.replaceState(null,'','#presentation/'+state.slide);});
+const returnButton=document.createElement('button');returnButton.id='return-to-deck';returnButton.textContent=t('返回演示','Return to presentation');returnButton.hidden=true;
+returnButton.addEventListener('click',()=>location.hash='presentation/'+state.slide);document.querySelector('.reader-actions').prepend(returnButton);
+
+
+window.addEventListener('hashchange',()=>{route();returnButton.hidden=state.view==='presentation';});
 document.querySelector('.skip-link').addEventListener('click',event=>{event.preventDefault();$('main').focus();});
 filterProjects();filterActors();filterComponents();filterSources();syncCompare();route();document.body.classList.add('js');
 })();

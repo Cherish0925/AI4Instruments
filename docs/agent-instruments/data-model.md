@@ -62,10 +62,18 @@ const profile = data.landscape.profiles.find(p => p.id === project.id);
 const links = data.graph.edges.filter(e => e.source === 'p:' + project.id);
 ```
 
-The bundle contains `catalogue`, `context`, `landscape`, `graph`, `sources` and `documents`. `sources` is the record array; the standalone `sources.json` wraps it with a review date. `documents` contains the full original texts authored for this module, schemas and the synthetic contract example. External papers and manuals remain linked sources.
+The bundle contains `catalogue`, `context`, `landscape`, `graph`, `sources`, `presentation` and `documents`. `sources` is the record array; the standalone `sources.json` wraps it with a review date. `documents` contains the full original texts authored for this module, schemas and the synthetic contract example. External papers and manuals remain linked sources.
 
 ## Rebuild checks / 构建检查
 
 The builder checks unique IDs, profile coverage, valid actor/route references, bilingual contribution fields, graph endpoints and source presence on documented edges. When editing the reader, check section navigation, deep links, filters, comparison, graph selection, downloads and mobile overflow in both languages.
 
 The diagram on the opening page is an analytical role model. The relationship graph is a navigable view of the complete `graph.json`; dense neighborhoods show six neighbors per side while the paginated evidence list retains every adjacent edge.
+
+## Presentation hierarchy
+
+`presentation.json` holds bilingual slide titles, speaker notes, the full-catalogue role grouping and the direct protocol comparison set. `groups` partitions the existing eight routes by primary system responsibility. `protocol_comparison.groups` separately groups comparable instrument-interface designs by their main mechanism. These are editorial classifications, not protocol inheritance or confirmed compatibility.
+
+References beginning `p:` identify catalogue projects; `s:` identify standards/design records. MHS and AIP use `s:` and are not among the 73 project records. Agent2Device is retained under `unassigned_concepts` because its public description does not establish a sufficiently detailed mechanism. Projects can span several responsibilities; primary assignments avoid duplicate counts. The reading hierarchy and Basic/Standard/Workflow Operations describe different dimensions.
+
+The HTML bundle includes the `presentation` object. `#presentation/3` opens the direct comparison inventory; `#presentation/6?route=bridge` opens the full-ecosystem island with its bridge records expanded.

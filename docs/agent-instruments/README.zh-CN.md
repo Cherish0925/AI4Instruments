@@ -8,10 +8,19 @@
 
 下载任一 HTML 后直接打开。字体、图谱、正文与结构化资料均已内嵌，离线支持检索、分页、比较和导出。
 
-## 八个阅读栏目
+## IOP 演示
+
+首页新增 16 页演示，按“具体方案、机制归纳、IOP 设计综合”展开。支持目录选页、左右方向键、Page Up / Page Down、演示模式、全屏与讲解备注。第 3 页列出 10 项直接比较方案，第 4 页归纳机制，第 5 页连接已有规范，第 6 页展开全部 73 条生态记录。
+
+直接比较集合由 7 条工程记录及 MHS、AIP、LAP 三条标准/设计材料组成。MHS 与 AIP 均不计入 73 条工程记录。三个独立 Open-MHS 工程按维护者分别列出。机制岛屿是按主要设计重心进行的归纳，公开细节不足的概念提案单列。
+
+[打开中文演示](index.zh-CN.html#presentation/1) · [English presentation](index.en.html#presentation/1) · [演示与分类数据](presentation.json)
+
+## 九个阅读栏目
 
 | 栏目 | 回答的问题 |
 | --- | --- |
+| IOP 演示 | 哪些同类方案值得直接比较；如何归纳机制并综合为 IOP 的设计？ |
 | 领域全景 | 设备桥接、仪器契约、常驻执行、过程编排、实验决策、仪器开发、界面操作与知识资料如何分工？ |
 | 关系图谱 | 谁维护什么；工程接入或复用了什么；哪些项目有后续发展关系？ |
 | 技术路线 | 每条路线解决什么问题，交付什么能力，怎样比较与验证？ |
@@ -60,3 +69,5 @@ python docs/agent-instruments/build.py
 HTML 的 `script#research-data` 保存全部数据；`documents` 字段包含中英文设计正文与工程说明、字段规范、CSV 和契约示例。维护数据关系见 [data-model.md](data-model.md)，更新记录见 [CHANGELOG.md](CHANGELOG.md)。
 
 原创说明采用仓库的 [CC BY 4.0](../../LICENSE-docs.md)，构建代码采用 [MIT](../../LICENSE)，第三方项目保留各自许可。离线字体采用 [SIL Open Font License](assets/FONT_LICENSE.txt)。
+
+演示内容与两级归纳位于 `presentation.py`，版式位于 `assets/presentation.css`，构建时生成 `presentation.json` 并内嵌两份 HTML。

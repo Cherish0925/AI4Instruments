@@ -4,9 +4,9 @@
 
 ## OpenMHP
 
-[kushalsinha/openmhp](https://github.com/kushalsinha/openmhp) · 仪器契约 · Apache-2.0 · 模拟验证
+[kushalsinha/openmhp](https://github.com/kushalsinha/openmhp) · 仪器说明 · Apache-2.0 · 模拟验证
 
-设备描述、读写、动作、任务、租约与实验记录组成统一接口；可通过已有驱动生态接入。适合研究精简设备契约与按需发现。
+设备描述、读写、动作、任务、租约与实验记录组成统一接口；可通过已有驱动生态接入。适合研究精简设备说明与按需发现。
 
 公开规范与实现；supported-devices 的 7 个设备包标为 twin tested，另有 1 个人工操作模板。维护者明确尚未确认这些驱动的实机运行。
 
@@ -16,7 +16,7 @@ MCP / CLI / Python SDK / JSON-RPC / HTTP/SSE
 
 ## Open-MHS · Abenor Labs
 
-[Abenor-Labs/Open-MHS](https://github.com/Abenor-Labs/Open-MHS) · 仪器契约 · Apache-2.0 · 接入实现 / 文档
+[Abenor-Labs/Open-MHS](https://github.com/Abenor-Labs/Open-MHS) · 仪器说明 · Apache-2.0 · 接入实现 / 文档
 
 以 capability tag 和设备基类统一传感器、执行器及状态；提供串口机械臂适配示例。独立社区实现。
 
@@ -28,7 +28,7 @@ MCP / REST / CLI / Python / Serial
 
 ## Open MHS · tongriyaotxt
 
-[tongriyaotxt/open-mhs](https://github.com/tongriyaotxt/open-mhs) · 仪器契约 · MIT · 接入实现 / 文档
+[tongriyaotxt/open-mhs](https://github.com/tongriyaotxt/open-mhs) · 仪器说明 · MIT · 接入实现 / 文档
 
 设备注册、统一命令和 MCP 工具；包含机器人动作与技能执行扩展。与同名项目分别维护。
 
@@ -40,7 +40,7 @@ MCP / REST / CLI / Python
 
 ## Open MHS · SCUT-ESA
 
-[SCUT-ESA/open-mhs](https://github.com/SCUT-ESA/open-mhs) · 仪器契约 · MIT · 维护者实机记录
+[SCUT-ESA/open-mhs](https://github.com/SCUT-ESA/open-mhs) · 仪器说明 · MIT · 维护者实机记录
 
 统一设备接口加显式后端策略，覆盖 VISA 仪器、嵌入式 I/O 与模拟设备。属于受 MHS 启发的社区工程。
 
@@ -52,7 +52,7 @@ MCP / REST / CLI / PyVISA
 
 ## Model Hardware Protocol · Cuntinum
 
-[Cuntinum/model-hardware-protocol](https://github.com/Cuntinum/model-hardware-protocol) · 仪器契约 · Apache-2.0 · 接入实现 / 文档
+[Cuntinum/model-hardware-protocol](https://github.com/Cuntinum/model-hardware-protocol) · 仪器说明 · Apache-2.0 · 接入实现 / 文档
 
 以 discover、read、write、execute 组织设备驱动和共享状态。包名 khp，与 OpenMHP 不是同一项目。
 
@@ -64,7 +64,7 @@ Python SDK / TypeScript SDK / MCP / CLI
 
 ## Open Agent Hardware Layer
 
-[fredabila/oahl](https://github.com/fredabila/oahl) · 仪器契约 · MIT · 维护者实机记录
+[fredabila/oahl](https://github.com/fredabila/oahl) · 仪器说明 · MIT · 维护者实机记录
 
 discover–reserve–execute–release 生命周期；节点、适配器与传输插件分离，可本地运行或使用可选注册与中继服务。
 
@@ -440,7 +440,7 @@ Python / WebSocket / Small language models / spmutil
 
 将仪器工作区变为参数、动作、图像回读与多步程序的固定工具接口；操作与后续观察分别记录。Nanonis 路径依赖外部 nqctl。
 
-公开 Pi 扩展与工作区契约；STM 论文是相关实验背景，不据此宣称该扩展独立包含全部硬件驱动。
+公开 Pi 扩展与工作区说明；STM 论文是相关实验背景，不据此宣称该扩展独立包含全部硬件驱动。
 
 Pi extension / CLI driver contract / Workspace JSON / Image readback
 
@@ -832,7 +832,7 @@ MCP gateway / Fastly Compute
 
 ## Agent2Device Protocol
 
-[neogyk/Agent2Device-Protocol](https://github.com/neogyk/Agent2Device-Protocol) · 仪器契约 · MIT · 构想 / 提案
+[neogyk/Agent2Device-Protocol](https://github.com/neogyk/Agent2Device-Protocol) · 仪器说明 · MIT · 构想 / 提案
 
 讨论 Agent 与实验设备连接的协议构想。
 

@@ -62,7 +62,7 @@ const profile = data.landscape.profiles.find(p => p.id === project.id);
 const links = data.graph.edges.filter(e => e.source === 'p:' + project.id);
 ```
 
-The bundle contains `catalogue`, `context`, `landscape`, `graph`, `sources`, `presentation` and `documents`. `sources` is the record array; the standalone `sources.json` wraps it with a review date. `documents` contains the full original texts authored for this module, schemas and the synthetic contract example. External papers and manuals remain linked sources.
+The bundle contains `catalogue`, `context`, `landscape`, `graph`, `sources`, `presentation` and `documents`. `sources` is the record array; the standalone `sources.json` wraps it with a review date. `documents` contains the full original texts authored for this module, schemas and the synthetic measurement example. External papers and manuals remain linked sources.
 
 ## Rebuild checks / 构建检查
 
@@ -72,10 +72,12 @@ The landscape section contains an analytical role diagram. The relationship grap
 
 ## IOP argument model
 
-The version 2 `presentation.json` uses one hierarchy: `levels.1` is existing designs, `levels.2` is mechanism families, and `levels.3` is the IOP operation model. `mechanism_families` records each family's defining mechanism, primary reference designs and corresponding IOP objects. Contributions can overlap; these links describe the analysis, not software compatibility.
+The version 2.1 `presentation.json` uses one hierarchy: `levels.1` is existing designs, `levels.2` is mechanism families, and `levels.3` is the IOP system design. `mechanism_families` records each family's defining mechanism, primary reference designs and corresponding IOP objects. Contributions can overlap; these links describe the analysis, not software compatibility.
 
 `slides` contains bilingual titles, short navigation labels, source keys, artifact status and full authored HTML bodies. `chapters` supplies the four navigation groups. `sources` resolves source keys to labels and URLs. The two HTML files embed the same object and display the selected language. No content depends on remotely loaded scripts or fonts.
 
 References beginning `p:` identify catalogue projects; `s:` identify standards/design records. MHS and AIP use `s:` and remain outside the 73 project records. Agent2Device is recorded under `additional_concepts`.
 
-The URL `#presentation/3` opens the design inventory; `#presentation/10` the complete hierarchy; `#presentation/13` the IOP object model. The original `presentation` route and filenames remain stable for existing links.
+The URL `#presentation/3` opens the design inventory; `#presentation/10` the complete hierarchy; `#presentation/13` the four-part architecture, `#presentation/14` the platform service and `#presentation/18` the operation object model. The original `presentation` route and filenames remain stable for existing links.
+
+`system_components` names the four system components: instrument descriptions, runtime, programs and records. `runtime_design` states platform ownership, dispatch conditions and record identities. These architecture fields are separate from the comparative `mechanism_families`.

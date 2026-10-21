@@ -10,12 +10,13 @@ Download either HTML file and open it locally. Fonts, diagrams, text and structu
 
 ## IOP: from existing designs to a shared operation model
 
-The argument uses three fixed levels: **existing designs → shared mechanisms → the IOP operation model**. A polarization scan connects capability definitions, execution, observations and device adaptation.
+The argument uses three fixed levels: **existing designs → shared mechanisms → the IOP system design**. A polarization scan connects capability definitions, execution, observations and device adaptation.
 
 - Pages 1–2: the hierarchy and the physical operation.
 - Pages 3–9: the objects, execution paths and distinctions of MHS, three independent Open-MHS projects, Cuntinum MHP, AIP, OpenMHP, LAP and OAHL.
-- Pages 10–12: capability models, execution/result contracts, discovery/resource coordination, and their relationship to SiLA 2, OPC UA/LADS and W3C WoT.
-- Pages 13–18: IOP object relationships, a shared operation definition, execution/readback, cross-device mappings, instrument packages and validation targets.
+- Pages 10–12: capability models, execution/result definitions, discovery/resource coordination, and their relationship to SiLA 2, OPC UA/LADS and W3C WoT.
+- Pages 13–17: the four IOP components, persistent platform service, parallel/sequential scheduling, experiment packages and automatically linked records.
+- Pages 18–21: operation relationships, shared definitions, device mappings and a cross-platform method target.
 
 Chapter navigation and a chapter-specific outline support keyboard navigation, direct page selection and fullscreen. Sources accompany relevant pages. Nine designs with concrete mechanisms inform the synthesis; the Agent2Device concept is listed separately. The wider project catalogue remains available in the other sections.
 
@@ -71,7 +72,7 @@ python docs/agent-instruments/build.py
 
 The builder uses Python’s standard library and generates both HTML files, project profiles, Markdown catalogues, CSV, graph and source index. Layout is in `reader.py` and `assets/reader.css`; interaction is in `assets/reader.js`. All static text remains readable without JavaScript.
 
-The HTML’s `script#research-data` contains the complete dataset. Its `documents` field includes both language editions of design text and project profiles, schemas, CSV and the contract example. See [data-model.md](data-model.md) for data relationships and [CHANGELOG.md](CHANGELOG.md) for updates.
+The HTML’s `script#research-data` contains the complete dataset. Its `documents` field includes both language editions of design text and project profiles, schemas, CSV and the measurement example. See [data-model.md](data-model.md) for data relationships and [CHANGELOG.md](CHANGELOG.md) for updates.
 
 ## Attribution
 

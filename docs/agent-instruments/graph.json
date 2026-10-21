@@ -15,7 +15,7 @@
       "id": "r:contract",
       "kind": "route",
       "label": {
-        "zh": "仪器契约",
+        "zh": "仪器说明",
         "en": "Instrument contracts"
       },
       "reference": "contract"

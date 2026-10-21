@@ -27,7 +27,7 @@
       "name": "Agent–Instrument Protocol (AIP)",
       "kind": "design-reference",
       "role": {
-        "zh": "持久设备执行服务与实验契约",
+        "zh": "持久设备执行服务与实验说明",
         "en": "Persistent device execution service and experimental contracts"
       },
       "status": {
@@ -46,7 +46,7 @@
       "name": "Lab Agent Protocol (LAP)",
       "kind": "design-paper",
       "role": {
-        "zh": "Agent 到仪器的契约提案",
+        "zh": "Agent 到仪器的说明提案",
         "en": "A proposed agent-to-instrument contract"
       },
       "status": {
@@ -54,7 +54,7 @@
         "en": "LAP v0.1 design in arXiv:2606.03755; the paper explicitly distinguishes it from a normative standard or implementation report."
       },
       "detail": {
-        "zh": "InstrumentCard、资源预留、任务生命周期和测量结果对象值得比较；单位、校准与不确定度属于契约的实验含义。",
+        "zh": "InstrumentCard、资源预留、任务生命周期和测量结果对象值得比较；单位、校准与不确定度属于说明的实验含义。",
         "en": "InstrumentCard, reservations, task lifecycle and measurement-result objects offer useful comparisons, especially units, calibration and uncertainty."
       },
       "sources": [
@@ -375,7 +375,7 @@
       "name": "Agent Identity Protocol",
       "url": "https://github.com/openagentidentityprotocol/agentidentityprotocol",
       "reason": {
-        "zh": "同缩写 AIP，研究身份与授权；不是仪器契约。",
+        "zh": "同缩写 AIP，研究身份与授权；不是仪器说明。",
         "en": "Another AIP acronym, addressing identity and authorization rather than instrument contracts."
       }
     },

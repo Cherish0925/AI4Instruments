@@ -1,4 +1,4 @@
-# Contract example / 契约示例
+# Contract example / 说明示例
 
 [measurement-contract.json](measurement-contract.json) illustrates a device description, an accepted operation, an observation and a completed acquisition. It is a design example with synthetic values, not an implemented protocol or a physical measurement record.
 

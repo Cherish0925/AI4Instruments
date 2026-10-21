@@ -1,13 +1,13 @@
 {
-  "schema_version": "2.0",
+  "schema_version": "2.1",
   "updated": "2026-10-21",
-  "edition": "IOP-02",
+  "edition": "IOP-03",
   "name": "Instrument Operations Protocol",
   "abbreviation": "IOP",
   "levels": {
     "1": "existing designs",
     "2": "mechanism families",
-    "3": "IOP operation model"
+    "3": "IOP system design"
   },
   "chapters": [
     {
@@ -71,8 +71,8 @@
     {
       "id": "execution",
       "name": {
-        "zh": "操作执行与结果契约",
-        "en": "Execution and result contracts"
+        "zh": "操作执行与结果定义",
+        "en": "Execution and result definitions"
       },
       "mechanism": {
         "zh": "把一次调用延伸为有身份、状态、资源与结果的物理过程。",
@@ -110,6 +110,49 @@
       ]
     }
   ],
+  "system_components": [
+    {
+      "id": "instrument-descriptions",
+      "name": {
+        "zh": "仪器说明",
+        "en": "Instrument descriptions"
+      }
+    },
+    {
+      "id": "runtime",
+      "name": {
+        "zh": "常驻运行时",
+        "en": "Persistent runtime"
+      }
+    },
+    {
+      "id": "programs",
+      "name": {
+        "zh": "实验程序",
+        "en": "Experiment programs"
+      }
+    },
+    {
+      "id": "records",
+      "name": {
+        "zh": "实验记录",
+        "en": "Experiment records"
+      }
+    }
+  ],
+  "runtime_design": {
+    "scope": "one authority per experimental platform",
+    "dispatch": "declared dependencies complete and compatible physical/communication resources available",
+    "ownership": "service-managed device connections and experiment workers",
+    "records": [
+      "project_id",
+      "experiment_id",
+      "run_id",
+      "operation_id",
+      "observation",
+      "artifact"
+    ]
+  },
   "classification_basis": "primary design emphasis; mechanisms may overlap",
   "additional_concepts": [
     "p:agent2device"
@@ -193,8 +236,8 @@
         "en": "AI4Instruments · Design study"
       },
       "body": {
-        "zh": "<p class=\"opening-definition\">仪器操作协议，定义一件实验操作的<b>物理含义、执行方式与结果依据</b>，使它能被人理解、被程序执行，并在不同设备之间复用。</p><div class=\"argument-map\"><a href=\"#presentation/3\"><span class=\"roman\">I</span><div><h3>具体方案</h3><b>MHS · AIP · OpenMHP · LAP · OAHL</b><p>各家用什么对象和机制连接仪器</p></div><span class=\"map-arrow\">↗</span></a><a href=\"#presentation/10\"><span class=\"roman\">II</span><div><h3>共同机制</h3><b>能力模型 · 执行契约 · 资源协作</b><p>把相似实现归到同一问题，把互补机制接起来</p></div><span class=\"map-arrow\">↗</span></a><a href=\"#presentation/13\"><span class=\"roman\">III</span><div><h3>IOP</h3><b>一套操作定义，连接知识、执行与结果</b><p>人和 Agent 使用同一个方法，驱动适配不同设备</p></div><span class=\"map-arrow\">↗</span></a></div>",
-        "en": "<p class=\"opening-definition\">IOP defines an operation’s <b>physical meaning, execution and evidence</b>. People and software share the definition; adapters make methods reusable across devices.</p><div class=\"argument-map\"><a href=\"#presentation/3\"><span class=\"roman\">I</span><div><h3>Existing designs</h3><b>MHS · AIP · OpenMHP · LAP · OAHL</b><p>How each design represents and operates instruments</p></div><span class=\"map-arrow\">↗</span></a><a href=\"#presentation/10\"><span class=\"roman\">II</span><div><h3>Shared mechanisms</h3><b>Capabilities · Execution · Resources</b><p>Group similar solutions; connect complementary mechanisms</p></div><span class=\"map-arrow\">↗</span></a><a href=\"#presentation/13\"><span class=\"roman\">III</span><div><h3>IOP</h3><b>One operation model linking knowledge, execution and results</b><p>People and agents share methods; adapters connect devices</p></div><span class=\"map-arrow\">↗</span></a></div>"
+        "zh": "<p class=\"opening-definition\">仪器操作协议，定义一件实验操作的<b>物理含义、执行方式与结果依据</b>，使它能被人理解、被程序执行，并在不同设备之间复用。</p><div class=\"argument-map\"><a href=\"#presentation/3\"><span class=\"roman\">I</span><div><h3>具体方案</h3><b>MHS · AIP · OpenMHP · LAP · OAHL</b><p>各家用什么对象和机制连接仪器</p></div><span class=\"map-arrow\">↗</span></a><a href=\"#presentation/10\"><span class=\"roman\">II</span><div><h3>共同机制</h3><b>能力模型 · 执行规则 · 资源协作</b><p>把相似实现归到同一问题，把互补机制接起来</p></div><span class=\"map-arrow\">↗</span></a><a href=\"#presentation/13\"><span class=\"roman\">III</span><div><h3>IOP</h3><b>共同说明与常驻服务，连接整个实验平台</b><p>人和 Agent 提交实验程序，平台常驻服务统一执行与留档</p></div><span class=\"map-arrow\">↗</span></a></div>",
+        "en": "<p class=\"opening-definition\">IOP defines an operation’s <b>physical meaning, execution and evidence</b>. People and software share the definition; adapters make methods reusable across devices.</p><div class=\"argument-map\"><a href=\"#presentation/3\"><span class=\"roman\">I</span><div><h3>Existing designs</h3><b>MHS · AIP · OpenMHP · LAP · OAHL</b><p>How each design represents and operates instruments</p></div><span class=\"map-arrow\">↗</span></a><a href=\"#presentation/10\"><span class=\"roman\">II</span><div><h3>Shared mechanisms</h3><b>Capabilities · Execution · Resources</b><p>Group similar solutions; connect complementary mechanisms</p></div><span class=\"map-arrow\">↗</span></a><a href=\"#presentation/13\"><span class=\"roman\">III</span><div><h3>IOP</h3><b>Shared descriptions and a persistent service for the experimental platform</b><p>People and agents submit programs; a persistent service executes and records them</p></div><span class=\"map-arrow\">↗</span></a></div>"
       },
       "sources": []
     },
@@ -347,8 +390,8 @@
       "id": "lap",
       "chapter": "designs",
       "title": {
-        "zh": "LAP：把资源占用和测量含义写进任务契约",
-        "en": "LAP: include reservations and measurement meaning in task contracts"
+        "zh": "LAP：把资源占用和测量含义写进任务定义",
+        "en": "LAP: include reservations and measurement meaning in task definitions"
       },
       "short": {
         "zh": "LAP",
@@ -359,8 +402,8 @@
         "en": "Shiyanjia Lab · LAP v0.1 design paper"
       },
       "body": {
-        "zh": "<div class=\"lap-contract\"><div class=\"entity \"><b>InstrumentCard</b><span>能力、设备身份与物理限制</span></div><span>↓</span><div class=\"entity core\"><b>Reservation + task</b><span>设备 / 样品占用，任务状态与参数绑定的执行确认</span></div><span>↓</span><div class=\"entity \"><b>MeasurementResult</b><span>数值、单位、校准、不确定度与来源</span></div></div><div class=\"split equal\"><div class=\"explanation\"><h3>定义</h3><p>LAP（Lab Agent Protocol）沿用 Agent 之间发现和任务协作的结构，把仪器作为有物理状态和测量结果的参与者。</p></div><div class=\"explanation\"><h3>在扫描中</h3><p>取得转台与探测器的使用权；提交扫描任务；返回带角度单位、探测器校准信息及测量来源的结果。</p></div></div><p class=\"thesis\">可继承的机制：让“结果是什么、在什么条件下产生”成为任务契约的一部分。</p>",
-        "en": "<div class=\"lap-contract\"><div class=\"entity \"><b>InstrumentCard</b><span>Capabilities, identity and physical limits</span></div><span>↓</span><div class=\"entity core\"><b>Reservation + task</b><span>Device/sample reservation, task state and task-bound confirmation</span></div><span>↓</span><div class=\"entity \"><b>MeasurementResult</b><span>Values, units, calibration, uncertainty and provenance</span></div></div><div class=\"split equal\"><div class=\"explanation\"><h3>Definition</h3><p>LAP retains agent discovery and task collaboration while treating instruments as participants with physical state and measurement results.</p></div><div class=\"explanation\"><h3>In the scan</h3><p>Reserve the stage and detector, submit a scan task, and return results with angle units, detector calibration and measurement provenance.</p></div></div><p class=\"thesis\">Mechanism to carry forward: make the meaning and conditions of a measurement part of the task contract.</p>"
+        "zh": "<div class=\"lap-contract\"><div class=\"entity \"><b>InstrumentCard</b><span>能力、设备身份与物理限制</span></div><span>↓</span><div class=\"entity core\"><b>Reservation + task</b><span>设备 / 样品占用，任务状态与参数绑定的执行确认</span></div><span>↓</span><div class=\"entity \"><b>MeasurementResult</b><span>数值、单位、校准、不确定度与来源</span></div></div><div class=\"split equal\"><div class=\"explanation\"><h3>定义</h3><p>LAP（Lab Agent Protocol）沿用 Agent 之间发现和任务协作的结构，把仪器作为有物理状态和测量结果的参与者。</p></div><div class=\"explanation\"><h3>在扫描中</h3><p>取得转台与探测器的使用权；提交扫描任务；返回带角度单位、探测器校准信息及测量来源的结果。</p></div></div><p class=\"thesis\">可继承的机制：让“结果是什么、在什么条件下产生”成为任务定义的一部分。</p>",
+        "en": "<div class=\"lap-contract\"><div class=\"entity \"><b>InstrumentCard</b><span>Capabilities, identity and physical limits</span></div><span>↓</span><div class=\"entity core\"><b>Reservation + task</b><span>Device/sample reservation, task state and task-bound confirmation</span></div><span>↓</span><div class=\"entity \"><b>MeasurementResult</b><span>Values, units, calibration, uncertainty and provenance</span></div></div><div class=\"split equal\"><div class=\"explanation\"><h3>Definition</h3><p>LAP retains agent discovery and task collaboration while treating instruments as participants with physical state and measurement results.</p></div><div class=\"explanation\"><h3>In the scan</h3><p>Reserve the stage and detector, submit a scan task, and return results with angle units, detector calibration and measurement provenance.</p></div></div><p class=\"thesis\">Mechanism to carry forward: make the meaning and conditions of a measurement part of the task definition.</p>"
       },
       "sources": [
         "lap"
@@ -405,8 +448,8 @@
         "en": "Synthesis of the reviewed designs"
       },
       "body": {
-        "zh": "<div class=\"island-headings\"><span>一级 · 具体方案</span><span>二级 · 共同机制</span><span>三级 · IOP 对象</span></div><div class=\"island-map\"><div class=\"island-row tone-A\"><a class=\"island-origin\" href=\"#presentation/4\">MHS · Open-MHS × 3 · MHP</a><div class=\"island-mechanism\"><span class=\"island-letter\">A</span><h3>设备能力模型</h3><p>设备能做什么？</p><b>共同描述 + 驱动映射</b></div><div class=\"island-output\">设备、能力、操作定义</div></div><div class=\"island-row tone-B\"><a class=\"island-origin\" href=\"#presentation/6\">AIP · OpenMHP · LAP</a><div class=\"island-mechanism\"><span class=\"island-letter\">B</span><h3>操作执行与结果契约</h3><p>怎样完成，又怎样证明？</p><b>任务状态 + 资源 + 观测</b></div><div class=\"island-output\">执行实例、观测、方法</div></div><div class=\"island-row tone-C\"><a class=\"island-origin\" href=\"#presentation/9\">OAHL</a><div class=\"island-mechanism\"><span class=\"island-letter\">C</span><h3>设备发现与资源协作</h3><p>设备在哪里，由谁使用？</p><b>发现 + 会话 + 访问路径</b></div><div class=\"island-output\">身份、占用、绑定</div></div></div><p class=\"figure-caption\">按主要设计重心归纳。OpenMHP 和 LAP 也包含发现与资源机制；分组表达贡献重心，这些机制在同一次操作中协作。</p>",
-        "en": "<div class=\"island-headings\"><span>I · Existing designs</span><span>II · Shared mechanisms</span><span>III · IOP objects</span></div><div class=\"island-map\"><div class=\"island-row tone-A\"><a class=\"island-origin\" href=\"#presentation/4\">MHS · Open-MHS × 3 · MHP</a><div class=\"island-mechanism\"><span class=\"island-letter\">A</span><h3>Device capability models</h3><p>What can the device do?</p><b>Shared description + driver mapping</b></div><div class=\"island-output\">Instrument, capability, operation</div></div><div class=\"island-row tone-B\"><a class=\"island-origin\" href=\"#presentation/6\">AIP · OpenMHP · LAP</a><div class=\"island-mechanism\"><span class=\"island-letter\">B</span><h3>Execution and result contracts</h3><p>How does it finish, and what is the evidence?</p><b>Task state + resources + observations</b></div><div class=\"island-output\">Run, observation, method</div></div><div class=\"island-row tone-C\"><a class=\"island-origin\" href=\"#presentation/9\">OAHL</a><div class=\"island-mechanism\"><span class=\"island-letter\">C</span><h3>Discovery and resource coordination</h3><p>Where is it, and who can use it now?</p><b>Discovery + sessions + access paths</b></div><div class=\"island-output\">Identity, reservation, binding</div></div></div><p class=\"figure-caption\">Grouped by primary design emphasis. OpenMHP and LAP also include discovery and resources; these overlapping mechanisms work together in a physical operation.</p>"
+        "zh": "<div class=\"island-headings\"><span>一级 · 具体方案</span><span>二级 · 共同机制</span><span>对 IOP 的贡献</span></div><div class=\"island-map\"><div class=\"island-row tone-A\"><a class=\"island-origin\" href=\"#presentation/4\">MHS · Open-MHS × 3 · MHP</a><div class=\"island-mechanism\"><span class=\"island-letter\">A</span><h3>设备能力模型</h3><p>设备能做什么？</p><b>共同描述 + 驱动映射</b></div><div class=\"island-output\">仪器说明：知识、能力与操作</div></div><div class=\"island-row tone-B\"><a class=\"island-origin\" href=\"#presentation/6\">AIP · OpenMHP · LAP</a><div class=\"island-mechanism\"><span class=\"island-letter\">B</span><h3>操作执行与结果定义</h3><p>怎样完成，又怎样证明？</p><b>任务状态 + 资源 + 观测</b></div><div class=\"island-output\">常驻运行时、实验程序与记录</div></div><div class=\"island-row tone-C\"><a class=\"island-origin\" href=\"#presentation/9\">OAHL</a><div class=\"island-mechanism\"><span class=\"island-letter\">C</span><h3>设备发现与资源协作</h3><p>设备在哪里，由谁使用？</p><b>发现 + 会话 + 访问路径</b></div><div class=\"island-output\">常驻运行时：注册、占用与连接</div></div></div><p class=\"figure-caption\">这三个岛屿归纳已有方案的机制；我们的 IOP 由仪器说明、常驻运行时、实验程序、实验记录四部分共同实现。</p>",
+        "en": "<div class=\"island-headings\"><span>I · Existing designs</span><span>II · Shared mechanisms</span><span>Contribution to IOP</span></div><div class=\"island-map\"><div class=\"island-row tone-A\"><a class=\"island-origin\" href=\"#presentation/4\">MHS · Open-MHS × 3 · MHP</a><div class=\"island-mechanism\"><span class=\"island-letter\">A</span><h3>Device capability models</h3><p>What can the device do?</p><b>Shared description + driver mapping</b></div><div class=\"island-output\">Descriptions: knowledge, capabilities and operations</div></div><div class=\"island-row tone-B\"><a class=\"island-origin\" href=\"#presentation/6\">AIP · OpenMHP · LAP</a><div class=\"island-mechanism\"><span class=\"island-letter\">B</span><h3>Execution and result definitions</h3><p>How does it finish, and what is the evidence?</p><b>Task state + resources + observations</b></div><div class=\"island-output\">Runtime, experiment programs and records</div></div><div class=\"island-row tone-C\"><a class=\"island-origin\" href=\"#presentation/9\">OAHL</a><div class=\"island-mechanism\"><span class=\"island-letter\">C</span><h3>Discovery and resource coordination</h3><p>Where is it, and who can use it now?</p><b>Discovery + sessions + access paths</b></div><div class=\"island-output\">Runtime: registration, reservations and connections</div></div></div><p class=\"figure-caption\">These three families summarize existing mechanisms. Our IOP combines four components: instrument descriptions, a persistent runtime, experiment programs and records.</p>"
       },
       "sources": [
         "mhs",
@@ -463,6 +506,111 @@
       ]
     },
     {
+      "id": "system",
+      "chapter": "iop",
+      "title": {
+        "zh": "IOP 的四个部分，由平台常驻服务连接起来",
+        "en": "Four IOP components, connected by a persistent platform service"
+      },
+      "short": {
+        "zh": "IOP 四部分",
+        "en": "Four IOP components"
+      },
+      "status": {
+        "zh": "IOP 总体架构设计",
+        "en": "IOP system architecture design"
+      },
+      "body": {
+        "zh": "<div class=\"iop-system-four\"><div class=\"iop-program\"><span class=\"component-index\">03</span><h3>实验程序</h3><p>人 / Agent 提交方法、步骤依赖与参数；服务接管执行</p></div><div class=\"iop-contract\"><span class=\"component-index\">01</span><h3>仪器说明</h3><p>原理与使用知识<br>能力、单位与操作<br>资源、影响与完成条件</p></div><div class=\"iop-runtime\"><span class=\"component-index\">02</span><h3>常驻运行时</h3><p>设备注册与连接<br>依赖和资源调度<br>执行、状态与事件</p></div><div class=\"iop-records\"><span class=\"component-index\">04</span><h3>实验记录</h3><p>研究、实验与运行身份<br>操作、观测和原始数据<br>版本、条件与来源</p></div><div class=\"iop-hardware\">平台上的真实设备：转台 · 功率计 · 相机 · 激光器 · 其他已注册仪器</div></div><p class=\"thesis\">我们的 IOP 按这四个部分组织；常驻运行时把仪器说明、实验程序和记录连接到同一套真实设备。</p>",
+        "en": "<div class=\"iop-system-four\"><div class=\"iop-program\"><span class=\"component-index\">03</span><h3>Experiment programs</h3><p>People and agents submit methods, dependencies and parameters; the service executes them</p></div><div class=\"iop-contract\"><span class=\"component-index\">01</span><h3>Instrument descriptions</h3><p>Principles and operating knowledge<br>Capabilities, units and operations<br>Resources, effects and completion</p></div><div class=\"iop-runtime\"><span class=\"component-index\">02</span><h3>Persistent runtime</h3><p>Device registration and connections<br>Dependency and resource scheduling<br>Execution, state and events</p></div><div class=\"iop-records\"><span class=\"component-index\">04</span><h3>Experiment records</h3><p>Project, experiment and run identity<br>Operations, observations and raw data<br>Versions, conditions and provenance</p></div><div class=\"iop-hardware\">Physical platform: stages · power meters · cameras · lasers · other registered instruments</div></div><p class=\"thesis\">IOP is organized into these four components. The persistent runtime connects instrument descriptions, experiment programs and records to physical equipment.</p>"
+      },
+      "sources": []
+    },
+    {
+      "id": "daemon",
+      "chapter": "iop",
+      "title": {
+        "zh": "每个平台的设备，统一注册到常驻服务",
+        "en": "Register each platform’s devices with one persistent service"
+      },
+      "short": {
+        "zh": "常驻服务与设备",
+        "en": "Service and devices"
+      },
+      "status": {
+        "zh": "IOP 常驻运行时设计",
+        "en": "IOP persistent-runtime design"
+      },
+      "body": {
+        "zh": "<div class=\"split daemon-layout\"><div class=\"system-drawing\"><div class=\"entity top\"><b>人 / Agent 的实验程序</b><span>提交实验 · 调用操作 · 订阅状态 · 查询结果</span></div><div class=\"connector\">↓ ↑</div><div class=\"daemon-core\"><h3>平台常驻服务</h3><p>统一的设备所有权与执行入口</p><div class=\"daemon-functions\"><span>设备与能力注册表</span><span>依赖 / 资源调度器</span><span>活动状态与事件记录</span></div></div><div class=\"connector\">↓ ↑</div><div class=\"driver-grid\"><div class=\"entity \"><b>转台驱动</b><span>位置与运动</span></div><div class=\"entity \"><b>功率计驱动</b><span>配置与采集</span></div><div class=\"entity \"><b>相机驱动</b><span>曝光与图像</span></div></div></div><div><div class=\"explanation\"><h3>注册与连接</h3><p>每台设备以唯一身份注册，绑定驱动、能力说明和连接地址。服务持有连接，维护设备当前状态。</p></div><div class=\"explanation\"><h3>常驻与执行</h3><p>实验工作进程由服务管理；每次实验分配 run_id。调用者离开或重连，仍可按同一身份查询正在执行的实验。</p></div><div class=\"explanation\"><h3>多平台协作</h3><p>每个平台设置自己的常驻服务。跨平台实验通过这些服务协调资源与事件；驱动仍由所属平台管理。</p></div></div></div><p class=\"thesis\">常驻服务是平台的统一执行入口；设备连接、实验活动和历史记录都具有持续的身份。</p>",
+        "en": "<div class=\"split daemon-layout\"><div class=\"system-drawing\"><div class=\"entity top\"><b>Experiment programs from people and agents</b><span>Submit experiments · Invoke operations · Watch state · Retrieve results</span></div><div class=\"connector\">↓ ↑</div><div class=\"daemon-core\"><h3>Persistent platform service</h3><p>One authority for device access and execution</p><div class=\"daemon-functions\"><span>Device and capability registry</span><span>Dependency / resource scheduler</span><span>Activity state and event records</span></div></div><div class=\"connector\">↓ ↑</div><div class=\"driver-grid\"><div class=\"entity \"><b>Stage driver</b><span>Position and motion</span></div><div class=\"entity \"><b>Meter driver</b><span>Settings and acquisition</span></div><div class=\"entity \"><b>Camera driver</b><span>Exposure and images</span></div></div></div><div><div class=\"explanation\"><h3>Registration and connections</h3><p>Each device registers an identity, driver, capability description and endpoint. The service owns connections and tracks current device state.</p></div><div class=\"explanation\"><h3>Persistent execution</h3><p>Service-managed workers execute experiments under a run_id. Callers can disconnect and reconnect to the same continuing run.</p></div><div class=\"explanation\"><h3>Multiple platforms</h3><p>Each platform runs its own service. Cross-platform experiments coordinate resources and events through those services.</p></div></div></div><p class=\"thesis\">The service is the platform’s execution entry point. Connections, experiment activities and records retain persistent identities.</p>"
+      },
+      "sources": []
+    },
+    {
+      "id": "scheduling",
+      "chapter": "iop",
+      "title": {
+        "zh": "依赖决定先后，资源决定能否并行",
+        "en": "Dependencies set order; resources determine concurrency"
+      },
+      "short": {
+        "zh": "并行与串行调度",
+        "en": "Parallel and sequential execution"
+      },
+      "status": {
+        "zh": "偏振扫描 · 操作依赖与资源声明",
+        "en": "Polarization scan · Declared dependencies and resources"
+      },
+      "body": {
+        "zh": "<div class=\"schedule-scroll\"><svg class=\"schedule-diagram\" viewBox=\"0 0 1000 295\" role=\"img\" aria-label=\"转台移动和探测器配置可以并行；两者完成后才采集功率并记录结果\"><defs><marker id=\"schedule-arrow\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\"><path d=\"M0 0L10 5L0 10z\"/></marker></defs><path class=\"schedule-edge\" d=\"M170 147H200V65H235M200 147V230H235M490 65H525V150H560M490 230H525V150M790 150H855\"/><g class=\"schedule-node \"><rect x=\"25\" y=\"115\" width=\"145\" height=\"65\"/><text class=\"schedule-title\" x=\"97.5\" y=\"146\" text-anchor=\"middle\">扫描点 θ</text><text x=\"97.5\" y=\"173\" text-anchor=\"middle\">建立操作实例</text></g><g class=\"schedule-node \"><rect x=\"235\" y=\"25\" width=\"255\" height=\"80\"/><text class=\"schedule-title\" x=\"362.5\" y=\"56\" text-anchor=\"middle\">A · 转动波片并确认到位</text><text x=\"362.5\" y=\"83\" text-anchor=\"middle\">占用转轴与光路</text></g><g class=\"schedule-node \"><rect x=\"235\" y=\"190\" width=\"255\" height=\"80\"/><text class=\"schedule-title\" x=\"362.5\" y=\"221\" text-anchor=\"middle\">B · 设置探测器参数</text><text x=\"362.5\" y=\"248\" text-anchor=\"middle\">占用探测器配置资源</text></g><g class=\"schedule-node join\"><rect x=\"560\" y=\"110\" width=\"230\" height=\"80\"/><text class=\"schedule-title\" x=\"675.0\" y=\"141\" text-anchor=\"middle\">C · 采集透射功率</text><text x=\"675.0\" y=\"168\" text-anchor=\"middle\">等待 A、B 完成</text></g><g class=\"schedule-node \"><rect x=\"855\" y=\"110\" width=\"125\" height=\"80\"/><text class=\"schedule-title\" x=\"917.5\" y=\"141\" text-anchor=\"middle\">观测入档</text><text x=\"917.5\" y=\"168\" text-anchor=\"middle\">进入下一点</text></g></svg></div><div class=\"dispatch-rule\">启动条件 = 前置步骤已完成 ＋ 所需物理资源与通信资源可用</div><div class=\"scheduling-rules\"><div class=\"explanation\"><h3>独立操作并行</h3><p>A 与 B 的资源兼容，可同时推进；C 依赖二者，按实际完成事件开始。</p></div><div class=\"explanation\"><h3>冲突资源串行</h3><p>同一转轴、共享光路或独占连接按资源规则排序；运动期间，其他可用设备继续工作。</p></div></div><p class=\"figure-caption\">扫描点持续保留转轴、光路与探测器，直到采集完成；通信连接按实际通信区间占用。精确同步由设备时钟和硬件触发执行。</p>",
+        "en": "<div class=\"schedule-scroll\"><svg class=\"schedule-diagram\" viewBox=\"0 0 1000 295\" role=\"img\" aria-label=\"Stage movement and detector setup run in parallel. Acquisition follows both, then observations are recorded.\"><defs><marker id=\"schedule-arrow\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto-start-reverse\"><path d=\"M0 0L10 5L0 10z\"/></marker></defs><path class=\"schedule-edge\" d=\"M170 147H200V65H235M200 147V230H235M490 65H525V150H560M490 230H525V150M790 150H855\"/><g class=\"schedule-node \"><rect x=\"25\" y=\"115\" width=\"145\" height=\"65\"/><text class=\"schedule-title\" x=\"97.5\" y=\"146\" text-anchor=\"middle\">Scan point θ</text><text x=\"97.5\" y=\"173\" text-anchor=\"middle\">Create operations</text></g><g class=\"schedule-node \"><rect x=\"235\" y=\"25\" width=\"255\" height=\"80\"/><text class=\"schedule-title\" x=\"362.5\" y=\"56\" text-anchor=\"middle\">A · Move and confirm arrival</text><text x=\"362.5\" y=\"83\" text-anchor=\"middle\">Own axis and optical path</text></g><g class=\"schedule-node \"><rect x=\"235\" y=\"190\" width=\"255\" height=\"80\"/><text class=\"schedule-title\" x=\"362.5\" y=\"221\" text-anchor=\"middle\">B · Configure detector</text><text x=\"362.5\" y=\"248\" text-anchor=\"middle\">Own detector configuration</text></g><g class=\"schedule-node join\"><rect x=\"560\" y=\"110\" width=\"230\" height=\"80\"/><text class=\"schedule-title\" x=\"675.0\" y=\"141\" text-anchor=\"middle\">C · Acquire optical power</text><text x=\"675.0\" y=\"168\" text-anchor=\"middle\">Wait for A and B</text></g><g class=\"schedule-node \"><rect x=\"855\" y=\"110\" width=\"125\" height=\"80\"/><text class=\"schedule-title\" x=\"917.5\" y=\"141\" text-anchor=\"middle\">Record</text><text x=\"917.5\" y=\"168\" text-anchor=\"middle\">Next point</text></g></svg></div><div class=\"dispatch-rule\">Start when dependencies are complete and required physical and communication resources are available</div><div class=\"scheduling-rules\"><div class=\"explanation\"><h3>Independent work overlaps</h3><p>A and B use compatible resources and can overlap. C starts after both completion events.</p></div><div class=\"explanation\"><h3>Conflicting access is ordered</h3><p>Resource rules order access to a shared axis, optical path or exclusive connection. Other available devices continue while motion proceeds.</p></div></div><p class=\"figure-caption\">Reserve the axis, optical path and detector for the whole scan point. Hold connections during exchanges. Device clocks and hardware triggers perform precision synchronization.</p>"
+      },
+      "sources": []
+    },
+    {
+      "id": "program",
+      "chapter": "iop",
+      "title": {
+        "zh": "实验包提交给服务，设备操作由运行时统一执行",
+        "en": "Experiment packages run through one platform service"
+      },
+      "short": {
+        "zh": "实验程序与服务接口",
+        "en": "Programs and service interface"
+      },
+      "status": {
+        "zh": "IOP 客户端接口设计示例",
+        "en": "Illustrative IOP client interface design"
+      },
+      "body": {
+        "zh": "<div class=\"split equal\"><div><span class=\"margin-label\">调用者的程序</span><pre class=\"contract-code runtime-example\"><code>platform = IOP.connect(&quot;optics-bench-01&quot;)\nrun = platform.submit(\n    project=&quot;polarization-study&quot;,\n    package=&quot;polarization-scan@0.1&quot;,\n    parameters={&quot;angles_deg&quot;: [0, 15, 30, 45]}\n)\n\nfor event in platform.watch(run.id):\n    print(event)\n\nresult = platform.result(run.id)</code></pre><div class=\"package-files\"><b>实验包</b><span>experiment.py · method.yaml · dependencies.lock</span></div></div><div><div class=\"explanation\"><h3>实验程序表达方法</h3><p>声明设备能力需求、步骤依赖、循环、条件与数据处理。运行时把能力绑定到已注册设备，并管理实验工作进程。</p></div><div class=\"explanation\"><h3>服务组织实际执行</h3><p>固定包版本和参数，分配运行身份，调度操作并发布事件。单步操作也使用同一入口。</p></div><div class=\"explanation\"><h3>调用者按需参与</h3><p>人或 Agent 随时查询、分析、提交下一轮或请求停止；当前实验按已提交的方法持续运行。</p></div></div></div><p class=\"thesis\">每个基础操作都有输入、作用资源、完成条件和结果；实验包将这些操作组合成持续执行的方法。</p>",
+        "en": "<div class=\"split equal\"><div><span class=\"margin-label\">Caller program</span><pre class=\"contract-code runtime-example\"><code>platform = IOP.connect(&quot;optics-bench-01&quot;)\nrun = platform.submit(\n    project=&quot;polarization-study&quot;,\n    package=&quot;polarization-scan@0.1&quot;,\n    parameters={&quot;angles_deg&quot;: [0, 15, 30, 45]}\n)\n\nfor event in platform.watch(run.id):\n    print(event)\n\nresult = platform.result(run.id)</code></pre><div class=\"package-files\"><b>Experiment package</b><span>experiment.py · method.yaml · dependencies.lock</span></div></div><div><div class=\"explanation\"><h3>The program expresses the method</h3><p>Declare required capabilities, dependencies, loops, conditions and data processing. The runtime binds capabilities to registered devices and manages the experiment worker.</p></div><div class=\"explanation\"><h3>The service organizes execution</h3><p>Fix the package version and parameters, allocate a run identity, schedule operations and publish events. Individual operations use the same entry point.</p></div><div class=\"explanation\"><h3>Callers participate as needed</h3><p>People or agents inspect, analyze, submit another run or request a stop. The current experiment continues under its submitted method.</p></div></div></div><p class=\"thesis\">Each primitive operation has inputs, affected resources, completion criteria and results. Experiment packages compose them into sustained methods.</p>"
+      },
+      "sources": []
+    },
+    {
+      "id": "records",
+      "chapter": "iop",
+      "title": {
+        "zh": "实验身份、操作事件和数据，在执行时自动关联",
+        "en": "Link experiments, operations and data as they run"
+      },
+      "short": {
+        "zh": "自动登记与全程留档",
+        "en": "Registration and persistent records"
+      },
+      "status": {
+        "zh": "IOP 实验记录与恢复设计",
+        "en": "IOP experiment records and recovery design"
+      },
+      "body": {
+        "zh": "<div class=\"provenance-chain\"><div><span>project_id</span><b>研究项目</b><p>研究目标与上下文</p></div><div><span>experiment_id</span><b>实验定义</b><p>方法、样品与变量</p></div><div><span>run_id</span><b>一次实际运行</b><p>包版本、参数与设备</p></div></div><div class=\"record-branches\"><div><b>operation_id</b><span>操作请求 → 下发 → 活动 → 结束事件</span></div><div><b>observation / artifact</b><span>实际读回、时间、单位、校准与数据文件</span></div></div><div class=\"argument-table record-table\"><table><thead><tr><th>何时记录</th><th>自动关联的内容</th></tr></thead><tbody><tr><td>任务受理</td><td>建立实验与运行记录，固定程序包、参数、驱动和说明版本；关联研究项目与调用者。</td></tr><tr><td>操作与观测</td><td>先登记请求，再下发操作；将进度、状态变化、实际读回与原始数据引用关联到操作和 run。</td></tr><tr><td>结束与再连接</td><td>完成、失败、停止和部分结果都保留；服务重启后依据持久记录与设备读回核对未完成操作。</td></tr></tbody></table></div><p class=\"thesis\">实验程序使用同一执行入口，服务就能持续建立“研究—实验—运行—操作—数据”的关联。</p>",
+        "en": "<div class=\"provenance-chain\"><div><span>project_id</span><b>Research project</b><p>Research goal and context</p></div><div><span>experiment_id</span><b>Experiment definition</b><p>Method, sample and variables</p></div><div><span>run_id</span><b>A concrete run</b><p>Package version, parameters, devices</p></div></div><div class=\"record-branches\"><div><b>operation_id</b><span>Request → dispatch → activity → terminal event</span></div><div><b>observation / artifact</b><span>Actual readback, time, units, calibration and data files</span></div></div><div class=\"argument-table record-table\"><table><thead><tr><th>When</th><th>Automatically linked information</th></tr></thead><tbody><tr><td>At acceptance</td><td>Create experiment/run records; fix package, parameters, driver and description versions; link the project and caller.</td></tr><tr><td>During operations</td><td>Register a request before dispatch; link progress, state changes, readback and raw-data references to the operation and run.</td></tr><tr><td>At completion or reconnection</td><td>Retain completion, failure, stop and partial results. After a service restart, reconcile unfinished operations using durable records and device readback.</td></tr></tbody></table></div><p class=\"thesis\">A shared execution entry point lets the service continuously link research, experiments, runs, operations and data.</p>"
+      },
+      "sources": []
+    },
+    {
       "id": "iop-model",
       "chapter": "iop",
       "title": {
@@ -470,8 +618,8 @@
         "en": "IOP: connect knowledge, execution and observations around operations"
       },
       "short": {
-        "zh": "IOP 的核心模型",
-        "en": "The IOP model"
+        "zh": "操作、执行与观测",
+        "en": "Operations, runs and observations"
       },
       "status": {
         "zh": "AI4Instruments · IOP 设计",
@@ -479,7 +627,7 @@
       },
       "body": {
         "zh": "<div class=\"object-model\"><div class=\"object-row\"><div class=\"entity \"><b>仪器 Instrument</b><span>物理身份、能力与资源</span></div><span class=\"relation-word\">提供</span><div class=\"entity core\"><b>操作 Operation</b><span>输入、作用、完成条件、输出</span></div><span class=\"relation-word\">被组合为</span><div class=\"entity \"><b>方法 Method</b><span>适用条件、步骤与分析</span></div></div><div class=\"object-connectors\"><span>驱动绑定 ↓</span><span>每次调用实例化 ↓</span><span>方法规定观测 ↓</span></div><div class=\"object-row\"><div class=\"entity \"><b>设备实现 Binding</b><span>厂商命令、现有控制系统</span></div><span class=\"relation-word\">执行</span><div class=\"entity core\"><b>执行实例 Run</b><span>参数、占用、状态与事件</span></div><span class=\"relation-word\">产出</span><div class=\"entity \"><b>观测 Observation</b><span>读回、单位、时间与条件</span></div></div></div><div class=\"model-definition\"><b>IOP 的核心约束</b><p>一次操作必须能从“它的物理含义”追到“这次如何执行”，再追到“结果由哪些观测支持”。原理与经验通过操作身份关联；方法复用这些操作；驱动实现它们。</p></div>",
-        "en": "<div class=\"object-model\"><div class=\"object-row\"><div class=\"entity \"><b>Instrument</b><span>Physical identity, capabilities and resources</span></div><span class=\"relation-word\">provides</span><div class=\"entity core\"><b>Operation</b><span>Inputs, effects, completion and outputs</span></div><span class=\"relation-word\">composes into</span><div class=\"entity \"><b>Method</b><span>Applicability, procedure and analysis</span></div></div><div class=\"object-connectors\"><span>Driver binding ↓</span><span>Each invocation creates ↓</span><span>Specifies acquisition ↓</span></div><div class=\"object-row\"><div class=\"entity \"><b>Binding</b><span>Vendor commands and control systems</span></div><span class=\"relation-word\">executes</span><div class=\"entity core\"><b>Run</b><span>Parameters, reservations, state and events</span></div><span class=\"relation-word\">produces</span><div class=\"entity \"><b>Observation</b><span>Readback, units, time and conditions</span></div></div></div><div class=\"model-definition\"><b>The central IOP contract</b><p>An operation must connect its physical meaning to a particular execution and the observations supporting its result. Principles and practical knowledge link to operation identities; methods compose operations; drivers implement them.</p></div>"
+        "en": "<div class=\"object-model\"><div class=\"object-row\"><div class=\"entity \"><b>Instrument</b><span>Physical identity, capabilities and resources</span></div><span class=\"relation-word\">provides</span><div class=\"entity core\"><b>Operation</b><span>Inputs, effects, completion and outputs</span></div><span class=\"relation-word\">composes into</span><div class=\"entity \"><b>Method</b><span>Applicability, procedure and analysis</span></div></div><div class=\"object-connectors\"><span>Driver binding ↓</span><span>Each invocation creates ↓</span><span>Specifies acquisition ↓</span></div><div class=\"object-row\"><div class=\"entity \"><b>Binding</b><span>Vendor commands and control systems</span></div><span class=\"relation-word\">executes</span><div class=\"entity core\"><b>Run</b><span>Parameters, reservations, state and events</span></div><span class=\"relation-word\">produces</span><div class=\"entity \"><b>Observation</b><span>Readback, units, time and conditions</span></div></div></div><div class=\"model-definition\"><b>The central IOP rule</b><p>An operation must connect its physical meaning to a particular execution and the observations supporting its result. Principles and practical knowledge link to operation identities; methods compose operations; drivers implement them.</p></div>"
       },
       "sources": [
         "operations"
@@ -507,27 +655,6 @@
       "sources": []
     },
     {
-      "id": "execution",
-      "chapter": "iop",
-      "title": {
-        "zh": "一次执行，必须走到实际状态和测量读回",
-        "en": "Follow execution through to physical state and readback"
-      },
-      "short": {
-        "zh": "执行与观测",
-        "en": "Execution and observation"
-      },
-      "status": {
-        "zh": "IOP 执行语义设计",
-        "en": "IOP execution semantics design"
-      },
-      "body": {
-        "zh": "<div class=\"execution-timeline\"><div class=\"timeline-heading\"><span>过程</span><b>01</b><b>02</b><b>03</b><b>04</b></div><div class=\"timeline-row\"><b>软件记录</b><div>请求受理<br><small>固定参数与方法版本</small></div><div>操作执行<br><small>下发移动，跟踪活动</small></div><div>条件成立<br><small>到位读回满足约定</small></div><div>结果形成<br><small>观测写入 run</small></div></div><div class=\"timeline-row physical\"><b>物理过程</b><div>转台仍在原位置</div><div>波片转动</div><div>实际位置稳定</div><div>探测器完成采集</div></div></div><div class=\"split equal\"><div class=\"explanation\"><h3>完成条件来自仪器行为</h3><p>驱动给出到位状态或读回判据；方法定义需要满足的条件，然后才采集功率。</p></div><div class=\"explanation\"><h3>中断后根据读回恢复认知</h3><p>连接中断时保留 run。重连后先检查位置与活动状态，再决定继续、结束或保留未完成记录。</p></div></div><p class=\"thesis\">执行记录回答“发出了什么”；观测记录回答“物理上发生了什么”。IOP 用同一个 run 将两者关联。</p>",
-        "en": "<div class=\"execution-timeline\"><div class=\"timeline-heading\"><span>Process</span><b>01</b><b>02</b><b>03</b><b>04</b></div><div class=\"timeline-row\"><b>Software</b><div>Accepted<br><small>Parameters and method version fixed</small></div><div>Running<br><small>Move issued, activity tracked</small></div><div>Condition met<br><small>Arrival readback meets criteria</small></div><div>Result recorded<br><small>Observations linked to run</small></div></div><div class=\"timeline-row physical\"><b>Physical</b><div>Stage at its initial position</div><div>Plate moving</div><div>Actual position settled</div><div>Detector acquisition complete</div></div></div><div class=\"split equal\"><div class=\"explanation\"><h3>Completion follows device behavior</h3><p>The driver supplies a settled state or readback criterion. The method specifies the required condition before power acquisition.</p></div><div class=\"explanation\"><h3>Reconcile from readback after interruption</h3><p>Retain the run across disconnection. Read position and activity state on reconnection before continuing, ending or retaining a partial record.</p></div></div><p class=\"thesis\">Execution records state what was issued; observations state what physically occurred. A shared run links both.</p>"
-      },
-      "sources": []
-    },
-    {
       "id": "compatibility",
       "chapter": "iop",
       "title": {
@@ -543,29 +670,8 @@
         "en": "Adapter design for two equipment configurations"
       },
       "body": {
-        "zh": "<div class=\"reuse-banner\"><b>optics.polarization_scan</b><span>同一个方法与结果格式</span></div><div class=\"argument-table \"><table><thead><tr><th>IOP 要求</th><th>设备实现 A</th><th>设备实现 B</th></tr></thead><tbody><tr><td>角度设定，单位 deg</td><td>厂商 SDK：将角度转换为原生位置单位</td><td>EPICS：映射设定值通道和单位</td></tr><tr><td>实际位置与到位条件</td><td>读取编码器与运动状态</td><td>映射读回及到位状态通道</td></tr><tr><td>光功率，单位 W</td><td>SCPI / VISA：读取并统一单位</td><td>已有采集服务：读取功率与时间</td></tr><tr><td>方法所需条件</td><td>波长、轴零点、量程与校准引用</td><td>提供相同含义；缺失能力显式返回</td></tr></tbody></table></div><p class=\"thesis\">兼容性落实到能力：输入含义相同、完成判据相同、结果可解释。传输方式与内部实现可以不同。</p>",
-        "en": "<div class=\"reuse-banner\"><b>optics.polarization_scan</b><span>One method and result format</span></div><div class=\"argument-table \"><table><thead><tr><th>IOP requirement</th><th>Device implementation A</th><th>Device implementation B</th></tr></thead><tbody><tr><td>Set angle in deg</td><td>Vendor SDK: convert angle to native position units</td><td>EPICS: map setpoint channel and units</td></tr><tr><td>Actual position and settling</td><td>Read encoder and motion state</td><td>Map readback and done-state channels</td></tr><tr><td>Optical power in W</td><td>SCPI / VISA: query and normalize units</td><td>Acquisition service: read power and time</td></tr><tr><td>Method requirements</td><td>Wavelength, origin, range and calibration</td><td>Expose the same meanings; report missing capabilities</td></tr></tbody></table></div><p class=\"thesis\">Compatibility is capability-specific: equivalent input meaning, completion criteria and interpretable results across different transports and implementations.</p>"
-      },
-      "sources": []
-    },
-    {
-      "id": "ecosystem",
-      "chapter": "iop",
-      "title": {
-        "zh": "知识、方法、代码与数据，围绕同一台仪器组织",
-        "en": "Organize knowledge, methods, code and data around the instrument"
-      },
-      "short": {
-        "zh": "生态由什么组成",
-        "en": "What the ecosystem contains"
-      },
-      "status": {
-        "zh": "IOP 仪器包设计",
-        "en": "IOP instrument-package design"
-      },
-      "body": {
-        "zh": "<div class=\"instrument-package\"><div class=\"package-spine\"><span>IOP</span><h3>仪器包</h3><p>共同身份<br>明确版本</p></div><div class=\"package-sections\"><div><h3>原理与知识</h3><p>物理量、作用机制、适用条件与实践经验</p><span>解释操作的含义与选择依据</span></div><div><h3>能力与操作定义</h3><p>参数、单位、状态、作用与结果结构</p><span>供界面、脚本与 Agent 共同读取</span></div><div><h3>驱动与方法实现</h3><p>设备适配、步骤组合、分析与复测</p><span>把定义落实到真实设备</span></div><div><h3>测量与一致性记录</h3><p>校准引用、实机读回、测试条件与数据</p><span>支持复用、比较与持续维护</span></div></div></div><p class=\"thesis\">生态的基本单位是可使用、可理解、可验证的仪器包；共享词汇和一致性测试，使不同作者的仪器包能够协作。</p>",
-        "en": "<div class=\"instrument-package\"><div class=\"package-spine\"><span>IOP</span><h3>Instrument package</h3><p>Shared identity<br>Explicit version</p></div><div class=\"package-sections\"><div><h3>Principles and knowledge</h3><p>Quantities, physical mechanisms, applicability and practice</p><span>Explain meaning and method choices</span></div><div><h3>Capability and operation definitions</h3><p>Parameters, units, state, effects and result structure</p><span>Shared by interfaces, scripts and agents</span></div><div><h3>Drivers and methods</h3><p>Adapters, procedure composition, analysis and repetition</p><span>Execute definitions on real devices</span></div><div><h3>Measurement and conformance records</h3><p>Calibration references, readbacks, test conditions and data</p><span>Support reuse, comparison and maintenance</span></div></div></div><p class=\"thesis\">The ecosystem grows through usable, understandable and testable instrument packages, joined by shared vocabulary and conformance tests.</p>"
+        "zh": "<div class=\"reuse-banner\"><b>optics.polarization_scan</b><span>同一个方法与结果格式</span></div><div class=\"argument-table \"><table><thead><tr><th>IOP 要求</th><th>注册驱动 A</th><th>注册驱动 B</th></tr></thead><tbody><tr><td>角度设定，单位 deg</td><td>厂商 SDK：将角度转换为原生位置单位</td><td>EPICS：映射设定值通道和单位</td></tr><tr><td>实际位置与到位条件</td><td>读取编码器与运动状态</td><td>映射读回及到位状态通道</td></tr><tr><td>光功率，单位 W</td><td>SCPI / VISA：读取并统一单位</td><td>已有采集服务：读取功率与时间</td></tr><tr><td>方法所需条件</td><td>波长、轴零点、量程与校准引用</td><td>提供相同含义；缺失能力显式返回</td></tr></tbody></table></div><p class=\"thesis\">兼容性落实到能力：输入含义相同、完成判据相同、结果可解释。传输方式与内部实现可以不同。</p>",
+        "en": "<div class=\"reuse-banner\"><b>optics.polarization_scan</b><span>One method and result format</span></div><div class=\"argument-table \"><table><thead><tr><th>IOP requirement</th><th>Registered driver A</th><th>Registered driver B</th></tr></thead><tbody><tr><td>Set angle in deg</td><td>Vendor SDK: convert angle to native position units</td><td>EPICS: map setpoint channel and units</td></tr><tr><td>Actual position and settling</td><td>Read encoder and motion state</td><td>Map readback and done-state channels</td></tr><tr><td>Optical power in W</td><td>SCPI / VISA: query and normalize units</td><td>Acquisition service: read power and time</td></tr><tr><td>Method requirements</td><td>Wavelength, origin, range and calibration</td><td>Expose the same meanings; report missing capabilities</td></tr></tbody></table></div><p class=\"thesis\">Compatibility is capability-specific: equivalent input meaning, completion criteria and interpretable results across different transports and implementations.</p>"
       },
       "sources": []
     },
@@ -585,8 +691,8 @@
         "en": "Development target · Current foundation: operation model and simulated reference implementation"
       },
       "body": {
-        "zh": "<div class=\"validation-map\"><div class=\"common-method\"><span>同一份操作定义与方法</span><b>optics.polarization_scan</b></div><div class=\"parallel-setups\"><div><b>设备组合 A</b><span>SDK 转台 + VISA 功率计</span></div><div><b>设备组合 B</b><span>控制系统转台 + 采集服务</span></div></div><div class=\"comparison-output\"><b>可解释、可对照的扫描记录</b><span>angle_actual · power · time · calibration_ref · method_version</span></div></div><div class=\"validation-criteria\"><div class=\"explanation\"><h3>语义一致</h3><p>同一角度定义、单位与方法条件。</p></div><div class=\"explanation\"><h3>执行成立</h3><p>到位判据由实机读回满足。</p></div><div class=\"explanation\"><h3>结果可解释</h3><p>差异能追溯到设备、校准与实验条件。</p></div></div><p class=\"thesis\">IOP 的价值：保留仪器的物理真实性，同时减少人和程序在理解、接入与复用方法时的重复工作。</p>",
-        "en": "<div class=\"validation-map\"><div class=\"common-method\"><span>One operation definition and method</span><b>optics.polarization_scan</b></div><div class=\"parallel-setups\"><div><b>Equipment configuration A</b><span>SDK stage + VISA power meter</span></div><div><b>Equipment configuration B</b><span>Control-system stage + acquisition service</span></div></div><div class=\"comparison-output\"><b>Interpretable, comparable scan records</b><span>angle_actual · power · time · calibration_ref · method_version</span></div></div><div class=\"validation-criteria\"><div class=\"explanation\"><h3>Consistent meaning</h3><p>Same angle definition, units and method conditions.</p></div><div class=\"explanation\"><h3>Valid execution</h3><p>Physical readback satisfies arrival criteria.</p></div><div class=\"explanation\"><h3>Interpretable results</h3><p>Differences trace to devices, calibration and conditions.</p></div></div><p class=\"thesis\">IOP preserves physical meaning while making instrument knowledge, connections and methods reusable.</p>"
+        "zh": "<div class=\"validation-map\"><div class=\"common-method\"><span>同一份操作定义与方法</span><b>optics.polarization_scan</b></div><div class=\"parallel-setups\"><div><b>平台常驻服务 A</b><span>SDK 转台 + VISA 功率计</span></div><div><b>平台常驻服务 B</b><span>控制系统转台 + 采集服务</span></div></div><div class=\"comparison-output\"><b>可解释、可对照的扫描记录</b><span>angle_actual · power · time · calibration_ref · method_version</span></div></div><div class=\"validation-criteria\"><div class=\"explanation\"><h3>语义一致</h3><p>同一角度定义、单位与方法条件。</p></div><div class=\"explanation\"><h3>执行成立</h3><p>到位判据由实机读回满足。</p></div><div class=\"explanation\"><h3>结果可解释</h3><p>差异能追溯到设备、校准与实验条件。</p></div></div><p class=\"thesis\">人和 Agent 使用同一实验入口；常驻服务统一执行与留档，同一方法可在不同设备组合上复用。</p>",
+        "en": "<div class=\"validation-map\"><div class=\"common-method\"><span>One operation definition and method</span><b>optics.polarization_scan</b></div><div class=\"parallel-setups\"><div><b>Platform service A</b><span>SDK stage + VISA power meter</span></div><div><b>Platform service B</b><span>Control-system stage + acquisition service</span></div></div><div class=\"comparison-output\"><b>Interpretable, comparable scan records</b><span>angle_actual · power · time · calibration_ref · method_version</span></div></div><div class=\"validation-criteria\"><div class=\"explanation\"><h3>Consistent meaning</h3><p>Same angle definition, units and method conditions.</p></div><div class=\"explanation\"><h3>Valid execution</h3><p>Physical readback satisfies arrival criteria.</p></div><div class=\"explanation\"><h3>Interpretable results</h3><p>Differences trace to devices, calibration and conditions.</p></div></div><p class=\"thesis\">People and agents share an experiment interface. Persistent services execute and record reusable methods across equipment configurations.</p>"
       },
       "sources": [
         "operations"

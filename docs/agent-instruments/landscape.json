@@ -37,7 +37,7 @@
     {
       "id": "contract",
       "name": {
-        "zh": "仪器契约",
+        "zh": "仪器说明",
         "en": "Instrument contracts"
       },
       "question": {
@@ -2622,7 +2622,7 @@
         "en": "Provides a runtime interface, distinct from development tools that edit VI internals."
       },
       "reuse": {
-        "zh": "定义 VI 的参数、物理影响和结果契约，再包装成可发现能力。",
+        "zh": "定义 VI 的参数、物理影响和结果定义，再包装成可发现能力。",
         "en": "Define VI arguments, physical effects and results before publishing discoverable capabilities."
       },
       "assessment": "editorial-analysis",
@@ -2878,7 +2878,7 @@
       ],
       "path_scope": "public",
       "contribution": {
-        "zh": "用固定工作区契约组织参数、动作、图像与多步程序，分开记录动作和观察。",
+        "zh": "用固定工作区说明组织参数、动作、图像与多步程序，分开记录动作和观察。",
         "en": "Uses a workspace contract for parameters, actions, images and procedures, recording actions separately from observations."
       },
       "difference": {

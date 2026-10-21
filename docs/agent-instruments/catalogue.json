@@ -21,7 +21,7 @@
       "license": "Apache-2.0",
       "license_class": "open",
       "description": {
-        "zh": "设备描述、读写、动作、任务、租约与实验记录组成统一接口；可通过已有驱动生态接入。适合研究精简设备契约与按需发现。",
+        "zh": "设备描述、读写、动作、任务、租约与实验记录组成统一接口；可通过已有驱动生态接入。适合研究精简设备说明与按需发现。",
         "en": "A device contract covering descriptors, reads, writes, actions, jobs, leases and run records, with bridges to existing drivers. Useful for studying a compact device interface and on-demand discovery."
       },
       "evidence": {
@@ -1677,7 +1677,7 @@
       },
       "evidence": {
         "kind": "adapter",
-        "zh": "公开 Pi 扩展与工作区契约；STM 论文是相关实验背景，不据此宣称该扩展独立包含全部硬件驱动。",
+        "zh": "公开 Pi 扩展与工作区说明；STM 论文是相关实验背景，不据此宣称该扩展独立包含全部硬件驱动。",
         "en": "Public Pi extension and workspace contract. The STM paper supplies related experimental context, not evidence that this extension includes every hardware driver."
       },
       "sources": [

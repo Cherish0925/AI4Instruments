@@ -10,12 +10,13 @@
 
 ## IOP：从具体方案到共同操作模型
 
-正文按固定的三级关系展开：**一级是具体方案，二级是共同机制，三级是 IOP 的操作模型**。以偏振扫描贯穿能力定义、执行、观测与设备适配。
+正文按固定的三级关系展开：**一级是具体方案，二级是共同机制，三级是 IOP 的系统设计**。以偏振扫描贯穿能力定义、执行、观测与设备适配。
 
 - 第 1–2 页：三级关系与物理操作。
 - 第 3–9 页：MHS、三个独立 Open-MHS 工程、Cuntinum MHP、AIP、OpenMHP、LAP、OAHL 的对象、执行路径与设计区别。
-- 第 10–12 页：设备能力模型、操作执行与结果契约、设备发现与资源协作，以及 SiLA 2、OPC UA/LADS、W3C WoT 的位置。
-- 第 13–18 页：IOP 对象关系、共同操作定义、执行读回、跨设备映射、仪器包与验证目标。
+- 第 10–12 页：设备能力模型、操作执行与结果定义、设备发现与资源协作，以及 SiLA 2、OPC UA/LADS、W3C WoT 的位置。
+- 第 13–17 页：IOP 四部分、平台常驻服务、并行与串行调度、实验包、自动登记与留档。
+- 第 18–21 页：操作对象关系、共同定义、设备映射与跨平台方法目标。
 
 章节导航与页内目录保持一致；支持方向键、页面选择与全屏。来源位于相关页面下方。九项具备具体机制的方案进入归纳；Agent2Device 概念材料在目录中单列。完整工程资料仍在后续栏目中查询。
 
@@ -26,7 +27,7 @@
 | 栏目 | 回答的问题 |
 | --- | --- |
 | IOP | 哪些同类方案值得直接比较；如何归纳机制并综合为 IOP 的设计？ |
-| 领域全景 | 设备桥接、仪器契约、常驻执行、过程编排、实验决策、仪器开发、界面操作与知识资料如何分工？ |
+| 领域全景 | 设备桥接、仪器说明、常驻执行、过程编排、实验决策、仪器开发、界面操作与知识资料如何分工？ |
 | 关系图谱 | 谁维护什么；工程接入或复用了什么；哪些项目有后续发展关系？ |
 | 技术路线 | 每条路线解决什么问题，交付什么能力，怎样比较与验证？ |
 | 参与者 | 研究机构、产业团队、协作组织、用户账号和标准主体分别做了什么？ |
@@ -51,7 +52,7 @@
 | 原始来源索引 | [sources.json](sources.json) |
 | 字段与关系语义 | [data-model.md](data-model.md) |
 | JSON Schema | [工程](catalogue.schema.json) · [领域数据](landscape.schema.json) · [图谱](graph.schema.json) |
-| 设备与测量契约示例 | [examples/](examples/README.md) |
+| 设备与测量说明示例 | [examples/](examples/README.md) |
 
 首页图解释功能分工；关系图展示具体工程的维护、接入、复用和迁移。图谱区分 `documented` 来源记录与 `analysis` 分析分类。合并显示的基础生态节点在关系备注中指明实际接入范围，例如 OPC UA 接入与 LADS 信息模型实现分别说明。
 
@@ -71,7 +72,7 @@ python docs/agent-instruments/build.py
 
 构建器只使用 Python 标准库，生成两份 HTML、工程说明、目录 Markdown、CSV、图谱和来源索引。版式在 `reader.py` 与 `assets/reader.css`，交互在 `assets/reader.js`。不启用 JavaScript 时仍能读取全部静态正文。
 
-HTML 的 `script#research-data` 保存全部数据；`documents` 字段包含中英文设计正文与工程说明、字段规范、CSV 和契约示例。维护数据关系见 [data-model.md](data-model.md)，更新记录见 [CHANGELOG.md](CHANGELOG.md)。
+HTML 的 `script#research-data` 保存全部数据；`documents` 字段包含中英文设计正文与工程说明、字段规范、CSV 和说明示例。维护数据关系见 [data-model.md](data-model.md)，更新记录见 [CHANGELOG.md](CHANGELOG.md)。
 
 原创说明采用仓库的 [CC BY 4.0](../../LICENSE-docs.md)，构建代码采用 [MIT](../../LICENSE)，第三方项目保留各自许可。离线字体采用 [SIL Open Font License](assets/FONT_LICENSE.txt)。
 

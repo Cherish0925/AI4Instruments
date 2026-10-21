@@ -1,5 +1,13 @@
 # Changes
 
+## 2026-10-21 · IOP-03
+
+- Organized the IOP system into instrument descriptions, persistent runtime, experiment programs and records; distinguished these from the three comparative mechanism families.
+- Added a platform-daemon architecture with registered devices, service-managed experiment workers and persistent execution identities.
+- Added a dependency graph for parallel stage movement and detector setup, resource-scoped reservations through acquisition, and explicit communication/physical resource semantics.
+- Connected package submission to automatic research/experiment/run/operation records, observations and restart reconciliation.
+- Updated both HTML editions to 21 pages, with the runtime architecture in pages 13–17.
+
 ## 2026-10-21 · IOP-02
 
 - Rewrote the opening argument around one hierarchy: existing designs, mechanism families and the IOP operation model.
@@ -30,7 +38,7 @@
 
 - Organized the homepage around device access, experiment execution and physical feedback.
 - Grouped protocol entries by function with equal visual treatment; placed the system model before acronym comparisons.
-- Embedded the measurement-contract example, catalogue schema and both analysis texts, with offline exports.
+- Embedded the measurement-measurement example, catalogue schema and both analysis texts, with offline exports.
 - Clarified the HTML files as the integrated reading editions and removed repeated method text from the project legend.
 
 ## 2026-10-20

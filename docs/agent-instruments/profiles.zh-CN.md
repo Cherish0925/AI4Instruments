@@ -2,9 +2,9 @@
 
 ## OpenMHP
 
-[kushalsinha/openmhp](https://github.com/kushalsinha/openmhp) · 仪器契约 · Apache-2.0 · 模拟验证
+[kushalsinha/openmhp](https://github.com/kushalsinha/openmhp) · 仪器说明 · Apache-2.0 · 模拟验证
 
-设备描述、读写、动作、任务、租约与实验记录组成统一接口；可通过已有驱动生态接入。适合研究精简设备契约与按需发现。
+设备描述、读写、动作、任务、租约与实验记录组成统一接口；可通过已有驱动生态接入。适合研究精简设备说明与按需发现。
 
 维护主体：kushalsinha
 
@@ -30,7 +30,7 @@
 
 ## Open-MHS · Abenor Labs
 
-[Abenor-Labs/Open-MHS](https://github.com/Abenor-Labs/Open-MHS) · 仪器契约 · Apache-2.0 · 接入实现 / 文档
+[Abenor-Labs/Open-MHS](https://github.com/Abenor-Labs/Open-MHS) · 仪器说明 · Apache-2.0 · 接入实现 / 文档
 
 以 capability tag 和设备基类统一传感器、执行器及状态；提供串口机械臂适配示例。独立社区实现。
 
@@ -58,7 +58,7 @@
 
 ## Open MHS · tongriyaotxt
 
-[tongriyaotxt/open-mhs](https://github.com/tongriyaotxt/open-mhs) · 仪器契约 · MIT · 接入实现 / 文档
+[tongriyaotxt/open-mhs](https://github.com/tongriyaotxt/open-mhs) · 仪器说明 · MIT · 接入实现 / 文档
 
 设备注册、统一命令和 MCP 工具；包含机器人动作与技能执行扩展。与同名项目分别维护。
 
@@ -86,7 +86,7 @@
 
 ## Open MHS · SCUT-ESA
 
-[SCUT-ESA/open-mhs](https://github.com/SCUT-ESA/open-mhs) · 仪器契约 · MIT · 维护者实机记录
+[SCUT-ESA/open-mhs](https://github.com/SCUT-ESA/open-mhs) · 仪器说明 · MIT · 维护者实机记录
 
 统一设备接口加显式后端策略，覆盖 VISA 仪器、嵌入式 I/O 与模拟设备。属于受 MHS 启发的社区工程。
 
@@ -114,7 +114,7 @@
 
 ## Model Hardware Protocol · Cuntinum
 
-[Cuntinum/model-hardware-protocol](https://github.com/Cuntinum/model-hardware-protocol) · 仪器契约 · Apache-2.0 · 接入实现 / 文档
+[Cuntinum/model-hardware-protocol](https://github.com/Cuntinum/model-hardware-protocol) · 仪器说明 · Apache-2.0 · 接入实现 / 文档
 
 以 discover、read、write、execute 组织设备驱动和共享状态。包名 khp，与 OpenMHP 不是同一项目。
 
@@ -142,7 +142,7 @@
 
 ## Open Agent Hardware Layer
 
-[fredabila/oahl](https://github.com/fredabila/oahl) · 仪器契约 · MIT · 维护者实机记录
+[fredabila/oahl](https://github.com/fredabila/oahl) · 仪器说明 · MIT · 维护者实机记录
 
 discover–reserve–execute–release 生命周期；节点、适配器与传输插件分离，可本地运行或使用可选注册与中继服务。
 
@@ -776,7 +776,7 @@ README 将采集控制和记录下载连成完整路径；具体能力取决于 
 
 ### 可复用部分
 
-定义 VI 的参数、物理影响和结果契约，再包装成可发现能力。
+定义 VI 的参数、物理影响和结果定义，再包装成可发现能力。
 
 ### 公开范围与实验记录
 
@@ -1020,7 +1020,7 @@ Nature Communications 论文报告实机 AFM 实验；代码与基准公开，�
 
 ### 贡献与价值
 
-用固定工作区契约组织参数、动作、图像与多步程序，分开记录动作和观察。
+用固定工作区说明组织参数、动作、图像与多步程序，分开记录动作和观察。
 
 ### 差异与适用条件
 
@@ -1032,7 +1032,7 @@ Nature Communications 论文报告实机 AFM 实验；代码与基准公开，�
 
 ### 公开范围与实验记录
 
-公开 Pi 扩展与工作区契约；STM 论文是相关实验背景，不据此宣称该扩展独立包含全部硬件驱动。
+公开 Pi 扩展与工作区说明；STM 论文是相关实验背景，不据此宣称该扩展独立包含全部硬件驱动。
 
 [项目说明](https://github.com/BB-84C/quailbot-pi/blob/main/README.md) · [许可证](https://github.com/BB-84C/quailbot-pi/blob/main/LICENSE) · [论文](https://arxiv.org/abs/2609.27302)
 
@@ -1934,7 +1934,7 @@ README 将其定位为参考实现并使用 mock 后端；不是 Anthropic 官�
 
 ## Agent2Device Protocol
 
-[neogyk/Agent2Device-Protocol](https://github.com/neogyk/Agent2Device-Protocol) · 仪器契约 · MIT · 构想 / 提案
+[neogyk/Agent2Device-Protocol](https://github.com/neogyk/Agent2Device-Protocol) · 仪器说明 · MIT · 构想 / 提案
 
 讨论 Agent 与实验设备连接的协议构想。
 

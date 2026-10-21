@@ -98,7 +98,7 @@ for lang in ['zh','en']:
         lines+=['### '+('公开范围与实验记录' if lang=='zh' else 'Public scope and experiment record'),'',p['evidence'][lang],'',' · '.join(f'[{ROLES[s["role"]][idx]}]({s["url"]})' for s in p['sources']),'']
     (ROOT/f'profiles.{suffix}.md').write_text('\n'.join(lines)+'\n')
     (ROOT/f'catalogue.{suffix}.md').write_text('\n'.join(catalog)+'\n')
-output=io.StringIO(newline='');writer=csv.writer(output)
+output=io.StringIO(newline='');writer=csv.writer(output,lineterminator="\n")
 writer.writerow(['id','name','repository','category','scope','license','license_class','evidence','mcp','skills','interfaces','description_zh','description_en','evidence_zh','evidence_en','url','reviewed'])
 for p in PROJECTS:writer.writerow([p['id'],p['name'],p['repository'],p['category'],p['scope'],p['license'],p['license_class'],p['evidence']['kind'],p['mcp'],p['skills'],'; '.join(p['interfaces']),p['description']['zh'],p['description']['en'],p['evidence']['zh'],p['evidence']['en'],p['url'],p['reviewed']])
 (ROOT/'catalogue.csv').write_text(output.getvalue(),encoding='utf-8-sig')

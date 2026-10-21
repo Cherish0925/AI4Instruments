@@ -3104,7 +3104,7 @@
       },
       "evidence": {
         "kind": "proposal",
-        "zh": "核查仓库树只有 README、LICENSE 与忽略文件，没有协议实现或设备驱动。",
+        "zh": "查阅仓库树只有 README、LICENSE 与忽略文件，没有协议实现或设备驱动。",
         "en": "The reviewed tree contains only README, LICENSE and an ignore file, with no protocol implementation or device driver."
       },
       "sources": [

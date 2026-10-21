@@ -1,4 +1,4 @@
-# IOP — Instrument Operations Protocol
+# IOP — Instrument Operation Protocol
 
 **仪器操作协议**
 
@@ -8,14 +8,14 @@ IOP 定义仪器操作的物理含义、执行方式与结果依据。人和程�
 
 ## Platform architecture / 平台架构
 
-IOP is organized into four components: **instrument descriptions, a persistent runtime, experiment programs and experiment records**. The three mechanism families in the comparative study explain existing approaches; these four components define our system architecture.
+IOP is organized into four components: **instrument descriptions, a persistent service, experiment programs and experiment records**. The three mechanism families in the comparative study explain existing approaches; these four components define our system architecture.
 
-IOP 按四个部分组织：**仪器说明、常驻运行时、实验程序、实验记录**。前文的三个机制岛屿用于归纳已有方案；这里的四部分定义我们的系统架构。
+IOP 按四个部分组织：**仪器说明、常驻服务、实验程序、实验记录**。前文的三个机制岛屿用于归纳已有方案；这里的四部分定义我们的系统架构。
 
 | Component / 组成 | Responsibility / 职责 |
 | --- | --- |
 | Instrument descriptions / 仪器说明 | Principles, operating knowledge, capabilities, quantities, operations, affected resources and completion conditions. / 原理、使用知识、能力、物理量、操作、作用资源与完成条件。 |
-| Persistent runtime / 常驻运行时 | Device registration and connections, resource ownership, dependency scheduling, managed experiment workers, state and events. / 设备注册与连接、资源占用、依赖调度、实验工作进程、状态与事件。 |
+| Persistent service / 常驻服务 | Device registration and connections, resource ownership, dependency scheduling, managed experiment workers, state and events. / 设备注册与连接、资源占用、依赖调度、实验工作进程、状态与事件。 |
 | Experiment programs / 实验程序 | Versioned methods, dependencies, loops, conditions, parameters and analysis. / 版本化的方法、步骤依赖、循环、条件、参数与分析。 |
 | Experiment records / 实验记录 | Research and experiment identities, runs, operation histories, observations, data and their context. / 研究与实验身份、运行、操作历史、观测、数据及其上下文。 |
 
@@ -23,7 +23,16 @@ Each experimental platform has one service responsible for its registered device
 
 每个实验平台由一个常驻服务管理已注册设备。驱动将设备身份、能力与连接地址绑定起来。人和 Agent 通过服务提交实验包或单步操作。服务管理实验工作进程及设备连接，调用者断开后，实验仍保留执行身份与状态。多个平台通过各自的服务协作。
 
-### Scheduling / 调度
+#
+Runtime names the software system that executes experiments. Persistent daemon processes host the platform service. The service can manage one instrument or several, with separate driver and experiment workers. Device operations pass through the service; fitting and analysis may run in a client or a worker. Programs submit derived results together with references to their input data.
+
+Runtime 指实验运行系统。常驻服务由持续运行的守护进程承载，可管理一台仪器或整个平台。服务内部可分设驱动进程与实验工作进程。设备操作经服务安排，拟合和分析可以在客户端或工作进程中完成。程序将分析结果与输入数据引用一并提交保存。
+
+A method identifier and version describe a reusable procedure. Each submission receives a run_id; each operation within that run receives its own operation_id. Observations and files retain links to the actual execution and the definitions it used.
+
+方法标识与版本说明可复用的实验步骤。每次提交产生 run_id，其中每项实际操作产生 operation_id。观测与数据文件同时关联实际执行及使用的定义。
+
+## Scheduling / 调度
 
 The method declares dependencies; the instrument description declares physical effects, read/write access, occupied resources and observable completion. An operation becomes eligible when its dependencies are complete and all required resources are available. The scheduler acquires the declared resource set together and orders incompatible requests. Compatible operations can run concurrently.
 
@@ -47,7 +56,8 @@ The service links project_id → experiment_id → run_id → operation_id → o
 | Operation / 操作 | Inputs, units, effects, completion criteria and outputs. / 输入、单位、作用、完成条件与输出。 |
 | Method / 方法 | Applicability, procedure and analysis using named operations. / 以明确操作组成的适用条件、过程与分析方法。 |
 | Binding / 设备绑定 | Mapping to drivers, vendor commands and existing control systems. / 到驱动、厂商命令及现有控制系统的映射。 |
-| Run / 执行实例 | A particular execution with fixed parameters, versions, resources, state and events. / 带固定参数、版本、资源、状态与事件的一次执行。 |
+| Run / 实验运行 | One experiment submission with fixed parameters, versions and devices. / 一次实验提交，包含参数、版本、设备与多项操作。 |
+| Operation instance / 操作实例 | One execution of an operation within a run, with state, events and observations. / 一次实验运行中的具体操作，包含状态、事件与观测。 |
 | Observation / 观测 | Physical readings with units, acquisition times, conditions and provenance. / 带单位、采集时间、条件与来源的物理读数。 |
 
 Knowledge materials explain an operation's principles, applicability and practical use through explicit identity and version references. Human-readable instructions and machine-readable descriptions remain linked. A result connects to the execution and observations that support it.

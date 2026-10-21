@@ -1236,7 +1236,7 @@
     "https://github.com/beriberikix/awesome-mcp-hardware"
   ],
   "method": {
-    "zh": "按项目、论文、官方文档、许可证及关键实现路径核查。实验状态引用作者或维护者的公开记录，本次未操作这些实机。组件与 fork 不重复计为独立工程。",
+    "zh": "按项目、论文、官方文档、许可证及关键实现路径查阅。实验状态引用作者或维护者的公开记录，本次未操作这些实机。组件与 fork 不重复计为独立工程。",
     "en": "Reviewed repositories, papers, official documentation, licenses and selected implementation paths. Experiment status reflects author or maintainer records; this review did not operate those instruments. Components and forks are not counted as independent projects."
   }
 }

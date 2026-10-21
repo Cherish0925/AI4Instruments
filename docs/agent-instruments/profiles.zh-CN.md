@@ -1832,7 +1832,7 @@ JPL 的 ROS 自然语言助手，结合系统诊断、状态查询与可扩展�
 
 ### 贡献与价值
 
-将机器人状态诊断、信息查询与操作工具放入自然语言助手。
+将机器人状态分析、信息查询与操作工具放入自然语言助手。
 
 ### 差异与适用条件
 
@@ -1956,7 +1956,7 @@ README 将其定位为参考实现并使用 mock 后端；不是 Anthropic 官�
 
 ### 公开范围与实验记录
 
-核查仓库树只有 README、LICENSE 与忽略文件，没有协议实现或设备驱动。
+查阅仓库树只有 README、LICENSE 与忽略文件，没有协议实现或设备驱动。
 
 [项目说明](https://github.com/neogyk/Agent2Device-Protocol/blob/main/README.md) · [许可证](https://github.com/neogyk/Agent2Device-Protocol/blob/main/LICENSE)
 
@@ -1980,7 +1980,7 @@ README 将其定位为参考实现并使用 mock 后端；不是 Anthropic 官�
 
 ### 可复用部分
 
-借鉴工具选择与领域任务组织，并逐项核查可公开复用的服务。
+借鉴工具选择与领域任务组织，并逐项查阅可公开复用的服务。
 
 ### 公开范围与实验记录
 

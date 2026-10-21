@@ -836,7 +836,7 @@ MCP gateway / Fastly Compute
 
 讨论 Agent 与实验设备连接的协议构想。
 
-核查仓库树只有 README、LICENSE 与忽略文件，没有协议实现或设备驱动。
+查阅仓库树只有 README、LICENSE 与忽略文件，没有协议实现或设备驱动。
 
 Design notes
 

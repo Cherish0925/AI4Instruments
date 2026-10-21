@@ -1,5 +1,12 @@
 # Changes
 
+## 2026-10-21 · IOP-04
+
+- Clarified the nine representative designs, their overlapping mechanisms and the four IOP components.
+- Distinguished reusable definitions, experiment runs and individual operation executions.
+- Explained persistent services for single instruments and complete platforms, with matching scheduling and method examples.
+- Revised Chinese and English wording throughout the main reading sequence.
+
 ## 2026-10-21 · IOP-03
 
 - Organized the IOP system into instrument descriptions, persistent runtime, experiment programs and records; distinguished these from the three comparative mechanism families.

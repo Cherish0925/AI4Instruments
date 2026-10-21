@@ -133,11 +133,11 @@
         "en": "Next conditions, experiment choices, updated hypotheses and interpretations."
       },
       "value": {
-        "zh": "把工具执行变成科学问题上的反馈过程；价值取决于完成什么实验任务、比基线改善什么。",
+        "zh": "把工具执行变成科学问题上的反馈过程；价值取决于完成什么实验任务、比对照方法改善什么。",
         "en": "Turns tool execution into feedback on a scientific question; value depends on the task and improvement over a baseline."
       },
       "comparison": {
-        "zh": "比较任务、反馈、基线和公开范围；物理论文与可下载系统的边界需对应。",
+        "zh": "比较任务、反馈、对照方法和公开范围；物理论文与可下载系统的边界需对应。",
         "en": "Compare tasks, feedback, baselines and release scope, aligning physical results with what is publicly available."
       },
       "verify": {
@@ -3741,7 +3741,7 @@
       ],
       "path_scope": "public",
       "contribution": {
-        "zh": "将机器人状态诊断、信息查询与操作工具放入自然语言助手。",
+        "zh": "将机器人状态分析、信息查询与操作工具放入自然语言助手。",
         "en": "Combines robot diagnosis, inspection and operation tools in a natural-language assistant."
       },
       "difference": {
@@ -3893,7 +3893,7 @@
         "en": "The public package lacks some paper service interfaces, so experimental scope exceeds the downloadable tool set."
       },
       "reuse": {
-        "zh": "借鉴工具选择与领域任务组织，并逐项核查可公开复用的服务。",
+        "zh": "借鉴工具选择与领域任务组织，并逐项查阅可公开复用的服务。",
         "en": "Reuse tool selection and domain-task organization while checking each available service."
       },
       "assessment": "editorial-analysis",
@@ -4321,7 +4321,7 @@
         "en": "Experimental intelligence needs usable experiment objects"
       },
       "body": {
-        "zh": "校准与合成 Agent 的决策能力建立在实验库、仪器驱动和可解释结果之上。把这些对象做成可复用资产，是上层智能持续进步的基础。",
+        "zh": "校准与合成 Agent 的决策能力建立在实验库、仪器驱动和可解释结果之上。把这些对象做成可复用内容，是上层智能持续进步的基础。",
         "en": "Calibration and synthesis agents depend on experiment libraries, drivers and interpretable results. Reusable experiment objects underpin improvements in decision-making."
       },
       "projects": [
@@ -4411,7 +4411,7 @@
         "en": "How should results be returned?"
       },
       "choice": {
-        "zh": "小型结果带单位、时间、来源与配置；大图像和波形以可校验的引用返回。",
+        "zh": "小型结果带单位、时间、来源与配置；大图像和波形以可完整性检查的引用返回。",
         "en": "Return small results with units, time, provenance and configuration; reference large images/waveforms with integrity information."
       },
       "why": {

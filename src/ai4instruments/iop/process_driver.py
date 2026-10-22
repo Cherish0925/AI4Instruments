@@ -81,6 +81,12 @@ class Worker:
                 if response is None or response.get('id') != request_id or response.get('outcome_unknown'):
                     self.failed = True
                     raise DriverUnavailable((response or {}).get('error','Driver exited without a result'))
+                if response.get('event') == 'progress':
+                    if cancelled is not None and hasattr(cancelled, 'progress'):
+                        cancelled.progress(**response.get('progress', {}))
+                    continue
+                if 'event' in response:
+                    continue
                 if response.get('cancelled'):
                     raise CancelledError()
                 if 'error' in response:
@@ -123,7 +129,8 @@ class ProcessDriver(Driver):
         return self.description
 
     def invoke(self, operation, arguments, cancelled):
-        return self.worker.call('invoke', {'device':self.id,'operation':operation,'arguments':arguments}, cancelled)
+        context = {name: str(getattr(cancelled, name)) for name in ('run_id', 'operation_id', 'output_dir') if hasattr(cancelled, name)}
+        return self.worker.call('invoke', {'device':self.id,'operation':operation,'arguments':arguments,'context':context}, cancelled)
 
     def close(self):
         self.worker.close()

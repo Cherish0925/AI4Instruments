@@ -1,0 +1,47 @@
+{
+  "previous_commit": "2ec480bc0eaefd42c96593d238f9e89ae58e285e",
+  "measurements": [
+    {
+      "version": "0.4.0",
+      "system": "Linux-6.18.55-x86_64-with-glibc2.39",
+      "python": "3.12.14",
+      "cpu_count": 9,
+      "pattern": "serial",
+      "steps": 5000,
+      "devices": 128,
+      "workers": 64,
+      "submission_seconds": 0.1557,
+      "execution_seconds": 20.408,
+      "operations_per_second": 245.0,
+      "scope": "Simulated immediate operations with local SQLite recording; not hardware throughput"
+    },
+    {
+      "version": "0.5.0",
+      "system": "Linux-6.18.55-x86_64-with-glibc2.39",
+      "python": "3.12.14",
+      "cpu_count": 9,
+      "pattern": "serial",
+      "steps": 5000,
+      "devices": 128,
+      "workers": 64,
+      "submission_seconds": 0.1887,
+      "execution_seconds": 3.2136,
+      "operations_per_second": 1555.9,
+      "scope": "Simulated immediate operations with local SQLite recording; not hardware throughput"
+    },
+    {
+      "version": "0.5.0",
+      "system": "Linux-6.18.55-x86_64-with-glibc2.39",
+      "python": "3.12.14",
+      "cpu_count": 9,
+      "pattern": "parallel",
+      "steps": 5000,
+      "devices": 128,
+      "workers": 64,
+      "submission_seconds": 0.1741,
+      "execution_seconds": 3.0307,
+      "operations_per_second": 1649.8,
+      "scope": "Simulated immediate operations with local SQLite recording; not hardware throughput"
+    }
+  ]
+}

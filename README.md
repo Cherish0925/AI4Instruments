@@ -4,13 +4,13 @@
 
 [Read the paper](paper/manuscript.md) · [PDF](paper/AI4Instruments.pdf) · [Operations](docs/operations.md) · [Try the example](examples/README.md) · [Discuss](https://github.com/Cherish0925/AI4Instruments/discussions/1) · [中文](README.zh-CN.md)
 
-## IOP · Instrument Operation Protocol
+## IOP Runtime
 
 **Install a persistent instrument service, configure experimental platforms, and run experiment programs from people or agents.** One computer can manage multiple platforms; shared instruments remain coordinated across them.
 
-[IOP project](iop/README.md) · [Download 0.4.0](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.4.0) · [Install](docs/runtime/README.md) · [Configure platforms](iop/platforms.md) · [Agent integration](iop/agent-setup.md)
+[IOP project](iop/README.md) · [Download 0.5.0](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.5.0) · [Install](docs/runtime/README.md) · [Configure platforms](iop/platforms.md) · [Agent integration](iop/agent-setup.md)
 
-0.4.0 includes platform configuration and initialization, a Rust driver-process supervisor, Python and TypeScript clients, dependency/resource scheduling and SQLite records. The HTTP service and workflow scheduler currently use Python. [Architecture](docs/runtime/architecture.md).
+0.5.0 includes multiple platforms, dependency and result bindings, counted resources, executable programs and remote jobs, Rust process execution, Python / TypeScript clients and SQLite records. [Architecture](docs/runtime/architecture.md).
 
 AI4Instruments develops a methodology and an open design framework for AI to participate throughout the life of scientific and engineering instruments: their conception, physical design, manufacture, software development, experimental use and continued improvement.
 

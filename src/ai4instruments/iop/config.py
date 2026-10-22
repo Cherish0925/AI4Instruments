@@ -6,7 +6,7 @@ import secrets
 import sys
 from pathlib import Path
 
-VERSION = "0.4.0"
+VERSION = "0.5.0"
 
 
 def home_path(value=None):
@@ -41,7 +41,8 @@ def initialize(home=None, demo=False, port=8765):
             {"id": "aux", "driver": "simulated", "config": {"kind": "stage"}},
         ]
     config = {"host": "127.0.0.1", "port": port, "token": secrets.token_urlsafe(32),
-              "workers": 8, "package_workers": 4, "discovery_interval": 30, "profiles": [], "devices": devices}
+              "workers": 8, "package_workers": 4, "discovery_interval": 30, "profiles": [],
+              "software_profiles": [], "resource_pools": {}, "devices": devices}
     if existing:
         existing["devices"] = devices
         config = existing

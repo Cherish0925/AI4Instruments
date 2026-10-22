@@ -12,12 +12,16 @@ import threading
 import time
 import uuid
 import zipfile
+import queue
+from collections import OrderedDict, deque
 from concurrent.futures import ThreadPoolExecutor, CancelledError
 from pathlib import Path, PurePosixPath
 from .config import save_json
 from .drivers import make_driver, parameters
 from .store import Store, dumps, now
 from . import platforms as platform_model
+from .resources import Allocator, QueueFull, capacities, quantities
+from .execution import Context
 
 TERMINAL = {"completed", "failed", "cancelled", "interrupted"}
 
@@ -43,8 +47,18 @@ class Engine:
         self.stopping = False
         self.endpoint = ""
         self.devices, self.descriptions, self.device_records = {}, {}, {}
+        self.reconnecting, self.offline = set(), {}
         self.runs, self.operations, self.futures, self.processes = {}, {}, {}, {}
-        self.reservations, self.claims = {}, {}
+        self.allocation = Allocator()
+        self.capacities = capacities(config.get('resource_pools', {}))
+        self.allocation.limits.update({'pool:' + k: v for k, v in self.capacities.items()})
+        self.ready, self.dependents, self.remaining_dependencies, self.remaining = {}, {}, {}, {}
+        self.step_ids, self.minimum_capacities = {}, {}
+        self.completed = queue.SimpleQueue()
+        self.progress_lock = threading.Lock()
+        self.progress_updates = {}
+        self.progress_times = {}
+        self.last_scheduled_run = None
         self.cancellations = {}
         self.errors = []
         self.discovery = {"connections":[], "providers":[]}
@@ -66,6 +80,7 @@ class Engine:
             self.runs[run["id"]] = run
             for op in reversed(self.store.list("operations", run["id"], 10000)):
                 self.operations[op["id"]] = op
+            self._index_run(run)
         self.thread = threading.Thread(target=self._loop, name="iop-scheduler", daemon=True)
 
     def start(self):
@@ -84,7 +99,7 @@ class Engine:
 
     def scan(self):
         from .discovery import discover, match_profiles
-        inventory = discover()
+        inventory = discover(self.config.get('software_profiles', []))
         if self.stopping:
             return inventory
         for record in match_profiles(inventory, self.config.get("profiles", [])):
@@ -116,6 +131,8 @@ class Engine:
             if not isinstance(value, str) or not value:
                 raise ValueError("Resources must be nonempty names")
             if value in self.devices:
+                if value in self.reconnecting or value in self.offline:
+                    raise ValueError('Device needs reconnection: ' + value)
                 resources.add("device:" + value)
                 record = self.device_records[value]
                 resources.update("shared:" + r for r in record.get("resources", []))
@@ -137,7 +154,7 @@ class Engine:
                 raise ValueError('Describe the observed device state before returning resources to use')
             if set(resources) - self.resource_holds.keys():
                 raise ValueError('Resource is not awaiting an observed state')
-            if set(resources) & (set(self.claims) | set(self.reservations)):
+            if any(self.allocation.used[r] for r in resources):
                 raise ValueError('Affected operations are still running')
             self.store.resolve_resources(resources, observation)
             self.resource_holds = self.store.resource_holds()
@@ -150,6 +167,65 @@ class Engine:
             record['active_runs'] = [r['id'] for r in self.runs.values() if r.get('platform', {}).get('id') == platform_id]
             record['missing_devices'] = sorted(set(record['definition']['devices']) - self.devices.keys())
             return record
+
+    def configure_resources(self, value):
+        value = capacities(value)
+        with self.lock:
+            for name in self.capacities.keys() | value.keys():
+                key = 'pool:' + name
+                needed = max([self.allocation.used[key]] +
+                    [self._amounts(r, reserve=True).get(key, 0) for r in self.runs.values()] +
+                    [self._amounts(o).get(key, 0) for o in self.operations.values() if o['state'] not in TERMINAL])
+                if needed > value.get(name, 0):
+                    raise ValueError('Capacity is needed by accepted work: ' + name)
+            self.allocation.limits = {k: v for k, v in self.allocation.limits.items() if not k.startswith('pool:')}
+            self.allocation.limits.update({'pool:' + k: v for k, v in value.items()})
+            self.capacities = value
+            self.config['resource_pools'] = value
+            save_json(self.home / 'config.json', self.config)
+            self.wake.set()
+            return self.resource_info()
+
+    def resource_info(self):
+        with self.lock:
+            return {'capacities': dict(self.capacities), 'allocation': self.allocation.snapshot()}
+
+    def _amounts(self, item, reserve=False):
+        amounts = {r: self.allocation.limit(r) if reserve else 1 for r in item['resources']}
+        amounts.update(item.get('requirements', {}))
+        return amounts
+
+    def _index_run(self, run):
+        self.ready[run['id']] = OrderedDict()
+        run['involved_resources'] = sorted(self._amounts(run, reserve=True).keys() |
+            set().union(*(self._amounts(self.operations[o]).keys() for o in run['operations'])))
+        ops = [self.operations[oid] for oid in run['operations']]
+        by_step = {o['step']: o for o in ops if o.get('step') is not None}
+        self.step_ids[run['id']] = {name: op['id'] for name, op in by_step.items()}
+        minimum = self._amounts(run, reserve=True)
+        for op in ops:
+            for key, count in self._amounts(op).items():
+                minimum[key] = max(minimum.get(key, 0), count)
+        self.minimum_capacities[run['id']] = minimum
+        self.remaining[run['id']] = sum(o['state'] not in TERMINAL for o in ops)
+        for op in ops:
+            if op['state'] != 'queued':
+                continue
+            parents = [by_step[step] for step in op['after'] if by_step[step]['state'] != 'completed']
+            self.remaining_dependencies[op['id']] = len(parents)
+            for parent in parents:
+                self.dependents.setdefault(parent['id'], []).append(op['id'])
+            if not parents:
+                self.ready[run['id']][op['id']] = None
+
+    def _operation_ended(self, op):
+        self.ready[op['run_id']].pop(op['id'], None)
+        self.remaining[op['run_id']] -= 1
+        if op['state'] == 'completed':
+            for child in self.dependents.pop(op['id'], []):
+                self.remaining_dependencies[child] -= 1
+                if self.remaining_dependencies[child] == 0 and self.operations[child]['state'] == 'queued':
+                    self.ready[op['run_id']][child] = None
 
     def prepare_platform(self, definition):
         definition = platform_model.description(definition, self.devices)
@@ -195,6 +271,7 @@ class Engine:
             return self.submit({'name': record['definition']['name'] + ': ' + procedure_id,
                 'platform': platform_id, 'procedure': procedure_id, 'platform_revision': record['revision'],
                 'steps': procedure['steps'], 'resources': procedure.get('resources', record['definition']['devices']),
+                'requirements': procedure.get('requirements', {}),
                 'request_id': request_id})
 
     def register(self, record, persist=True):
@@ -225,12 +302,16 @@ class Engine:
                     raise ValueError("Driver must describe its operations")
                 if any(not isinstance(spec, dict) for spec in description["operations"].values()):
                     raise ValueError("Invalid operation description")
+                concurrency = description.get('concurrency', 1)
+                if type(concurrency) is not int or concurrency < 1:
+                    raise ValueError('Driver concurrency must be a positive integer')
                 with self.lock:
                     if self.stopping:
                         raise ValueError("Service is stopping")
                     self.devices[device_id] = driver
                     self.device_records[device_id] = record
                     self.descriptions[device_id] = json.loads(dumps({"id":device_id, "driver":record["driver"], **description}))
+                    self.allocation.limits['device:' + device_id] = concurrency
                     if persist:
                         self.config["devices"] = list(self.device_records.values())
                         save_json(self.home / "config.json", self.config)
@@ -246,14 +327,25 @@ class Engine:
         device_id, name = step["device"], step["operation"]
         if device_id not in self.devices:
             raise ValueError("Device is not registered: " + device_id)
+        if device_id in self.reconnecting or device_id in self.offline:
+            raise ValueError('Device needs reconnection: ' + device_id)
         specs = self.descriptions[device_id]["operations"]
         if name not in specs:
             raise ValueError("Unknown operation: " + device_id + "." + name)
         if not isinstance(step.get("arguments", {}), dict):
             raise ValueError("Arguments must be an object")
-        args = parameters(specs[name], step.get("arguments", {}))
+        bindings = step.get('bindings', {})
+        if set(bindings) & step.get('arguments', {}).keys() or set(bindings) - specs[name].get('parameters', {}).keys():
+            raise ValueError('Bindings must name operation parameters not supplied in arguments')
+        static = {**specs[name], 'parameters': {k: v for k, v in specs[name].get('parameters', {}).items() if k not in bindings}}
+        args = parameters(static, step.get("arguments", {}))
+        requirements = {}
+        for source in (self.descriptions[device_id], specs[name], step):
+            for key, count in quantities(source.get('requirements', {}), self.capacities).items():
+                requirements[key] = max(requirements.get(key, 0), count)
         return {"id":identifier("op"), "run_id":run_id, "step":step.get("id"), "device":device_id,
-                "operation":name, "arguments":args, "after":step.get("after", []), "state":"queued", "created":now(),
+                "operation":name, "arguments":args, "bindings": bindings, "requirements": requirements,
+                "after":platform_model.dependencies(step), "state":"queued", "created":now(),
                 "resources":sorted(set(self._resources([device_id], name) + self._resources(step.get("resources", [])))),
                 "request_id":step.get("request_id")}
 
@@ -267,6 +359,8 @@ class Engine:
                 if previous["spec"] != spec or (package is not None and (self.home / "runs" / previous["id"] / "package.zip").read_bytes() != package):
                     raise ValueError("request_id already names a different experiment")
                 return previous
+            if len(self.runs) >= int(self.config.get('max_active_runs', 10000)):
+                raise QueueFull('The service has reached its configured number of active experiments')
             run_id = identifier("run")
             platform_id = spec.get('platform')
             platform = self.platforms.get(platform_id) if platform_id else None
@@ -278,7 +372,8 @@ class Engine:
                    "kind":"package" if package is not None else "workflow", "name":spec.get("name", "Experiment"),
                    "project":spec.get("project"), "experiment":spec.get("experiment"), "spec":spec,
                    "parameters":spec.get("parameters", {}), "resources":self._resources(spec.get("resources", [])),
-                   "devices":self.descriptions.copy(), "operations":[], "result":None}
+                   "requirements":quantities(spec.get('requirements', {}), self.capacities),
+                   "devices":{}, "operations":[], "operation_count":0, "result":None}
             if platform:
                 run['platform'] = json.loads(dumps(platform))
                 outside = set(spec.get('resources', [])) & (self.devices.keys() - set(platform['definition']['devices']))
@@ -291,8 +386,19 @@ class Engine:
                 operations = [self._operation(run_id, s) for s in steps]
                 if platform and any(op['device'] not in platform['definition']['devices'] for op in operations):
                     raise ValueError('Workflow devices must belong to the selected platform')
-                if run["resources"]:
+                if run["resources"] or run['requirements']:
                     run["resources"] = sorted(set(run["resources"]).union(*(op["resources"] for op in operations)))
+                    for op in operations:
+                        for key, count in op['requirements'].items():
+                            if key[5:] in spec.get('requirements', {}) and count > run['requirements'][key]:
+                                raise ValueError('Step needs more capacity than the experiment reservation: ' + key)
+                            run['requirements'][key] = max(run['requirements'].get(key, 0), count)
+            if len(self.operations) + len(operations) > int(self.config.get('max_active_operations', 100000)):
+                raise QueueFull('The service has reached its configured number of active operations')
+            used = {op['device'] for op in operations}
+            if package is not None:
+                used = set(platform['definition']['devices']) if platform else (set(spec.get('resources', [])) & self.devices.keys() or self.devices.keys())
+            run['devices'] = {name: self.descriptions[name] for name in used}
             directory = self.home / "runs" / run_id
             directory.mkdir(parents=True)
             (directory / "output").mkdir()
@@ -300,6 +406,7 @@ class Engine:
                 run["package"] = self._unpack(directory, package)
             save_json(directory / "experiment.json", {"id":run_id, **spec})
             run["operations"] = [op["id"] for op in operations]
+            run['operation_count'] = len(operations)
             with self.store.transaction():
                 self.store.put("runs", run)
                 self.store.event("run.accepted", run_id, name=run["name"], kind_of_run=run["kind"])
@@ -308,6 +415,7 @@ class Engine:
                     self.store.event("operation.queued", run_id, operation_id=op["id"], device=op["device"], operation=op["operation"])
             self.runs[run_id] = run
             self.operations.update({op["id"]:op for op in operations})
+            self._index_run(run)
             self.wake.set()
             return json.loads(dumps(run))
 
@@ -343,18 +451,26 @@ class Engine:
                 if old["run_id"] != run_id or old["device"] != step["device"] or old["operation"] != step["operation"] or old["arguments"] != parameters(self.descriptions[step["device"]]["operations"][step["operation"]], step.get("arguments", {})):
                     raise ValueError("request_id already names a different operation")
                 return old
+            if len(self.operations) >= int(self.config.get('max_active_operations', 100000)):
+                raise QueueFull('The service has reached its configured number of active operations')
             op = self._operation(run_id, step)
             if run.get('platform') and op['device'] not in run['platform']['definition']['devices']:
                 raise ValueError('Operation device must belong to the selected platform')
-            if run["resources"] and not set(op["resources"]) <= set(run["resources"]):
-                raise ValueError("Include every device used by this package in its resources at submission")
+            if run['resources'] or run.get('requirements'):
+                reserved = self._amounts(run, reserve=True)
+                if any(count > reserved.get(key, 0) for key, count in self._amounts(op).items()):
+                    raise ValueError('Include every device and resource quantity used by this package at submission')
             if op["after"]:
                 raise ValueError("Package programs express dependencies by waiting for operation results")
             run["operations"].append(op["id"])
+            run['operation_count'] = run.get('operation_count', 0) + 1
             with self.store.transaction():
                 self.store.put("runs", run); self.store.put("operations", op)
                 self.store.event("operation.queued", run_id, operation_id=op["id"], device=op["device"], operation=op["operation"])
             self.operations[op["id"]] = op
+            self.ready[run_id][op['id']] = None
+            self.remaining[run_id] += 1
+            run['involved_resources'] = sorted(set(run['involved_resources']) | self._amounts(op).keys())
             self.wake.set()
             return json.loads(dumps(op))
 
@@ -382,6 +498,7 @@ class Engine:
             op = self.operations[op_id]
             if op["state"] == "queued":
                 op.update(state="cancelled", ended=now())
+                self._operation_ended(op)
                 with self.store.transaction():
                     self.store.put("operations", op)
                     self.store.event("operation.cancelled", run["id"], operation_id=op_id)
@@ -394,6 +511,9 @@ class Engine:
 
     @staticmethod
     def _terminate(process, force=False):
+        if hasattr(process, 'terminate') and hasattr(process, 'done'):
+            process.terminate()
+            return
         try:
             if sys.platform == "win32":
                 subprocess.run(["taskkill", "/PID", str(process.pid), "/T", "/F"],
@@ -415,6 +535,17 @@ class Engine:
         source_path = str(Path(__file__).resolve().parents[2])
         env["PYTHONPATH"] = source_path + os.pathsep + env.get("PYTHONPATH", "")
         command = [sys.executable if part == "{python}" else part for part in run["package"]["command"]]
+        from .jobs import NativeJob
+        from .process_driver import executable
+        try:
+            executable()
+        except ValueError:
+            pass
+        else:
+            self.processes[run['id']] = NativeJob(command, directory / 'package', env,
+                directory / 'stdout.txt', directory / 'stderr.txt',
+                timeout=run['package'].get('timeout', 0), notify=self.wake.set)
+            return
         with open(directory / "stdout.txt", "wb") as out, open(directory / "stderr.txt", "wb") as err:
             options = {"creationflags":subprocess.CREATE_NEW_PROCESS_GROUP} if sys.platform == "win32" else {"start_new_session":True}
             self.processes[run["id"]] = subprocess.Popen(command, cwd=directory / "package", env=env,
@@ -423,7 +554,7 @@ class Engine:
     def _finish(self, run, state):
         run.update(state=state, ended=now())
         run.pop("terminate_at", None)
-        self.reservations = {r:owner for r,owner in self.reservations.items() if owner != run["id"]}
+        self.allocation.finish(run['id'])
         directory = self.home / "runs" / run["id"]
         save_json(directory / "run.json", run)
         for root in [directory / "output"]:
@@ -437,18 +568,27 @@ class Engine:
         # Completed records live in SQLite; only active work remains in memory.
         for op_id in run["operations"]:
             self.operations.pop(op_id, None)
+            self.dependents.pop(op_id, None)
+            self.remaining_dependencies.pop(op_id, None)
+        self.ready.pop(run['id'], None)
+        self.remaining.pop(run['id'], None)
+        self.step_ids.pop(run['id'], None)
+        self.minimum_capacities.pop(run['id'], None)
+        process = self.processes.get(run['id'])
+        if process and hasattr(process, 'close'):
+            process.close()
         self.processes.pop(run["id"], None)
         self.runs.pop(run["id"], None)
 
     def _file_record(self, run_id, path, name):
-        for existing in self.store.list("artifacts", run_id, 10000):
-            if existing["name"] == name:
-                return existing
-        item = {"id":identifier("file"), "run_id":run_id, "name":name, "size":path.stat().st_size,
+        existing = self.store.artifact_named(run_id, name)
+        item = {"id":existing['id'] if existing else identifier("file"), "run_id":run_id, "name":name, "size":path.stat().st_size,
                 "media_type":mimetypes.guess_type(name)[0] or "application/octet-stream", "created":now()}
         with self.store.transaction():
-            self.store.db.execute("INSERT INTO artifacts VALUES(?,?,?)", (item["id"], run_id, dumps(item)))
-            self.store.event("artifact.saved", run_id, artifact_id=item["id"], name=name, size=item["size"])
+            self.store.db.execute('INSERT INTO artifacts(id,run_id,body,name) VALUES(?,?,?,?) '
+                'ON CONFLICT(id) DO UPDATE SET body=excluded.body', (item['id'], run_id, dumps(item), name))
+            if not existing:
+                self.store.event("artifact.saved", run_id, artifact_id=item["id"], name=name, size=item["size"])
         return item
 
     def save_result(self, run_id, result):
@@ -462,129 +602,252 @@ class Engine:
             return result
 
     def artifact(self, run_id, name, data):
-        with self.lock:
-            self.store.get("runs", run_id)
-            path = self.home / "runs" / run_id / "output" / relative_path(name)
-            root = (self.home / "runs" / run_id / "output").resolve()
-            if not path.resolve().is_relative_to(root):
-                raise ValueError("File must remain in the run output directory")
-            if path.exists():
-                raise ValueError("An output file already has this name")
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(data)
-            return self._file_record(run_id, path, "output/" + relative_path(name).as_posix())
+        return self.artifact_stream(run_id, name, io.BytesIO(data), len(data))
+
+    def artifact_stream(self, run_id, name, stream, length):
+        if type(length) is not int or length < 0:
+            raise ValueError('File length must be a nonnegative integer')
+        self.store.get('runs', run_id)
+        rel = relative_path(name)
+        incoming = self.home / 'incoming'
+        incoming.mkdir(exist_ok=True)
+        temporary = incoming / identifier('upload')
+        try:
+            with temporary.open('xb') as file:
+                left = length
+                while left:
+                    chunk = stream.read(min(left, 256 * 1024))
+                    if not chunk:
+                        raise ValueError('File transfer ended before the declared length')
+                    file.write(chunk)
+                    left -= len(chunk)
+            with self.lock:
+                path = self.home / 'runs' / run_id / 'output' / rel
+                root = (self.home / 'runs' / run_id / 'output').resolve()
+                if not path.resolve().is_relative_to(root):
+                    raise ValueError('File must remain in the run output directory')
+                if path.exists():
+                    raise ValueError('An output file already has this name')
+                path.parent.mkdir(parents=True, exist_ok=True)
+                temporary.rename(path)
+                return self._file_record(run_id, path, 'output/' + rel.as_posix())
+        finally:
+            temporary.unlink(missing_ok=True)
+
+    def reconnect(self, device_id):
+        with self.registration_lock:
+            with self.lock:
+                driver = self.devices[device_id]
+                worker = getattr(driver, 'worker', None)
+                affected = {name for name, other in self.devices.items()
+                            if name == device_id or (worker is not None and getattr(other, 'worker', None) is worker)}
+                if any(o['device'] in affected and o['state'] not in TERMINAL for o in self.operations.values()):
+                    raise ValueError('Wait for or cancel device operations before reconnecting')
+                if any(self.allocation.used['device:' + name] for name in affected):
+                    raise ValueError('An experiment still reserves this device')
+                self.reconnecting.update(affected)
+                registry = {k: v for k, v in self.devices.items() if k not in affected}
+            created = {}
+            try:
+                driver.close()
+                for name in sorted(affected):
+                    created[name] = make_driver(self.device_records[name], registry)
+                    registry[name] = created[name]
+                    if created[name].describe() != {k: v for k, v in self.descriptions[name].items() if k not in {'id', 'driver'}}:
+                        raise ValueError('Driver description changed; update the device configuration before reuse')
+                with self.lock:
+                    self.devices.update(created)
+                    for name in affected:
+                        self.offline.pop(name, None)
+                    with self.store.transaction():
+                        self.store.event('devices.reconnected', devices=sorted(affected))
+                return {'devices': sorted(affected), 'state': 'connected'}
+            except Exception as error:
+                for new in created.values():
+                    new.close()
+                with self.lock:
+                    self.offline.update({name: str(error) for name in affected})
+                raise
+            finally:
+                with self.lock:
+                    self.reconnecting.difference_update(affected)
+
+    def run_info(self, run_id, details=True):
+        result = self.store.get('runs', run_id)
+        if details:
+            result['operation_records'] = list(reversed(self.store.list('operations', run_id, 10000)))
+        else:
+            result = {key: result[key] for key in ('id', 'state', 'name', 'created', 'started', 'ended', 'error') if key in result}
+        return result
+
+    def _progress(self, op_id, value):
+        with self.progress_lock:
+            self.progress_updates[op_id] = value
+            current = time.monotonic()
+            if current - self.progress_times.get(op_id, 0) >= 0.2:
+                self.progress_times[op_id] = current
+                self.wake.set()
 
     def _tick(self):
-        # Completed device work releases resources only after the driver returns.
-        for op_id, future in list(self.futures.items()):
-            if not future.done():
-                continue
-            op = self.operations[op_id]; run = self.runs[op["run_id"]]
+        with self.progress_lock:
+            progress, self.progress_updates = self.progress_updates, {}
+        if progress:
+            with self.store.transaction():
+                for op_id, value in progress.items():
+                    op = self.operations.get(op_id)
+                    if op and op['state'] == 'running':
+                        op['progress'] = value
+                        self.store.put('operations', op)
+                        self.store.event('operation.progress', op['run_id'], operation_id=op_id, progress=value)
+        # Only completed futures and newly ready dependencies enter the scheduler.
+        while not self.completed.empty():
+            op_id = self.completed.get()
+            future = self.futures[op_id]
+            op = self.operations[op_id]; run = self.runs[op['run_id']]
             try:
-                op["result"] = json.loads(dumps(future.result()))
-                op["state"] = "completed"
+                op['result'] = json.loads(dumps(future.result()))
+                op['state'] = 'completed'
             except CancelledError:
-                op["state"] = "cancelled"
+                op['state'] = 'cancelled'
+                if run['state'] == 'running':
+                    run.update(state='cancelling', end_state='cancelled')
+                    self._stop_pending(run)
             except BaseException as error:
-                op.update(state="failed", error=f"{type(error).__name__}: {error}")
+                op.update(state='failed', error=f'{type(error).__name__}: {error}')
                 from .process_driver import DriverUnavailable
                 if isinstance(error, DriverUnavailable):
                     op['outcome_unknown'] = True
-                    self.store.hold_resources(set(op['resources']) | set(run['resources']), op_id, str(error))
+                    affected = self._amounts(op).keys() | self._amounts(run, reserve=True).keys()
+                    self.store.hold_resources(affected, op_id, str(error))
                     self.resource_holds = self.store.resource_holds()
-                if run["state"] == "running":
-                    run.update(state="cancelling", end_state="failed", error=op["error"])
-                    self._save_run(run, "run.failing")
+                if run['state'] == 'running':
+                    run.update(state='cancelling', end_state='failed', error=op['error'])
+                    self._save_run(run, 'run.failing')
                     self._stop_pending(run)
-            op["ended"] = now()
+            op['ended'] = now()
             with self.store.transaction():
-                self.store.put("operations", op)
-                self.store.event("operation." + op["state"], run["id"], operation_id=op_id, result=op.get("result"), error=op.get("error"))
-            self.claims = {r:owner for r,owner in self.claims.items() if owner != op_id}
-            del self.futures[op_id]; self.cancellations.pop(op_id, None)
+                self.store.put('operations', op)
+                self.store.event('operation.' + op['state'], run['id'], operation_id=op_id,
+                                 result=op.get('result'), error=op.get('error'))
+            self._operation_ended(op)
+            self.allocation.release(op_id)
+            del self.futures[op_id]
+            self.cancellations.pop(op_id, None)
+            self.progress_times.pop(op_id, None)
+            if run['kind'] == 'package':
+                # Long-lived programs keep only in-flight calls in memory. All
+                # completed operations remain in the indexed SQLite history.
+                run['operations'].remove(op_id)
+                self.operations.pop(op_id)
+                with self.store.transaction():
+                    self.store.put('runs', run)
         for run in list(self.runs.values()):
-            involved = set(run['resources']).union(*(self.operations[oid]['resources'] for oid in run['operations']))
-            if run['state'] in {'queued','running'} and involved & self.resource_holds.keys():
-                run.update(state='cancelling', end_state='interrupted', error='Device outcome is unresolved: ' + ', '.join(sorted(involved & self.resource_holds.keys())))
+            unresolved = set(run['involved_resources']) & self.resource_holds.keys()
+            if run['state'] in {'queued', 'running'} and unresolved:
+                run.update(state='cancelling', end_state='interrupted',
+                           error='Device outcome is unresolved: ' + ', '.join(sorted(unresolved)))
                 self._stop_pending(run)
-            if run["state"] == "queued":
+            if run['state'] == 'queued':
                 continue
-            process = self.processes.get(run["id"])
-            if process and run["state"] == "cancelling" and process.poll() is None and time.monotonic() - run.get("terminate_at", time.monotonic()) > 3:
+            process = self.processes.get(run['id'])
+            if process and run['state'] == 'cancelling' and process.poll() is None and time.monotonic() - run.get('terminate_at', time.monotonic()) > 3:
                 self._terminate(process, force=True)
             process_done = process is None or process.poll() is not None
-            ops_done = all(self.operations[oid]["state"] in TERMINAL for oid in run["operations"])
-            if run["kind"] == "package" and process_done and process is not None:
-                run["exit_code"] = process.returncode
-                if process.returncode and run["state"] == "running":
-                    run.update(state="cancelling", end_state="failed", error="Experiment process exited with code " + str(process.returncode))
+            if run['kind'] == 'package' and process_done and process is not None:
+                run['exit_code'] = process.returncode
+                if process.returncode and run['state'] == 'running':
+                    run.update(state='cancelling', end_state='failed', error='Experiment process exited with code ' + str(process.returncode))
                     self._stop_pending(run)
-                    ops_done = all(self.operations[oid]["state"] in TERMINAL for oid in run["operations"])
-            if ops_done and process_done:
-                if run["state"] == "cancelling":
-                    self._finish(run, run.get("end_state", "cancelled"))
-                elif run["kind"] == "workflow" or process is not None:
-                    if run["kind"] == "workflow":
-                        run["result"] = {self.operations[oid]["step"]: self.operations[oid].get("result") for oid in run["operations"]}
-                    self._finish(run, "completed")
+            if self.remaining[run['id']] == 0 and process_done:
+                if run['state'] == 'cancelling':
+                    self._finish(run, run.get('end_state', 'cancelled'))
+                elif run['kind'] == 'workflow' or process is not None:
+                    if run['kind'] == 'workflow':
+                        run['result'] = {self.operations[oid]['step']: self.operations[oid].get('result') for oid in run['operations']}
+                    self._finish(run, 'completed')
         if self.stopping:
             return
-        # Reserve all requested resources together. Waiting experiments do not hold partial sets.
         waiting = set()
+        package_slots = self.package_count - len(self.processes)
         for run in list(self.runs.values()):
-            if run["state"] != "queued":
+            if run['state'] != 'queued':
                 continue
-            res = set(run["resources"])
-            if run["kind"] == "package" and sum(p.poll() is None for p in self.processes.values()) >= self.package_count:
+            if run['kind'] == 'package' and package_slots <= 0:
                 continue
-            if res & (set(self.reservations) | set(self.claims) | waiting):
-                waiting.update(res); continue
-            for resource in res:
-                self.reservations[resource] = run["id"]
-            missing = [self.operations[oid]["device"] for oid in run["operations"] if self.operations[oid]["device"] not in self.devices]
-            if missing:
-                run.update(state="cancelling", end_state="failed", error="Missing registered devices: " + ", ".join(missing))
+            amounts = self._amounts(run, reserve=True)
+            unavailable = [k for k, v in self.minimum_capacities[run['id']].items() if v > self.allocation.limit(k)]
+            if unavailable:
+                run.update(state='cancelling', end_state='failed', error='Configured capacity no longer fits the experiment: ' + ', '.join(sorted(set(unavailable))))
                 self._stop_pending(run)
                 continue
-            run.update(state="running", started=now())
-            self._save_run(run, "run.started")
-            if run["kind"] == "package":
+            if not self.allocation.can_reserve(amounts, waiting):
+                waiting.update(amounts)
+                continue
+            missing = [self.operations[oid]['device'] for oid in run['operations'] if self.operations[oid]['device'] not in self.devices]
+            if missing:
+                run.update(state='cancelling', end_state='failed', error='Missing registered devices: ' + ', '.join(missing))
+                self._stop_pending(run)
+                continue
+            self.allocation.reserve(run['id'], amounts)
+            run.update(state='running', started=now())
+            self._save_run(run, 'run.started')
+            if run['kind'] == 'package':
                 try:
                     self._start_package(run)
+                    package_slots -= 1
                 except Exception as error:
-                    run.update(state="cancelling", end_state="failed", error=str(error))
+                    run.update(state='cancelling', end_state='failed', error=str(error))
+        # Round-robin between experiments; a large ready set cannot monopolize starts.
+        run_ids = [rid for rid, ready in self.ready.items() if ready and self.runs[rid]['state'] == 'running']
+        if self.last_scheduled_run in run_ids:
+            index = run_ids.index(self.last_scheduled_run) + 1
+            run_ids = run_ids[index:] + run_ids[:index]
+        candidates = deque((rid, iter(list(self.ready[rid]))) for rid in run_ids)
         blocked = set()
-        states_by_run = {rid:{self.operations[oid]["step"]:self.operations[oid]["state"] for oid in r["operations"]} for rid,r in self.runs.items()}
-        for op in self.operations.values():
-            if op["state"] != "queued":
+        while candidates and len(self.futures) < self.worker_count:
+            rid, items = candidates.popleft()
+            try:
+                op_id = next(items)
+            except StopIteration:
                 continue
-            run = self.runs[op["run_id"]]
-            if run["state"] != "running":
+            candidates.append((rid, items))
+            op = self.operations[op_id]
+            amounts = self._amounts(op)
+            if not self.allocation.can_claim(rid, amounts, blocked | waiting):
+                blocked.update(amounts)
                 continue
-            states = states_by_run[run["id"]]
-            if any(states.get(dep) != "completed" for dep in op["after"]):
-                continue
-            resources = set(op["resources"])
-            owned = {r for r,owner in self.reservations.items() if owner == run["id"]}
-            unavailable = set(self.claims) | (set(self.reservations) - owned) | (blocked - owned) | (waiting - owned)
-            if resources & unavailable:
-                blocked.update(resources); continue
-            if len(self.futures) >= self.worker_count:
-                break
-            op.update(state="running", started=now())
-            with self.store.transaction():
-                self.store.put("operations", op)
-                self.store.event("operation.started", run["id"], operation_id=op["id"], device=op["device"], operation=op["operation"])
-            for resource in resources:
-                self.claims[resource] = op["id"]
-            event = threading.Event(); self.cancellations[op["id"]] = event
-            future = self.pool.submit(self.devices[op["device"]].invoke, op["operation"], op["arguments"], event)
-            self.futures[op["id"]] = future
-            future.add_done_callback(lambda _: self.wake.set())
+            self.ready[rid].pop(op_id)
+            self.last_scheduled_run = rid
+            op.update(state='running', started=now())
+            self.allocation.claim(op_id, rid, amounts)
+            output = self.home / 'runs' / rid / 'output' / 'operations' / op_id
+            context = Context(rid, op_id, output, lambda value, oid=op_id: self._progress(oid, value))
+            self.cancellations[op_id] = context
+            try:
+                if op.get('bindings'):
+                    args = dict(op['arguments'])
+                    for name, binding in op['bindings'].items():
+                        value = self.operations[self.step_ids[rid][binding['step']]]['result']
+                        for key in binding.get('path', []):
+                            value = value[key]
+                        args[name] = value
+                    op['arguments'] = parameters(self.descriptions[op['device']]['operations'][op['operation']], args)
+                with self.store.transaction():
+                    self.store.put('operations', op)
+                    self.store.event('operation.started', rid, operation_id=op_id, device=op['device'], operation=op['operation'])
+                future = self.pool.submit(self.devices[op['device']].invoke, op['operation'], op['arguments'], context)
+            except Exception as error:
+                from concurrent.futures import Future
+                future = Future(); future.set_exception(error)
+            self.futures[op_id] = future
+            def completed(_, oid=op_id):
+                self.completed.put(oid)
+                self.wake.set()
+            future.add_done_callback(completed)
 
     def _loop(self):
         while True:
-            self.wake.wait(0.05); self.wake.clear()
+            self.wake.wait(0.25); self.wake.clear()
             with self.lock:
                 try:
                     self._tick()
@@ -599,7 +862,7 @@ class Engine:
             return {"devices":len(self.devices), "platforms":len(self.platforms), "queued_runs":sum(r["state"] == "queued" for r in self.runs.values()),
                     "active_runs":sum(r["state"] != "queued" for r in self.runs.values()), "active_operations":len(self.futures),
                     "queued_operations":sum(o["state"] == "queued" for o in self.operations.values()),
-                    "workers":self.worker_count, "package_workers":self.package_count, "resource_holds":list(self.resource_holds.values()), "errors":self.errors[-5:]}
+                    "workers":self.worker_count, "package_workers":self.package_count, "resources":self.resource_info(), "resource_holds":list(self.resource_holds.values()), "errors":self.errors[-5:]}
 
     def close(self):
         with self.lock:

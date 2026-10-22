@@ -45,7 +45,11 @@ def main():
                 elif method=='describe':
                     reply({'id':message['id'],'result':devices[p['device']].describe()})
                 elif method=='invoke':
-                    event=threading.Event();active[message['id']]=event
+                    from .execution import Context
+                    context = p.get('context', {})
+                    event = Context(context['run_id'], context['operation_id'], context['output_dir'],
+                        lambda value, mid=message['id']: reply({'id':mid,'event':'progress','progress':value})) if context else threading.Event()
+                    active[message['id']]=event
                     threading.Thread(target=invoke,args=(message,event),daemon=True).start()
                 else:raise ValueError('Unknown worker method: '+method)
             except Exception as error:

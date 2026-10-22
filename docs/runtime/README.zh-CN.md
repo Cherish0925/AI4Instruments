@@ -4,11 +4,11 @@
 
 IOP Runtime 是安装在仪器所在计算机上的常驻软件。它保持设备连接，接收实验程序，安排串行与并行操作，保存参数、读数、结果和文件。人和 Agent 使用同一套 HTTP 接口、Python 客户端和命令行；浏览器可以查看设备、提交实验和读取结果。
 
-**0.4.0 已实现：** 后台服务、设备登记与发现、依赖调度、跨步骤设备占用、实验程序包执行、实验记录、Python 客户端、网页界面和各系统的登录自启动入口。
+**0.5.0 已实现：** 后台服务、设备登记与发现、依赖调度、跨步骤设备占用、实验程序包执行、实验记录、Python 客户端、网页界面和各系统的登录自启动入口。
 
-Rust 驱动进程组件与 TypeScript 客户端已加入本版；完整 Rust 核心的后续设计见[常驻服务架构](architecture.zh-CN.md)，其中列明当前实现与后续建设顺序。
+Rust 管理 SDK、计算程序和实验程序的进程执行，Python 处理 HTTP 与工作流调度，TypeScript 提供完整客户端。见[当前架构](architecture.zh-CN.md)。
 
-**新增：** 多平台配置、连接图、初始化步骤、配置历史、TypeScript 客户端与 Rust 独立驱动进程管理。进入 [IOP 工程](../../iop/README.zh-CN.md)或[配置实验平台](../../iop/platforms.zh-CN.md)。
+**0.5.0 新增：** 依赖就绪调度、跨步骤结果传递、可计数资源、通用命令程序、异步 HTTP 任务、驱动包入口、进度事件和文件流式上传。[实验执行](../../iop/execution.zh-CN.md) · [软件与驱动扩展](../../iop/software.zh-CN.md)。进入 [IOP 工程](../../iop/README.zh-CN.md)或[配置实验平台](../../iop/platforms.zh-CN.md)。
 
 ## 安装与启动
 
@@ -29,7 +29,7 @@ iop open
 
 安装脚本自动选择 `dist/` 中适合当前系统的 wheel。
 
-`[devices]` 安装串口、VISA、USB 发现和 Modbus 相关依赖。仅使用 TCP 仪器、模拟设备或已有驱动时，可以省略它。核心服务仅使用 Python 标准库。
+`[devices]` 安装串口、VISA、USB 发现和 Modbus 相关依赖。仅使用 TCP 仪器、模拟设备或已有驱动时，可以省略它。Python 服务使用标准库；原生执行组件包含在发行包中。
 
 | 系统 | 后台运行 | `iop service install` |
 | --- | --- | --- |
@@ -136,7 +136,7 @@ iop devices
 | 情况 | 执行方式 |
 | --- | --- |
 | 不同设备、没有依赖 | 在可用工作线程中并行 |
-| 同一设备的多个请求 | 顺序执行，一次只调用一个操作 |
+| 同一设备的多个请求 | 默认顺序执行；驱动声明 `concurrency` 后按其数量安排 |
 | 步骤的 `after` 指向前置步骤 | 前置步骤全部完成后执行 |
 | 多项操作使用同一光路、样品或运动区域 | 给它们声明同一个共享资源名 |
 | 一次扫描不能被其他实验插入 | 提交时在 `resources` 中列出整次实验需要的设备与共享资源 |
@@ -205,7 +205,16 @@ lab = Client("http://lab-computer:8765", token="平台令牌")
 
 也可以设置 `IOP_ENDPOINT` 和 `IOP_TOKEN`。页面用 `iop open` 打开，连接信息由本机配置传入。HTTP API 见[接口文档](http-api.md)。不同计算机可分别运行服务，实验程序按设备所在平台连接；本版资源调度范围为一个服务实例。
 
-## 开发
+## 源码与开发
+
+源码安装后，普通命令程序和独立 SDK 需要编译原生组件：
+
+```sh
+cargo build --release --locked --manifest-path iop/daemon/Cargo.toml
+```
+
+将生成的 `iop-execd`（Windows 为 `iop-execd.exe`）放入命令路径，或把环境变量 `IOP_EXECD` 设置为它的绝对路径。发行包已包含该程序。
+
 
 ```sh
 python -m pip install -e .

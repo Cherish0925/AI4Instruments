@@ -19,6 +19,21 @@ def strings(values, what):
     return values
 
 
+def dependencies(step):
+    result = list(strings(step.get('after', []), 'Step dependencies'))
+    bindings = step.get('bindings', {})
+    if not isinstance(bindings, dict):
+        raise ValueError('Bindings must be an object')
+    for field, binding in bindings.items():
+        if not isinstance(field, str) or not isinstance(binding, dict) or not isinstance(binding.get('step'), str):
+            raise ValueError('Each binding needs a parameter name and a source step')
+        if not isinstance(binding.get('path', []), list) or any(type(k) not in (str, int) for k in binding.get('path', [])):
+            raise ValueError('Binding paths contain object keys or array indices')
+        if binding['step'] not in result:
+            result.append(binding['step'])
+    return result
+
+
 def steps(value):
     if not isinstance(value, list) or not 1 <= len(value) <= 10000:
         raise ValueError('A workflow needs between 1 and 10000 steps')
@@ -27,11 +42,11 @@ def steps(value):
     ids = strings([s.get('id') for s in value], 'Step IDs')
     children, counts = {i: [] for i in ids}, {}
     for step in value:
-        dependencies = strings(step.get('after', []), 'Step dependencies')
-        if not set(dependencies) <= children.keys():
+        parents = dependencies(step)
+        if not set(parents) <= children.keys():
             raise ValueError('Step dependencies contain an unknown step')
-        counts[step['id']] = len(dependencies)
-        for parent in dependencies:
+        counts[step['id']] = len(parents)
+        for parent in parents:
             children[parent].append(step['id'])
     ready = deque(i for i in ids if counts[i] == 0)
     visited = 0

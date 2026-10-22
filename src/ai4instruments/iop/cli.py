@@ -73,11 +73,13 @@ def parser():
     root.add_argument('--endpoint', help='Remote service URL')
     sub = root.add_subparsers(dest='command', required=True)
     p = sub.add_parser('init', help='Create a configuration'); p.add_argument('--demo', action='store_true'); p.add_argument('--port', type=int, default=8765)
-    for name in ['start','serve','stop','status','open','devices','discover']:
+    for name in ['start','serve','stop','status','open','devices','discover','adapters']:
         sub.add_parser(name)
     p = sub.add_parser('register'); p.add_argument('file')
+    p = sub.add_parser('reconnect'); p.add_argument('device')
+    p = sub.add_parser('resources'); p.add_argument('--set', dest='capacities', help='JSON object of resource capacities')
     p = sub.add_parser('run'); p.add_argument('file'); p.add_argument('--wait', action='store_true')
-    p = sub.add_parser('package'); p.add_argument('path'); p.add_argument('--resources', nargs='*', default=[]); p.add_argument('--parameters', default='{}'); p.add_argument('--project'); p.add_argument('--platform'); p.add_argument('--wait', action='store_true')
+    p = sub.add_parser('package'); p.add_argument('path'); p.add_argument('--resources', nargs='*', default=[]); p.add_argument('--requirements', default='{}'); p.add_argument('--parameters', default='{}'); p.add_argument('--project'); p.add_argument('--platform'); p.add_argument('--wait', action='store_true')
     p = sub.add_parser('platform', help='Configure and initialize experimental platforms')
     ps = p.add_subparsers(dest='platform_action', required=True)
     ps.add_parser('list')
@@ -120,6 +122,12 @@ def main():
             output(client.devices())
         elif args.command == 'discover':
             output(client.discover())
+        elif args.command == 'adapters':
+            output(client.adapters())
+        elif args.command == 'reconnect':
+            output(client.reconnect(args.device))
+        elif args.command == 'resources':
+            output(client.configure_resources(json.loads(args.capacities)) if args.capacities is not None else client.resources())
         elif args.command == 'register':
             records = json.loads(Path(args.file).read_text(encoding='utf-8'))
             output([client.register(record) for record in records] if isinstance(records,list) else client.register(records))
@@ -128,7 +136,7 @@ def main():
             run = client.run(client.request('/v1/runs', spec)['id'])
             output(run.result() if args.wait else {'run_id':run.id})
         elif args.command == 'package':
-            run = client.submit_package(args.path, resources=args.resources, parameters=json.loads(args.parameters), project=args.project, platform=args.platform)
+            run = client.submit_package(args.path, resources=args.resources, parameters=json.loads(args.parameters), project=args.project, platform=args.platform, requirements=json.loads(args.requirements))
             output(run.result() if args.wait else {'run_id':run.id})
         elif args.command == 'platform':
             action = args.platform_action

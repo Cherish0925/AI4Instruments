@@ -232,12 +232,18 @@ def make_driver(record, registry):
     name = record["driver"]
     from .adapters import Modbus, HTTP
     from .simulation import Laboratory
-    builtins = {"simulated":Simulated, "simulated-lab":Laboratory, "scpi":SCPI, "modbus":Modbus, "http":HTTP}
+    from .software import Command
+    builtins = {"simulated":Simulated, "simulated-lab":Laboratory, "scpi":SCPI, "modbus":Modbus, "http":HTTP, "command":Command}
     if name in builtins:
         cls = builtins[name]
     else:
         module, separator, class_name = name.partition(":")
         if not separator:
-            raise ValueError("Driver must name a built-in adapter or module:Class")
-        cls = getattr(importlib.import_module(module), class_name)
+            from importlib.metadata import entry_points
+            matches = list(entry_points(group='ai4instruments.drivers', name=name))
+            if len(matches) != 1:
+                raise ValueError('Driver must name a built-in adapter, installed driver entry point or module:Class')
+            cls = matches[0].load()
+        else:
+            cls = getattr(importlib.import_module(module), class_name)
     return cls(record["id"], record.get("config", {}), registry)

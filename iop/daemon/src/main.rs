@@ -6,13 +6,15 @@ use tokio::{
     process::{Child, Command},
     time::{self, Instant},
 };
+mod job;
+mod process_tree;
 
-async fn emit(value: &Value) -> io::Result<()> {
+pub(crate) async fn emit(value: &Value) -> io::Result<()> {
     let mut output = tokio::io::stdout();
     output.write_all(format!("{value}\n").as_bytes()).await?;
     output.flush().await
 }
-async fn stop(child: &mut Child) {
+pub(crate) async fn stop(child: &mut Child) {
     if let Some(id) = child.id() {
         #[cfg(unix)]
         unsafe {
@@ -38,6 +40,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     if args == ["--version"] {
         println!("iop-execd {}", env!("CARGO_PKG_VERSION"));
         return Ok(());
+    }
+    if args == ["--job"] {
+        return job::run().await;
     }
     let mut timeout = 300.0_f64;
     if args.first().map(String::as_str) == Some("--timeout") && args.len() >= 2 {
@@ -66,6 +71,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         command.creation_flags(0x00000200);
     }
     let mut child = command.spawn()?;
+    #[cfg(windows)]
+    let _tree = process_tree::Tree::attach(&child)?;
     let mut input = child.stdin.take().unwrap();
     let mut responses = BufReader::new(child.stdout.take().unwrap()).lines();
     let mut requests = BufReader::new(tokio::io::stdin()).lines();
@@ -101,7 +108,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     if pending.as_ref() != Some(&response["id"]) {
                         return Err("Driver response does not match the active operation".into());
                     }
-                    pending = None;
+                    if response.get("event").is_none() {
+                        pending = None;
+                    }
                     emit(&response).await?;
                 }
                 _ = &mut timer, if pending.is_some() => {

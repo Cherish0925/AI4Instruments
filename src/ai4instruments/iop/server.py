@@ -13,11 +13,13 @@ from .config import VERSION
 from .discovery import discover
 from .engine import relative_path
 from .store import dumps
+from .resources import QueueFull
 
 
 class Server(ThreadingHTTPServer):
     daemon_threads = True
     allow_reuse_address = True
+    request_queue_size = 256
 
     def server_bind(self):
         # A local instrument service does not need reverse DNS to start listening.
@@ -61,6 +63,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send(Path(__file__).with_name('reader.html').read_bytes(), media_type='text/html; charset=utf-8')
             if method == 'GET' and url.path == '/platform.js':
                 return self._send(Path(__file__).with_name('platform.js').read_bytes(), media_type='text/javascript; charset=utf-8')
+            if method == 'GET' and url.path == '/resources.js':
+                return self._send(Path(__file__).with_name('resources.js').read_bytes(), media_type='text/javascript; charset=utf-8')
             if method == 'GET' and url.path == '/health':
                 return self._send({'service':'IOP', 'version':VERSION})
             expected = 'Bearer ' + engine.config['token']
@@ -69,6 +73,8 @@ class Handler(BaseHTTPRequestHandler):
             body = {}
             if method == 'POST':
                 length = int(self.headers.get('Content-Length', '0'))
+                if len(parts) == 4 and parts[:2] == ['v1', 'runs'] and parts[3] == 'files':
+                    return self._send(engine.artifact_stream(parts[2], query['name'], self.rfile, length))
                 if not 0 < length <= 64 * 1024 * 1024:
                     raise ValueError('Request body must be between 1 byte and 64 MiB')
                 body = json.loads(self.rfile.read(length))
@@ -77,6 +83,11 @@ class Handler(BaseHTTPRequestHandler):
             result = None
             if parts == ['v1','status'] and method == 'GET':
                 result = {'version':VERSION, **engine.metrics()}
+            elif parts == ['v1', 'resources']:
+                result = engine.configure_resources(body['capacities']) if method == 'POST' else engine.resource_info()
+            elif parts == ['v1', 'adapters'] and method == 'GET':
+                from .plugins import adapters
+                result = adapters()
             elif parts == ['v1','platforms']:
                 result = engine.apply_platform(body['definition'], body.get('expected_revision', 0)) if method == 'POST' else engine.list_platforms()
             elif parts == ['v1','resources','resolve'] and method == 'POST':
@@ -98,6 +109,8 @@ class Handler(BaseHTTPRequestHandler):
                         result = list(engine.descriptions.values())
             elif len(parts) == 3 and parts[:2] == ['v1','devices'] and method == 'GET':
                 result = engine.descriptions[parts[2]]
+            elif len(parts) == 4 and parts[:2] == ['v1', 'devices'] and parts[3] == 'reconnect' and method == 'POST':
+                result = engine.reconnect(parts[2])
             elif parts == ['v1','discovery'] and method == 'GET':
                 result = engine.scan()
                 result['registered'] = list(engine.descriptions.values())
@@ -107,17 +120,18 @@ class Handler(BaseHTTPRequestHandler):
                 data = base64.b64decode(body.pop('archive'), validate=True)
                 result = engine.submit(body, data)
             elif parts == ['v1','events'] and method == 'GET':
-                rows = engine.store.events(query.get('after',0), query.get('run_id'), query.get('limit',200))
+                rows = engine.store.events(query.get('after',0), query.get('run_id'), query.get('limit',200), query.get('wait',0))
                 result = {'events':rows, 'cursor':rows[-1]['sequence'] if rows else int(query.get('after',0))}
             elif len(parts) == 3 and parts[:2] == ['v1','operations'] and method == 'GET':
                 result = engine.store.get('operations', parts[2])
             elif len(parts) == 3 and parts[:2] == ['v1','runs'] and method == 'GET':
-                result = engine.store.get('runs', parts[2])
-                result['operation_records'] = list(reversed(engine.store.list('operations', parts[2], 10000)))
+                result = engine.run_info(parts[2], details=query.get('details', 'true') != 'false')
             elif len(parts) == 4 and parts[:2] == ['v1','runs']:
                 run_id, action = parts[2:]
                 if action == 'operations' and method == 'POST':
                     result = engine.invoke(run_id, body)
+                elif action == 'operations' and method == 'GET':
+                    result = engine.store.operation_page(run_id, query.get('after', 0), query.get('limit', 200))
                 elif action == 'cancel' and method == 'POST':
                     result = engine.cancel(run_id)
                 elif action == 'result' and method == 'POST':
@@ -146,6 +160,8 @@ class Handler(BaseHTTPRequestHandler):
             else:
                 raise KeyError(url.path)
             self._send(result)
+        except QueueFull as error:
+            self._send({'error':str(error), 'retry_after':1}, 503)
         except KeyError as error:
             self._send({'error':'Not found: ' + str(error)}, 404)
         except (ValueError, TypeError, FileNotFoundError) as error:

@@ -88,12 +88,25 @@ class Modbus(Driver):
 
 class HTTP(Driver):
     def describe(self):
-        return {'name':self.config.get('name',self.id),'mode':'hardware','transport':'http',
+        return {'name':self.config.get('name',self.id),'mode':self.config.get('mode', 'hardware'),'transport':'http',
+                'concurrency':self.config.get('concurrency', 1), 'requirements':self.config.get('requirements', {}),
                 'operations':self.config.get('operations',{})}
 
     def invoke(self, operation, arguments, cancelled):
         if cancelled.is_set():raise CancelledError()
         spec=self.config['operations'][operation]
+        if 'job' in spec:
+            from .http_jobs import execute
+            return execute(self, spec, arguments, cancelled)
+        content = self.request(spec, arguments)
+        value=content
+        for key in spec.get('result_path',[]):
+            value=value[key]
+        result={'value':value,'response':content,'time':now(),'source':self.config.get('mode', 'device')}
+        if 'unit' in spec:result['unit']=spec['unit']
+        return result
+
+    def request(self, spec, arguments):
         def fill(value):
             if isinstance(value,str):
                 if value.startswith('${') and value.endswith('}') and value[2:-1] in arguments:
@@ -112,9 +125,4 @@ class HTTP(Driver):
         with urlopen(request,timeout=float(self.config.get('timeout',10))) as response:
             payload=response.read()
             content=json.loads(payload) if payload else None
-        value=content
-        for key in spec.get('result_path',[]):
-            value=value[key]
-        result={'value':value,'response':content,'time':now(),'source':'device'}
-        if 'unit' in spec:result['unit']=spec['unit']
-        return result
+        return content

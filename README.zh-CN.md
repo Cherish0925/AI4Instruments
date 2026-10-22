@@ -4,13 +4,13 @@
 
 [阅读论文](paper/manuscript.md) · [PDF](paper/AI4Instruments.pdf) · [Operations](docs/operations.md) · [运行示例](examples/README.md) · [参与讨论](https://github.com/Cherish0925/AI4Instruments/discussions/1) · [English](README.md)
 
-## IOP · 仪器操作协议
+## IOP Runtime · 仪器运行服务
 
 **安装常驻仪器服务，配置实验平台，让人和 Agent 提交程序开展实验。** 一台计算机可以管理多个平台，共享设备由同一个服务安排使用。
 
-[IOP 工程入口](iop/README.zh-CN.md) · [下载 0.4.0](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.4.0) · [安装](docs/runtime/README.zh-CN.md) · [配置实验平台](iop/platforms.zh-CN.md) · [Agent 接入](iop/agent-setup.md)
+[IOP 工程入口](iop/README.zh-CN.md) · [下载 0.5.0](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.5.0) · [安装](docs/runtime/README.zh-CN.md) · [配置实验平台](iop/platforms.zh-CN.md) · [Agent 接入](iop/agent-setup.md)
 
-0.4.0 提供平台配置与初始化、Rust 驱动进程管理、Python 与 TypeScript 客户端、依赖与资源调度、SQLite 实验记录。当前 HTTP 服务与工作流调度使用 Python。[整体架构](docs/runtime/architecture.zh-CN.md)。
+0.5.0 提供多平台配置、依赖与结果传递、可计数资源、普通程序与远端任务接入、Rust 进程执行、Python / TypeScript 客户端和 SQLite 实验记录。[整体架构](docs/runtime/architecture.zh-CN.md)。
 
 AI4Instruments 探索一套面向 AI 的仪器方法论、设计规范与开放生态，让 AI 参与科学与工程仪器的构思、规划设计、生产制造、软硬件开发、实验使用与持续改进，贯穿仪器的整个生命周期。
 

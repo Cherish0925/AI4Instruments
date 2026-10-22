@@ -4,11 +4,11 @@
 
 IOP Runtime runs on the computer connected to your instruments. It maintains device connections, executes experiment programs, schedules serial and parallel operations, and retains parameters, readings, results and files. People and agents share the HTTP API, Python client and command line. A browser interface displays instruments, accepts experiments and shows results.
 
-**Implemented in 0.4.0:** background service, device registration and discovery, dependency scheduling, reservations across steps, experiment package execution, persistent records, Python client, browser interface and operating-system login startup.
+**Implemented in 0.5.0:** background service, device registration and discovery, dependency scheduling, reservations across steps, experiment package execution, persistent records, Python client, browser interface and operating-system login startup.
 
-The native driver supervisor and TypeScript client are implemented; the complete Rust core remains described in the [runtime architecture](architecture.md). That document separates the current implementation from the next development stages.
+Rust handles SDK, command and experiment processes; Python handles HTTP and workflow scheduling; TypeScript supplies the complete client. See the [current architecture](architecture.md).
 
-**New:** multiple platforms, connection diagrams, initialization procedures, configuration history, a TypeScript client and native Rust driver supervision. Open the [IOP project](../../iop/README.md) or [configure a platform](../../iop/platforms.md).
+**New in 0.5.0:** ready dependency scheduling, result bindings, counted resources, command programs, HTTP jobs, installable driver entry points, progress events and streaming file uploads. [Execution](../../iop/execution.md) · [Software and drivers](../../iop/software.md). Open the [IOP project](../../iop/README.md) or [configure a platform](../../iop/platforms.md).
 
 ## Install and start
 
@@ -199,7 +199,16 @@ lab = Client("http://lab-computer:8765", token="platform-token")
 
 `IOP_ENDPOINT` and `IOP_TOKEN` provide the same settings through the environment. `iop open` opens the browser interface using local connection settings. See the [HTTP API](http-api.md). Different instrument computers may run separate services; experiments connect to the relevant endpoint. Resource scheduling in this version covers one service instance.
 
-## Development
+## Source installation and development
+
+Build the native executor for command programs and independent SDK workers:
+
+```sh
+cargo build --release --locked --manifest-path iop/daemon/Cargo.toml
+```
+
+Put `iop-execd` (`iop-execd.exe` on Windows) on the executable path or set `IOP_EXECD` to its absolute path. Distribution archives already contain this binary.
+
 
 ```sh
 python -m pip install -e .

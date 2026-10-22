@@ -2,6 +2,8 @@
 import json
 import platform
 import subprocess
+import os
+import shutil
 from pathlib import Path
 
 
@@ -9,7 +11,7 @@ def _command(args):
     return subprocess.check_output(args, text=True, encoding="utf-8", errors="replace", timeout=15, stderr=subprocess.DEVNULL)
 
 
-def discover():
+def discover(software_profiles=()):
     found, providers = [], []
     try:
         from serial.tools import list_ports
@@ -68,6 +70,17 @@ def discover():
         providers.append({"name":"usb-inventory", "available":system in {'Linux','Windows','Darwin'}})
     except Exception as error:
         providers.append({"name":"usb-inventory", "available":False, "detail":str(error)})
+    for profile in software_profiles:
+        candidates = profile.get('executables', [])
+        if not isinstance(candidates, list) or any(not isinstance(v, str) for v in candidates):
+            raise ValueError('Software discovery executables must be a list of names or paths')
+        for candidate in candidates:
+            path = shutil.which(os.path.expandvars(os.path.expanduser(candidate)))
+            if path:
+                found.append({'transport': 'command', 'program': profile['id'], 'name': profile.get('name', profile['id']),
+                              'address': str(Path(path).resolve()), 'status': 'discovered'})
+                break
+    providers.append({'name': 'software-profiles', 'available': True, 'configured': len(software_profiles)})
     return {"connections":found, "providers":providers}
 
 

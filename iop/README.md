@@ -1,14 +1,16 @@
-# IOP · Instrument Operation Protocol
+# IOP Runtime
 
-[中文](README.zh-CN.md) · [Download](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.4.0) · [Installation](../docs/runtime/README.md) · [Platform configuration](platforms.md) · [Agent integration](agent-setup.md)
+[中文](README.zh-CN.md) · [Download](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.5.0) · [Installation](../docs/runtime/README.md) · [Platform configuration](platforms.md) · [Agent integration](agent-setup.md)
 
-**One persistent service for people and agents to use experimental platforms.** It runs on the computer connected to instruments, maintains devices and platform descriptions, executes experiment programs, schedules serial and parallel work, and preserves operations and data. Accepted experiments continue after the submitting terminal, browser or agent session closes.
+**One persistent service for people and agents to use experimental platforms.** It connects physical instruments, computational programs and remote task services, maintains platform descriptions, schedules serial and parallel experiments, and preserves operations and data. Accepted experiments continue after the submitting terminal, browser or agent session closes.
+
+IOP names the Instrument Operation Protocol; IOP Runtime implements its execution functions. [Experiment execution](execution.md) covers dependencies, data flow and resources. [Software and driver extensions](software.md) explains how tools connect.
 
 One computer can serve several experimental platforms. Each platform describes its devices, physical connections, shared resources and initialization procedures. Platforms may reference the same instrument; one service coordinates its use across them.
 
 ## Start
 
-Download the matching IOP 0.4.0 archive and run `install.sh` on Linux, macOS or WSL, or `install.ps1` on Windows. Python 3.10+ is required. Archives include the platform-specific Rust executor; users do not need a Rust compiler. The installer prints the installed commands.
+Download the matching IOP 0.5.0 archive and run `install.sh` on Linux, macOS or WSL, or `install.ps1` on Windows. Python 3.10+ is required. Archives include the platform-specific Rust executor; users do not need a Rust compiler. The installer prints the installed commands.
 
 | Archive | Runtime environment |
 | --- | --- |
@@ -40,23 +42,26 @@ The browser's platform page displays connections, imports and exports configurat
 
 Physical topology and experimental timing are separate. A trigger cable alone does not establish synchronized acquisition: the program must configure and prepare the devices before triggering. Software orders operations; device clocks and hardware triggers provide precise timing.
 
-## Implemented in 0.4.0
+## Implemented in 0.5.0
 
 | Component | Implementation |
 | --- | --- |
 | Persistent service | Python HTTP API, scheduler, experiment processes and CLI. |
-| Native executor | Rust `iop-execd` supervises independent driver processes, messaging, cancellation requests, response deadlines and exit. |
-| Drivers | SCPI TCP / serial / VISA, Modbus TCP / RTU, HTTP JSON, Python adapters and executable adapters. |
+| Native executor | Rust `iop-execd` owns SDK, command and experiment process trees, progress, cancellation and exit. |
+| Scheduling | Ready dependencies, rotation between experiments, result bindings, device concurrency and counted resources. |
+| Drivers | SCPI TCP / serial / VISA, Modbus TCP / RTU, synchronous/asynchronous HTTP, executable programs, Python packages and SDK workers. |
 | Clients | Python, TypeScript, HTTP, CLI and browser interface. |
 | Records | SQLite, configuration history, events, packages, output files and raw-data relationships. |
 
-C, C++, C#, Java and other executable SDK adapters can implement the same [driver interface](drivers.md). Their language environments are required only for the relevant adapters. Development continues toward the [Rust core architecture](../docs/runtime/architecture.md); workflow scheduling in this release remains Python.
+C, C++, C#, Java and other adapters use the same [independent driver interface](drivers.md) or command interface. Their runtime environments are needed only by the relevant programs. In the [current architecture](../docs/runtime/architecture.md), Python handles HTTP and workflow scheduling; Rust handles process execution.
 
 ## Project entry points
 
 | Component | Location |
 | --- | --- |
 | Platform descriptions | [Configuration guide](platforms.md), [JSON Schema](schema/platform.schema.json) |
+| Dependencies, resources and result bindings | [Execution](execution.md), [Workflow schema](schema/workflow.schema.json) |
+| Software, remote services and driver packages | [Extensions](software.md) |
 | Native driver supervision | [daemon/](daemon/) |
 | Python service, clients and drivers | [src/ai4instruments/iop](../src/ai4instruments/iop/) |
 | TypeScript client | [clients/typescript](clients/typescript/) |

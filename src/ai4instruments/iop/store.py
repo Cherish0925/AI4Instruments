@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import sqlite3
 import threading
+import time
 from datetime import datetime, timezone
 from contextlib import contextmanager
 
@@ -18,6 +19,7 @@ def dumps(value):
 class Store:
     def __init__(self, path):
         self.lock = threading.RLock()
+        self.changed = threading.Condition(self.lock)
         self.db = sqlite3.connect(path, check_same_thread=False, timeout=30)
         self.db.execute("PRAGMA journal_mode=WAL")
         self.db.execute("PRAGMA synchronous=FULL")
@@ -31,11 +33,18 @@ class Store:
             run_id TEXT, kind TEXT NOT NULL, body TEXT NOT NULL);
           CREATE INDEX IF NOT EXISTS events_run ON events(run_id,sequence);
           CREATE TABLE IF NOT EXISTS artifacts(id TEXT PRIMARY KEY, run_id TEXT NOT NULL, body TEXT NOT NULL);
+          CREATE INDEX IF NOT EXISTS artifacts_run ON artifacts(run_id);
           CREATE TABLE IF NOT EXISTS platform_versions(
             id TEXT NOT NULL, revision INTEGER NOT NULL, body TEXT NOT NULL,
             PRIMARY KEY(id,revision));
           CREATE TABLE IF NOT EXISTS resource_holds(resource TEXT PRIMARY KEY, body TEXT NOT NULL);
         ''')
+        columns = {row[1] for row in self.db.execute('PRAGMA table_info(artifacts)')}
+        if 'name' not in columns:
+            self.db.execute('ALTER TABLE artifacts ADD COLUMN name TEXT')
+        for identifier, body in self.db.execute('SELECT id,body FROM artifacts WHERE name IS NULL').fetchall():
+            self.db.execute('UPDATE artifacts SET name=? WHERE id=?', (json.loads(body)['name'], identifier))
+        self.db.execute('CREATE UNIQUE INDEX IF NOT EXISTS artifacts_name ON artifacts(run_id,name)')
         self.db.commit()
 
     @contextmanager
@@ -44,6 +53,7 @@ class Store:
             try:
                 yield
                 self.db.commit()
+                self.changed.notify_all()
             except BaseException:
                 self.db.rollback()
                 raise
@@ -76,6 +86,17 @@ class Store:
             row = self.db.execute(f"SELECT body FROM {table} WHERE request_id=?", (request_id,)).fetchone()
             return json.loads(row[0]) if row else None
 
+    def artifact_named(self, run_id, name):
+        with self.lock:
+            row = self.db.execute('SELECT body FROM artifacts WHERE run_id=? AND name=?', (run_id, name)).fetchone()
+            return json.loads(row[0]) if row else None
+
+    def operation_page(self, run_id, after=0, limit=200):
+        with self.lock:
+            rows = self.db.execute('SELECT rowid,body FROM operations WHERE run_id=? AND rowid>? ORDER BY rowid LIMIT ?',
+                                  (run_id, int(after), min(max(int(limit), 1), 1000))).fetchall()
+        return {'operations':[json.loads(body) for _, body in rows], 'cursor':rows[-1][0] if rows else int(after)}
+
     def list(self, table, run_id=None, limit=100):
         if table not in {"runs", "operations", "artifacts"}:
             raise ValueError(table)
@@ -89,7 +110,7 @@ class Store:
         self.db.execute("INSERT INTO events(time,run_id,kind,body) VALUES(?,?,?,?)",
                         (now(), run_id, kind, dumps(data)))
 
-    def events(self, after=0, run_id=None, limit=200):
+    def events(self, after=0, run_id=None, limit=200, wait=0):
         query = "SELECT sequence,time,run_id,kind,body FROM events WHERE sequence>?"
         args = [int(after)]
         if run_id:
@@ -97,8 +118,20 @@ class Store:
             args.append(run_id)
         query += " ORDER BY sequence LIMIT ?"
         args.append(min(max(int(limit), 1), 1000))
-        with self.lock:
-            rows = self.db.execute(query, args).fetchall()
+        wait = float(wait)
+        if not 0 <= wait <= 25:
+            raise ValueError('Event wait must be between 0 and 25 seconds')
+        deadline = time.monotonic() + wait
+        with self.changed:
+            while True:
+                rows = self.db.execute(query, args).fetchall()
+                if rows or time.monotonic() >= deadline:
+                    break
+                if run_id:
+                    row = self.db.execute('SELECT state FROM runs WHERE id=?', (run_id,)).fetchone()
+                    if not row or row[0] in {'completed', 'failed', 'cancelled', 'interrupted'}:
+                        break
+                self.changed.wait(deadline - time.monotonic())
         return [{"sequence": n, "time": t, "run_id": r, "kind": k, **json.loads(b)} for n,t,r,k,b in rows]
 
     def recover(self):

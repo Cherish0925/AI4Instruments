@@ -64,3 +64,15 @@ lab.request('/v1/resources/resolve', {
 ```
 
 The observation is recorded with the release. Old physical actions are not automatically resubmitted. This applies specifically to interrupted driver processes; normal completion and cooperative cancellation retain the usual operation records.
+
+## Progress and output context / 进度与文件
+
+IOP 0.5.0 supplies `context` in an `invoke` request with `run_id`, `operation_id` and an absolute `output_dir`. Existing workers may ignore this additional field. A worker can emit intermediate messages using the active request ID:
+
+```json
+{"id":"request-id","event":"progress","progress":{"fraction":0.5,"message":"Acquiring"}}
+```
+
+Progress does not finish the request or extend its configured response timeout. The final response still contains `result`, `error` or `cancelled`. Files written inside the operation output directory are indexed with the experiment. `iop reconnect DEVICE` recreates the SDK worker once its accepted operations have ended.
+
+`invoke` 增加的 `context` 提供实验编号、操作编号和输出目录。进度消息使用相同请求编号，不结束当前操作；最终仍返回结果或结束状态。旧驱动可忽略新增字段。普通可执行程序无需实现此消息协议，可直接使用 [command 适配器](software.zh-CN.md)。

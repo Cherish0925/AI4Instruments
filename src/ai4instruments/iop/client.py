@@ -61,6 +61,18 @@ class Client:
     def register(self, record):
         return self.request('/v1/devices', record)
 
+    def reconnect(self, device):
+        return self.request('/v1/devices/' + device + '/reconnect', {})
+
+    def adapters(self):
+        return self.request('/v1/adapters')
+
+    def resources(self):
+        return self.request('/v1/resources')
+
+    def configure_resources(self, capacities):
+        return self.request('/v1/resources', {'capacities': capacities})
+
     def platforms(self):
         return self.request('/v1/platforms')
 
@@ -75,12 +87,12 @@ class Client:
                               {'request_id': request_id or str(uuid.uuid4())})
         return Run(self, record['id'])
 
-    def submit(self, steps, *, name='Experiment', project=None, experiment=None, resources=(), request_id=None, parameters=None, platform=None):
+    def submit(self, steps, *, name='Experiment', project=None, experiment=None, resources=(), request_id=None, parameters=None, platform=None, requirements=None):
         return Run(self, self.request('/v1/runs', {'name':name, 'project':project, 'experiment':experiment,
                    'steps':steps, 'resources':list(resources), 'parameters':parameters or {}, 'platform': platform,
-                   'request_id':request_id or str(uuid.uuid4())})['id'])
+                   'requirements':requirements or {}, 'request_id':request_id or str(uuid.uuid4())})['id'])
 
-    def submit_package(self, path, *, name=None, project=None, experiment=None, resources=(), parameters=None, request_id=None, platform=None):
+    def submit_package(self, path, *, name=None, project=None, experiment=None, resources=(), parameters=None, request_id=None, platform=None, requirements=None):
         path = Path(path)
         if path.is_dir():
             buffer = io.BytesIO()
@@ -94,7 +106,7 @@ class Client:
             data = path.read_bytes()
         run = self.request('/v1/packages', {'archive':base64.b64encode(data).decode(), 'name':name or path.stem,
                            'project':project, 'experiment':experiment, 'resources':list(resources), 'platform':platform,
-                           'parameters':parameters or {}, 'request_id':request_id or str(uuid.uuid4())})
+                           'parameters':parameters or {}, 'requirements':requirements or {}, 'request_id':request_id or str(uuid.uuid4())})
         return Run(self, run['id'])
 
     def run(self, run_id):
@@ -107,26 +119,31 @@ class Client:
         run = self.submit([{'id':'call', 'device':device, 'operation':operation, 'arguments':arguments or {}}])
         return run.result(timeout)['call']
 
-    def events(self, after=0, run_id=None):
-        return self.request('/v1/events?' + urlencode({k:v for k,v in {'after':after,'run_id':run_id}.items() if v is not None}))
+    def events(self, after=0, run_id=None, wait=0):
+        return self.request('/v1/events?' + urlencode({k:v for k,v in {'after':after,'run_id':run_id,'wait':wait}.items() if v is not None}))
 
 
 class Run:
     def __init__(self, client, run_id):
         self.client, self.id = client, run_id
 
-    def info(self):
-        return self.client.request('/v1/runs/'+self.id)
+    def info(self, details=True):
+        return self.client.request('/v1/runs/'+self.id + ('' if details else '?details=false'))
 
     def wait(self, timeout=None, interval=0.1):
         deadline = time.monotonic() + timeout if timeout is not None else None
+        cursor = 0
         while True:
-            info = self.info()
+            info = self.info(details=False)
             if info['state'] in TERMINAL:
-                return info
+                return self.info()
             if deadline is not None and time.monotonic() >= deadline:
                 raise TimeoutError('Experiment is still running: '+self.id)
-            time.sleep(interval)
+            remaining = max(0, deadline - time.monotonic()) if deadline is not None else 25
+            page = self.client.events(cursor, self.id, wait=min(25, max(0, self.client.timeout - 1), remaining))
+            cursor = page['cursor']
+            if self.client.timeout <= 1 and not page['events']:
+                time.sleep(min(interval, remaining))
 
     def result(self, timeout=None):
         info = self.wait(timeout)
@@ -160,6 +177,19 @@ class Run:
     def files(self):
         return self.client.request('/v1/runs/'+self.id+'/artifacts')
 
+    def operations(self, after=0, limit=200):
+        return self.client.request('/v1/runs/' + self.id + '/operations?' + urlencode({'after':after,'limit':limit}))
+
+    def upload(self, source, name=None):
+        source = Path(source)
+        with source.open('rb') as file:
+            data = iter(lambda: file.read(256 * 1024), b'')
+            request = Request(self.client.endpoint + '/v1/runs/' + self.id + '/files?' + urlencode({'name':name or source.name}),
+                data=data, headers={'Authorization':'Bearer ' + self.client.token,
+                                    'Content-Type':'application/octet-stream', 'Content-Length':str(os.fstat(file.fileno()).st_size)})
+            with self.client._open(request, timeout=self.client.timeout) as response:
+                return json.loads(response.read())
+
     def download(self, artifact_id, destination):
         request = Request(self.client.endpoint+'/v1/artifacts/'+artifact_id, headers={'Authorization':'Bearer '+self.client.token})
         with self.client._open(request, timeout=self.client.timeout) as response, Path(destination).open('wb') as file:
@@ -168,12 +198,12 @@ class Run:
     def watch(self, after=0, interval=0.2):
         terminal_observed = False
         while True:
-            page = self.client.events(after, self.id)
+            page = self.client.events(after, self.id, wait=min(25, max(0, self.client.timeout - 1)))
             for event in page['events']:
                 yield event
             after = page['cursor']
             # Drain queued events before observing completion.
-            if not page['events'] and self.info()['state'] in TERMINAL:
+            if not page['events'] and self.info(details=False)['state'] in TERMINAL:
                 if terminal_observed:
                     return
                 terminal_observed = True

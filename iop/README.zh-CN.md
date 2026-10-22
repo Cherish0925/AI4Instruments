@@ -1,14 +1,16 @@
-# IOP · 仪器操作协议
+# IOP Runtime · 仪器运行服务
 
-[English](README.md) · [下载软件](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.4.0) · [安装与使用](../docs/runtime/README.zh-CN.md) · [平台配置](platforms.zh-CN.md) · [Agent 接入](agent-setup.md)
+[English](README.md) · [下载软件](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.5.0) · [安装与使用](../docs/runtime/README.zh-CN.md) · [平台配置](platforms.zh-CN.md) · [Agent 接入](agent-setup.md)
 
-**让人和 Agent 通过同一个常驻服务使用实验平台。** 服务运行在连接仪器的计算机上，管理设备与实验平台，执行实验程序，安排串行与并行，保存操作过程和数据。终端、浏览器或 Agent 会话关闭后，已经受理的实验继续运行。
+**让人和 Agent 通过同一个常驻服务使用实验平台。** 服务运行在实验室计算机上，连接实体仪器、计算程序和远端任务服务，执行实验程序，安排串行与并行，保存操作过程和数据。终端、浏览器或 Agent 会话关闭后，已经受理的实验继续运行。
+
+IOP 是仪器操作协议；IOP Runtime 是实现其运行功能的软件。[实验执行](execution.zh-CN.md)说明依赖、数据传递、资源与持续运行；[软件与驱动扩展](software.zh-CN.md)说明如何接入不同工具。
 
 一台计算机可以连接多个实验平台。每个平台有自己的设备、物理连接、共享资源和初始化方法；同一台仪器可以被多个平台引用，由计算机上的同一个服务统一安排使用。
 
 ## 开始使用
 
-下载适合系统的 IOP 0.4.0 软件包，解压后执行 `install.sh`（Linux、macOS、WSL）或 `install.ps1`（Windows）。需要 Python 3.10+；软件包内含对应系统的 Rust 执行程序，无需 Rust 编译器。安装完成后会显示启动命令。
+下载适合系统的 IOP 0.5.0 软件包，解压后执行 `install.sh`（Linux、macOS、WSL）或 `install.ps1`（Windows）。需要 Python 3.10+；软件包内含对应系统的 Rust 执行程序，无需 Rust 编译器。安装完成后会显示启动命令。
 
 | 下载包 | 运行环境 |
 | --- | --- |
@@ -42,21 +44,24 @@ iop open
 
 ## 现有实现
 
-| 组成 | 0.4.0 中的实现 |
+| 组成 | 0.5.0 中的实现 |
 | --- | --- |
 | 常驻服务 | Python HTTP API、调度、实验进程与命令行。 |
-| 原生执行组件 | Rust `iop-execd` 管理独立驱动进程、消息转发、取消请求、响应时限与退出。 |
-| 驱动 | SCPI TCP / 串口 / VISA、Modbus TCP / RTU、HTTP JSON、Python 驱动和独立程序接口。 |
+| 原生执行组件 | Rust `iop-execd` 管理 SDK、命令程序和实验程序的进程树、进度、取消与退出。 |
+| 调度与资源 | 依赖就绪队列、跨实验轮流安排、结果到参数的传递、设备并发数与可计数资源。 |
+| 驱动 | SCPI TCP / 串口 / VISA、Modbus TCP / RTU、同步与异步 HTTP、命令程序、Python 包与独立 SDK 进程。 |
 | 客户端 | Python、TypeScript、HTTP、命令行与浏览器界面。 |
 | 实验记录 | SQLite、配置版本、事件、实验包、输出文件与原始数据关联。 |
 
-C、C++、C#、Java 或其他语言编写的厂商适配程序，可以使用同一套[独立驱动接口](drivers.md)。这些语言的开发环境只在对应适配程序需要时安装。常驻核心继续向[目标 Rust 架构](../docs/runtime/architecture.zh-CN.md)推进；本版本的工作流调度仍在 Python 中。
+C、C++、C#、Java 或其他语言编写的厂商适配程序，可以使用同一套[独立驱动接口](drivers.md)或命令程序接口。这些语言的运行环境按具体程序安装。[当前架构](../docs/runtime/architecture.zh-CN.md)中，Python 负责 HTTP 与工作流调度，Rust 负责进程执行。
 
 ## 工程入口
 
 | 内容 | 位置 |
 | --- | --- |
 | 平台说明与机器可读结构 | [配置说明](platforms.zh-CN.md)、[JSON Schema](schema/platform.schema.json) |
+| 实验依赖、资源和数据传递 | [执行说明](execution.zh-CN.md)、[工作流结构](schema/workflow.schema.json) |
+| 软件、远端服务与驱动包 | [扩展说明](software.zh-CN.md) |
 | Rust 驱动进程管理 | [daemon/](daemon/) |
 | Python 服务、客户端与驱动 | [src/ai4instruments/iop](../src/ai4instruments/iop/) |
 | TypeScript 客户端 | [clients/typescript](clients/typescript/) |

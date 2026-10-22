@@ -1,14 +1,18 @@
-# IOP HTTP API · 0.3.0
+# IOP HTTP API · 0.5.0
 
 [中文安装](README.zh-CN.md) · [Installation](README.md)
 
-Base URL: `http://127.0.0.1:8765`. API bodies are JSON objects. Requests to `/v1/*` include `Authorization: Bearer <config.json token>`. Responses use UTF-8 JSON, except file downloads. Errors return `{"error":"message"}` with status 400, 401, 404 or 500. The browser page and `/health` are readable without the token. Maximum JSON request size is 64 MiB.
+Base URL: `http://127.0.0.1:8765`. API bodies are JSON objects. Requests to `/v1/*` include `Authorization: Bearer <config.json token>`. Responses use UTF-8 JSON, except binary file transfers. Errors return `{"error":"message"}` with status 400, 401, 404, 503 or 500. The browser page and `/health` are readable without the token. Maximum JSON request size is 64 MiB.
 
 ## Endpoints
 
 | Method | Path | Body / query | Response |
 | --- | --- | --- | --- |
 | GET | `/health` | — | Service name and version |
+| GET | `/v1/adapters` | — | Built-in and installed driver entries |
+| GET | `/v1/resources` | — | Configured capacities and current allocation |
+| POST | `/v1/resources` | `{"capacities":{"cpu":16,"solver":2}}` | Replace named capacities; accepted work must still fit |
+| POST | `/v1/devices/{device_id}/reconnect` | `{}` | Reconnect idle devices sharing a worker |
 | GET | `/v1/status` | — | Active/queued counts, worker limits, service errors |
 | GET | `/v1/devices` | — | Instrument descriptions |
 | GET | `/v1/devices/{device_id}` | — | One instrument description |
@@ -17,18 +21,20 @@ Base URL: `http://127.0.0.1:8765`. API bodies are JSON objects. Requests to `/v1
 | POST | `/v1/runs` | Workflow below | Accepted run record |
 | POST | `/v1/packages` | Package below | Accepted run record |
 | GET | `/v1/runs` | `limit=100` | Most recent runs first |
-| GET | `/v1/runs/{run_id}` | — | Run with `operation_records` |
+| GET | `/v1/runs/{run_id}` | `details=false` for a compact state | Run; detailed response includes recent `operation_records` |
+| GET | `/v1/runs/{run_id}/operations` | `after=0&limit=200` | `{"operations":[...],"cursor":N}`; ordered operation history |
 | POST | `/v1/runs/{run_id}/operations` | Operation below | Operation in a running package |
 | GET | `/v1/operations/{operation_id}` | — | State, times, result or error |
 | POST | `/v1/runs/{run_id}/cancel` | `{}` | Current run, cancellation requested |
 | POST | `/v1/runs/{run_id}/result` | `{"result": ...}` | Saved result; run must be running |
 | POST | `/v1/runs/{run_id}/artifacts` | `{"name":"scan.csv","data":"<base64>"}` | Saved output file record |
 | GET | `/v1/runs/{run_id}/artifacts` | — | File records |
+| POST | `/v1/runs/{run_id}/files?name=raw/data.bin` | Binary body and `Content-Length` | Stream a file without base64 encoding |
 | GET | `/v1/artifacts/{artifact_id}` | — | File bytes, streamed |
-| GET | `/v1/events` | `after=0&run_id=...&limit=200` | `{"events":[...],"cursor":N}` |
+| GET | `/v1/events` | `after=0&run_id=...&limit=200&wait=25` | `{"events":[...],"cursor":N}` |
 | POST | `/v1/shutdown` | `{}` | `{"stopping":true}` |
 
-`after` is an exclusive event sequence number. Poll using the returned `cursor`; an empty page means no new events. Omit `run_id` for events across the platform. The Python `Run.watch()` iterator handles this polling.
+`after` is an exclusive event sequence number. Poll using the returned `cursor`; an empty page means no new events. Omit `run_id` for events across the platform. The optional `wait` (0–25 seconds) waits for new events; a terminal run returns immediately. Python and TypeScript watch iterators resume from the returned cursor.
 
 ## Workflow
 
@@ -110,7 +116,7 @@ After a service restart, queued runs remain queued, while previously started run
 
 Names are relative to the run directory. Uploaded files go under `output/`; an existing filename is not overwritten. Large outputs can be written directly by a hosted program and downloaded through the streaming endpoint.
 
-## Platforms and native drivers (0.4.0)
+## Platforms and native drivers
 
 | Method | Path | Body / result |
 | --- | --- | --- |
@@ -125,3 +131,15 @@ Names are relative to the run directory. Uploaded files go under `output/`; an e
 Workflow and package submissions accept `platform` and optional `platform_revision`. The selected definition is retained in the run. Device calls must belong to that platform. Platform resources also apply to calls without a platform ID. `GET /v1/status` includes platform count and `resource_holds`.
 
 [Platform configuration](../../iop/platforms.md) · [中文](../../iop/platforms.zh-CN.md) · [Executable drivers](../../iop/drivers.md)
+
+## Quantities and result bindings
+
+`requirements` maps configured resource names to positive integer quantities. It may appear on a driver description, an operation description, a workflow step or a run. Driver, operation and step quantities combine by taking the maximum for each resource. Run-level requirements reserve capacity for the whole experiment; operations consume those reserved quantities without double counting. `resources` continues to name exclusive shared objects and whole devices.
+
+A step's `bindings` maps parameter names to `{ "step": "source-step", "path": ["value", 0] }`. These sources are implicit dependencies. Paths select keys or array indices; an omitted path selects the whole result. Bound arguments are checked before invoking the destination operation.
+
+`operation.progress` events contain `operation_id` and `progress` with `fraction`, `message` and optional driver fields. Progress is also available on the operation record. Completed package operations remain in SQLite; `operation_count` counts all submitted calls while a running package's `operations` list contains only its unfinished calls. Detailed run responses include up to 10,000 recent operation records; use the cursor endpoint for full history.
+
+HTTP 503 indicates that the configured active-work capacity has been reached and includes `retry_after` in seconds. Submission retries should retain their request identifier. Queued work and accepted experiments continue while new work waits at the caller.
+
+The command adapter's operation context and HTTP asynchronous job descriptions are documented in [software extensions](../../iop/software.md). The schemas for [platforms](../../iop/schema/platform.schema.json) and [workflows](../../iop/schema/workflow.schema.json) are shipped with the source and installation archives.

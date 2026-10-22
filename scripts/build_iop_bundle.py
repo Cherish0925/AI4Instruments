@@ -8,14 +8,16 @@ root = Path(__file__).resolve().parents[1]
 version = json.loads((root / 'iop/release.json').read_text())['version']
 wheel, = (root / 'dist').glob('*.whl')
 system = {'Darwin':'macos','Windows':'windows','Linux':'linux'}[platform.system()]
-arch = {'AMD64':'x86_64','aarch64':'arm64'}.get(platform.machine(), platform.machine())
+arch = {'AMD64':'x86_64','ARM64':'arm64','aarch64':'arm64'}.get(platform.machine(), platform.machine())
 name = f'IOP-{version}-{system}-{arch}'
 output = root / 'release'; output.mkdir(exist_ok=True)
 with zipfile.ZipFile(output / (name + '.zip'), 'w', zipfile.ZIP_DEFLATED) as archive:
     archive.write(wheel, name + '/dist/' + wheel.name)
     for filename in ('install.sh','install.ps1','LICENSE'):
         archive.write(root / filename, name + '/' + filename)
-    for folder in ('iop/examples','iop/schema','examples/iop'):
+    for document in (root / 'iop').glob('*.md'):
+        archive.write(document, name + '/iop/' + document.name)
+    for folder in ('iop/examples','iop/schema','docs/runtime','examples/iop'):
         for file in (root / folder).rglob('*'):
             if file.is_file() and '__pycache__' not in file.parts:
                 archive.write(file,name + '/' + file.relative_to(root).as_posix())

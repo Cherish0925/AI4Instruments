@@ -155,12 +155,50 @@
                 },
                 "resources": {
                   "$ref": "#/$defs/strings"
+                },
+                "requirements": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "integer",
+                    "minimum": 1
+                  }
+                },
+                "bindings": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "required": [
+                      "step"
+                    ],
+                    "properties": {
+                      "step": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "path": {
+                        "type": "array",
+                        "items": {
+                          "type": [
+                            "string",
+                            "integer"
+                          ]
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
           },
           "resources": {
             "$ref": "#/$defs/strings"
+          },
+          "requirements": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer",
+              "minimum": 1
+            }
           }
         }
       }

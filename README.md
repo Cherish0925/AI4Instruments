@@ -10,6 +10,8 @@ The purpose is to expand what can be investigated in the physical world, support
 
 ## IOP instrument service
 
+**Target runtime architecture:** Rust for the persistent core, Python for drivers and experiments, TypeScript for interfaces and clients, and SQLite for experiment records. The [architecture and development sequence](docs/runtime/architecture.md) explains scheduling, driver processes, data and agent integration. The current installable release, **0.3.0, uses a Python core and SQLite**.
+
 Run one persistent service on the instrument computer. Experiment programs use it to operate devices, coordinate serial and parallel work, reserve equipment across steps, and retain run records and data. Includes a Python client, HTTP API, CLI and browser interface.
 
 ```sh

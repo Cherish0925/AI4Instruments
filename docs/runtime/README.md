@@ -1,10 +1,12 @@
 # IOP instrument service
 
-[中文](README.zh-CN.md) · [HTTP API](http-api.md) · [Device drivers](drivers.md) · [Source](../../src/ai4instruments/iop)
+[中文](README.zh-CN.md) · [Architecture](architecture.md) · [HTTP API](http-api.md) · [Device drivers](drivers.md) · [Source](../../src/ai4instruments/iop)
 
 IOP Runtime runs on the computer connected to your instruments. It maintains device connections, executes experiment programs, schedules serial and parallel operations, and retains parameters, readings, results and files. People and agents share the HTTP API, Python client and command line. A browser interface displays instruments, accepts experiments and shows results.
 
 **Implemented in 0.3.0:** background service, device registration and discovery, dependency scheduling, reservations across steps, experiment package execution, persistent records, Python client, browser interface and operating-system login startup.
+
+The target Rust core, independent driver processes and TypeScript client are described in the [runtime architecture](architecture.md). That document separates the current implementation from the next development stages.
 
 ## Install and start
 

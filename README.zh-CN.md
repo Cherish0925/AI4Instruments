@@ -10,6 +10,8 @@ AI4Instruments 探索一套面向 AI 的仪器方法论、设计规范与开放�
 
 ## IOP 常驻服务
 
+**目标架构：** Rust 负责持续运行的核心，Python 负责驱动与实验，TypeScript 负责界面与客户端，SQLite 保存实验记录。[架构与建设顺序](docs/runtime/architecture.zh-CN.md)说明调度、驱动进程、数据与 Agent 接入。当前可安装的 **0.3.0 使用 Python 核心与 SQLite**。
+
 仪器所在计算机运行一个服务，实验程序通过它操作设备。服务安排串行与并行、保留连续实验所需的设备、保存每次运行与数据文件。提供 Python 客户端、HTTP 接口、命令行和浏览器界面。
 
 ```sh

@@ -1,10 +1,12 @@
 # IOP 常驻服务
 
-[English](README.md) · [HTTP 接口](http-api.md) · [仪器驱动](drivers.md) · [源码](../../src/ai4instruments/iop)
+[English](README.md) · [服务架构](architecture.zh-CN.md) · [HTTP 接口](http-api.md) · [仪器驱动](drivers.md) · [源码](../../src/ai4instruments/iop)
 
 IOP Runtime 是安装在仪器所在计算机上的常驻软件。它保持设备连接，接收实验程序，安排串行与并行操作，保存参数、读数、结果和文件。人和 Agent 使用同一套 HTTP 接口、Python 客户端和命令行；浏览器可以查看设备、提交实验和读取结果。
 
 **0.3.0 已实现：** 后台服务、设备登记与发现、依赖调度、跨步骤设备占用、实验程序包执行、实验记录、Python 客户端、网页界面和各系统的登录自启动入口。
+
+目标 Rust 核心、独立驱动进程与 TypeScript 客户端见[常驻服务架构](architecture.zh-CN.md)，其中列明当前实现与后续建设顺序。
 
 ## 安装与启动
 

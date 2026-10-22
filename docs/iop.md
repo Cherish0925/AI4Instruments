@@ -8,6 +8,10 @@ IOP 定义仪器操作的物理含义、执行方式与结果依据。人和程�
 
 ## Platform architecture / 平台架构
 
+The [runtime architecture](runtime/architecture.md) specifies the target Rust core, Python driver and experiment processes, TypeScript clients and SQL records, with the migration from the current Python implementation.
+
+[常驻服务架构](runtime/architecture.zh-CN.md)说明 Rust 核心、Python 驱动与实验进程、TypeScript 客户端、SQL 记录的分工，以及从当前 Python 实现逐步推进的顺序。
+
 IOP is organized into four components: **instrument descriptions, a persistent service, experiment programs and experiment records**. The three mechanism families in the comparative study explain existing approaches; these four components define our system architecture.
 
 IOP 按四个部分组织：**仪器说明、常驻服务、实验程序、实验记录**。前文的三个机制岛屿用于归纳已有方案；这里的四部分定义我们的系统架构。

@@ -1,0 +1,15 @@
+{
+  "id": "power-meter",
+  "driver": "scpi",
+  "config": {
+    "name": "SCPI power meter",
+    "transport": "tcp",
+    "host": "192.168.1.50",
+    "port": 5025,
+    "timeout": 5,
+    "operations": {
+      "read_power": {"description": "Read optical power", "parameters": {}, "query": "MEAS:POW?", "result": {"type": "number", "unit": "W"}},
+      "set_wavelength": {"description": "Set wavelength correction", "parameters": {"wavelength_nm": {"type": "number", "unit": "nm"}}, "write": "SENS:CORR:WAV {wavelength_nm}", "completion": {"query": "*OPC?", "equals": "1", "timeout": 10}}
+    }
+  }
+}

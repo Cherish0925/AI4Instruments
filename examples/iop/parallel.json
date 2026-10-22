@@ -1,0 +1,10 @@
+{
+  "name": "Polarization point",
+  "project": "polarization-study",
+  "resources": ["stage", "meter", "optical-path"],
+  "steps": [
+    {"id": "move", "device": "stage", "operation": "move_to", "arguments": {"angle_deg": 15, "duration": 0.2}},
+    {"id": "configure", "device": "meter", "operation": "configure", "arguments": {"exposure_s": 0.05}},
+    {"id": "measure", "device": "meter", "operation": "measure", "after": ["move", "configure"]}
+  ]
+}

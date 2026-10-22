@@ -23,7 +23,6 @@ Each experimental platform has one service responsible for its registered device
 
 每个实验平台由一个常驻服务管理已注册设备。驱动将设备身份、能力与连接地址绑定起来。人和 Agent 通过服务提交实验包或单步操作。服务管理实验工作进程及设备连接，调用者断开后，实验仍保留执行身份与状态。多个平台通过各自的服务协作。
 
-#
 Runtime names the software system that executes experiments. Persistent daemon processes host the platform service. The service can manage one instrument or several, with separate driver and experiment workers. Device operations pass through the service; fitting and analysis may run in a client or a worker. Programs submit derived results together with references to their input data.
 
 Runtime 指实验运行系统。常驻服务由持续运行的守护进程承载，可管理一台仪器或整个平台。服务内部可分设驱动进程与实验工作进程。设备操作经服务安排，拟合和分析可以在客户端或工作进程中完成。程序将分析结果与输入数据引用一并提交保存。
@@ -76,8 +75,10 @@ Compatibility is defined per capability: inputs retain physical meaning, complet
 
 ## Development / 建设
 
-The repository currently contains an [operation composition model](operations.md) and a simulated optical reference implementation. The next implementation target is a platform service with device registration, persistent runs, dependency/resource scheduling and linked records, followed by one polarization-scan method operating across two physical equipment configurations.
+[IOP Runtime 0.3.0](runtime/README.md) implements the platform service: device registration and discovery, persistent experiment packages, dependency/resource scheduling, HTTP and Python clients, and linked records. It includes SCPI TCP/serial/VISA, Modbus TCP/RTU and HTTP drivers, a custom-driver interface and simulated multi-instrument experiments. Previously started work becomes interrupted after a service restart; automatic recovery of physical actions is not implemented.
 
-仓库当前提供[操作组合模型](operations.md)与模拟光学参考实现。下一实现目标是具备设备注册、持久运行、依赖与资源调度、关联记录的平台常驻服务，再使同一个偏振扫描方法在两套真实设备组合上运行。
+[IOP 常驻服务 0.3.0](runtime/README.zh-CN.md) 已实现设备登记与发现、持续运行的实验程序包、依赖与资源调度、HTTP 与 Python 客户端和关联记录。提供 SCPI TCP / 串口 / VISA、Modbus TCP / RTU 和 HTTP 驱动、自定义驱动接口及多仪器模拟实验。服务重启后，之前已经开始的实验标为中断，保留数据；物理动作的自动恢复尚未实现。
+
+The architecture above describes the broader IOP design. The runtime guide specifies the implemented behavior of this release. / 上文说明 IOP 整体设计，本版实际行为以常驻服务文档为准。
 
 [中文 IOP](agent-instruments/index.zh-CN.html#presentation/1) · [English IOP](agent-instruments/index.en.html#presentation/1) · [Content and mechanisms](agent-instruments/presentation.json)

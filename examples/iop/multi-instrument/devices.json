@@ -1,0 +1,6 @@
+[
+  {"id":"bath","driver":"simulated-lab","config":{"kind":"temperature","initial":293.15}},
+  {"id":"balance","driver":"simulated-lab","resources":["sample"],"config":{"kind":"balance"}},
+  {"id":"pump","driver":"simulated-lab","resources":["sample"],"config":{"kind":"pump","balance":"balance","density_g_ml":1}},
+  {"id":"daq","driver":"simulated-lab","config":{"kind":"daq"}}
+]

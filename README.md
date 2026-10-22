@@ -8,6 +8,22 @@ AI4Instruments develops a methodology and an open design framework for AI to par
 
 The purpose is to expand what can be investigated in the physical world, support sustained autonomous research, and make experimental knowledge and capabilities usable across laboratories. **Scientific discovery, the development of instruments, and AI learning from real experimental experience** can advance together. The principles extend across scientific and engineering disciplines, instrument types and computational approaches.
 
+## IOP instrument service
+
+Run one persistent service on the instrument computer. Experiment programs use it to operate devices, coordinate serial and parallel work, reserve equipment across steps, and retain run records and data. Includes a Python client, HTTP API, CLI and browser interface.
+
+```sh
+python -m pip install ".[devices]"
+iop init --demo
+iop start
+iop open
+```
+
+Requires Python 3.10+. Installation entry points cover Windows, Linux, macOS and WSL. Physical instruments connect through SCPI over TCP / serial / VISA, Modbus TCP / RTU, HTTP JSON or installed vendor drivers.
+
+[Install and use](docs/runtime/README.md) · [Device drivers](docs/runtime/drivers.md) · [HTTP API](docs/runtime/http-api.md) · [Experiment program](examples/iop/polarization/experiment.py)
+
+
 ## From using instruments to expanding what can be done
 
 **Instruments4AI** starts with available equipment: establish programmable control, prepare manuals and SDKs, expose tools and knowledge, integrate serial and parallel experiments, and write programmes for new tasks.

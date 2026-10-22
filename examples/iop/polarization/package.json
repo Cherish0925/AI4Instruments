@@ -1,0 +1,5 @@
+{
+  "name": "polarization-scan",
+  "version": "0.1.0",
+  "command": ["{python}", "experiment.py"]
+}

@@ -1,0 +1,9 @@
+{
+  "id":"environment-sensor","driver":"http",
+  "config":{"base_url":"http://192.168.1.70:8080","timeout":5,
+    "operations":{
+      "read_temperature":{"parameters":{},"method":"GET","path":"/temperature","result_path":["temperature"],"unit":"K"},
+      "set_interval":{"parameters":{"seconds":{"type":"number","minimum":0.1,"maximum":60}},"method":"PUT","path":"/settings","body":{"interval_s":"${seconds}"}}
+    }
+  }
+}

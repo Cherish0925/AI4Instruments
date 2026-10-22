@@ -1,0 +1,9 @@
+{
+  "id":"temperature-controller","driver":"modbus",
+  "config":{"transport":"tcp","host":"192.168.1.60","port":502,"device_id":1,
+    "operations":{
+      "read_temperature":{"parameters":{},"function":"read_holding_registers","arguments":{"address":0,"count":1},"scale":0.1,"unit":"degC","signed":true},
+      "set_temperature":{"parameters":{"celsius":{"type":"number","minimum":0,"maximum":100,"unit":"degC"}},"function":"write_register","arguments":{"address":1},"value_parameter":"celsius","scale":0.1}
+    }
+  }
+}

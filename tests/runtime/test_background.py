@@ -5,12 +5,20 @@ import sys
 import tempfile
 import time
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 from ai4instruments.iop import Client
 from ai4instruments.iop.config import initialize, InstanceLock
 
 
 class BackgroundCase(unittest.TestCase):
+    def test_service_binding_does_not_require_name_resolution(self):
+        from types import SimpleNamespace
+        from ai4instruments.iop.server import Server
+        with patch('socket.getfqdn',side_effect=AssertionError('No reverse DNS needed')):
+            server=Server(('127.0.0.1',0),SimpleNamespace())
+            server.server_close()
+
     def test_detached_service_outlives_client_and_stops(self):
         with tempfile.TemporaryDirectory() as home:
             with socket.socket() as sock:

@@ -4,6 +4,7 @@ import base64
 import hmac
 import json
 import shutil
+import socketserver
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -17,6 +18,11 @@ from .store import dumps
 class Server(ThreadingHTTPServer):
     daemon_threads = True
     allow_reuse_address = True
+
+    def server_bind(self):
+        # A local instrument service does not need reverse DNS to start listening.
+        socketserver.TCPServer.server_bind(self)
+        self.server_name, self.server_port = self.server_address[:2]
 
     def __init__(self, address, engine):
         self.engine = engine

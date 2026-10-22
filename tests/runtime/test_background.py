@@ -17,9 +17,13 @@ class BackgroundCase(unittest.TestCase):
                 sock.bind(('127.0.0.1',0));port=sock.getsockname()[1]
             initialize(home,True,port)
             command=[sys.executable,'-m','ai4instruments.iop','--home',home]
-            subprocess.run(command+['start'],check=True,capture_output=True,text=True,timeout=20)
-            client=Client(home=home)
+            client=Client(home=home,timeout=1)
             try:
+                try:
+                    subprocess.run(command+['start'],check=True,capture_output=True,text=True,timeout=20)
+                except (subprocess.CalledProcessError,subprocess.TimeoutExpired) as error:
+                    log=Path(home)/'service.log'
+                    self.fail(str(error)+'\n'+str(error.stderr)+'\n'+(log.read_text() if log.exists() else 'No service log'))
                 submit="import sys; from ai4instruments.iop import Client; print(Client(home=sys.argv[1]).submit([{'id':'wait','device':'aux','operation':'wait','arguments':{'duration':0.3}}]).id)"
                 run_id=subprocess.check_output([sys.executable,'-c',submit,home],text=True,timeout=10).strip()
                 self.assertEqual(client.run(run_id).wait(5)['state'],'completed')

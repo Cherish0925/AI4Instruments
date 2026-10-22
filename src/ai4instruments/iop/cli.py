@@ -44,7 +44,7 @@ def serve(home):
 
 def start(home):
     initialize(home)
-    client = Client(home=home)
+    client = Client(home=home, timeout=0.5)
     try:
         client.request('/v1/status')
         return 'IOP is already running: ' + client.endpoint
@@ -54,7 +54,8 @@ def start(home):
         options = {'creationflags':subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP} if sys.platform == 'win32' else {'start_new_session':True}
         process = subprocess.Popen([sys.executable,'-m','ai4instruments.iop','--home',str(home),'serve'],
                                    stdin=subprocess.DEVNULL, stdout=log, stderr=log, **options)
-    for _ in range(100):
+    deadline = time.monotonic() + 10
+    while time.monotonic() < deadline:
         if process.poll() is not None:
             raise RuntimeError('IOP did not start. Read '+str(home/'service.log'))
         try:

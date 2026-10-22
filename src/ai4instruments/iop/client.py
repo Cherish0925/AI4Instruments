@@ -9,9 +9,9 @@ import time
 import uuid
 import zipfile
 from pathlib import Path
-from urllib.request import Request, urlopen
+from urllib.request import Request, urlopen, build_opener, ProxyHandler
 from urllib.error import HTTPError
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse
 from .config import home_path
 from .engine import TERMINAL
 
@@ -30,6 +30,8 @@ class Client:
         self.endpoint = (endpoint or os.environ.get('IOP_ENDPOINT') or f"http://{'127.0.0.1' if host == '0.0.0.0' else host}:{config.get('port',8765)}").rstrip('/')
         self.token = token if token is not None else os.environ.get('IOP_TOKEN', config.get('token',''))
         self.timeout = timeout
+        # Loopback instrument services communicate directly, independent of OS proxy settings.
+        self._open = build_opener(ProxyHandler({})).open if urlparse(self.endpoint).hostname in {'127.0.0.1','localhost','::1'} else urlopen
 
     @classmethod
     def connect(cls, endpoint=None, **kwargs):
@@ -40,7 +42,7 @@ class Client:
         request = Request(self.endpoint + path, data=data, headers={'Authorization':'Bearer '+self.token,
                           'Content-Type':'application/json'})
         try:
-            with urlopen(request, timeout=self.timeout) as response:
+            with self._open(request, timeout=self.timeout) as response:
                 data = response.read()
                 return data if binary else json.loads(data)
         except HTTPError as error:
@@ -146,7 +148,7 @@ class Run:
 
     def download(self, artifact_id, destination):
         request = Request(self.client.endpoint+'/v1/artifacts/'+artifact_id, headers={'Authorization':'Bearer '+self.client.token})
-        with urlopen(request, timeout=self.client.timeout) as response, Path(destination).open('wb') as file:
+        with self.client._open(request, timeout=self.client.timeout) as response, Path(destination).open('wb') as file:
             shutil.copyfileobj(response,file,256*1024)
 
     def watch(self, after=0, interval=0.2):

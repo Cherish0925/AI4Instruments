@@ -56,12 +56,11 @@ def initialize(home=None, demo=False, port=8765):
 class InstanceLock:
     def __init__(self, home):
         self.file = open(Path(home) / "service.lock", "a+b")
-        self.file.seek(0)
-        if self.file.read(1) == b"":
-            self.file.write(b"0")
-            self.file.flush()
-        self.file.seek(0)
         try:
+            if os.fstat(self.file.fileno()).st_size == 0:
+                self.file.write(b"0")
+                self.file.flush()
+            self.file.seek(0)
             if sys.platform == "win32":
                 import msvcrt
                 msvcrt.locking(self.file.fileno(), msvcrt.LK_NBLCK, 1)

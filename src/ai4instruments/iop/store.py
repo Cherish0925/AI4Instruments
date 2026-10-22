@@ -31,6 +31,10 @@ class Store:
             run_id TEXT, kind TEXT NOT NULL, body TEXT NOT NULL);
           CREATE INDEX IF NOT EXISTS events_run ON events(run_id,sequence);
           CREATE TABLE IF NOT EXISTS artifacts(id TEXT PRIMARY KEY, run_id TEXT NOT NULL, body TEXT NOT NULL);
+          CREATE TABLE IF NOT EXISTS platform_versions(
+            id TEXT NOT NULL, revision INTEGER NOT NULL, body TEXT NOT NULL,
+            PRIMARY KEY(id,revision));
+          CREATE TABLE IF NOT EXISTS resource_holds(resource TEXT PRIMARY KEY, body TEXT NOT NULL);
         ''')
         self.db.commit()
 
@@ -111,6 +115,40 @@ class Store:
                     self.event("operation.interrupted", run["id"], operation_id=op["id"])
             rows = self.db.execute("SELECT body FROM runs WHERE state='queued' ORDER BY rowid").fetchall()
             return [json.loads(r[0]) for r in rows]
+
+    def platforms(self):
+        with self.lock:
+            rows = self.db.execute('''SELECT p.body FROM platform_versions p JOIN
+                (SELECT id,MAX(revision) AS revision FROM platform_versions GROUP BY id) latest
+                ON p.id=latest.id AND p.revision=latest.revision ORDER BY p.id''').fetchall()
+        return [json.loads(row[0]) for row in rows]
+
+    def platform_history(self, platform_id):
+        with self.lock:
+            return [json.loads(row[0]) for row in self.db.execute(
+                'SELECT body FROM platform_versions WHERE id=? ORDER BY revision DESC', (platform_id,))]
+
+    def save_platform(self, record):
+        with self.transaction():
+            self.db.execute('INSERT INTO platform_versions VALUES(?,?,?)',
+                            (record['id'], record['revision'], dumps(record)))
+            self.event('platform.configured', platform_id=record['id'], revision=record['revision'])
+
+    def resource_holds(self):
+        with self.lock:
+            return {resource:json.loads(body) for resource,body in self.db.execute('SELECT resource,body FROM resource_holds')}
+
+    def hold_resources(self, resources, operation_id, reason):
+        with self.transaction():
+            for resource in resources:
+                record = {'resource':resource, 'operation_id':operation_id, 'reason':reason, 'time':now()}
+                self.db.execute('INSERT OR REPLACE INTO resource_holds VALUES(?,?)',(resource,dumps(record)))
+
+    def resolve_resources(self, resources, observation):
+        with self.transaction():
+            for resource in resources:
+                self.db.execute('DELETE FROM resource_holds WHERE resource=?',(resource,))
+            self.event('resources.resolved', resources=resources, observation=observation)
 
     def close(self):
         with self.lock:

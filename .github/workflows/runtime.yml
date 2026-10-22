@@ -6,6 +6,8 @@ on:
       - 'tests/**'
       - 'examples/iop/**'
       - 'pyproject.toml'
+      - 'setup.py'
+      - 'iop/**'
       - '.github/workflows/runtime.yml'
   pull_request:
   workflow_dispatch:

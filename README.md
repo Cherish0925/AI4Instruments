@@ -4,26 +4,17 @@
 
 [Read the paper](paper/manuscript.md) · [PDF](paper/AI4Instruments.pdf) · [Operations](docs/operations.md) · [Try the example](examples/README.md) · [Discuss](https://github.com/Cherish0925/AI4Instruments/discussions/1) · [中文](README.zh-CN.md)
 
+## IOP · Instrument Operation Protocol
+
+**Install a persistent instrument service, configure experimental platforms, and run experiment programs from people or agents.** One computer can manage multiple platforms; shared instruments remain coordinated across them.
+
+[IOP project](iop/README.md) · [Download 0.4.0](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.4.0) · [Install](docs/runtime/README.md) · [Configure platforms](iop/platforms.md) · [Agent integration](iop/agent-setup.md)
+
+0.4.0 includes platform configuration and initialization, a Rust driver-process supervisor, Python and TypeScript clients, dependency/resource scheduling and SQLite records. The HTTP service and workflow scheduler currently use Python. [Architecture](docs/runtime/architecture.md).
+
 AI4Instruments develops a methodology and an open design framework for AI to participate throughout the life of scientific and engineering instruments: their conception, physical design, manufacture, software development, experimental use and continued improvement.
 
 The purpose is to expand what can be investigated in the physical world, support sustained autonomous research, and make experimental knowledge and capabilities usable across laboratories. **Scientific discovery, the development of instruments, and AI learning from real experimental experience** can advance together. The principles extend across scientific and engineering disciplines, instrument types and computational approaches.
-
-## IOP instrument service
-
-**Target runtime architecture:** Rust for the persistent core, Python for drivers and experiments, TypeScript for interfaces and clients, and SQLite for experiment records. The [architecture and development sequence](docs/runtime/architecture.md) explains scheduling, driver processes, data and agent integration. The current installable release, **0.3.0, uses a Python core and SQLite**.
-
-Run one persistent service on the instrument computer. Experiment programs use it to operate devices, coordinate serial and parallel work, reserve equipment across steps, and retain run records and data. Includes a Python client, HTTP API, CLI and browser interface.
-
-```sh
-python -m pip install ".[devices]"
-iop init --demo
-iop start
-iop open
-```
-
-Requires Python 3.10+. Installation entry points cover Windows, Linux, macOS and WSL. Physical instruments connect through SCPI over TCP / serial / VISA, Modbus TCP / RTU, HTTP JSON or installed vendor drivers.
-
-[Install and use](docs/runtime/README.md) · [Device drivers](docs/runtime/drivers.md) · [HTTP API](docs/runtime/http-api.md) · [Experiment program](examples/iop/polarization/experiment.py)
 
 
 ## From using instruments to expanding what can be done

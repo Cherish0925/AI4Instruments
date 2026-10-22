@@ -1,0 +1,19 @@
+{
+  "id": "external-stage",
+  "driver": "process",
+  "config": {
+    "worker": "external-sdk",
+    "timeout": 300,
+    "configuration": {
+      "devices": [
+        {
+          "id": "external-stage",
+          "driver": "simulated",
+          "config": {
+            "kind": "stage"
+          }
+        }
+      ]
+    }
+  }
+}

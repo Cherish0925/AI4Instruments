@@ -5,7 +5,6 @@ import io
 import json
 import mimetypes
 import os
-import re
 import signal
 import subprocess
 import sys
@@ -14,11 +13,11 @@ import time
 import uuid
 import zipfile
 from concurrent.futures import ThreadPoolExecutor, CancelledError
-from collections import deque
 from pathlib import Path, PurePosixPath
 from .config import save_json
 from .drivers import make_driver, parameters
 from .store import Store, dumps, now
+from . import platforms as platform_model
 
 TERMINAL = {"completed", "failed", "cancelled", "interrupted"}
 
@@ -39,6 +38,7 @@ class Engine:
         self.home, self.config = Path(home), config
         self.home.mkdir(parents=True, exist_ok=True)
         self.lock = threading.RLock()
+        self.registration_lock = threading.RLock()
         self.wake = threading.Event()
         self.stopping = False
         self.endpoint = ""
@@ -51,6 +51,9 @@ class Engine:
         self.discovery_stop = threading.Event()
         self.discovery_thread = None
         self.store = Store(self.home / "records.sqlite3")
+        self.platforms = {p['id']: p for p in self.store.platforms()}
+        self.platform_resources = platform_model.resource_index(self.platforms)
+        self.resource_holds = self.store.resource_holds()
         self.worker_count = max(1, int(config.get("workers", 8)))
         self.package_count = max(1, int(config.get("package_workers", 4)))
         self.pool = ThreadPoolExecutor(max_workers=self.worker_count, thread_name_prefix="iop-device")
@@ -82,15 +85,15 @@ class Engine:
     def scan(self):
         from .discovery import discover, match_profiles
         inventory = discover()
+        if self.stopping:
+            return inventory
+        for record in match_profiles(inventory, self.config.get("profiles", [])):
+            if record["id"] not in self.devices:
+                try:
+                    self.register(record)
+                except Exception as error:
+                    inventory.setdefault("profile_errors", []).append({"device":record["id"], "error":str(error)})
         with self.lock:
-            if self.stopping:
-                return inventory
-            for record in match_profiles(inventory, self.config.get("profiles", [])):
-                if record["id"] not in self.devices:
-                    try:
-                        self.register(record)
-                    except Exception as error:
-                        inventory.setdefault("profile_errors", []).append({"device":record["id"], "error":str(error)})
             for record in self.device_records.values():
                 c = record.get("config", {})
                 if record["driver"] == "scpi" and c.get("transport", "tcp") == "tcp":
@@ -105,7 +108,7 @@ class Engine:
             self.discovery = inventory
             return inventory
 
-    def _resources(self, values):
+    def _resources(self, values, operation=None):
         if not isinstance(values, (list, tuple)):
             raise ValueError("Resources must be a list")
         resources = set()
@@ -117,45 +120,127 @@ class Engine:
                 record = self.device_records[value]
                 resources.update("shared:" + r for r in record.get("resources", []))
                 resources.update("shared:" + r for r in self.descriptions[value].get("resources", []))
+                resources.update(platform_model.operation_resources(self.platforms, value, operation)
+                                 if operation else self.platform_resources.get(value, ()))
             else:
                 resources.add("shared:" + value)
         return sorted(resources)
 
-    def register(self, record, persist=True):
+    def list_platforms(self):
+        with self.lock:
+            return [self.platform_info(p) for p in sorted(self.platforms)]
+
+    def resolve_resources(self, resources, observation):
+        with self.lock:
+            platform_model.strings(resources, 'Resources')
+            if not isinstance(observation,str) or not observation.strip():
+                raise ValueError('Describe the observed device state before returning resources to use')
+            if set(resources) - self.resource_holds.keys():
+                raise ValueError('Resource is not awaiting an observed state')
+            if set(resources) & (set(self.claims) | set(self.reservations)):
+                raise ValueError('Affected operations are still running')
+            self.store.resolve_resources(resources, observation)
+            self.resource_holds = self.store.resource_holds()
+            self.wake.set()
+            return {'released':resources}
+
+    def platform_info(self, platform_id):
+        with self.lock:
+            record = json.loads(dumps(self.platforms[platform_id]))
+            record['active_runs'] = [r['id'] for r in self.runs.values() if r.get('platform', {}).get('id') == platform_id]
+            record['missing_devices'] = sorted(set(record['definition']['devices']) - self.devices.keys())
+            return record
+
+    def prepare_platform(self, definition):
+        definition = platform_model.description(definition, self.devices)
+        for procedure in definition['procedures'].values():
+            for step in procedure['steps']:
+                self._operation('prepare', step)
+        return definition
+
+    def apply_platform(self, definition, expected_revision=0):
         with self.lock:
             if self.stopping:
-                raise ValueError("Service is stopping")
-            device_id = record.get("id", "")
-            if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,79}", device_id):
-                raise ValueError("Device ID must use letters, digits, dots, dashes or underscores")
-            if device_id in self.devices:
-                raise ValueError("Device is already registered: " + device_id)
+                raise ValueError('Service is stopping')
+            definition = self.prepare_platform(definition)
+            old = self.platforms.get(definition['id'])
+            revision = old['revision'] if old else 0
+            if type(expected_revision) is not int or expected_revision != revision:
+                raise ValueError('Platform revision changed; current revision is ' + str(revision))
+            if old and old['definition'] == definition:
+                return self.platform_info(definition['id'])
+            affected = set(definition['devices']) | set(old['definition']['devices'] if old else [])
+            resource_ids = {r['id'] for r in definition['resources'] + (old['definition']['resources'] if old else [])}
+            for p in self.platforms.values():
+                for resource in p['definition']['resources']:
+                    if resource['id'] in resource_ids:
+                        affected.update(resource['devices'])
+            for run in self.runs.values():
+                used = {self.operations[o]['device'] for o in run['operations']}
+                used.update(r[7:] for r in run['resources'] if r.startswith('device:'))
+                if run['kind'] == 'package' and not run['resources']:
+                    used.update(run.get('platform', {}).get('definition', {}).get('devices', self.devices))
+                if affected & used or {'shared:' + r for r in resource_ids} & set(run['resources']):
+                    raise ValueError('Wait for or cancel affected experiment before changing platform: ' + run['id'])
+            record = {'id': definition['id'], 'revision': revision + 1, 'updated': now(), 'definition': definition}
+            self.store.save_platform(record)
+            self.platforms[record['id']] = record
+            self.platform_resources = platform_model.resource_index(self.platforms)
+            return self.platform_info(record['id'])
+
+    def run_procedure(self, platform_id, procedure_id, request_id=None):
+        with self.lock:
+            record = self.platforms[platform_id]
+            procedure = record['definition']['procedures'][procedure_id]
+            return self.submit({'name': record['definition']['name'] + ': ' + procedure_id,
+                'platform': platform_id, 'procedure': procedure_id, 'platform_revision': record['revision'],
+                'steps': procedure['steps'], 'resources': procedure.get('resources', record['definition']['devices']),
+                'request_id': request_id})
+
+    def register(self, record, persist=True):
+        # SDK startup can take time; it must not hold the experiment scheduler lock.
+        with self.registration_lock:
             record = json.loads(dumps(record))
+            device_id = record.get("id", "")
+            platform_model.name(device_id, 'Device ID')
+            with self.lock:
+                if self.stopping:
+                    raise ValueError("Service is stopping")
+                if device_id in self.devices:
+                    raise ValueError("Device is already registered: " + device_id)
+                if any(device_id == r['id'] for p in self.platforms.values() for r in p['definition']['resources']):
+                    raise ValueError('Device ID already names a shared platform resource: ' + device_id)
+                if record["driver"] == "scpi":
+                    c = record.get("config", {}); transport = c.get("transport", "tcp")
+                    address = (transport, c.get("host"), c.get("port", 5025) if transport == "tcp" else c.get("port"), c.get("resource"))
+                    for old in self.device_records.values():
+                        o = old.get("config", {}); kind = o.get("transport", "tcp")
+                        other = (kind, o.get("host"), o.get("port", 5025) if kind == "tcp" else o.get("port"), o.get("resource"))
+                        if old["driver"] == "scpi" and address == other:
+                            raise ValueError("This connection already belongs to " + old["id"])
             driver = make_driver(record, self.devices)
-            description = driver.describe()
-            if not isinstance(description.get("operations"), dict) or not description["operations"]:
-                raise ValueError("Driver must describe its operations")
-            for spec in description["operations"].values():
-                if not isinstance(spec, dict):
+            try:
+                description = driver.describe()
+                if not isinstance(description.get("operations"), dict) or not description["operations"]:
+                    raise ValueError("Driver must describe its operations")
+                if any(not isinstance(spec, dict) for spec in description["operations"].values()):
                     raise ValueError("Invalid operation description")
-            # A physical connection has one registered owner in this platform.
-            if record["driver"] == "scpi":
-                c = record.get("config", {}); transport = c.get("transport", "tcp")
-                address = (transport, c.get("host"), c.get("port", 5025) if transport == "tcp" else c.get("port"), c.get("resource"))
-                for old in self.device_records.values():
-                    o = old.get("config", {}); kind = o.get("transport", "tcp")
-                    other = (kind, o.get("host"), o.get("port", 5025) if kind == "tcp" else o.get("port"), o.get("resource"))
-                    if old["driver"] == "scpi" and address == other:
-                        raise ValueError("This connection already belongs to " + old["id"])
-            self.devices[device_id] = driver
-            self.device_records[device_id] = record
-            self.descriptions[device_id] = json.loads(dumps({"id":device_id, "driver":record["driver"], **description}))
-            if persist:
-                self.config["devices"] = list(self.device_records.values())
-                save_json(self.home / "config.json", self.config)
-                with self.store.transaction():
-                    self.store.event("device.registered", device_id=device_id)
-            return self.descriptions[device_id]
+                with self.lock:
+                    if self.stopping:
+                        raise ValueError("Service is stopping")
+                    self.devices[device_id] = driver
+                    self.device_records[device_id] = record
+                    self.descriptions[device_id] = json.loads(dumps({"id":device_id, "driver":record["driver"], **description}))
+                    if persist:
+                        self.config["devices"] = list(self.device_records.values())
+                        save_json(self.home / "config.json", self.config)
+                        with self.store.transaction():
+                            self.store.event("device.registered", device_id=device_id)
+                    return self.descriptions[device_id]
+            except BaseException:
+                if not any(getattr(other,'worker',None) is getattr(driver,'worker',object()) for other in self.devices.values()):
+                    driver.close()
+                raise
 
     def _operation(self, run_id, step):
         device_id, name = step["device"], step["operation"]
@@ -169,7 +254,7 @@ class Engine:
         args = parameters(specs[name], step.get("arguments", {}))
         return {"id":identifier("op"), "run_id":run_id, "step":step.get("id"), "device":device_id,
                 "operation":name, "arguments":args, "after":step.get("after", []), "state":"queued", "created":now(),
-                "resources":sorted(set(self._resources([device_id] + step.get("resources", [])))),
+                "resources":sorted(set(self._resources([device_id], name) + self._resources(step.get("resources", [])))),
                 "request_id":step.get("request_id")}
 
     def submit(self, spec, package=None):
@@ -183,41 +268,29 @@ class Engine:
                     raise ValueError("request_id already names a different experiment")
                 return previous
             run_id = identifier("run")
+            platform_id = spec.get('platform')
+            platform = self.platforms.get(platform_id) if platform_id else None
+            if platform_id and platform is None:
+                raise ValueError('Unknown platform: ' + str(platform_id))
+            if platform and spec.get('platform_revision', platform['revision']) != platform['revision']:
+                raise ValueError('Platform revision changed')
             run = {"id":run_id, "state":"queued", "created":now(), "request_id":spec.get("request_id"),
                    "kind":"package" if package is not None else "workflow", "name":spec.get("name", "Experiment"),
                    "project":spec.get("project"), "experiment":spec.get("experiment"), "spec":spec,
                    "parameters":spec.get("parameters", {}), "resources":self._resources(spec.get("resources", [])),
                    "devices":self.descriptions.copy(), "operations":[], "result":None}
+            if platform:
+                run['platform'] = json.loads(dumps(platform))
+                outside = set(spec.get('resources', [])) & (self.devices.keys() - set(platform['definition']['devices']))
+                if outside:
+                    raise ValueError('Reserved devices must belong to the selected platform')
             operations = []
             if package is None:
                 steps = spec.get("steps", [])
-                if not isinstance(steps, list) or not steps or len(steps) > 10000:
-                    raise ValueError("A workflow needs between 1 and 10000 steps")
-                if any(not isinstance(s, dict) or not isinstance(s.get("after", []), list) for s in steps):
-                    raise ValueError("Each step is an object with an optional after list")
-                names = [s.get("id") for s in steps]
-                if any(not isinstance(n, str) or not n for n in names) or len(set(names)) != len(names):
-                    raise ValueError("Each step needs a unique ID")
-                dependents = {name:[] for name in names}
-                remaining = {}
-                for step in steps:
-                    dependencies = set(step.get("after", []))
-                    if not dependencies <= dependents.keys():
-                        raise ValueError("Step dependencies contain an unknown step")
-                    remaining[step["id"]] = len(dependencies)
-                    for dependency in dependencies:
-                        dependents[dependency].append(step["id"])
-                ready = deque(name for name,count in remaining.items() if count == 0)
-                visited = 0
-                while ready:
-                    visited += 1
-                    for child in dependents[ready.popleft()]:
-                        remaining[child] -= 1
-                        if remaining[child] == 0:
-                            ready.append(child)
-                if visited != len(steps):
-                    raise ValueError("Step dependencies contain a cycle")
+                platform_model.steps(steps)
                 operations = [self._operation(run_id, s) for s in steps]
+                if platform and any(op['device'] not in platform['definition']['devices'] for op in operations):
+                    raise ValueError('Workflow devices must belong to the selected platform')
                 if run["resources"]:
                     run["resources"] = sorted(set(run["resources"]).union(*(op["resources"] for op in operations)))
             directory = self.home / "runs" / run_id
@@ -271,6 +344,8 @@ class Engine:
                     raise ValueError("request_id already names a different operation")
                 return old
             op = self._operation(run_id, step)
+            if run.get('platform') and op['device'] not in run['platform']['definition']['devices']:
+                raise ValueError('Operation device must belong to the selected platform')
             if run["resources"] and not set(op["resources"]) <= set(run["resources"]):
                 raise ValueError("Include every device used by this package in its resources at submission")
             if op["after"]:
@@ -334,6 +409,9 @@ class Engine:
         env.update(IOP_ENDPOINT=self.endpoint, IOP_TOKEN=self.config["token"], IOP_RUN_ID=run["id"],
                    IOP_RUN_DIR=str(directory / "output"), IOP_PARAMETERS_JSON=dumps(run["parameters"]),
                    PYTHONUNBUFFERED="1")
+        if run.get('platform'):
+            env['IOP_PLATFORM_ID'] = run['platform']['id']
+            env['IOP_PLATFORM_REVISION'] = str(run['platform']['revision'])
         source_path = str(Path(__file__).resolve().parents[2])
         env["PYTHONPATH"] = source_path + os.pathsep + env.get("PYTHONPATH", "")
         command = [sys.executable if part == "{python}" else part for part in run["package"]["command"]]
@@ -409,6 +487,11 @@ class Engine:
                 op["state"] = "cancelled"
             except BaseException as error:
                 op.update(state="failed", error=f"{type(error).__name__}: {error}")
+                from .process_driver import DriverUnavailable
+                if isinstance(error, DriverUnavailable):
+                    op['outcome_unknown'] = True
+                    self.store.hold_resources(set(op['resources']) | set(run['resources']), op_id, str(error))
+                    self.resource_holds = self.store.resource_holds()
                 if run["state"] == "running":
                     run.update(state="cancelling", end_state="failed", error=op["error"])
                     self._save_run(run, "run.failing")
@@ -420,6 +503,10 @@ class Engine:
             self.claims = {r:owner for r,owner in self.claims.items() if owner != op_id}
             del self.futures[op_id]; self.cancellations.pop(op_id, None)
         for run in list(self.runs.values()):
+            involved = set(run['resources']).union(*(self.operations[oid]['resources'] for oid in run['operations']))
+            if run['state'] in {'queued','running'} and involved & self.resource_holds.keys():
+                run.update(state='cancelling', end_state='interrupted', error='Device outcome is unresolved: ' + ', '.join(sorted(involved & self.resource_holds.keys())))
+                self._stop_pending(run)
             if run["state"] == "queued":
                 continue
             process = self.processes.get(run["id"])
@@ -509,10 +596,10 @@ class Engine:
 
     def metrics(self):
         with self.lock:
-            return {"devices":len(self.devices), "queued_runs":sum(r["state"] == "queued" for r in self.runs.values()),
+            return {"devices":len(self.devices), "platforms":len(self.platforms), "queued_runs":sum(r["state"] == "queued" for r in self.runs.values()),
                     "active_runs":sum(r["state"] != "queued" for r in self.runs.values()), "active_operations":len(self.futures),
                     "queued_operations":sum(o["state"] == "queued" for o in self.operations.values()),
-                    "workers":self.worker_count, "package_workers":self.package_count, "errors":self.errors[-5:]}
+                    "workers":self.worker_count, "package_workers":self.package_count, "resource_holds":list(self.resource_holds.values()), "errors":self.errors[-5:]}
 
     def close(self):
         with self.lock:

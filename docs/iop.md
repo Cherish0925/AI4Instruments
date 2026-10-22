@@ -79,10 +79,10 @@ Compatibility is defined per capability: inputs retain physical meaning, complet
 
 ## Development / 建设
 
-[IOP Runtime 0.3.0](runtime/README.md) implements the platform service: device registration and discovery, persistent experiment packages, dependency/resource scheduling, HTTP and Python clients, and linked records. It includes SCPI TCP/serial/VISA, Modbus TCP/RTU and HTTP drivers, a custom-driver interface and simulated multi-instrument experiments. Previously started work becomes interrupted after a service restart; automatic recovery of physical actions is not implemented.
+[IOP 0.4.0](../iop/README.md) provides platform configuration and initialization, native driver-process supervision, Python and TypeScript clients, experiment packages and persistent records. One computer can manage several platforms, with shared equipment coordinated by the same scheduler.
 
-[IOP 常驻服务 0.3.0](runtime/README.zh-CN.md) 已实现设备登记与发现、持续运行的实验程序包、依赖与资源调度、HTTP 与 Python 客户端和关联记录。提供 SCPI TCP / 串口 / VISA、Modbus TCP / RTU 和 HTTP 驱动、自定义驱动接口及多仪器模拟实验。服务重启后，之前已经开始的实验标为中断，保留数据；物理动作的自动恢复尚未实现。
+[IOP 0.4.0](../iop/README.zh-CN.md) 已提供平台配置与初始化、原生驱动进程管理、Python 与 TypeScript 客户端、实验包和持续保存的实验记录。一台计算机可以管理多个实验平台，共享仪器由同一服务安排使用。当前工作流调度使用 Python。
 
-The architecture above describes the broader IOP design. The runtime guide specifies the implemented behavior of this release. / 上文说明 IOP 整体设计，本版实际行为以常驻服务文档为准。
+The architecture above describes the broader IOP design. The [runtime guide](runtime/README.md) specifies implemented behavior. / 上文说明整体设计，当前行为见[使用文档](runtime/README.zh-CN.md)。
 
 [中文 IOP](agent-instruments/index.zh-CN.html#presentation/1) · [English IOP](agent-instruments/index.en.html#presentation/1) · [Content and mechanisms](agent-instruments/presentation.json)

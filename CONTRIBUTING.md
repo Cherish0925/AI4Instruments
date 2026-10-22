@@ -19,7 +19,7 @@ Describe capability, experimental evidence and task objectives separately. Prese
 ## Make a change
 
 1. Open an issue describing the scientific or engineering problem, or submit a focused pull request for a concrete improvement.
-2. Put reusable implementation under `src/`, runnable examples under `examples/`, and explanatory design material under `docs/`.
+2. Put Python implementation under `src/`, runnable experiments under `examples/iop/`, and explanatory design material under `docs/`. IOP has its main entry at `iop/`, with the Rust executor in `iop/daemon/`, TypeScript client in `iop/clients/typescript/`, and platform descriptions in `iop/schema/` and `iop/examples/`.
 3. Run `python -m unittest discover -s tests -v` when changing the reference implementation. Add a behavioural test when a change introduces a meaningful new contract or fixes a fault.
 4. For paper edits, update `paper/manuscript.md` and, when needed, `paper/references.json`. Run `python scripts/build_paper.py` and inspect the PDF and HTML before committing both outputs.
 5. State what changed, why it matters, how it was checked and which results were observed on hardware or in simulation.

@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "id": "liquid-bench",
+  "name": "Temperature, dosing, mass and acquisition",
+  "devices": [
+    "bath",
+    "balance",
+    "pump",
+    "daq"
+  ],
+  "resources": [
+    {
+      "id": "sample",
+      "devices": [
+        "balance",
+        "pump"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "from": {
+        "device": "pump",
+        "port": "outlet"
+      },
+      "to": {
+        "device": "balance",
+        "port": "vessel"
+      },
+      "kind": "fluid"
+    },
+    {
+      "from": {
+        "device": "bath",
+        "port": "sample"
+      },
+      "to": {
+        "device": "daq",
+        "port": "sensor"
+      },
+      "kind": "measurement"
+    }
+  ],
+  "procedures": {
+    "initialize": {
+      "steps": [
+        {
+          "id": "temperature",
+          "device": "bath",
+          "operation": "set_temperature",
+          "arguments": {
+            "kelvin": 298.15
+          }
+        },
+        {
+          "id": "tare",
+          "device": "balance",
+          "operation": "tare"
+        },
+        {
+          "id": "reference",
+          "device": "daq",
+          "operation": "acquire",
+          "arguments": {
+            "count": 32,
+            "rate_hz": 1000
+          }
+        }
+      ]
+    }
+  }
+}

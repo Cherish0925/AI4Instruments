@@ -109,3 +109,19 @@ After a service restart, queued runs remain queued, while previously started run
 ```
 
 Names are relative to the run directory. Uploaded files go under `output/`; an existing filename is not overwritten. Large outputs can be written directly by a hosted program and downloaded through the streaming endpoint.
+
+## Platforms and native drivers (0.4.0)
+
+| Method | Path | Body / result |
+| --- | --- | --- |
+| GET | `/v1/platforms` | Current platform definitions, revisions, missing devices and active runs. |
+| POST | `/v1/platforms/preview` | `{ "definition": { ... } }`; parses a platform without saving or executing it. |
+| POST | `/v1/platforms` | `{ "definition": { ... }, "expected_revision": 0 }`; use current revision for updates. |
+| GET | `/v1/platforms/{id}` | One platform. |
+| GET | `/v1/platforms/{id}/history` | Saved versions, newest first. |
+| POST | `/v1/platforms/{id}/procedures/{name}` | `{ "request_id": "..." }`; submit a configured procedure and return a run. |
+| POST | `/v1/resources/resolve` | `{ "resources": ["..."], "observation": "..." }`; record observed equipment state and release resources retained after a driver interruption. |
+
+Workflow and package submissions accept `platform` and optional `platform_revision`. The selected definition is retained in the run. Device calls must belong to that platform. Platform resources also apply to calls without a platform ID. `GET /v1/status` includes platform count and `resource_holds`.
+
+[Platform configuration](../../iop/platforms.md) · [中文](../../iop/platforms.zh-CN.md) · [Executable drivers](../../iop/drivers.md)

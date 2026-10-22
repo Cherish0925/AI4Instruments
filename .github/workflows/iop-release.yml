@@ -1,0 +1,79 @@
+name: IOP distributions
+on:
+  push:
+    branches: [main]
+    paths: ['iop/release.json']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-22.04-arm, windows-2022, windows-11-arm, macos-14, macos-15-intel]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo build --release --locked --manifest-path iop/daemon/Cargo.toml
+      - name: Include native executor
+        shell: python
+        run: |
+          from pathlib import Path
+          import shutil, sys
+          binary = 'iop-execd.exe' if sys.platform == 'win32' else 'iop-execd'
+          destination = Path('src/ai4instruments/iop/bin')
+          destination.mkdir(exist_ok=True)
+          shutil.copy2(Path('iop/daemon/target/release') / binary, destination / binary)
+      - run: python -m pip wheel --no-deps . --wheel-dir dist
+      - name: Install the built wheel
+        shell: python
+        run: |
+          import subprocess, sys
+          from pathlib import Path
+          wheel, = Path('dist').glob('*.whl')
+          subprocess.run([sys.executable,'-m','pip','install',str(wheel),'pyserial','pymodbus>=3.11,<4'],check=True)
+      - run: python -m unittest discover -s tests -v
+      - run: python scripts/build_iop_bundle.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: iop-${{ matrix.os }}
+          path: release/*.zip
+  typescript:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+        working-directory: iop/clients/typescript
+      - run: npm test
+        working-directory: iop/clients/typescript
+      - run: npm pack
+        working-directory: iop/clients/typescript
+      - uses: actions/upload-artifact@v4
+        with:
+          name: iop-typescript
+          path: iop/clients/typescript/*.tgz
+  publish:
+    needs: [native, typescript]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: release
+          merge-multiple: true
+      - name: Publish IOP release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(python -c "import json; print(json.load(open('iop/release.json'))['version'])")
+          gh release create "iop-v${version}" release/* --target "$GITHUB_SHA" --title "IOP ${version}" --notes-file iop/RELEASE.md

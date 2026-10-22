@@ -1,0 +1,35 @@
+{
+  "name": "Position and acquire",
+  "platform": "materials-bench",
+  "resources": [
+    "stage",
+    "meter"
+  ],
+  "steps": [
+    {
+      "id": "position",
+      "device": "stage",
+      "operation": "move_to",
+      "arguments": {
+        "angle_deg": 25
+      }
+    },
+    {
+      "id": "configure",
+      "device": "meter",
+      "operation": "configure",
+      "arguments": {
+        "exposure_s": 0.05
+      }
+    },
+    {
+      "id": "acquire",
+      "device": "meter",
+      "operation": "measure",
+      "after": [
+        "position",
+        "configure"
+      ]
+    }
+  ]
+}

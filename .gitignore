@@ -6,3 +6,8 @@ build/
 dist/
 runs/
 .pytest_cache/
+node_modules/
+target/
+src/ai4instruments/iop/bin/
+release/
+*.tgz

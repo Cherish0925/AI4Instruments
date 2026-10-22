@@ -4,7 +4,9 @@
 
 **One experimental platform, one persistent instrument service.** People and agents submit experiment programs. The service maintains device connections, schedules operations and preserves the experiment. Runs can last hours or days independently of the submitting terminal, browser or agent session.
 
-The target implementation uses **a Rust core, Python driver and experiment processes, TypeScript interfaces and clients, and SQL experiment records**. This document establishes that architecture and its implementation sequence. The installable **0.3.0 release uses a Python core and SQLite**; section 8 compares the implementation with the target.
+The target implementation uses **a Rust core, Python driver and experiment processes, TypeScript interfaces and clients, and SQL experiment records**. This document establishes that architecture and its implementation sequence. The initial **0.3.0 release uses a Python core and SQLite**; section 8 compares the implementation with the target.
+
+**0.4.0 implementation:** multiple platforms and initialization, Rust `iop-execd` driver supervision and the TypeScript client are now available. The [IOP project](../../iop/README.md) lists downloads and current capabilities. HTTP serving, workflow scheduling and SQLite coordination remain Python; the 0.3.0 comparison below records the starting point.
 
 ## 1. The service within IOP
 
@@ -144,7 +146,7 @@ Complete the single-computer execution path first. Multi-computer platforms subs
 | Interruption | Started runs become interrupted; records remain | Read device state to resolve unfinished operations before further execution. |
 | Installation | Python required; scripts and login startup | OS-specific packages, managed driver environments and native service management. |
 
-The implementation lives in [`src/ai4instruments/iop`](../../src/ai4instruments/iop); the [runtime guide](README.md) describes its behavior. There is currently no Rust core, TypeScript client or published capacity measurement.
+The implementation lives in [`src/ai4instruments/iop`](../../src/ai4instruments/iop); the [runtime guide](README.md) describes its behavior. Version 0.4.0 adds the native driver component and TypeScript client described above. A complete Rust scheduling core and published capacity measurements remain future work.
 
 Each stage produces runnable behavior that can be compared with the existing implementation:
 

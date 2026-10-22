@@ -59,6 +59,8 @@ class Handler(BaseHTTPRequestHandler):
         try:
             if method == 'GET' and url.path == '/':
                 return self._send(Path(__file__).with_name('reader.html').read_bytes(), media_type='text/html; charset=utf-8')
+            if method == 'GET' and url.path == '/platform.js':
+                return self._send(Path(__file__).with_name('platform.js').read_bytes(), media_type='text/javascript; charset=utf-8')
             if method == 'GET' and url.path == '/health':
                 return self._send({'service':'IOP', 'version':VERSION})
             expected = 'Bearer ' + engine.config['token']
@@ -75,6 +77,19 @@ class Handler(BaseHTTPRequestHandler):
             result = None
             if parts == ['v1','status'] and method == 'GET':
                 result = {'version':VERSION, **engine.metrics()}
+            elif parts == ['v1','platforms']:
+                result = engine.apply_platform(body['definition'], body.get('expected_revision', 0)) if method == 'POST' else engine.list_platforms()
+            elif parts == ['v1','resources','resolve'] and method == 'POST':
+                result = engine.resolve_resources(body['resources'], body['observation'])
+            elif parts == ['v1','platforms','preview'] and method == 'POST':
+                with engine.lock:
+                    result = {'definition': engine.prepare_platform(body['definition'])}
+            elif len(parts) == 3 and parts[:2] == ['v1','platforms'] and method == 'GET':
+                result = engine.platform_info(parts[2])
+            elif len(parts) == 4 and parts[:2] == ['v1','platforms'] and parts[3] == 'history' and method == 'GET':
+                result = engine.store.platform_history(parts[2])
+            elif len(parts) == 5 and parts[:2] == ['v1','platforms'] and parts[3] == 'procedures' and method == 'POST':
+                result = engine.run_procedure(parts[2], parts[4], body.get('request_id'))
             elif parts == ['v1','devices']:
                 if method == 'POST':
                     result = engine.register(body)

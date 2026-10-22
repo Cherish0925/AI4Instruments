@@ -61,12 +61,26 @@ class Client:
     def register(self, record):
         return self.request('/v1/devices', record)
 
-    def submit(self, steps, *, name='Experiment', project=None, experiment=None, resources=(), request_id=None, parameters=None):
+    def platforms(self):
+        return self.request('/v1/platforms')
+
+    def platform(self, platform_id):
+        return self.request('/v1/platforms/' + platform_id)
+
+    def configure_platform(self, definition, expected_revision=0):
+        return self.request('/v1/platforms', {'definition': definition, 'expected_revision': expected_revision})
+
+    def procedure(self, platform_id, procedure='initialize', request_id=None):
+        record = self.request('/v1/platforms/' + platform_id + '/procedures/' + procedure,
+                              {'request_id': request_id or str(uuid.uuid4())})
+        return Run(self, record['id'])
+
+    def submit(self, steps, *, name='Experiment', project=None, experiment=None, resources=(), request_id=None, parameters=None, platform=None):
         return Run(self, self.request('/v1/runs', {'name':name, 'project':project, 'experiment':experiment,
-                   'steps':steps, 'resources':list(resources), 'parameters':parameters or {},
+                   'steps':steps, 'resources':list(resources), 'parameters':parameters or {}, 'platform': platform,
                    'request_id':request_id or str(uuid.uuid4())})['id'])
 
-    def submit_package(self, path, *, name=None, project=None, experiment=None, resources=(), parameters=None, request_id=None):
+    def submit_package(self, path, *, name=None, project=None, experiment=None, resources=(), parameters=None, request_id=None, platform=None):
         path = Path(path)
         if path.is_dir():
             buffer = io.BytesIO()
@@ -79,7 +93,7 @@ class Client:
         else:
             data = path.read_bytes()
         run = self.request('/v1/packages', {'archive':base64.b64encode(data).decode(), 'name':name or path.stem,
-                           'project':project, 'experiment':experiment, 'resources':list(resources),
+                           'project':project, 'experiment':experiment, 'resources':list(resources), 'platform':platform,
                            'parameters':parameters or {}, 'request_id':request_id or str(uuid.uuid4())})
         return Run(self, run['id'])
 

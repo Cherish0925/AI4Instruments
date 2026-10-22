@@ -1,0 +1,67 @@
+# IOP · 仪器操作协议
+
+[English](README.md) · [下载软件](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.4.0) · [安装与使用](../docs/runtime/README.zh-CN.md) · [平台配置](platforms.zh-CN.md) · [Agent 接入](agent-setup.md)
+
+**让人和 Agent 通过同一个常驻服务使用实验平台。** 服务运行在连接仪器的计算机上，管理设备与实验平台，执行实验程序，安排串行与并行，保存操作过程和数据。终端、浏览器或 Agent 会话关闭后，已经受理的实验继续运行。
+
+一台计算机可以连接多个实验平台。每个平台有自己的设备、物理连接、共享资源和初始化方法；同一台仪器可以被多个平台引用，由计算机上的同一个服务统一安排使用。
+
+## 开始使用
+
+下载适合系统的 IOP 0.4.0 软件包，解压后执行 `install.sh`（Linux、macOS、WSL）或 `install.ps1`（Windows）。需要 Python 3.10+；软件包内含对应系统的 Rust 执行程序，无需 Rust 编译器。安装完成后会显示启动命令。
+
+| 下载包 | 运行环境 |
+| --- | --- |
+| Linux x86_64 / arm64 | Ubuntu 22.04 及相容系统，glibc 2.35+ |
+| Windows x86_64 / arm64 | 对应架构的 64 位 Windows |
+| macOS arm64 | Apple Silicon，macOS 14+ |
+| macOS x86_64 | Intel，macOS 15+ |
+| 其他 CPU / 系统组合 | 使用[源码安装](../docs/runtime/README.zh-CN.md)，按当地系统编译 Rust 组件 |
+
+WSL 使用 Linux 包及已经提供给 WSL 的设备；Windows 专用 SDK 可以由 Windows 端服务承接。
+
+```sh
+iop init
+iop start
+iop open
+```
+
+浏览器中的“实验平台”页面支持查看连接图、导入与导出配置、保存配置版本和执行初始化。命令行与客户端使用相同接口。
+
+## 配置一次，持续做实验
+
+| 阶段 | 具体工作 |
+| --- | --- |
+| 发现设备 | 读取计算机可见的 USB、串口、VISA 与已登记网络设备信息，匹配已配置的驱动。 |
+| 建立平台 | 人或 Agent 结合实际接线和仪器说明，配置设备归属、端口连接、共享对象、初始化方法。 |
+| 执行初始化 | 服务执行明确的初始化步骤，保留每步结果。配置保存本身不触发设备动作。 |
+| 开展实验 | 本地或远端程序通过服务提交操作与实验包，按本次实验的依赖与资源要求执行。 |
+| 保留结果 | 保存平台配置版本、实验参数、操作、读数、分析结果与文件。 |
+
+物理连接和实验时序分别表达。接了一根触发线，不代表任意一次实验都可以同步采集；实验还需执行设备配置、准备与触发步骤。软件安排执行顺序，设备时钟与硬件触发执行精确时序。
+
+## 现有实现
+
+| 组成 | 0.4.0 中的实现 |
+| --- | --- |
+| 常驻服务 | Python HTTP API、调度、实验进程与命令行。 |
+| 原生执行组件 | Rust `iop-execd` 管理独立驱动进程、消息转发、取消请求、响应时限与退出。 |
+| 驱动 | SCPI TCP / 串口 / VISA、Modbus TCP / RTU、HTTP JSON、Python 驱动和独立程序接口。 |
+| 客户端 | Python、TypeScript、HTTP、命令行与浏览器界面。 |
+| 实验记录 | SQLite、配置版本、事件、实验包、输出文件与原始数据关联。 |
+
+C、C++、C#、Java 或其他语言编写的厂商适配程序，可以使用同一套[独立驱动接口](drivers.md)。这些语言的开发环境只在对应适配程序需要时安装。常驻核心继续向[目标 Rust 架构](../docs/runtime/architecture.zh-CN.md)推进；本版本的工作流调度仍在 Python 中。
+
+## 工程入口
+
+| 内容 | 位置 |
+| --- | --- |
+| 平台说明与机器可读结构 | [配置说明](platforms.zh-CN.md)、[JSON Schema](schema/platform.schema.json) |
+| Rust 驱动进程管理 | [daemon/](daemon/) |
+| Python 服务、客户端与驱动 | [src/ai4instruments/iop](../src/ai4instruments/iop/) |
+| TypeScript 客户端 | [clients/typescript](clients/typescript/) |
+| 多平台与独立驱动例子 | [examples/](examples/) |
+| 实验程序包 | [examples/iop/](../examples/iop/) |
+| HTTP 接口 | [API](../docs/runtime/http-api.md) |
+
+设备发现、驱动连接和具体操作支持分别列明。已连接的设备需要有可用驱动与仪器说明，才能成为可操作的设备。实际仪器型号与操作结果随实验室使用逐项补充。

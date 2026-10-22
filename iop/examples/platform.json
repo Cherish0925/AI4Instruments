@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "id": "materials-bench",
+  "name": "Materials characterization",
+  "devices": [
+    "stage",
+    "meter"
+  ],
+  "resources": [
+    {
+      "id": "sample-a",
+      "devices": [
+        "stage",
+        "meter"
+      ],
+      "description": "Retain the sample across positioning and acquisition",
+      "operations": {
+        "stage": [
+          "move_to"
+        ],
+        "meter": [
+          "measure"
+        ]
+      }
+    }
+  ],
+  "connections": [
+    {
+      "from": {
+        "device": "stage",
+        "port": "sample"
+      },
+      "to": {
+        "device": "meter",
+        "port": "input"
+      },
+      "kind": "measurement",
+      "description": "The meter observes the sample held by the stage"
+    }
+  ],
+  "procedures": {
+    "initialize": {
+      "resources": [
+        "stage",
+        "meter"
+      ],
+      "steps": [
+        {
+          "id": "position",
+          "device": "stage",
+          "operation": "move_to",
+          "arguments": {
+            "angle_deg": 0
+          }
+        },
+        {
+          "id": "configure",
+          "device": "meter",
+          "operation": "configure",
+          "arguments": {
+            "exposure_s": 0.02
+          }
+        }
+      ]
+    }
+  }
+}

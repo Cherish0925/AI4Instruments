@@ -1,0 +1,13 @@
+[package]
+name = "iop-execd"
+version = "0.4.0"
+edition = "2021"
+license = "MIT"
+description = "IOP native driver-process supervisor"
+
+[dependencies]
+tokio = { version = "1", features = ["rt", "macros", "process", "io-util", "io-std", "time"] }
+serde_json = "1"
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"

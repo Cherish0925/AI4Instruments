@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "id": "second-bench",
+  "name": "Independent platform",
+  "devices": [
+    "aux"
+  ],
+  "resources": [],
+  "connections": [],
+  "procedures": {
+    "initialize": {
+      "steps": [
+        {
+          "id": "position",
+          "device": "aux",
+          "operation": "move_to",
+          "arguments": {
+            "angle_deg": 0
+          }
+        }
+      ]
+    }
+  }
+}

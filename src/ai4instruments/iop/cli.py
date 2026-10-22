@@ -77,7 +77,18 @@ def parser():
         sub.add_parser(name)
     p = sub.add_parser('register'); p.add_argument('file')
     p = sub.add_parser('run'); p.add_argument('file'); p.add_argument('--wait', action='store_true')
-    p = sub.add_parser('package'); p.add_argument('path'); p.add_argument('--resources', nargs='*', default=[]); p.add_argument('--parameters', default='{}'); p.add_argument('--project'); p.add_argument('--wait', action='store_true')
+    p = sub.add_parser('package'); p.add_argument('path'); p.add_argument('--resources', nargs='*', default=[]); p.add_argument('--parameters', default='{}'); p.add_argument('--project'); p.add_argument('--platform'); p.add_argument('--wait', action='store_true')
+    p = sub.add_parser('platform', help='Configure and initialize experimental platforms')
+    ps = p.add_subparsers(dest='platform_action', required=True)
+    ps.add_parser('list')
+    for action in ('show', 'history'):
+        q = ps.add_parser(action); q.add_argument('id')
+    q = ps.add_parser('draft'); q.add_argument('id'); q.add_argument('--devices', nargs='+', required=True); q.add_argument('--output')
+    for action in ('preview', 'apply'):
+        q = ps.add_parser(action); q.add_argument('file'); q.add_argument('--revision', type=int, default=0)
+    for action in ('initialize', 'run'):
+        q = ps.add_parser(action); q.add_argument('id'); q.add_argument('--wait', action='store_true')
+        if action == 'run': q.add_argument('procedure')
     p = sub.add_parser('call'); p.add_argument('device'); p.add_argument('operation'); p.add_argument('--arguments', default='{}')
     p = sub.add_parser('runs'); p.add_argument('--limit',type=int,default=20)
     for name in ['result','cancel','files']:
@@ -117,8 +128,30 @@ def main():
             run = client.run(client.request('/v1/runs', spec)['id'])
             output(run.result() if args.wait else {'run_id':run.id})
         elif args.command == 'package':
-            run = client.submit_package(args.path, resources=args.resources, parameters=json.loads(args.parameters), project=args.project)
+            run = client.submit_package(args.path, resources=args.resources, parameters=json.loads(args.parameters), project=args.project, platform=args.platform)
             output(run.result() if args.wait else {'run_id':run.id})
+        elif args.command == 'platform':
+            action = args.platform_action
+            if action == 'list': output(client.platforms())
+            elif action == 'show': output(client.platform(args.id))
+            elif action == 'history': output(client.request('/v1/platforms/' + args.id + '/history'))
+            elif action == 'draft':
+                from .platforms import description
+                draft = description({'schema_version':1, 'id':args.id, 'name':args.id, 'devices':args.devices},
+                                    {d['id']:d for d in client.devices()})
+                if args.output:
+                    from .config import save_json
+                    destination = Path(args.output)
+                    if destination.exists(): raise ValueError('Choose a new output filename: ' + str(destination))
+                    save_json(destination, draft); output(str(destination))
+                else: output(draft)
+            elif action in ('preview', 'apply'):
+                definition = json.loads(Path(args.file).read_text(encoding='utf-8'))
+                output(client.request('/v1/platforms/preview', {'definition':definition}) if action == 'preview'
+                       else client.configure_platform(definition, args.revision))
+            else:
+                run = client.procedure(args.id, 'initialize' if action == 'initialize' else args.procedure)
+                output(run.result() if args.wait else {'run_id':run.id})
         elif args.command == 'call':
             output(client.invoke(args.device, args.operation, json.loads(args.arguments)))
         elif args.command == 'runs':

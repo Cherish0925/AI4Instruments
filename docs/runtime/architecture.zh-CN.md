@@ -4,7 +4,9 @@
 
 **目标：一个实验平台，一个持续运行的仪器服务。** 人与 Agent 提交实验程序，服务管理设备连接、安排操作、保存实验过程。实验可以持续数小时或数天，不依赖提交它的终端、浏览器或 Agent 会话。
 
-采用 **Rust 常驻核心、Python 驱动与实验进程、TypeScript 界面与客户端、SQL 实验记录** 的分工。本文确定目标架构与实现顺序；目前可安装的 **0.3.0 使用 Python 核心与 SQLite**，实现差异见第 8 节。
+采用 **Rust 常驻核心、Python 驱动与实验进程、TypeScript 界面与客户端、SQL 实验记录** 的分工。本文确定目标架构与实现顺序；最初的 **0.3.0 使用 Python 核心与 SQLite**，实现差异见第 8 节。
+
+**0.4.0 实现进展：** 已加入多平台配置与初始化、Rust `iop-execd` 独立驱动进程管理和 TypeScript 客户端。[IOP 工程入口](../../iop/README.zh-CN.md)列明下载与当前能力。HTTP 服务、工作流调度和 SQLite 协调仍在 Python 中；下文的 0.3.0 对照保留为迁移起点。
 
 ## 1. 服务在 IOP 中的位置
 
@@ -144,7 +146,7 @@ HTTP JSON 延续现有 `/v1` 接口；Python 与未来 TypeScript 客户端共�
 | 中断 | 已开始的实验标为中断，保留记录 | 依据设备读回处理未结束操作，再决定后续执行。 |
 | 安装 | 需要 Python；提供安装脚本与登录自启动 | 分系统安装包、托管驱动环境与原生服务管理。 |
 
-现有实现位于 [`src/ai4instruments/iop`](../../src/ai4instruments/iop)，行为说明见[使用文档](README.zh-CN.md)。当前没有 Rust 核心或 TypeScript 客户端，也没有公布容量测量结果。
+现有实现位于 [`src/ai4instruments/iop`](../../src/ai4instruments/iop)，行为说明见[使用文档](README.zh-CN.md)。0.4.0 已加入上述原生驱动组件与 TypeScript 客户端；完整 Rust 调度核心和容量测量结果仍待后续实现。
 
 按下列顺序推进，每一步形成可以运行和比较的结果：
 

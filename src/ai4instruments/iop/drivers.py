@@ -226,6 +226,9 @@ class SCPI(Driver):
 
 
 def make_driver(record, registry):
+    if record.get('driver') == 'process':
+        from .process_driver import ProcessDriver
+        return ProcessDriver(record['id'], record.get('config', {}), registry)
     name = record["driver"]
     from .adapters import Modbus, HTTP
     from .simulation import Laboratory

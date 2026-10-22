@@ -4,9 +4,11 @@
 
 IOP Runtime runs on the computer connected to your instruments. It maintains device connections, executes experiment programs, schedules serial and parallel operations, and retains parameters, readings, results and files. People and agents share the HTTP API, Python client and command line. A browser interface displays instruments, accepts experiments and shows results.
 
-**Implemented in 0.3.0:** background service, device registration and discovery, dependency scheduling, reservations across steps, experiment package execution, persistent records, Python client, browser interface and operating-system login startup.
+**Implemented in 0.4.0:** background service, device registration and discovery, dependency scheduling, reservations across steps, experiment package execution, persistent records, Python client, browser interface and operating-system login startup.
 
-The target Rust core, independent driver processes and TypeScript client are described in the [runtime architecture](architecture.md). That document separates the current implementation from the next development stages.
+The native driver supervisor and TypeScript client are implemented; the complete Rust core remains described in the [runtime architecture](architecture.md). That document separates the current implementation from the next development stages.
+
+**New:** multiple platforms, connection diagrams, initialization procedures, configuration history, a TypeScript client and native Rust driver supervision. Open the [IOP project](../../iop/README.md) or [configure a platform](../../iop/platforms.md).
 
 ## Install and start
 
@@ -25,9 +27,7 @@ For installation into a separate Python environment in your user directory, run 
 
 The downloadable IOP bundle also contains an installable wheel:
 
-```sh
-python -m pip install "dist/ai4instruments-0.3.0-py3-none-any.whl[devices]"
-```
+The installation script selects the platform-specific wheel in `dist/` automatically.
 
 The `[devices]` extra installs serial, VISA, USB discovery and Modbus dependencies. Omit it for TCP instruments, simulation or drivers already installed. The core uses only the Python standard library.
 

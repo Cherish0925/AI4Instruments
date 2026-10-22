@@ -4,9 +4,11 @@
 
 IOP Runtime 是安装在仪器所在计算机上的常驻软件。它保持设备连接，接收实验程序，安排串行与并行操作，保存参数、读数、结果和文件。人和 Agent 使用同一套 HTTP 接口、Python 客户端和命令行；浏览器可以查看设备、提交实验和读取结果。
 
-**0.3.0 已实现：** 后台服务、设备登记与发现、依赖调度、跨步骤设备占用、实验程序包执行、实验记录、Python 客户端、网页界面和各系统的登录自启动入口。
+**0.4.0 已实现：** 后台服务、设备登记与发现、依赖调度、跨步骤设备占用、实验程序包执行、实验记录、Python 客户端、网页界面和各系统的登录自启动入口。
 
-目标 Rust 核心、独立驱动进程与 TypeScript 客户端见[常驻服务架构](architecture.zh-CN.md)，其中列明当前实现与后续建设顺序。
+Rust 驱动进程组件与 TypeScript 客户端已加入本版；完整 Rust 核心的后续设计见[常驻服务架构](architecture.zh-CN.md)，其中列明当前实现与后续建设顺序。
+
+**新增：** 多平台配置、连接图、初始化步骤、配置历史、TypeScript 客户端与 Rust 独立驱动进程管理。进入 [IOP 工程](../../iop/README.zh-CN.md)或[配置实验平台](../../iop/platforms.zh-CN.md)。
 
 ## 安装与启动
 
@@ -25,9 +27,7 @@ iop open
 
 下载的 IOP 软件包也可以直接安装其中的 wheel：
 
-```sh
-python -m pip install "dist/ai4instruments-0.3.0-py3-none-any.whl[devices]"
-```
+安装脚本自动选择 `dist/` 中适合当前系统的 wheel。
 
 `[devices]` 安装串口、VISA、USB 发现和 Modbus 相关依赖。仅使用 TCP 仪器、模拟设备或已有驱动时，可以省略它。核心服务仅使用 Python 标准库。
 

@@ -36,7 +36,7 @@ jobs:
           import subprocess, sys
           from pathlib import Path
           wheel, = Path('dist').glob('*.whl')
-          subprocess.run([sys.executable,'-m','pip','install',str(wheel)+'[agent]','pyserial','pymodbus>=3.11,<4'],check=True)
+          subprocess.run([sys.executable,'-m','pip','install','--prefer-binary',str(wheel)+'[agent]','pyserial','pymodbus>=3.11,<4'],check=True)
       - run: python -m unittest discover -s tests -v
       - name: Install native desktop
         if: runner.os != 'Linux'

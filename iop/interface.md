@@ -37,7 +37,7 @@ macOS applications are installed under your user `Applications` directory. Linux
 sudo apt-get install libegl1 libopengl0 libxkbcommon0 libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 libxcb-keysyms1 libxcb-shape0 libxcb-xinerama0 libxcb-randr0 libxcb-render-util0 libxtst6 libxkbfile1 libopus0 libsnappy1v5 libminizip1t64 liblcms2-2 libwebp7 libwebpdemux2 libwebpmux3 libnss3 libasound2t64
 ```
 
-Use `libasound2` instead of `libasound2t64` on Ubuntu 22.04. Linux ARM64 desktop installations require Ubuntu 24.04 (glibc 2.39) or a newer compatible system for the matching [PySide6 web engine](https://pypi.org/project/PySide6-WebEngine/). Headless servers and WSL can use `install.sh` and browser access. Windows-specific instrument SDKs run with a Windows service.
+On Ubuntu 22.04, use `libasound2` and `libminizip1` instead of their `t64` variants. Linux ARM64 desktop installations require Ubuntu 24.04 (glibc 2.39) or a newer compatible system for the matching [PySide6 web engine](https://pypi.org/project/PySide6-WebEngine/). Headless servers and WSL can use `install.sh` and browser access. Windows-specific instrument SDKs run with a Windows service.
 
 The installer prints full command paths. To update, stop the existing service with its `iop stop` command, run the new installer and reopen the application. Existing `~/.iop` configuration and records are retained.
 

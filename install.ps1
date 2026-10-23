@@ -14,7 +14,7 @@ $IOPSource = if ($IOPWheel) { $IOPWheel.FullName } else { $PSScriptRoot }
 $IOPExtras = 'devices'
 if ($env:IOP_AGENT -ne '0') { $IOPExtras += ',agent' }
 if ($env:IOP_DESKTOP -eq '1') { $IOPExtras += ',desktop' }
-& $InstalledPython -m pip install "${IOPSource}[$IOPExtras]"
+& $InstalledPython -m pip install --prefer-binary "${IOPSource}[$IOPExtras]"
 if ($LASTEXITCODE -ne 0) { throw 'Could not install IOP' }
 & $IOP init
 if ($LASTEXITCODE -ne 0) { throw 'Could not initialize IOP' }

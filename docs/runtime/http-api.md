@@ -1,4 +1,4 @@
-# IOP HTTP API · 0.6.0
+# IOP HTTP API · 0.7.0
 
 [中文安装](README.zh-CN.md) · [Installation](README.md)
 
@@ -11,6 +11,8 @@ Base URL: `http://127.0.0.1:8765`. API bodies are JSON objects. Requests to `/v1
 | GET | `/health` | — | Service name and version |
 | GET | `/v1/ui` | — | Desktop availability and local connection status |
 | POST | `/v1/ui/desktop` | `{"view":"devices"}` | Open a native window on the service computer; local requests only |
+| GET | `/v1/context` | `refresh=true` for a new connection scan | Compact laboratory description: instruments, platforms, drivers, resources and remaining setup |
+| GET | `/v1/schemas/{name}` | `device`, `platform`, `workflow` | Packaged JSON schema |
 | GET | `/v1/adapters` | — | Built-in and installed driver entries |
 | GET | `/v1/resources` | — | Configured capacities and current allocation |
 | POST | `/v1/resources` | `{"capacities":{"cpu":16,"solver":2}}` | Replace named capacities; accepted work must still fit |
@@ -18,7 +20,7 @@ Base URL: `http://127.0.0.1:8765`. API bodies are JSON objects. Requests to `/v1
 | GET | `/v1/status` | — | Active/queued counts, worker limits, service errors, version, hostname, system and uptime |
 | GET | `/v1/devices` | — | Instrument descriptions |
 | GET | `/v1/devices/{device_id}` | — | One instrument description |
-| POST | `/v1/devices` | Device record | Registered description; persists configuration |
+| POST | `/v1/devices` | Device record | Registered description; persists configuration; identical retries reuse the device |
 | GET | `/v1/discovery` | `cached=true` to reuse the last scan | Current scan, provider availability and registered devices |
 | POST | `/v1/runs` | Workflow below | Accepted run record |
 | POST | `/v1/packages` | Package below | Accepted run record |

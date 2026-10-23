@@ -55,6 +55,13 @@ class Client:
     def devices(self):
         return self.request('/v1/devices')
 
+    def context(self, refresh=False):
+        return self.request('/v1/context' + ('?refresh=true' if refresh else ''))
+
+    def schema(self, name):
+        from urllib.parse import quote
+        return self.request('/v1/schemas/' + quote(name, safe=''))
+
     def discover(self):
         return self.request('/v1/discovery')
 

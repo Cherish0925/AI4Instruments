@@ -1,6 +1,6 @@
 {
   "name": "@ai4instruments/iop",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "IOP client for instruments, platforms and experiment programs",
   "type": "module",
   "main": "dist/index.js",

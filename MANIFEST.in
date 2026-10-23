@@ -1,0 +1,1 @@
+include iop/schema/*.schema.json

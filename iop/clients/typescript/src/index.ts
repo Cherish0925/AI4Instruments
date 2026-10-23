@@ -35,6 +35,8 @@ export class IOP {
     return value as T;
   }
   devices() { return this.request<Record<string, unknown>[]>('/v1/devices'); }
+  context(refresh = false) { return this.request<Record<string, unknown>>('/v1/context' + (refresh ? '?refresh=true' : '')); }
+  schema(name: 'device' | 'platform' | 'workflow') { return this.request<Record<string, unknown>>('/v1/schemas/' + name); }
   discover() { return this.request<Record<string, unknown>>('/v1/discovery'); }
   register(record: Record<string, unknown>) { return this.request('/v1/devices', record); }
   adapters() { return this.request<Record<string, unknown>[]>('/v1/adapters'); }

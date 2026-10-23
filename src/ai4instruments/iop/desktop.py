@@ -31,6 +31,7 @@ def page_url(client, view='overview', desktop=False):
 
 
 def ensure_service(home, endpoint=None):
+    endpoint = endpoint or os.environ.get('IOP_ENDPOINT')
     if endpoint:
         client = Client(endpoint, home=home)
         client.request('/v1/status')

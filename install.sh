@@ -11,10 +11,12 @@ for IOP_WHEEL in "$IOP_ROOT"/dist/*.whl; do
     if [ -f "$IOP_WHEEL" ]; then IOP_SOURCE="$IOP_WHEEL"; break; fi
 done
 IOP_EXTRAS=devices
-if [ "${IOP_DESKTOP:-0}" = "1" ]; then IOP_EXTRAS=devices,desktop; fi
+if [ "${IOP_AGENT:-1}" = "1" ]; then IOP_EXTRAS="$IOP_EXTRAS,agent"; fi
+if [ "${IOP_DESKTOP:-0}" = "1" ]; then IOP_EXTRAS="$IOP_EXTRAS,desktop"; fi
 "$IOP_PREFIX/venv/bin/python" -m pip install "$IOP_SOURCE[$IOP_EXTRAS]"
 "$IOP_PREFIX/venv/bin/iop" init
 printf '\nInstalled. Start with:\n  "%s/venv/bin/iop" start\nOpen the platform with:\n  "%s/venv/bin/iop" open\n' "$IOP_PREFIX" "$IOP_PREFIX"
+printf 'Read laboratory setup:\n  "%s/venv/bin/iop" context --start\nAgent connection settings:\n  "%s/venv/bin/iop" mcp-config\n' "$IOP_PREFIX" "$IOP_PREFIX"
 
 if [ "${IOP_DESKTOP:-0}" = "1" ]; then
     "$IOP_PREFIX/venv/bin/iop" shortcuts

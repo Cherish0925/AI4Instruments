@@ -43,8 +43,9 @@ def serve(home):
 
 
 def start(home):
-    initialize(home)
-    client = Client(home=home, timeout=0.5)
+    config = initialize(home)
+    host = '127.0.0.1' if config['host'] == '0.0.0.0' else config['host']
+    client = Client(f"http://{host}:{config['port']}", token=config['token'], home=home, timeout=0.5)
     try:
         client.request('/v1/status')
         return 'IOP is already running: ' + client.endpoint
@@ -56,13 +57,13 @@ def start(home):
                                    stdin=subprocess.DEVNULL, stdout=log, stderr=log, **options)
     deadline = time.monotonic() + 10
     while time.monotonic() < deadline:
-        if process.poll() is not None:
-            raise RuntimeError('IOP did not start. Read '+str(home/'service.log'))
         try:
             client.request('/v1/status')
             return 'IOP is running: '+client.endpoint
         except Exception:
             time.sleep(0.1)
+    if process.poll() is not None:
+        raise RuntimeError('IOP did not start. Read '+str(home/'service.log'))
     raise RuntimeError('Startup is still pending. Read '+str(home/'service.log'))
 
 
@@ -77,6 +78,10 @@ def parser():
         sub.add_parser(name)
     p = sub.add_parser('desktop', help='Open the native desktop window'); p.add_argument('--view', default='overview')
     sub.add_parser('shortcuts', help='Install desktop and browser application entries')
+    p = sub.add_parser('context', help='Read the laboratory configuration for an agent or program')
+    p.add_argument('--refresh', action='store_true'); p.add_argument('--start', action='store_true')
+    sub.add_parser('mcp', help='Expose the shared service to an agent over MCP stdio')
+    sub.add_parser('mcp-config', help='Print the MCP launcher configuration for this installation')
     p = sub.add_parser('register'); p.add_argument('file')
     p = sub.add_parser('reconnect'); p.add_argument('device')
     p = sub.add_parser('resources'); p.add_argument('--set', dest='capacities', help='JSON object of resource capacities')
@@ -118,6 +123,17 @@ def main():
             output(client.request('/v1/shutdown', {}))
         elif args.command == 'status':
             output(client.request('/v1/status'))
+        elif args.command == 'context':
+            if args.start:
+                from .desktop import ensure_service
+                client = ensure_service(home, args.endpoint)
+            output(client.context(args.refresh))
+        elif args.command == 'mcp-config':
+            from .context import agent_configuration
+            output(agent_configuration(home, args.endpoint or os.environ.get('IOP_ENDPOINT')))
+        elif args.command == 'mcp':
+            from .mcp import run
+            run(home, args.endpoint)
         elif args.command == 'open':
             from .desktop import open_browser
             open_browser(home, args.endpoint)

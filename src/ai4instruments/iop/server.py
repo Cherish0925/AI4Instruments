@@ -89,6 +89,12 @@ class Handler(BaseHTTPRequestHandler):
             if parts == ['v1','status'] and method == 'GET':
                 result = {'version':VERSION, 'hostname':platform.node(), 'system':platform.system(),
                           'uptime_s':round(time.monotonic() - self.server.started), **engine.metrics()}
+            elif parts == ['v1', 'context'] and method == 'GET':
+                from .context import laboratory
+                result = laboratory(engine, query.get('refresh') == 'true')
+            elif len(parts) == 3 and parts[:2] == ['v1', 'schemas'] and method == 'GET':
+                from .context import schema_document
+                result = schema_document(parts[2])
             elif parts == ['v1', 'ui'] and method == 'GET':
                 from .desktop import available, has_display
                 result = {'desktop_installed':available(), 'desktop_available':available() and has_display(),

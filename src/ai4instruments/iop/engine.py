@@ -76,6 +76,7 @@ class Engine:
                 self.register(device, persist=False)
             except Exception as error:
                 self.errors.append({"device":device.get("id"), "error":str(error)})
+                self.offline[device.get('id', 'unknown')] = str(error)
         for run in self.store.recover():
             self.runs[run["id"]] = run
             for op in reversed(self.store.list("operations", run["id"], 10000)):
@@ -289,6 +290,8 @@ class Engine:
                 if self.stopping:
                     raise ValueError("Service is stopping")
                 if device_id in self.devices:
+                    if self.device_records[device_id] == record:
+                        return self.descriptions[device_id]
                     raise ValueError("Device is already registered: " + device_id)
                 if any(device_id == r['id'] for p in self.platforms.values() for r in p['definition']['resources']):
                     raise ValueError('Device ID already names a shared platform resource: ' + device_id)
@@ -318,10 +321,14 @@ class Engine:
                     self.descriptions[device_id] = json.loads(dumps({"id":device_id, "driver":record["driver"], **description}))
                     self.allocation.limits['device:' + device_id] = concurrency
                     if persist:
-                        self.config["devices"] = list(self.device_records.values())
+                        saved = {d['id']: d for d in self.config.get('devices', [])}
+                        saved[device_id] = record
+                        self.config["devices"] = list(saved.values())
                         save_json(self.home / "config.json", self.config)
                         with self.store.transaction():
                             self.store.event("device.registered", device_id=device_id)
+                    self.offline.pop(device_id, None)
+                    self.errors = [error for error in self.errors if error.get('device') != device_id]
                     return self.descriptions[device_id]
             except BaseException:
                 if not any(getattr(other,'worker',None) is getattr(driver,'worker',object()) for other in self.devices.values()):
@@ -641,6 +648,11 @@ class Engine:
 
     def reconnect(self, device_id):
         with self.registration_lock:
+            with self.lock:
+                pending = next((d for d in self.config.get('devices', []) if d['id'] == device_id), None) if device_id not in self.devices else None
+            if pending is not None:
+                self.register(pending)
+                return {'devices': [device_id], 'state': 'connected'}
             with self.lock:
                 driver = self.devices[device_id]
                 worker = getattr(driver, 'worker', None)

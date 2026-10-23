@@ -200,6 +200,15 @@ try {
   await page.waitForSelector("#run-detail-summary .badge.completed");
   await page.click("#modal-close");
   await page.click('[data-view="settings"]');
+  const contextDownload = page.waitForEvent("download");
+  await page.click("#agent-context-export");
+  const exportedContext = await contextDownload;
+  const labContext = JSON.parse(
+    await readFile(await exportedContext.path(), "utf8"),
+  );
+  assert.equal(labContext.service.name, "IOP Runtime");
+  assert.equal(labContext.platforms[0].id, "bench-01");
+  assert.ok(!JSON.stringify(labContext).includes(token));
   await page.selectOption("#theme-select", "dark");
   await page.selectOption("#language-select", "en");
   assert.equal(

@@ -11,12 +11,17 @@ $IOP = Join-Path $InstallDir 'venv\Scripts\iop.exe'
 if ($LASTEXITCODE -ne 0) { throw 'Could not prepare pip' }
 $IOPWheel = Get-ChildItem (Join-Path $PSScriptRoot 'dist\*.whl') -ErrorAction SilentlyContinue | Select-Object -First 1
 $IOPSource = if ($IOPWheel) { $IOPWheel.FullName } else { $PSScriptRoot }
-$IOPExtras = if ($env:IOP_DESKTOP -eq '1') { 'devices,desktop' } else { 'devices' }
+$IOPExtras = 'devices'
+if ($env:IOP_AGENT -ne '0') { $IOPExtras += ',agent' }
+if ($env:IOP_DESKTOP -eq '1') { $IOPExtras += ',desktop' }
 & $InstalledPython -m pip install "${IOPSource}[$IOPExtras]"
 if ($LASTEXITCODE -ne 0) { throw 'Could not install IOP' }
 & $IOP init
+if ($LASTEXITCODE -ne 0) { throw 'Could not initialize IOP' }
 Write-Host "Installed. Start with: & '$IOP' start"
 Write-Host "Open the platform with: & '$IOP' open"
+Write-Host "Read laboratory setup: & '$IOP' context --start"
+Write-Host "Agent connection settings: & '$IOP' mcp-config"
 
 if ($env:IOP_DESKTOP -eq '1') {
     $IOPArchitecture = & $InstalledPython -c 'import sysconfig; print(sysconfig.get_platform())'

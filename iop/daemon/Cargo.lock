@@ -20,7 +20,7 @@ dependencies = [
 
 [[package]]
 name = "iop-execd"
-version = "0.6.0"
+version = "0.7.0"
 dependencies = [
  "libc",
  "serde_json",

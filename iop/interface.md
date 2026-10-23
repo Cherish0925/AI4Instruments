@@ -1,6 +1,6 @@
 # IOP Runtime · Desktop and browser
 
-[中文](interface.zh-CN.md) · [Download 0.6.0](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.6.0) · [IOP project](README.md)
+[中文](interface.zh-CN.md) · [Download 0.7.0](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.7.0) · [IOP project](README.md)
 
 IOP Runtime is installed software that runs continuously on the laboratory computer. Its native window and browser interface connect to the same service and share instruments, platform configuration, experiments and data. Accepted experiments continue when either window closes.
 
@@ -77,3 +77,7 @@ Results load separately from operation history, which is paged in groups of 100.
 ## Interface implementation
 
 HTML, CSS and JavaScript modules ship with the installed software; no frontend development server or CDN is required. Desktop windows use the system web engine on Windows / macOS and Qt WebEngine on Linux. pywebview supplies the standard window; Windows ARM64 uses public Windows Forms and WebView2 APIs directly. See [source and verification](interface/README.md).
+
+## Agent integration
+
+Installers include the MCP component. Run `iop mcp-config` for this installation’s agent launcher or `iop context --start` to read laboratory setup. Connection settings can export the same description. [Agent guide](agent-setup.md).

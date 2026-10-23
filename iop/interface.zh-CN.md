@@ -1,6 +1,6 @@
 # IOP Runtime · 桌面与网页
 
-[English](interface.md) · [下载 0.6.0](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.6.0) · [IOP 工程](README.zh-CN.md)
+[English](interface.md) · [下载 0.7.0](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.7.0) · [IOP 工程](README.zh-CN.md)
 
 IOP Runtime 是安装在实验室计算机上的常驻软件。桌面窗口和浏览器是它的两个操作入口：连接相同的服务，使用相同的仪器、平台配置、实验和数据。窗口关闭后，已经提交的实验继续运行。
 
@@ -77,3 +77,7 @@ iop --endpoint http://lab-computer:8765 desktop
 ## 界面工程
 
 界面是随软件安装的 HTML、CSS 与 JavaScript 模块，无需前端服务器或 CDN。Windows / macOS 使用系统网页引擎，Linux 使用 Qt WebEngine。常规桌面窗口由 pywebview 提供，Windows ARM64 通过公开的 Windows Forms 与 WebView2 接口创建窗口。[源码与运行检查](interface/README.md)。
+
+## Agent 接入
+
+安装脚本默认包含 MCP 组件。用 `iop mcp-config` 获取当前安装的 Agent 连接配置；用 `iop context --start` 读取实验室配置。“连接与设置”页面可导出实验室说明。[完整接入说明](agent-setup.zh-CN.md)。

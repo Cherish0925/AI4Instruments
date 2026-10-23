@@ -5,6 +5,7 @@ import sys
 import tempfile
 import time
 import unittest
+from concurrent.futures import ThreadPoolExecutor
 from unittest.mock import patch
 from pathlib import Path
 from ai4instruments.iop import Client
@@ -28,7 +29,9 @@ class BackgroundCase(unittest.TestCase):
             client=Client(home=home,timeout=1)
             try:
                 try:
-                    subprocess.run(command+['start'],check=True,capture_output=True,text=True,timeout=20)
+                    with ThreadPoolExecutor(max_workers=3) as pool:
+                        starts = list(pool.map(lambda _: subprocess.run(command+['start'],check=True,capture_output=True,text=True,timeout=20), range(3)))
+                    self.assertEqual(len(starts), 3)
                 except (subprocess.CalledProcessError,subprocess.TimeoutExpired) as error:
                     log=Path(home)/'service.log'
                     self.fail(str(error)+'\n'+str(error.stderr)+'\n'+(log.read_text() if log.exists() else 'No service log'))
@@ -37,6 +40,9 @@ class BackgroundCase(unittest.TestCase):
                 self.assertEqual(client.run(run_id).wait(5)['state'],'completed')
                 second=subprocess.run(command+['start'],check=True,capture_output=True,text=True,timeout=10)
                 self.assertIn('already running',second.stdout)
+                with patch.dict('os.environ', {'IOP_ENDPOINT':'http://127.0.0.1:1', 'IOP_TOKEN':'another-service'}):
+                    local=subprocess.run(command+['start'],check=True,capture_output=True,text=True,timeout=10)
+                self.assertIn('already running',local.stdout)
             finally:
                 try:client.request('/v1/shutdown',{})
                 except OSError:pass

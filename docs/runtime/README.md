@@ -2,9 +2,11 @@
 
 [中文](README.zh-CN.md) · [Architecture](architecture.md) · [HTTP API](http-api.md) · [Device drivers](drivers.md) · [Source](../../src/ai4instruments/iop)
 
+0.7.0 adds [MCP and agent integration](../../iop/agent-setup.md), a shared laboratory context and instrument configuration recovery. [Application interfaces and system support](../../iop/product.md).
+
 IOP Runtime runs on the computer connected to your instruments. It maintains device connections, executes experiment programs, schedules serial and parallel operations, and retains parameters, readings, results and files. People and agents share the HTTP API, Python client and command line. A browser interface displays instruments, accepts experiments and shows results.
 
-**Implemented in 0.6.0:** background service, device registration and discovery, dependency scheduling, reservations across steps, experiment package execution, persistent records, Python client, browser interface and operating-system login startup.
+**Implemented in 0.7.0:** background service, device registration and discovery, dependency scheduling, reservations across steps, experiment package execution, persistent records, Python client, browser interface and operating-system login startup.
 
 Rust handles SDK, command and experiment processes; Python handles HTTP and workflow scheduling; TypeScript supplies the complete client. See the [current architecture](architecture.md).
 

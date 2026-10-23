@@ -6,7 +6,7 @@ import zipfile
 
 root = Path(__file__).resolve().parents[1]
 version = json.loads((root / 'iop/release.json').read_text())['version']
-wheel, = (root / 'dist').glob('*.whl')
+wheel, = (root / 'dist').glob(f'ai4instruments-{version}-*.whl')
 system = {'Darwin':'macos','Windows':'windows','Linux':'linux'}[platform.system()]
 arch = {'AMD64':'x86_64','ARM64':'arm64','aarch64':'arm64'}.get(platform.machine(), platform.machine())
 name = f'IOP-{version}-{system}-{arch}'
@@ -27,11 +27,14 @@ Python 3.10+ is required. This archive includes the native Rust executor.
 Linux/macOS/WSL: sh install.sh
 Windows: powershell -NoProfile -ExecutionPolicy Bypass -File .\\install.ps1
 The installer prints the installed command paths.
+Agent MCP connection: iop mcp-config
+Laboratory configuration: iop context --start
 
 Desktop installation: install-desktop.sh or install-desktop.ps1
 Open IOP Runtime from the system application menu, or run iop desktop.
 Browser: iop open
 Both start or connect to the same persistent service.
+The Agent component is included by default. Set IOP_AGENT=0 to omit it.
 Platform setup and usage:
 https://github.com/Cherish0925/AI4Instruments/tree/main/iop
 ''')

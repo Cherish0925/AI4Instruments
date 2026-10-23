@@ -1,47 +1,84 @@
-# Agent setup / Agent 配置实验平台
+# IOP · Agent integration
 
-[IOP](README.md) · [中文](README.zh-CN.md) · [Platform schema](schema/platform.schema.json) · [HTTP API](../docs/runtime/http-api.md)
+[中文](agent-setup.zh-CN.md) · [Application and platforms](product.md) · [HTTP API](../docs/runtime/http-api.md) · [Platform schema](schema/platform.schema.json)
 
-Codex, Claude Code, DeepSeek Harness, Qiushi Engine and other clients can use the same CLI, HTTP API or SDK. The service operates independently of the chosen model or harness. This guide describes the available interface; it does not claim a separately published plugin for each product.
+Codex, Claude Code, DeepSeek Harness, Qiushi Engine and other research software can connect through MCP, CLI, HTTP or the Python/TypeScript clients. All interfaces use the same service, instruments, platform configuration and experiment records.
 
-1. Connect to the instrument computer's service. Read `/v1/status`, `/v1/devices`, `/v1/discovery` and `/v1/platforms`.
-2. Match discovered connections to instrument models, documentation and installed drivers. Register usable devices. An enumerated USB port does not identify the full operation set.
-3. Read the actual platform wiring and experiment requirements. Create a platform description containing device IDs, port connections, shared physical resources and initialization procedures. Ask the operator for physical connections that cannot be observed electronically.
-4. Preview the description with `POST /v1/platforms/preview`. Save it with `POST /v1/platforms` and the current `expected_revision` (0 for a new platform).
-5. Submit the `initialize` procedure when its actions are intended. Query the resulting run and readings. Saving a configuration does not invoke it.
-6. Submit an experiment with `platform`, `steps` and the resources to retain across steps, or upload a package. Keep its `run_id`; query or reconnect later. Reuse `request_id` when retrying the same submission.
+## First connection
 
-人或 Agent 首次接入时，需要将可见设备、实际接线、仪器说明与实验要求对应起来。USB/串口扫描通常无法获知样品、光路、管路或触发线的实际连接。已有配置可以直接读取与复用，不必每次实验重新配置。
+The release installers include the Agent component. Print the MCP connection configuration using the installed `iop` command:
 
-云端 Agent 使用可达的服务地址，读取并保留运行编号；长实验交给服务运行。本地或远端的客户端关闭后，已经受理的实验继续。更换模型或 Harness 不要求重新打开仪器连接。
-
-## Python
-
-```python
-import json
-from pathlib import Path
-from ai4instruments.iop import Client
-lab = Client()  # IOP_ENDPOINT and IOP_TOKEN can select a remote service.
-definition = json.loads(Path('platform.json').read_text())
-lab.request('/v1/platforms/preview', {'definition': definition})
-platform = lab.configure_platform(definition, expected_revision=0)
-run = lab.procedure(platform['id'], 'initialize')
-print(run.id, run.result())
+```sh
+iop mcp-config
 ```
 
-## TypeScript
+Use its `command` and `args` in your agent host's MCP server settings. The output uses the common `mcpServers` JSON structure; hosts using another configuration format use the same command and argument list. Paths refer to the current installation. No connection token is printed.
 
-Build or install the packaged client from [clients/typescript](clients/typescript/). The package has no runtime dependencies and uses the standard Fetch API.
+The host starts `iop mcp`. It connects to the local service, starting it if necessary. Closing the MCP process leaves that service and accepted experiments running. Call `lab_context` first: it returns saved platforms, instrument operation names, available drivers, visible connections, resource usage and remaining setup work.
+
+Terminal-based agents can instead call:
+
+```sh
+iop context --start
+```
+
+Add `--refresh` for a new connection scan; otherwise IOP reuses its current inventory. The desktop/browser settings page exports the same laboratory description as JSON.
+
+For source installations, install `.[agent]` in the IOP environment. Set `IOP_AGENT=0` in the release installer to omit MCP dependencies. Python 3.10 uses the maintained MCP SDK 1.x; Python 3.11+ uses SDK 2.x. Both paths are covered by the runtime workflow. SDK references: [v1](https://py.sdk.modelcontextprotocol.io/v1/) and [v2](https://py.sdk.modelcontextprotocol.io/).
+
+## Configure once, then reuse
+
+1. Read `lab_context`. Reuse existing instruments and platforms.
+2. For a new instrument, read its documentation and choose an installed adapter. Read `configuration_schema("device")`, then call `register_instrument`. Repeating the identical record reuses the connection.
+3. Save devices, physical connections, shared objects and named procedures with `configure_platform`. Use the current revision when editing. Ask only for physical details that cannot be obtained from existing descriptions or connected equipment.
+4. Run the saved initialization procedure when the experiment needs it. Saving configuration alone performs no device action.
+5. Submit an experiment or program; retain its run ID. Inspect progress and results later. Reuse `request_id` when retrying the same submission.
+
+An individual instrument can operate without a platform. A platform records relationships among devices used together. Serial/parallel ordering comes from experiment dependencies; shared resources describe objects requiring coordinated use.
+
+## MCP tools
+
+| Tool | Purpose |
+| --- | --- |
+| `lab_context` | Current laboratory description; optional connection refresh |
+| `describe_instrument` | Operations, arguments and units for one device |
+| `configuration_schema` | Device, platform or workflow JSON schema |
+| `register_instrument` | Register a connection using an installed driver |
+| `configure_platform` | Save or preview platform configuration |
+| `configure_resources` | Set named resource capacities |
+| `run_procedure` | Execute initialization or another saved procedure |
+| `submit_experiment` | Submit a graph of instrument operations and dependencies |
+| `submit_program` | Upload a directory or ZIP from the MCP host for service execution |
+| `experiment` | Status, paged operations, output files and optional result |
+| `cancel_experiment` | Request cancellation |
+| `reconnect_instrument` | Reconnect a device or a previously unavailable SDK |
+| `resolve_resources` | Record observed instrument state and return interrupted resources to use |
+| `download_file` | Save an experiment output on the MCP host |
+
+`iop://laboratory` exposes the same context as an MCP resource. Submissions return immediately. `experiment` returns at most 100 operations per page; pass the returned cursor as `after`. Retrieve large data through output files.
+
+## Remote service
+
+```sh
+iop --endpoint http://lab-computer:8765 mcp-config
+```
+
+Set `IOP_TOKEN` in the agent host's environment or secret configuration. The MCP process runs beside the agent and forwards work to the reachable instrument service. It does not start another local service when a remote endpoint is selected. See [server configuration](../docs/runtime/README.md).
+
+## SDK access
+
+```python
+from ai4instruments.iop import Client
+lab = Client()  # Reads environment variables or local connection settings.
+print(lab.context()['platforms'])
+print(lab.schema('workflow'))
+```
 
 ```typescript
 import { IOP } from '@ai4instruments/iop';
 const lab = new IOP(process.env.IOP_ENDPOINT, process.env.IOP_TOKEN);
-const platforms = await lab.platforms();
-const run = await lab.submit([
-  { id: 'read', device: 'meter', operation: 'measure' }
-], { platform: 'materials-bench' });
-console.log(run.id);
-console.log(await run.result());
+const context = await lab.context();
+const schema = await lab.schema('workflow');
 ```
 
-Remote connections must reach the instrument service; the default listener is local to its computer. Configure the service's `host` and its existing connection token for the laboratory network, or use the laboratory's existing remote connection. No cloud account is required to run IOP locally.
+HTTP exposes `GET /v1/context` and `GET /v1/schemas/{name}`. Retrieve detailed operations at `GET /v1/devices/{id}` only for instruments needed by the current task.

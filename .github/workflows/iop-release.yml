@@ -36,7 +36,7 @@ jobs:
           import subprocess, sys
           from pathlib import Path
           wheel, = Path('dist').glob('*.whl')
-          subprocess.run([sys.executable,'-m','pip','install',str(wheel),'pyserial','pymodbus>=3.11,<4'],check=True)
+          subprocess.run([sys.executable,'-m','pip','install',str(wheel)+'[agent]','pyserial','pymodbus>=3.11,<4'],check=True)
       - run: python -m unittest discover -s tests -v
       - name: Install native desktop
         if: runner.os != 'Linux'
@@ -58,6 +58,9 @@ jobs:
         timeout-minutes: 5
         run: python iop/interface/test/desktop.py
       - run: python scripts/build_iop_bundle.py
+      - name: Verify the release installer and installed service
+        timeout-minutes: 10
+        run: python scripts/check_iop_install.py
       - uses: actions/upload-artifact@v4
         with:
           name: iop-${{ matrix.os }}
@@ -83,7 +86,11 @@ jobs:
           name: iop-typescript
           path: iop/clients/typescript/*.tgz
   interface:
-    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

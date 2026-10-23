@@ -1,6 +1,8 @@
 # IOP Runtime · 仪器运行服务
 
-[English](README.md) · [下载软件](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.6.0) · [桌面与网页](interface.zh-CN.md) · [安装与使用](../docs/runtime/README.zh-CN.md) · [平台配置](platforms.zh-CN.md) · [Agent 接入](agent-setup.md)
+[English](README.md) · [下载软件](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.7.0) · [桌面与网页](interface.zh-CN.md) · [安装与使用](../docs/runtime/README.zh-CN.md) · [平台配置](platforms.zh-CN.md) · [Agent 接入](agent-setup.zh-CN.md)
+
+0.7.0 新增 MCP 接入、统一实验室说明、配置格式接口与设备恢复。Agent 直接复用已有仪器和平台配置。[软件形态、系统支持与职责分工](product.zh-CN.md)。
 
 **让人和 Agent 通过同一个常驻服务使用实验平台。** 服务运行在实验室计算机上，连接实体仪器、计算程序和远端任务服务，执行实验程序，安排串行与并行，保存操作过程和数据。终端、浏览器或 Agent 会话关闭后，已经受理的实验继续运行。
 
@@ -10,11 +12,11 @@ IOP 是仪器操作协议；IOP Runtime 是实现其运行功能的软件。[实
 
 ## 开始使用
 
-下载适合系统的 IOP 0.6.0 软件包并解压。桌面使用运行 `install-desktop.ps1`（Windows）或 `sh install-desktop.sh`（macOS / Linux）；安装后从系统应用菜单打开 **IOP Runtime**。只需要浏览器或服务器运行时，使用 `install.ps1` / `install.sh`。需要 Python 3.10+；软件包内含 Rust 执行程序，安装脚本下载所需依赖。
+下载适合系统的 IOP 0.7.0 软件包并解压。桌面使用运行 `install-desktop.ps1`（Windows）或 `sh install-desktop.sh`（macOS / Linux）；安装后从系统应用菜单打开 **IOP Runtime**。只需要浏览器或服务器运行时，使用 `install.ps1` / `install.sh`。需要 Python 3.10+；软件包内含 Rust 执行程序，安装脚本下载所需依赖。
 
 | 下载包 | 运行环境 |
 | --- | --- |
-| Linux x86_64 / arm64 | Ubuntu 22.04 及相容系统，glibc 2.35+ |
+| Linux x86_64 / arm64 | 服务：glibc 2.35+；ARM64 桌面：glibc 2.39+ |
 | Windows x86_64 / arm64 | 对应架构的 64 位 Windows |
 | macOS arm64 | Apple Silicon，macOS 14+ |
 | macOS x86_64 | Intel，macOS 15+ |
@@ -48,13 +50,13 @@ iop open
 
 ## 现有实现
 
-| 组成 | 0.6.0 中的实现 |
+| 组成 | 0.7.0 中的实现 |
 | --- | --- |
 | 常驻服务 | Python HTTP API、调度、实验进程与命令行。 |
 | 原生执行组件 | Rust `iop-execd` 管理 SDK、命令程序和实验程序的进程树、进度、取消与退出。 |
 | 调度与资源 | 依赖就绪队列、跨实验轮流安排、结果到参数的传递、设备并发数与可计数资源。 |
 | 驱动 | SCPI TCP / 串口 / VISA、Modbus TCP / RTU、同步与异步 HTTP、命令程序、Python 包与独立 SDK 进程。 |
-| 客户端 | Python、TypeScript、HTTP、命令行、桌面窗口与浏览器界面。 |
+| 客户端 | Python、TypeScript、HTTP、MCP、命令行、桌面窗口与浏览器界面。 |
 | 实验记录 | SQLite、配置版本、事件、实验包、输出文件与原始数据关联。 |
 
 C、C++、C#、Java 或其他语言编写的厂商适配程序，可以使用同一套[独立驱动接口](drivers.md)或命令程序接口。这些语言的运行环境按具体程序安装。[当前架构](../docs/runtime/architecture.zh-CN.md)中，Python 负责 HTTP 与工作流调度，Rust 负责进程执行。

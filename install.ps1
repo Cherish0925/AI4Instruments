@@ -19,6 +19,15 @@ Write-Host "Installed. Start with: & '$IOP' start"
 Write-Host "Open the platform with: & '$IOP' open"
 
 if ($env:IOP_DESKTOP -eq '1') {
+    $IOPArchitecture = & $InstalledPython -c 'import sysconfig; print(sysconfig.get_platform())'
+    if ($IOPArchitecture -eq 'win-arm64') {
+        $IOPDotnetScript = Join-Path $InstallDir 'dotnet-install.ps1'
+        Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -OutFile $IOPDotnetScript
+        foreach ($IOPFramework in @('dotnet', 'windowsdesktop')) {
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $IOPDotnetScript -Runtime $IOPFramework -Channel 10.0 -Architecture arm64 -InstallDir (Join-Path $InstallDir 'dotnet') -NoPath
+            if ($LASTEXITCODE -ne 0) { throw 'Could not install the ARM64 desktop runtime' }
+        }
+    }
     & $IOP shortcuts
     if ($LASTEXITCODE -ne 0) { throw 'Could not create application shortcuts' }
     Write-Host "Open IOP Runtime from the Start menu, or run: & '$IOP' desktop"

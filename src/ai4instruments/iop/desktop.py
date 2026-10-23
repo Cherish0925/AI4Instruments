@@ -3,10 +3,10 @@ from __future__ import annotations
 import importlib.util
 import json
 import os
-import platform
 import shlex
 import subprocess
 import sys
+import sysconfig
 import tempfile
 import webbrowser
 from pathlib import Path
@@ -48,6 +48,13 @@ def open_browser(home, endpoint=None, view='overview'):
 def launch(home, endpoint=None, view='overview'):
     if not available():
         raise RuntimeError('Install the desktop component with install-desktop.ps1 (Windows) or install-desktop.sh (macOS / Linux).')
+    if sys.platform == 'win32' and (sysconfig.get_platform() == 'win-arm64' or os.environ.get('PYTHONNET_RUNTIME') == 'coreclr'):
+        from pythonnet import load
+        options = {'runtime_config': str(Path(__file__).with_name('desktop.runtimeconfig.json'))}
+        runtime = Path(os.environ.get('IOP_DESKTOP_DOTNET_ROOT', Path(sys.prefix).parent / 'dotnet'))
+        if runtime.is_dir():
+            options['dotnet_root'] = str(runtime)
+        load('coreclr', **options)
     import webview
     client = ensure_service(home, endpoint)
 

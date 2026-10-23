@@ -23,6 +23,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\install-desktop.ps1
 
 The Start menu receives **IOP Runtime** and **IOP Browser**. The desktop window uses Microsoft Edge WebView2; install [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/) if it is absent.
 
+On Windows ARM64, the installer also installs .NET 10 Desktop Runtime inside the IOP user installation for the native ARM64 window. See [Microsoft installation documentation](https://learn.microsoft.com/dotnet/core/tools/dotnet-install-script).
+
 On **macOS / Linux**:
 
 ```sh

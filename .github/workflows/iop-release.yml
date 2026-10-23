@@ -41,6 +41,18 @@ jobs:
       - name: Install native desktop
         if: runner.os != 'Linux'
         run: python -m pip install "pywebview>=6.2,<7"
+      - name: Install Windows ARM desktop runtime
+        if: matrix.os == 'windows-11-arm'
+        shell: pwsh
+        run: |
+          $script = Join-Path $env:RUNNER_TEMP 'dotnet-install.ps1'
+          $runtime = Join-Path $env:RUNNER_TEMP 'iop-dotnet'
+          Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -OutFile $script
+          foreach ($framework in @('dotnet', 'windowsdesktop')) {
+            & powershell.exe -NoProfile -ExecutionPolicy Bypass -File $script -Runtime $framework -Channel 10.0 -Architecture arm64 -InstallDir $runtime -NoPath
+            if ($LASTEXITCODE -ne 0) { throw 'Desktop runtime installation failed' }
+          }
+          "IOP_DESKTOP_DOTNET_ROOT=$runtime" >> $env:GITHUB_ENV
       - name: Exercise native desktop and browser switching
         if: runner.os != 'Linux'
         timeout-minutes: 5

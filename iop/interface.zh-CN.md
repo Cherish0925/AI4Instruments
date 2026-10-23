@@ -23,6 +23,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\install-desktop.ps1
 
 安装后，在开始菜单找到 **IOP Runtime** 和 **IOP Browser**。桌面窗口使用 Microsoft Edge WebView2；如果系统没有安装它，先安装 [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/)。
 
+Windows ARM64 的安装脚本还会把 .NET 10 Desktop Runtime 安装到 IOP 用户目录，供原生 ARM64 窗口使用。[Microsoft 安装说明](https://learn.microsoft.com/dotnet/core/tools/dotnet-install-script)。
+
 **macOS / Linux**：
 
 ```sh

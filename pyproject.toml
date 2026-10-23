@@ -21,4 +21,4 @@ devices = ["pyserial>=3.5", "pyvisa>=1.14", "pyvisa-py>=0.7", "pyusb>=1.2", "zer
 desktop = ["pywebview>=6.2,<7; sys_platform != 'linux'", "pywebview[pyside6]>=6.2,<7; sys_platform == 'linux'"]
 
 [tool.setuptools.package-data]
-"ai4instruments.iop" = ["reader.html", "ui/*", "bin/*"]
+"ai4instruments.iop" = ["reader.html", "desktop.runtimeconfig.json", "ui/*", "bin/*"]

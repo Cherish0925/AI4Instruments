@@ -34,10 +34,10 @@ sh install-desktop.sh
 macOS 应用位于当前用户的 `Applications` 目录；Linux 写入当前用户的应用菜单。Linux 桌面使用 Qt WebEngine / PySide6，需要图形会话和系统图形库。Ubuntu 可安装：
 
 ```sh
-sudo apt-get install libegl1 libopengl0 libxkbcommon0 libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 libxcb-keysyms1 libxcb-shape0 libxcb-xinerama0 libxcb-randr0 libxcb-render-util0 libxtst6 libxkbfile1 libnss3 libasound2t64
+sudo apt-get install libegl1 libopengl0 libxkbcommon0 libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 libxcb-keysyms1 libxcb-shape0 libxcb-xinerama0 libxcb-randr0 libxcb-render-util0 libxtst6 libxkbfile1 libopus0 libsnappy1v5 libminizip1t64 liblcms2-2 libwebp7 libwebpdemux2 libwebpmux3 libnss3 libasound2t64
 ```
 
-Ubuntu 22.04 使用 `libasound2` 替代 `libasound2t64`。Linux ARM64 桌面使用 Ubuntu 24.04（glibc 2.39）或更新的兼容系统，以安装对应的 [PySide6 网页引擎](https://pypi.org/project/PySide6-WebEngine/)。无桌面的服务器和 WSL 可以使用 `install.sh` 安装运行服务，从浏览器访问。Windows 专用仪器 SDK 使用 Windows 端服务。
+Ubuntu 22.04 使用 `libasound2` 与 `libminizip1`，分别替代 `libasound2t64` 与 `libminizip1t64`。Linux ARM64 桌面使用 Ubuntu 24.04（glibc 2.39）或更新的兼容系统，以安装对应的 [PySide6 网页引擎](https://pypi.org/project/PySide6-WebEngine/)。无桌面的服务器和 WSL 可以使用 `install.sh` 安装运行服务，从浏览器访问。Windows 专用仪器 SDK 使用 Windows 端服务。
 
 安装脚本打印完整命令路径；同一目录可以再次运行安装脚本升级。更新前用旧安装的 `iop stop` 停止服务，安装后重新打开应用。默认的 `~/.iop` 配置与实验记录继续保留。
 

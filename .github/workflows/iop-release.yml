@@ -112,7 +112,7 @@ jobs:
         run: npm test
         working-directory: iop/interface
       - name: Install Linux desktop libraries
-        run: sudo apt-get install -y libxtst6 libxkbfile1 libegl1 libopengl0
+        run: sudo apt-get install -y libxtst6 libxkbfile1 libegl1 libopengl0 libopus0 libsnappy1v5 libminizip1t64 liblcms2-2 libwebp7 libwebpdemux2 libwebpmux3
       - name: Exercise Linux native desktop
         timeout-minutes: 5
         env:

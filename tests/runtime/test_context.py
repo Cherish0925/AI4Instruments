@@ -66,7 +66,7 @@ class ContextCase(unittest.TestCase):
         config = agent_configuration(Path('/path with spaces/lab'), self.client.endpoint)
         entry = config['mcpServers']['iop']
         self.assertEqual(entry['command'], sys.executable)
-        self.assertIn('/path with spaces/lab', entry['args'])
+        self.assertIn(str(Path('/path with spaces/lab')), entry['args'])
         self.assertEqual(entry['args'][-1], 'mcp')
         self.assertNotIn(self.config['token'], json.dumps(config))
 

@@ -12,7 +12,7 @@ root = Path(__file__).resolve().parents[1]
 version = json.loads((root / 'iop/release.json').read_text())['version']
 archive, = (root / 'release').glob(f'IOP-{version}-*.zip')
 with tempfile.TemporaryDirectory(prefix='iop install ') as temporary:
-    temporary = Path(temporary)
+    temporary = Path(temporary).resolve()
     with zipfile.ZipFile(archive) as package:
         package.extractall(temporary / 'download')
     source, = (temporary / 'download').iterdir()
@@ -36,7 +36,7 @@ with tempfile.TemporaryDirectory(prefix='iop install ') as temporary:
         assert context['service']['version'] == json.loads((root / 'iop/release.json').read_text())['version']
         assert context['devices'] == []
         launch = json.loads(run('mcp-config'))['mcpServers']['iop']
-        assert Path(launch['command']) == python
+        assert Path(launch['command']).samefile(python)
         assert str(home) in launch['args']
         assert config['token'] not in json.dumps(launch)
         subprocess.run([str(python), '-c', 'from ai4instruments.iop.context import schema_document; assert schema_document("platform")["title"]; import mcp'],

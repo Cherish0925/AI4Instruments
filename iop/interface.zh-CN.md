@@ -37,7 +37,7 @@ macOS 应用位于当前用户的 `Applications` 目录；Linux 写入当前用�
 sudo apt-get install libegl1 libopengl0 libxkbcommon0 libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 libxcb-keysyms1 libxcb-shape0 libxcb-xinerama0 libxcb-randr0 libxcb-render-util0 libxtst6 libxkbfile1 libnss3 libasound2t64
 ```
 
-Ubuntu 22.04 使用 `libasound2` 替代 `libasound2t64`。无桌面的服务器和 WSL 可以使用 `install.sh` 安装运行服务，从浏览器访问。Windows 专用仪器 SDK 使用 Windows 端服务。
+Ubuntu 22.04 使用 `libasound2` 替代 `libasound2t64`。Linux ARM64 桌面使用 Ubuntu 24.04（glibc 2.39）或更新的兼容系统，以安装对应的 [PySide6 网页引擎](https://pypi.org/project/PySide6-WebEngine/)。无桌面的服务器和 WSL 可以使用 `install.sh` 安装运行服务，从浏览器访问。Windows 专用仪器 SDK 使用 Windows 端服务。
 
 安装脚本打印完整命令路径；同一目录可以再次运行安装脚本升级。更新前用旧安装的 `iop stop` 停止服务，安装后重新打开应用。默认的 `~/.iop` 配置与实验记录继续保留。
 
@@ -76,4 +76,4 @@ iop --endpoint http://lab-computer:8765 desktop
 
 ## 界面工程
 
-界面是随软件安装的 HTML、CSS 与 JavaScript 模块，无需前端服务器或 CDN。桌面使用 pywebview，Windows / macOS 使用系统网页引擎，Linux 使用 Qt WebEngine。[源码与运行检查](interface/README.md)。
+界面是随软件安装的 HTML、CSS 与 JavaScript 模块，无需前端服务器或 CDN。Windows / macOS 使用系统网页引擎，Linux 使用 Qt WebEngine。常规桌面窗口由 pywebview 提供，Windows ARM64 通过公开的 Windows Forms 与 WebView2 接口创建窗口。[源码与运行检查](interface/README.md)。

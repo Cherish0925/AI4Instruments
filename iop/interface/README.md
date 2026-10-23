@@ -15,6 +15,7 @@ The runtime serves the application from its installed package. The same pages ar
 | `ui/runs.js` | Workflow/program submission, history, results and downloads |
 | `ui/resources.js` | Resource capacities, allocation and installed adapters |
 | `src/ai4instruments/iop/desktop.py` | Native window, browser handoff and OS launchers |
+| `src/ai4instruments/iop/windows_desktop.py` | Windows ARM64 WebView2 host using public Windows Forms APIs on CoreCLR |
 
 Run the browser workflow checks from this directory:
 

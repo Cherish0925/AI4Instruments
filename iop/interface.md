@@ -37,7 +37,7 @@ macOS applications are installed under your user `Applications` directory. Linux
 sudo apt-get install libegl1 libopengl0 libxkbcommon0 libxkbcommon-x11-0 libxcb-cursor0 libxcb-icccm4 libxcb-keysyms1 libxcb-shape0 libxcb-xinerama0 libxcb-randr0 libxcb-render-util0 libxtst6 libxkbfile1 libnss3 libasound2t64
 ```
 
-Use `libasound2` instead of `libasound2t64` on Ubuntu 22.04. Headless servers and WSL can use `install.sh` and browser access. Windows-specific instrument SDKs run with a Windows service.
+Use `libasound2` instead of `libasound2t64` on Ubuntu 22.04. Linux ARM64 desktop installations require Ubuntu 24.04 (glibc 2.39) or a newer compatible system for the matching [PySide6 web engine](https://pypi.org/project/PySide6-WebEngine/). Headless servers and WSL can use `install.sh` and browser access. Windows-specific instrument SDKs run with a Windows service.
 
 The installer prints full command paths. To update, stop the existing service with its `iop stop` command, run the new installer and reopen the application. Existing `~/.iop` configuration and records are retained.
 
@@ -76,4 +76,4 @@ Results load separately from operation history, which is paged in groups of 100.
 
 ## Interface implementation
 
-HTML, CSS and JavaScript modules ship with the installed software; no frontend development server or CDN is required. The desktop uses pywebview with the system web engine on Windows / macOS and Qt WebEngine on Linux. See [source and verification](interface/README.md).
+HTML, CSS and JavaScript modules ship with the installed software; no frontend development server or CDN is required. Desktop windows use the system web engine on Windows / macOS and Qt WebEngine on Linux. pywebview supplies the standard window; Windows ARM64 uses public Windows Forms and WebView2 APIs directly. See [source and verification](interface/README.md).

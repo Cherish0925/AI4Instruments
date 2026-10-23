@@ -6,6 +6,8 @@ import json
 import shutil
 import socketserver
 import threading
+import time
+import platform
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse, parse_qs
@@ -28,6 +30,7 @@ class Server(ThreadingHTTPServer):
 
     def __init__(self, address, engine):
         self.engine = engine
+        self.started = time.monotonic()
         super().__init__(address, Handler)
         host, port = self.server_address[:2]
         engine.endpoint = f"http://{'127.0.0.1' if host == '0.0.0.0' else host}:{port}"
@@ -61,10 +64,12 @@ class Handler(BaseHTTPRequestHandler):
         try:
             if method == 'GET' and url.path == '/':
                 return self._send(Path(__file__).with_name('reader.html').read_bytes(), media_type='text/html; charset=utf-8')
-            if method == 'GET' and url.path == '/platform.js':
-                return self._send(Path(__file__).with_name('platform.js').read_bytes(), media_type='text/javascript; charset=utf-8')
-            if method == 'GET' and url.path == '/resources.js':
-                return self._send(Path(__file__).with_name('resources.js').read_bytes(), media_type='text/javascript; charset=utf-8')
+            if method == 'GET' and len(parts) == 2 and parts[0] == 'ui' and parts[1] in {
+                'app.css', 'app.js', 'core.js', 'devices.js', 'platforms.js', 'runs.js', 'resources.js', 'mark.svg'
+            }:
+                file = Path(__file__).with_name('ui') / parts[1]
+                media = {'.js':'text/javascript; charset=utf-8', '.css':'text/css; charset=utf-8', '.svg':'image/svg+xml'}
+                return self._send(file.read_bytes(), media_type=media[file.suffix])
             if method == 'GET' and url.path == '/health':
                 return self._send({'service':'IOP', 'version':VERSION})
             expected = 'Bearer ' + engine.config['token']
@@ -82,7 +87,17 @@ class Handler(BaseHTTPRequestHandler):
                     raise ValueError('Expected a JSON object')
             result = None
             if parts == ['v1','status'] and method == 'GET':
-                result = {'version':VERSION, **engine.metrics()}
+                result = {'version':VERSION, 'hostname':platform.node(), 'system':platform.system(),
+                          'uptime_s':round(time.monotonic() - self.server.started), **engine.metrics()}
+            elif parts == ['v1', 'ui'] and method == 'GET':
+                from .desktop import available, has_display
+                result = {'desktop_installed':available(), 'desktop_available':available() and has_display(),
+                          'local':self.client_address[0] in ('127.0.0.1', '::1')}
+            elif parts == ['v1', 'ui', 'desktop'] and method == 'POST':
+                if self.client_address[0] not in ('127.0.0.1', '::1'):
+                    raise ValueError('Open the desktop application on your computer, then connect it to this service.')
+                from .desktop import spawn
+                result = spawn(engine.home, body.get('view', 'overview'))
             elif parts == ['v1', 'resources']:
                 result = engine.configure_resources(body['capacities']) if method == 'POST' else engine.resource_info()
             elif parts == ['v1', 'adapters'] and method == 'GET':
@@ -112,10 +127,12 @@ class Handler(BaseHTTPRequestHandler):
             elif len(parts) == 4 and parts[:2] == ['v1', 'devices'] and parts[3] == 'reconnect' and method == 'POST':
                 result = engine.reconnect(parts[2])
             elif parts == ['v1','discovery'] and method == 'GET':
-                result = engine.scan()
+                result = dict(engine.discovery) if query.get('cached') == 'true' else engine.scan()
                 result['registered'] = list(engine.descriptions.values())
             elif parts == ['v1','runs']:
                 result = engine.submit(body) if method == 'POST' else engine.store.list('runs', limit=int(query.get('limit',100)))
+                if method == 'GET' and query.get('details') == 'false':
+                    result = [{k:v for k,v in run.items() if k not in ('result','operations','definition','manifest')} for run in result]
             elif parts == ['v1','packages'] and method == 'POST':
                 data = base64.b64decode(body.pop('archive'), validate=True)
                 result = engine.submit(body, data)
@@ -136,6 +153,8 @@ class Handler(BaseHTTPRequestHandler):
                     result = engine.cancel(run_id)
                 elif action == 'result' and method == 'POST':
                     result = engine.save_result(run_id, body['result'])
+                elif action == 'result' and method == 'GET':
+                    result = engine.store.get('runs', run_id).get('result')
                 elif action == 'artifacts':
                     result = engine.artifact(run_id, body['name'], base64.b64decode(body['data'], validate=True)) if method == 'POST' else engine.store.list('artifacts', run_id, 10000)
                 else:

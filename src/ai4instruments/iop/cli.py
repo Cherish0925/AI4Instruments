@@ -75,6 +75,8 @@ def parser():
     p = sub.add_parser('init', help='Create a configuration'); p.add_argument('--demo', action='store_true'); p.add_argument('--port', type=int, default=8765)
     for name in ['start','serve','stop','status','open','devices','discover','adapters']:
         sub.add_parser(name)
+    p = sub.add_parser('desktop', help='Open the native desktop window'); p.add_argument('--view', default='overview')
+    sub.add_parser('shortcuts', help='Install desktop and browser application entries')
     p = sub.add_parser('register'); p.add_argument('file')
     p = sub.add_parser('reconnect'); p.add_argument('device')
     p = sub.add_parser('resources'); p.add_argument('--set', dest='capacities', help='JSON object of resource capacities')
@@ -117,7 +119,14 @@ def main():
         elif args.command == 'status':
             output(client.request('/v1/status'))
         elif args.command == 'open':
-            webbrowser.open(client.endpoint+'/#token='+client.token)
+            from .desktop import open_browser
+            open_browser(home, args.endpoint)
+        elif args.command == 'desktop':
+            from .desktop import launch
+            launch(home, args.endpoint, args.view)
+        elif args.command == 'shortcuts':
+            from .desktop import install_launchers
+            output(install_launchers(home))
         elif args.command == 'devices':
             output(client.devices())
         elif args.command == 'discover':

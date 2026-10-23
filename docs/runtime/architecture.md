@@ -4,13 +4,14 @@
 
 IOP Runtime runs on laboratory computers between people, agents, experiment programs and their instruments or computational tools. A computer may manage several experimental platforms. Platform definitions describe device membership, physical connections, shared objects and initialization.
 
-## Implementation in 0.5.0
+## Implementation in 0.6.0
 
 | Component | Responsibility | Source |
 | --- | --- | --- |
 | Python service | HTTP, platform configuration, dependency/resource scheduling and adapters | `src/ai4instruments/iop/` |
 | Rust executor | SDK sessions, program process trees, cancellation and exit | `iop/daemon/` |
 | TypeScript client | Package submission, operations, events, results and files | `iop/clients/typescript/` |
+| Desktop and browser | Registration, topology, experiments, results and native/browser switching | `desktop.py`, `ui/` |
 | SQLite and files | Run state, operations, events, configuration revisions, file index and raw output | `store.py` and the service directory |
 
 The browser uses static HTML and JavaScript served by IOP; it needs no separate Node.js service. Vendor C, C++, C# and Java SDKs use independent worker processes. Ordinary programs can use the command adapter.

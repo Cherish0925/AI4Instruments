@@ -13,11 +13,11 @@ name = f'IOP-{version}-{system}-{arch}'
 output = root / 'release'; output.mkdir(exist_ok=True)
 with zipfile.ZipFile(output / (name + '.zip'), 'w', zipfile.ZIP_DEFLATED) as archive:
     archive.write(wheel, name + '/dist/' + wheel.name)
-    for filename in ('install.sh','install.ps1','LICENSE'):
+    for filename in ('install.sh','install.ps1','install-desktop.sh','install-desktop.ps1','LICENSE'):
         archive.write(root / filename, name + '/' + filename)
     for document in (root / 'iop').glob('*.md'):
         archive.write(document, name + '/iop/' + document.name)
-    for folder in ('iop/examples','iop/schema','docs/runtime','examples/iop'):
+    for folder in ('iop/examples','iop/schema','iop/performance','iop/interface/screenshots','docs/runtime','examples/iop'):
         for file in (root / folder).rglob('*'):
             if file.is_file() and '__pycache__' not in file.parts:
                 archive.write(file,name + '/' + file.relative_to(root).as_posix())
@@ -28,7 +28,10 @@ Linux/macOS/WSL: sh install.sh
 Windows: powershell -NoProfile -ExecutionPolicy Bypass -File .\\install.ps1
 The installer prints the installed command paths.
 
-Start: iop init, iop start, iop open
+Desktop installation: install-desktop.sh or install-desktop.ps1
+Open IOP Runtime from the system application menu, or run iop desktop.
+Browser: iop open
+Both start or connect to the same persistent service.
 Platform setup and usage:
 https://github.com/Cherish0925/AI4Instruments/tree/main/iop
 ''')

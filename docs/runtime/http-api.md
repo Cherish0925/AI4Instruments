@@ -1,4 +1,4 @@
-# IOP HTTP API · 0.5.0
+# IOP HTTP API · 0.6.0
 
 [中文安装](README.zh-CN.md) · [Installation](README.md)
 
@@ -9,23 +9,26 @@ Base URL: `http://127.0.0.1:8765`. API bodies are JSON objects. Requests to `/v1
 | Method | Path | Body / query | Response |
 | --- | --- | --- | --- |
 | GET | `/health` | — | Service name and version |
+| GET | `/v1/ui` | — | Desktop availability and local connection status |
+| POST | `/v1/ui/desktop` | `{"view":"devices"}` | Open a native window on the service computer; local requests only |
 | GET | `/v1/adapters` | — | Built-in and installed driver entries |
 | GET | `/v1/resources` | — | Configured capacities and current allocation |
 | POST | `/v1/resources` | `{"capacities":{"cpu":16,"solver":2}}` | Replace named capacities; accepted work must still fit |
 | POST | `/v1/devices/{device_id}/reconnect` | `{}` | Reconnect idle devices sharing a worker |
-| GET | `/v1/status` | — | Active/queued counts, worker limits, service errors |
+| GET | `/v1/status` | — | Active/queued counts, worker limits, service errors, version, hostname, system and uptime |
 | GET | `/v1/devices` | — | Instrument descriptions |
 | GET | `/v1/devices/{device_id}` | — | One instrument description |
 | POST | `/v1/devices` | Device record | Registered description; persists configuration |
-| GET | `/v1/discovery` | — | Current scan, provider availability and registered devices |
+| GET | `/v1/discovery` | `cached=true` to reuse the last scan | Current scan, provider availability and registered devices |
 | POST | `/v1/runs` | Workflow below | Accepted run record |
 | POST | `/v1/packages` | Package below | Accepted run record |
-| GET | `/v1/runs` | `limit=100` | Most recent runs first |
+| GET | `/v1/runs` | `limit=100&details=false` for compact summaries | Most recent runs first |
 | GET | `/v1/runs/{run_id}` | `details=false` for a compact state | Run; detailed response includes recent `operation_records` |
 | GET | `/v1/runs/{run_id}/operations` | `after=0&limit=200` | `{"operations":[...],"cursor":N}`; ordered operation history |
 | POST | `/v1/runs/{run_id}/operations` | Operation below | Operation in a running package |
 | GET | `/v1/operations/{operation_id}` | — | State, times, result or error |
 | POST | `/v1/runs/{run_id}/cancel` | `{}` | Current run, cancellation requested |
+| GET | `/v1/runs/{run_id}/result` | — | Saved result without operation history |
 | POST | `/v1/runs/{run_id}/result` | `{"result": ...}` | Saved result; run must be running |
 | POST | `/v1/runs/{run_id}/artifacts` | `{"name":"scan.csv","data":"<base64>"}` | Saved output file record |
 | GET | `/v1/runs/{run_id}/artifacts` | — | File records |

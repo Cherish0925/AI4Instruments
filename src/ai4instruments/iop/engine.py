@@ -111,6 +111,11 @@ class Engine:
         with self.lock:
             for record in self.device_records.values():
                 c = record.get("config", {})
+                if record['driver'] in ('scpi', 'modbus') and c.get('transport') in ('serial', 'visa'):
+                    address = c.get('resource') if c['transport'] == 'visa' else c.get('port')
+                    for candidate in inventory['connections']:
+                        if candidate.get('transport') == c['transport'] and candidate.get('address') == address:
+                            candidate.update(status='registered', id=record['id'])
                 if record["driver"] == "scpi" and c.get("transport", "tcp") == "tcp":
                     inventory["connections"].append({"transport":"tcp", "address":str(c.get("host"))+":"+str(c.get("port",5025)), "id":record["id"], "status":"registered"})
             for record in self.device_records.values():

@@ -1,6 +1,6 @@
 # IOP Runtime
 
-[中文](README.zh-CN.md) · [Download](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.5.0) · [Installation](../docs/runtime/README.md) · [Platform configuration](platforms.md) · [Agent integration](agent-setup.md)
+[中文](README.zh-CN.md) · [Download](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.6.0) · [Desktop & browser](interface.md) · [Installation](../docs/runtime/README.md) · [Platform configuration](platforms.md) · [Agent integration](agent-setup.md)
 
 **One persistent service for people and agents to use experimental platforms.** It connects physical instruments, computational programs and remote task services, maintains platform descriptions, schedules serial and parallel experiments, and preserves operations and data. Accepted experiments continue after the submitting terminal, browser or agent session closes.
 
@@ -10,7 +10,7 @@ One computer can serve several experimental platforms. Each platform describes i
 
 ## Start
 
-Download the matching IOP 0.5.0 archive and run `install.sh` on Linux, macOS or WSL, or `install.ps1` on Windows. Python 3.10+ is required. Archives include the platform-specific Rust executor; users do not need a Rust compiler. The installer prints the installed commands.
+Download and extract the matching IOP 0.6.0 archive. For a native desktop window, run `install-desktop.ps1` on Windows or `sh install-desktop.sh` on macOS / Linux, then open **IOP Runtime** from the application menu. Use `install.ps1` / `install.sh` for browser or server use. Python 3.10+ is required; archives include the Rust executor and installers download the required dependencies.
 
 | Archive | Runtime environment |
 | --- | --- |
@@ -28,7 +28,11 @@ iop start
 iop open
 ```
 
-The browser's platform page displays connections, imports and exports configuration, saves configuration versions and starts initialization. CLI and clients share the same API.
+Desktop and browser share the same interface. Use `iop desktop` for a native window or `iop open` for a browser; both connect to or start the local service. Experiments continue when a window closes.
+
+![IOP Runtime overview](interface/screenshots/overview.png)
+
+The screenshot shows a simulated platform with operations, results and connections supplied by the running service.
 
 ## Configure the platform, then run experiments
 
@@ -42,7 +46,7 @@ The browser's platform page displays connections, imports and exports configurat
 
 Physical topology and experimental timing are separate. A trigger cable alone does not establish synchronized acquisition: the program must configure and prepare the devices before triggering. Software orders operations; device clocks and hardware triggers provide precise timing.
 
-## Implemented in 0.5.0
+## Implemented in 0.6.0
 
 | Component | Implementation |
 | --- | --- |
@@ -50,7 +54,7 @@ Physical topology and experimental timing are separate. A trigger cable alone do
 | Native executor | Rust `iop-execd` owns SDK, command and experiment process trees, progress, cancellation and exit. |
 | Scheduling | Ready dependencies, rotation between experiments, result bindings, device concurrency and counted resources. |
 | Drivers | SCPI TCP / serial / VISA, Modbus TCP / RTU, synchronous/asynchronous HTTP, executable programs, Python packages and SDK workers. |
-| Clients | Python, TypeScript, HTTP, CLI and browser interface. |
+| Clients | Python, TypeScript, HTTP, CLI, native desktop and browser interface. |
 | Records | SQLite, configuration history, events, packages, output files and raw-data relationships. |
 
 C, C++, C#, Java and other adapters use the same [independent driver interface](drivers.md) or command interface. Their runtime environments are needed only by the relevant programs. In the [current architecture](../docs/runtime/architecture.md), Python handles HTTP and workflow scheduling; Rust handles process execution.
@@ -59,6 +63,7 @@ C, C++, C#, Java and other adapters use the same [independent driver interface](
 
 | Component | Location |
 | --- | --- |
+| Desktop, browser and interface development | [Guide](interface.md), [interface/](interface/) |
 | Platform descriptions | [Configuration guide](platforms.md), [JSON Schema](schema/platform.schema.json) |
 | Dependencies, resources and result bindings | [Execution](execution.md), [Workflow schema](schema/workflow.schema.json) |
 | Software, remote services and driver packages | [Extensions](software.md) |

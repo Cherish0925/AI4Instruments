@@ -1,16 +1,143 @@
-<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>IOP Runtime · 实验平台</title><style>
-:root{color-scheme:light dark;--bg:#f8f9f5;--fg:#233c32;--muted:#66756d;--line:#dce2d8;--surface:#fff;--accent:#315b45}*{box-sizing:border-box}body{margin:0;font:15px/1.6 system-ui,sans-serif;background:var(--bg);color:var(--fg)}header{padding:25px 5%;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}h1{font-size:24px;margin:0}main{max-width:1200px;margin:32px auto;padding:0 24px}nav{display:flex;gap:20px;overflow:auto;border-bottom:1px solid var(--line);margin-bottom:25px}button{font:inherit;border:1px solid var(--line);padding:7px 14px;border-radius:4px;background:var(--surface);color:var(--fg);cursor:pointer}nav button{white-space:nowrap;flex-shrink:0;border:0;background:none;border-radius:0;padding:12px 1px}nav button[aria-current=true]{border-bottom:2px solid var(--accent);font-weight:650}input,textarea,select{font:inherit;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:9px;border-radius:4px}input{max-width:100%}textarea{width:100%;min-height:210px;font:13px/1.5 monospace}select{padding:9px} .platform-card{border:1px solid var(--line);background:var(--surface);padding:20px;margin-bottom:16px;border-radius:6px}.platform-card h3{margin:0}.platform-card svg{width:100%;max-height:420px}.platform-card svg text{fill:var(--fg);font:13px system-ui}.platform-card svg rect{fill:var(--bg);stroke:var(--line)}.platform-card svg path{stroke:var(--accent);fill:none}.platform-card small{color:var(--muted)} h2{font-size:20px;font-weight:600}p{color:var(--muted)}table{width:100%;border-collapse:collapse;background:var(--surface)}td,th{text-align:left;padding:13px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--muted);font-size:13px;font-weight:500}.scroll{overflow:auto}.tools{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:16px 0}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.6 monospace;padding:20px;background:var(--surface);border:1px solid var(--line)}.muted{color:var(--muted)}.notice{color:#996331}dialog{background:var(--bg);color:var(--fg);width:min(980px,95%);max-height:90vh;border:1px solid var(--line)}[hidden]{display:none!important}#summary{font-size:14px;color:var(--muted)}@media(prefers-color-scheme:dark){:root{--bg:#16211c;--fg:#e4ebe4;--muted:#a1b5a7;--line:#35483c;--surface:#1d2d23;--accent:#a5c5a8}}@media(max-width:600px){header{display:block}td,th{padding:9px;font-size:13px}main{padding:0 14px}nav{gap:16px}}
-</style><header><h1>IOP Runtime <span class="muted">实验平台</span></h1><span id="summary">连接常驻服务</span></header><main><div id="connection" class="tools"><input id="token" type="password" placeholder="服务连接令牌" autocomplete="off"><button id="connect">连接</button><span class="muted">本机运行 iop open 可直接打开</span></div><p id="message" role="status"></p><nav><button data-tab="platforms" aria-current="true">实验平台</button><button data-tab="devices">仪器与软件</button><button data-tab="capacity">运行资源</button><button data-tab="runs">实验任务</button><button data-tab="submit">提交实验</button></nav><section id="platforms"><h2>实验平台</h2><p>先登记设备，再配置连接关系、共享资源和初始化步骤。同一台计算机可以管理多个平台。</p><div id="platform-cards"></div><h2>平台配置</h2><div class="tools"><input id="platform-id" placeholder="平台 ID，例如 materials-bench"><input id="platform-devices" placeholder="已登记设备 ID，用逗号分隔"><button id="platform-draft">创建配置</button><input type="file" id="platform-file" accept=".json"></div><textarea id="platform-definition" spellcheck="false" placeholder="选择平台编辑，或导入平台 JSON 文件"></textarea><div class="tools"><span id="platform-revision">新平台</span><button id="platform-preview">查看配置结果</button><button id="platform-apply">保存配置</button><button id="platform-export">导出文件</button></div><pre id="platform-result" hidden></pre></section><section id="devices" hidden><div class="tools"><h2>已注册设备</h2><button id="scan">发现设备</button></div><div class="scroll"><table><thead><tr><th>设备</th><th>类型</th><th>可用操作</th></tr></thead><tbody id="device-rows"></tbody></table></div><pre id="discovery" hidden></pre></section><section id="capacity" hidden><h2>运行资源</h2><p>为计算线程、GPU、软件许可或其他可计数资源设置可用数量。实验声明所需数量，服务统一安排。</p><div class="scroll"><table><thead><tr><th>资源</th><th>使用中</th><th>容量</th></tr></thead><tbody id="capacity-rows"></tbody></table></div><h2>可用数量</h2><textarea id="capacity-definition" spellcheck="false" style="min-height:120px">{}</textarea><div class="tools"><button id="capacity-save">保存资源配置</button><span class="muted">例如 {"cpu":16,"gpu":2,"solver":1}</span></div><h2>已安装适配器</h2><div id="adapter-list"></div></section><section id="runs" hidden><h2>实验任务</h2><div class="scroll"><table><thead><tr><th>实验</th><th>状态</th><th>开始时间</th><th>操作</th></tr></thead><tbody id="run-rows"></tbody></table></div></section><section id="submit" hidden><div class="tools"><label for="experiment-platform">实验平台</label><select id="experiment-platform"><option value="">直接选择已登记设备</option></select></div><h2>提交操作流程</h2><p>after 指定前置步骤，bindings 将结果传给后续操作。resources 保留设备，requirements 指定资源数量。</p><textarea id="workflow" spellcheck="false">{"name":"Position and measure","resources":["stage","meter"],"steps":[{"id":"move","device":"stage","operation":"move_to","arguments":{"angle_deg":15}},{"id":"read","device":"meter","operation":"measure","after":["move"]}]}</textarea><div class="tools"><button id="send">提交流程</button></div><h2>上传实验包</h2><p>ZIP 根目录包含 package.json 和程序文件。</p><div class="tools"><input type="file" id="package" accept=".zip"><input id="resources" placeholder="设备名称，用逗号分隔"><button id="upload">提交实验包</button></div></section><dialog id="detail"><button id="close">关闭</button><div id="detail-files" class="tools"></div><pre id="detail-text"></pre></dialog></main><script>
-const $=s=>document.querySelector(s);let token=new URLSearchParams(location.hash.slice(1)).get('token')||sessionStorage.getItem('iop-token')||'';if(location.hash)history.replaceState(null,'',location.pathname);$('#token').value=token;if(token)sessionStorage.setItem('iop-token',token);
-async function api(path,body){const r=await fetch('/v1/'+path,{method:body===undefined?'GET':'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});const v=await r.json();if(!r.ok)throw Error(v.error);return v}
-function message(s){$('#message').textContent=s}function cell(row,s){const td=document.createElement('td');td.textContent=s;row.append(td);return td}
-async function refresh(){if(!token)return;try{const [state,devices,runs]=await Promise.all([api('status'),api('devices'),api('runs?limit=40')]);if(window.refreshPlatforms)await window.refreshPlatforms();if(window.refreshResources)await window.refreshResources();$('#connection').hidden=true;$('#summary').textContent=`${state.devices} 个连接对象 · ${state.active_runs} 个运行中实验 · ${state.queued_runs} 个等待中实验`;
-$('#device-rows').replaceChildren();for(const d of devices){let tr=document.createElement('tr');cell(tr,d.id);cell(tr,({simulation:'模拟设备',software:'软件',hardware:'实体仪器'})[d.mode]||d.driver);cell(tr,Object.keys(d.operations).join(', '));$('#device-rows').append(tr)}
-$('#run-rows').replaceChildren();for(const r of runs){let tr=document.createElement('tr');cell(tr,r.name);cell(tr,r.state);cell(tr,new Date(r.started||r.created).toLocaleString());let td=cell(tr,'');let b=document.createElement('button');b.textContent='查看';b.onclick=async()=>{try{$('#detail-text').textContent=JSON.stringify(await api('runs/'+r.id),null,2);$('#detail-files').replaceChildren();for(const f of await api('runs/'+r.id+'/artifacts')){const link=document.createElement('button');link.textContent=f.name;link.onclick=async()=>{try{const response=await fetch('/v1/artifacts/'+f.id,{headers:{Authorization:'Bearer '+token}});if(!response.ok)throw Error('文件读取失败');const url=URL.createObjectURL(await response.blob());const a=document.createElement('a');a.href=url;a.download=f.name.split('/').pop();a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}catch(e){message(e.message)}};$('#detail-files').append(link)}$('#detail').showModal()}catch(e){message(e.message)}};td.append(b);if(['queued','running'].includes(r.state)){let c=document.createElement('button');c.textContent='停止';c.onclick=async()=>{try{await api('runs/'+r.id+'/cancel',{});refresh()}catch(e){message(e.message)}};td.append(c)}$('#run-rows').append(tr)}
-}catch(e){message(e.message);$('#connection').hidden=false}}
-$('#connect').onclick=()=>{token=$('#token').value;sessionStorage.setItem('iop-token',token);message('');refresh()};for(const b of document.querySelectorAll('[data-tab]'))b.onclick=()=>{for(const n of document.querySelectorAll('[data-tab]')){const active=n===b;n.setAttribute('aria-current',active);$('#'+n.dataset.tab).hidden=!active}};
-$('#scan').onclick=async()=>{try{message('正在读取设备列表');const d=await api('discovery');$('#discovery').hidden=false;$('#discovery').textContent=JSON.stringify(d,null,2);message('')}catch(e){message(e.message)}};
-$('#send').onclick=async()=>{try{const spec=JSON.parse($('#workflow').value);if($('#experiment-platform').value)spec.platform=$('#experiment-platform').value;const r=await api('runs',spec);message('已提交：'+r.id);refresh()}catch(e){message(e.message)}};
-$('#upload').onclick=async()=>{try{const f=$('#package').files[0];if(!f)throw Error('请选择 ZIP 文件');if(f.size>40*1024*1024)throw Error('实验包需小于 40 MiB');const data=new Uint8Array(await f.arrayBuffer());let s='';for(let i=0;i<data.length;i+=16384)s+=String.fromCharCode(...data.subarray(i,i+16384));const r=await api('packages',{name:f.name,archive:btoa(s),platform:$('#experiment-platform').value||undefined,resources:$('#resources').value.split(',').map(s=>s.trim()).filter(Boolean)});message('已提交：'+r.id);refresh()}catch(e){message(e.message)}};
-$('#close').onclick=()=>$('#detail').close();refresh();setInterval(refresh,3000);
-</script><script src="/platform.js"></script><script src="/resources.js"></script></html>
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>IOP Runtime</title>
+    <link rel="icon" type="image/svg+xml" href="/ui/mark.svg" />
+    <link rel="stylesheet" href="/ui/app.css" />
+    <script>
+      document.documentElement.dataset.theme =
+        localStorage.getItem("iop-theme") || "light";
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">跳到内容 · Skip to content</a>
+    <aside id="sidebar" class="sidebar">
+      <a class="brand" href="#overview"
+        ><img src="/ui/mark.svg" width="34" height="34" alt="" /><span
+          >IOP <small>Runtime</small></span
+        ></a
+      >
+      <button id="search-open" class="search-trigger">
+        <span data-icon="search"></span
+        ><span data-en="Find devices or experiments">查找设备与实验</span
+        ><kbd>⌘ K</kbd>
+      </button>
+      <div class="nav-label" data-en="LABORATORY">实验室</div>
+      <nav aria-label="主导航">
+        <button data-view="overview">
+          <span data-icon="grid"></span><span data-en="Overview">概览</span>
+        </button>
+        <button data-view="devices">
+          <span data-icon="device"></span
+          ><span data-en="Instruments & software">仪器与软件</span
+          ><b id="nav-devices">—</b>
+        </button>
+        <button data-view="platforms">
+          <span data-icon="network"></span
+          ><span data-en="Platforms">实验平台</span><b id="nav-platforms">—</b>
+        </button>
+        <button data-view="runs">
+          <span data-icon="activity"></span
+          ><span data-en="Experiments">实验任务</span><b id="nav-runs">—</b>
+        </button>
+        <button data-view="resources">
+          <span data-icon="layers"></span
+          ><span data-en="Resources">运行资源</span>
+        </button>
+      </nav>
+      <div class="sidebar-bottom">
+        <button id="mode-switch" class="mode-button">
+          <span data-icon="monitor"></span
+          ><span data-en="Open desktop app">打开桌面应用</span
+          ><span data-icon="arrow-up-right"></span>
+        </button>
+        <button data-view="settings" class="settings-button">
+          <span data-icon="settings"></span
+          ><span data-en="Connection & settings">连接与设置</span>
+        </button>
+        <div class="service-label">
+          <span id="connection-dot" class="dot"></span
+          ><span id="service-caption" data-en="Connecting">正在连接</span
+          ><span id="sidebar-version"></span>
+        </div>
+      </div>
+    </aside>
+    <div class="shell">
+      <header class="topbar">
+        <button
+          id="menu-toggle"
+          class="icon-button"
+          aria-label="展开导航"
+          title="菜单"
+        >
+          <span data-icon="menu"></span>
+        </button>
+        <div class="breadcrumb">
+          <span data-en="Laboratory">实验室</span><span>/</span
+          ><strong id="view-title">概览</strong>
+        </div>
+        <div class="topbar-actions">
+          <span id="host-label" class="host-label"></span
+          ><button
+            id="refresh-button"
+            class="icon-button"
+            title="刷新"
+            aria-label="刷新"
+          >
+            <span data-icon="refresh"></span></button
+          ><button id="new-run" class="button primary">
+            <span data-icon="plus"></span
+            ><span data-en="New experiment">新建实验</span>
+          </button>
+        </div>
+      </header>
+      <div
+        id="connection-banner"
+        class="connection-banner"
+        role="status"
+        hidden
+      ></div>
+      <main id="content" tabindex="-1"></main>
+      <footer>
+        <span>IOP Runtime</span
+        ><span id="footer-status" data-en="Experiment service"
+          >实验运行服务</span
+        ><span id="updated-at"></span>
+      </footer>
+    </div>
+    <dialog id="modal" class="modal">
+      <div class="modal-heading">
+        <div>
+          <span id="modal-eyebrow" class="eyebrow"></span>
+          <h2 id="modal-title"></h2>
+        </div>
+        <button
+          id="modal-close"
+          class="icon-button"
+          aria-label="关闭"
+          title="关闭"
+        >
+          <span data-icon="close"></span>
+        </button>
+      </div>
+      <div id="modal-body"></div>
+    </dialog>
+    <dialog id="palette" class="palette">
+      <div class="palette-search">
+        <span data-icon="search"></span
+        ><input
+          id="palette-input"
+          placeholder="搜索设备、平台、实验…"
+          data-en-placeholder="Find devices, platforms or experiments…"
+          autocomplete="off"
+        /><kbd>Esc</kbd>
+      </div>
+      <div id="palette-results"></div>
+    </dialog>
+    <div id="toast" class="toast" role="status" hidden></div>
+    <script type="module" src="/ui/app.js"></script>
+  </body>
+</html>

@@ -4,11 +4,13 @@
 
 IOP Runtime runs on the computer connected to your instruments. It maintains device connections, executes experiment programs, schedules serial and parallel operations, and retains parameters, readings, results and files. People and agents share the HTTP API, Python client and command line. A browser interface displays instruments, accepts experiments and shows results.
 
-**Implemented in 0.5.0:** background service, device registration and discovery, dependency scheduling, reservations across steps, experiment package execution, persistent records, Python client, browser interface and operating-system login startup.
+**Implemented in 0.6.0:** background service, device registration and discovery, dependency scheduling, reservations across steps, experiment package execution, persistent records, Python client, browser interface and operating-system login startup.
 
 Rust handles SDK, command and experiment processes; Python handles HTTP and workflow scheduling; TypeScript supplies the complete client. See the [current architecture](architecture.md).
 
 **New in 0.5.0:** ready dependency scheduling, result bindings, counted resources, command programs, HTTP jobs, installable driver entry points, progress events and streaming file uploads. [Execution](../../iop/execution.md) · [Software and drivers](../../iop/software.md). Open the [IOP project](../../iop/README.md) or [configure a platform](../../iop/platforms.md).
+
+**New in 0.6.0:** a native desktop window, browser switching, application menu entries and a redesigned interface for devices, platforms, experiments and resources. [Desktop and browser guide](../../iop/interface.md).
 
 ## Install and start
 

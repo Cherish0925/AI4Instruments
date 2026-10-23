@@ -38,6 +38,13 @@ jobs:
           wheel, = Path('dist').glob('*.whl')
           subprocess.run([sys.executable,'-m','pip','install',str(wheel),'pyserial','pymodbus>=3.11,<4'],check=True)
       - run: python -m unittest discover -s tests -v
+      - name: Install native desktop
+        if: runner.os != 'Linux'
+        run: python -m pip install "pywebview>=6.2,<7"
+      - name: Exercise native desktop and browser switching
+        if: runner.os != 'Linux'
+        timeout-minutes: 5
+        run: python iop/interface/test/desktop.py
       - run: python scripts/build_iop_bundle.py
       - uses: actions/upload-artifact@v4
         with:
@@ -63,8 +70,40 @@ jobs:
         with:
           name: iop-typescript
           path: iop/clients/typescript/*.tgz
+  interface:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo build --release --locked --manifest-path iop/daemon/Cargo.toml
+      - name: Include native executor
+        run: mkdir -p src/ai4instruments/iop/bin && cp iop/daemon/target/release/iop-execd src/ai4instruments/iop/bin/
+      - run: python -m pip install '.[desktop]'
+      - run: npm ci
+        working-directory: iop/interface
+      - run: npx playwright install --with-deps chromium
+        working-directory: iop/interface
+      - name: Exercise browser workflows
+        run: npm test
+        working-directory: iop/interface
+      - name: Install Linux desktop libraries
+        run: sudo apt-get install -y libxtst6 libxkbfile1 libegl1 libopengl0
+      - name: Exercise Linux native desktop
+        timeout-minutes: 5
+        env:
+          QT_API: pyside6
+          QT_QPA_PLATFORM: offscreen
+          QTWEBENGINE_DISABLE_SANDBOX: '1'
+          QTWEBENGINE_CHROMIUM_FLAGS: '--disable-gpu --no-sandbox'
+        run: python iop/interface/test/desktop.py
   publish:
-    needs: [native, typescript]
+    needs: [native, typescript, interface]
     runs-on: ubuntu-latest
     permissions:
       contents: write

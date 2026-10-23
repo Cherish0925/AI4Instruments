@@ -17,6 +17,7 @@ class ParallelDriver(Driver):
         super().__init__(*args)
         self.lock = threading.Lock()
         self.active = self.maximum = self.calls = 0
+        self.hold = None
 
     def describe(self):
         return {'mode':'software', 'concurrency':8, 'requirements':self.config.get('requirements', {}),
@@ -30,6 +31,8 @@ class ParallelDriver(Driver):
             self.maximum = max(self.maximum, self.active)
         try:
             cancelled.progress(0.5, 'Computing')
+            if self.hold is not None and not self.hold.wait(10):
+                raise TimeoutError('Operation was not released by the test')
             if cancelled.wait(arguments['duration']):
                 raise CancelledError()
             return {'value':arguments['x'] * 2}
@@ -62,12 +65,20 @@ class ExecutionCase(unittest.TestCase):
     def test_reservation_is_counted_once_and_capacity_can_change_after_completion(self):
         self.client.configure_resources({'cpu':4})
         self.register({'cpu':2})
-        run = self.client.submit([self.step('a'),self.step('b')], requirements={'cpu':4})
-        self.wait_running(run)
-        with self.assertRaises(IOPError):
-            self.client.configure_resources({'cpu':1})
-        used = {row['resource']:row['used'] for row in self.client.resources()['allocation']}
-        self.assertEqual(used['pool:cpu'],4)
+        driver = self.engine.devices['calculator']
+        driver.hold = threading.Event()
+        try:
+            run = self.client.submit([self.step('a'),self.step('b')], requirements={'cpu':4})
+            deadline = time.monotonic() + 5
+            while driver.maximum < 2 and time.monotonic() < deadline:
+                time.sleep(0.01)
+            self.assertEqual(driver.maximum, 2)
+            with self.assertRaises(IOPError):
+                self.client.configure_resources({'cpu':1})
+            used = {row['resource']:row['used'] for row in self.client.resources()['allocation']}
+            self.assertEqual(used['pool:cpu'],4)
+        finally:
+            driver.hold.set()
         run.result(5)
         self.assertEqual(self.engine.devices['calculator'].maximum,2)
         self.client.configure_resources({'cpu':2})

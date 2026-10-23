@@ -58,7 +58,8 @@ def launch(home, endpoint=None, view='overview'):
         import clr
         # CoreCLR separates desktop drawing and system events into their own assemblies.
         for assembly in ('System.Windows.Forms', 'System.Drawing.Primitives',
-                         'System.Drawing.Common', 'Microsoft.Win32.SystemEvents'):
+                         'System.Drawing.Common', 'Microsoft.Win32.SystemEvents',
+                         'System.Diagnostics.Process'):
             clr.AddReference(assembly)
     import webview
     client = ensure_service(home, endpoint)

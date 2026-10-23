@@ -61,6 +61,10 @@ def launch(home, endpoint=None, view='overview'):
                          'System.Drawing.Common', 'Microsoft.Win32.SystemEvents',
                          'System.Diagnostics.Process'):
             clr.AddReference(assembly)
+        from .windows_desktop import open_window
+        client = ensure_service(home, endpoint)
+        return open_window(page_url(client, view, True), Path(home) / 'desktop',
+                           lambda selected: webbrowser.open(page_url(client, selected)))
     import webview
     client = ensure_service(home, endpoint)
 

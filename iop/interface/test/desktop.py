@@ -2,6 +2,7 @@
 import os
 import subprocess
 import sys
+import sysconfig
 import tempfile
 import time
 from pathlib import Path
@@ -30,8 +31,8 @@ with tempfile.TemporaryDirectory(prefix='iop-desktop-') as folder:
         client = Client(endpoint, token=config['token'])
         experiment = []
 
-        def interact():
-            window = webview.windows[0]
+        def interact(window=None):
+            window = window or webview.windows[0]
             try:
                 if not window.events.loaded.wait(30):
                     raise RuntimeError('Desktop page did not load')
@@ -57,11 +58,19 @@ with tempfile.TemporaryDirectory(prefix='iop-desktop-') as folder:
                 window.destroy()
 
         with patch.object(desktop.webbrowser, 'open', side_effect=lambda url: opened.append(url)):
-            original = webview.start
-            def start(*args, **kwargs):
-                return original(interact, *args, **kwargs)
-            with patch.object(webview, 'start', side_effect=start):
-                desktop.launch(home, endpoint)
+            if sys.platform == 'win32' and (sysconfig.get_platform() == 'win-arm64' or os.environ.get('PYTHONNET_RUNTIME') == 'coreclr'):
+                from ai4instruments.iop import windows_desktop
+                original = windows_desktop.open_window
+                def start(*args, **kwargs):
+                    return original(*args, **kwargs, on_loaded=interact)
+                with patch.object(windows_desktop, 'open_window', side_effect=start):
+                    desktop.launch(home, endpoint)
+            else:
+                original = webview.start
+                def start(*args, **kwargs):
+                    return original(interact, *args, **kwargs)
+                with patch.object(webview, 'start', side_effect=start):
+                    desktop.launch(home, endpoint)
         if errors:
             raise errors[0]
         assert experiment[0].wait(5)['state'] == 'completed'

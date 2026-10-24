@@ -1,11 +1,21 @@
 $ErrorActionPreference = 'Stop'
 $InstallDir = if ($env:IOP_INSTALL_DIR) { $env:IOP_INSTALL_DIR } else { Join-Path $env:LOCALAPPDATA 'AI4Instruments' }
+$PreviousPython = Join-Path $InstallDir 'venv\Scripts\python.exe'
+if (Test-Path $PreviousPython) {
+    & $PreviousPython (Join-Path $PSScriptRoot 'scripts\prepare_iop_upgrade.py')
+    if ($LASTEXITCODE -ne 0) { throw 'The previous installation is still in use' }
+}
 $PythonArchive = Join-Path $PSScriptRoot 'runtime\python.tar.gz'
 if ((Test-Path $PythonArchive) -and -not $env:IOP_PYTHON) {
     $PythonDir = Join-Path $InstallDir 'runtime\0.8.2'
-    New-Item -ItemType Directory -Path $PythonDir -Force | Out-Null
-    & tar.exe -xzf $PythonArchive -C $PythonDir
-    if ($LASTEXITCODE -ne 0) { throw 'Could not unpack the included Python' }
+    $PythonSource = Join-Path $PSScriptRoot 'runtime\source.json'
+    $InstalledSource = Join-Path $PythonDir 'source.json'
+    if (-not (Test-Path $InstalledSource) -or (Get-Content $InstalledSource -Raw) -ne (Get-Content $PythonSource -Raw)) {
+        New-Item -ItemType Directory -Path $PythonDir -Force | Out-Null
+        & tar.exe -xzf $PythonArchive -C $PythonDir
+        if ($LASTEXITCODE -ne 0) { throw 'Could not unpack the included Python' }
+        Copy-Item $PythonSource $InstalledSource
+    }
     $Python = Join-Path $PythonDir 'python\python.exe'
     $BundledPython = $true
 } else {
@@ -13,10 +23,7 @@ if ((Test-Path $PythonArchive) -and -not $env:IOP_PYTHON) {
 }
 & $Python -c 'import sys; assert sys.version_info >= (3,10), "Python 3.10 or later is required"'
 if ($LASTEXITCODE -ne 0) { throw 'Python 3.10 or later is required' }
-$PreviousPython = Join-Path $InstallDir 'venv\Scripts\python.exe'
 if (Test-Path $PreviousPython) {
-    & $PreviousPython (Join-Path $PSScriptRoot 'scripts\prepare_iop_upgrade.py')
-    if ($LASTEXITCODE -ne 0) { throw 'The previous installation is still in use' }
     & $Python -m venv --upgrade (Join-Path $InstallDir 'venv')
 } else {
     & $Python -m venv (Join-Path $InstallDir 'venv')

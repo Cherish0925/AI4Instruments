@@ -2,9 +2,15 @@
 set -eu
 IOP_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 IOP_PREFIX=${IOP_INSTALL_DIR:-"$HOME/.local/share/ai4instruments"}
+if [ -f "$IOP_PREFIX/venv/bin/python" ]; then
+    "$IOP_PREFIX/venv/bin/python" "$IOP_ROOT/scripts/prepare_iop_upgrade.py"
+fi
 if [ -f "$IOP_ROOT/runtime/python.tar.gz" ] && [ -z "${IOP_PYTHON:-}" ]; then
-    mkdir -p "$IOP_PREFIX/runtime/0.8.2"
-    tar -xzf "$IOP_ROOT/runtime/python.tar.gz" -C "$IOP_PREFIX/runtime/0.8.2"
+    if ! cmp -s "$IOP_ROOT/runtime/source.json" "$IOP_PREFIX/runtime/0.8.2/source.json"; then
+        mkdir -p "$IOP_PREFIX/runtime/0.8.2"
+        tar -xzf "$IOP_ROOT/runtime/python.tar.gz" -C "$IOP_PREFIX/runtime/0.8.2"
+        cp "$IOP_ROOT/runtime/source.json" "$IOP_PREFIX/runtime/0.8.2/source.json"
+    fi
     IOP_PYTHON="$IOP_PREFIX/runtime/0.8.2/python/bin/python3"
     IOP_BUNDLED=1
 else
@@ -12,7 +18,6 @@ else
 fi
 "$IOP_PYTHON" -c 'import sys; assert sys.version_info >= (3,10), "Python 3.10 or later is required"'
 if [ -f "$IOP_PREFIX/venv/bin/python" ]; then
-    "$IOP_PREFIX/venv/bin/python" "$IOP_ROOT/scripts/prepare_iop_upgrade.py"
     "$IOP_PYTHON" -m venv --upgrade "$IOP_PREFIX/venv"
 else
     "$IOP_PYTHON" -m venv "$IOP_PREFIX/venv"

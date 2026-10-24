@@ -23,6 +23,7 @@ if hashlib.sha256(archive.read_bytes()).hexdigest() != source['sha256']:
     raise RuntimeError('Python download is incomplete or differs from the published distribution')
 (directory / 'source.json').write_text(json.dumps(source, indent=2) + '\n')
 wheel, = (root / 'dist').glob('*.whl')
-subprocess.run([sys.executable, '-m', 'pip', 'download', '--only-binary=:all:', '--dest', str(directory / 'wheels'),
+# Build missing platform wheels here, so installation never needs a compiler.
+subprocess.run([sys.executable, '-m', 'pip', 'wheel', '--prefer-binary', '--wheel-dir', str(directory / 'wheels'),
                 str(wheel) + '[devices,agent]', 'pip'], check=True)
 print('Prepared Python and offline Runtime/Agent dependencies for ' + target)

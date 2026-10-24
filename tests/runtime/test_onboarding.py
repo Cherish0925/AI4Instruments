@@ -1,5 +1,6 @@
 """Shared instrument setup and data access, independent of a particular model."""
 import copy
+from contextlib import closing
 import json
 import socketserver
 import sqlite3
@@ -18,7 +19,7 @@ class Recorded(Driver):
         return {'mode': 'simulation', 'operations': {'read': {'parameters': {}}}}
 
     def invoke(self, operation, arguments, context):
-        with sqlite3.connect(self.config['database']) as db:
+        with closing(sqlite3.connect(self.config['database'])) as db:
             state, = db.execute('SELECT state FROM operations WHERE id=?', (context.operation_id,)).fetchone()
         if state != 'running':
             raise RuntimeError('Operation started before its record was committed')

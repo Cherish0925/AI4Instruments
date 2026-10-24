@@ -60,4 +60,4 @@ Remaining product work includes standalone installers, signing and notarization,
 
 Local clients read local connection settings automatically. Remote clients use the service's existing token. Experiment programs execute with the service account's permissions; remote networks use the laboratory's controlled network or encrypted connection.
 
-Accepted experiments continue after clients close. On service restart, queued work is restored and previously started work is recorded as interrupted. Physical actions with unresolved outcomes are not automatically resubmitted. Devices and shared resources follow their saved scheduling configuration; independent equipment can operate concurrently.
+Accepted experiments continue after clients close. On service restart, queued work is restored and previously started work is recorded as interrupted. Programs declaring resume support can [continue from saved progress](continuity.md#saved-program-progress) under their original run ID. Unresolved physical actions require a device-state read before continuing. Devices and shared resources follow their saved scheduling configuration; independent equipment can operate concurrently.

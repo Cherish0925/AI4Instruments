@@ -2,7 +2,7 @@
 
 [English](README.md) · [服务架构](architecture.zh-CN.md) · [HTTP 接口](http-api.md) · [仪器驱动](drivers.md) · [源码](../../src/ai4instruments/iop)
 
-0.8.2 改进[仪器接入](../../iop/instrument-setup.zh-CN.md)、并行调度和实验程序连续调用。[Agent 接入](../../iop/agent-setup.zh-CN.md)复用同一套实验室配置。[软件形态与系统支持](../../iop/product.zh-CN.md)。
+0.8.2 增加逐项设备发现、仪器配置在线编辑、程序进度保存与续接、二进制数据分块传输。[持续实验](../../iop/continuity.zh-CN.md)说明完整使用流程。[Agent 接入](../../iop/agent-setup.zh-CN.md)复用同一套实验室配置。[软件形态与系统支持](../../iop/product.zh-CN.md)。
 
 IOP Runtime 是安装在仪器所在计算机上的常驻软件。它保持设备连接，接收实验程序，安排串行与并行操作，保存参数、读数、结果和文件。人和 Agent 使用同一套 HTTP 接口、Python 客户端和命令行；浏览器可以查看设备、提交实验和读取结果。
 
@@ -197,7 +197,7 @@ run.save_result({"position": angle, "reading": reading})
 
 每次提交有独立 `run_id`，每项操作有独立 `operation_id`。实验保存提交时的设备说明，事件保存开始、结束、错误与返回结果。调用方可提供 `request_id`；同一请求重发返回原记录，不重复执行。
 
-服务重新启动时，尚未开始的任务继续排队；已经开始但没有完整结束记录的任务标为 `interrupted`，保留已有数据。该版本不会自动重放这些物理动作。重启后确认设备位置与实验进度，再提交下一次实验。
+服务重新启动时，尚未开始的任务继续排队；已经开始但没有完整结束记录的任务标为 `interrupted`，保留已有数据。声明支持续接的程序可以沿用原实验编号，从已保存的进度继续。存在尚未返回的物理动作时，先读取设备状态并记录处理结果；已经完成的调用按原请求编号返回已有结果。见[程序保存与续接](../../iop/continuity.zh-CN.md#程序保存与续接)。
 
 默认同时执行 8 项设备操作、4 个实验程序包，可在 `config.json` 中修改 `workers` 和 `package_workers` 后重启。并发数应按计算机性能、设备响应和实验需要设置。调度服务不会自行修改实验算法、设备参数或完成条件。
 

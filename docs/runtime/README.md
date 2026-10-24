@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) · [Architecture](architecture.md) · [HTTP API](http-api.md) · [Device drivers](drivers.md) · [Source](../../src/ai4instruments/iop)
 
-0.8.2 improves [instrument setup](../../iop/instrument-setup.md), parallel scheduling and repeated program calls. [Agent integration](../../iop/agent-setup.md) uses the same saved laboratory configuration. [Application interfaces and system support](../../iop/product.md).
+0.8.2 adds incremental discovery, editable instrument settings, saved program progress and binary data streams. [Continuing experiments](../../iop/continuity.md) explains the full sequence. [Agent integration](../../iop/agent-setup.md) uses the same saved laboratory configuration. [Application interfaces and system support](../../iop/product.md).
 
 IOP Runtime runs on the computer connected to your instruments. It maintains device connections, executes experiment programs, schedules serial and parallel operations, and retains parameters, readings, results and files. People and agents share the HTTP API, Python client and command line. A browser interface displays instruments, accepts experiments and shows results.
 
@@ -191,7 +191,7 @@ Data defaults to `~/.iop`. Change it with `IOP_HOME` or `iop --home /path/to/dat
 
 Each submission receives a `run_id`; each operation receives an `operation_id`. Runs retain instrument descriptions at submission. Events retain starts, ends, returned values and errors. A caller-supplied `request_id` identifies a repeated request and returns the original record without executing it twice.
 
-After restart, work that never started remains queued. Previously started work without a complete ending becomes `interrupted`, with its existing data retained. This version does not automatically replay those physical actions. Establish device position and experiment progress before submitting subsequent work.
+After restart, work that never started remains queued. Previously started work without a complete ending becomes `interrupted`, with its existing data retained. Programs declaring resume support can continue under the same run ID from their saved progress. Resolve any unfinished physical action by reading the device state before continuing; completed calls retain their results under their original request IDs. See [program progress and continuation](../../iop/continuity.md#saved-program-progress).
 
 Defaults are eight device workers and four package processes. Adjust `workers` and `package_workers` in `config.json` and restart. Choose these counts for the computer, instruments and experiments. The service does not independently change experimental algorithms, device parameters or completion conditions.
 

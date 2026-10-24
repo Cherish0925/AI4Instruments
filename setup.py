@@ -13,6 +13,10 @@ class BuildPython(build_py):
         destination.mkdir(parents=True, exist_ok=True)
         for source in Path('iop/schema').glob('*.schema.json'):
             shutil.copy2(source, destination / source.name)
+        destination = Path(self.build_lib) / 'ai4instruments/iop/instruments'
+        destination.mkdir(parents=True, exist_ok=True)
+        for source in Path('iop/instruments').glob('*.json'):
+            shutil.copy2(source, destination / source.name)
 
 
 class Wheel(bdist_wheel):

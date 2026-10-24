@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "IOP Instrument Model Description",
+  "type": "object",
+  "required": [
+    "id",
+    "match",
+    "config"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,79}$"
+    },
+    "driver": {
+      "const": "scpi"
+    },
+    "match": {
+      "type": "object",
+      "required": [
+        "manufacturer",
+        "model"
+      ],
+      "properties": {
+        "manufacturer": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          ]
+        },
+        "model": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          ]
+        },
+        "serial_number": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          ]
+        },
+        "firmware": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "documentation": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "config": {
+      "type": "object",
+      "required": [
+        "operations"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "operations": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "description": {
+                "type": "string"
+              },
+              "parameters": {
+                "type": "object"
+              },
+              "query": {
+                "type": "string",
+                "minLength": 1
+              },
+              "write": {
+                "type": "string",
+                "minLength": 1
+              },
+              "result": {
+                "type": "object"
+              }
+            },
+            "oneOf": [
+              {
+                "required": [
+                  "query"
+                ],
+                "not": {
+                  "required": [
+                    "write"
+                  ]
+                }
+              },
+              {
+                "required": [
+                  "write"
+                ],
+                "not": {
+                  "required": [
+                    "query"
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

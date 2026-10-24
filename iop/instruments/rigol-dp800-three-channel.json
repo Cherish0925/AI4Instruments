@@ -1,0 +1,117 @@
+{
+  "id": "rigol-dp800-three-channel",
+  "match": {
+    "manufacturer": [
+      "RIGOL TECHNOLOGIES",
+      "RIGOL TECHNOLOGIES,INC.",
+      "RIGOL TECHNOLOGIES INC.",
+      "RIGOL"
+    ],
+    "model": [
+      "DP831",
+      "DP831A",
+      "DP832",
+      "DP832A"
+    ]
+  },
+  "driver": "scpi",
+  "documentation": [
+    "https://www.batronix.com/pdf/Rigol/ProgrammingGuide/DP800_ProgrammingGuide_EN.pdf"
+  ],
+  "config": {
+    "operations": {
+      "read_voltage": {
+        "description": "Read measured channel voltage.",
+        "parameters": {
+          "channel": {
+            "type": "string",
+            "enum": [
+              "CH1",
+              "CH2",
+              "CH3"
+            ]
+          }
+        },
+        "query": ":MEAS:VOLT? {channel}",
+        "result": {
+          "type": "number",
+          "unit": "V"
+        }
+      },
+      "read_current": {
+        "description": "Read measured channel current.",
+        "parameters": {
+          "channel": {
+            "type": "string",
+            "enum": [
+              "CH1",
+              "CH2",
+              "CH3"
+            ]
+          }
+        },
+        "query": ":MEAS:CURR? {channel}",
+        "result": {
+          "type": "number",
+          "unit": "A"
+        }
+      },
+      "read_power": {
+        "description": "Read measured channel power.",
+        "parameters": {
+          "channel": {
+            "type": "string",
+            "enum": [
+              "CH1",
+              "CH2",
+              "CH3"
+            ]
+          }
+        },
+        "query": ":MEAS:POWE? {channel}",
+        "result": {
+          "type": "number",
+          "unit": "W"
+        }
+      },
+      "read_output": {
+        "description": "Read whether the selected output is ON or OFF.",
+        "parameters": {
+          "channel": {
+            "type": "string",
+            "enum": [
+              "CH1",
+              "CH2",
+              "CH3"
+            ]
+          }
+        },
+        "query": ":OUTP? {channel}",
+        "result": {
+          "type": "string"
+        }
+      },
+      "set_output": {
+        "description": "Enable or disable a channel using its saved voltage and current settings.",
+        "parameters": {
+          "channel": {
+            "type": "string",
+            "enum": [
+              "CH1",
+              "CH2",
+              "CH3"
+            ]
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "ON",
+              "OFF"
+            ]
+          }
+        },
+        "write": ":OUTP {channel},{state}"
+      }
+    }
+  }
+}

@@ -2,11 +2,11 @@
 
 [English](README.md) · [服务架构](architecture.zh-CN.md) · [HTTP 接口](http-api.md) · [仪器驱动](drivers.md) · [源码](../../src/ai4instruments/iop)
 
-0.8.0 改进[仪器接入](../../iop/instrument-setup.zh-CN.md)、并行调度和实验程序连续调用。[Agent 接入](../../iop/agent-setup.zh-CN.md)复用同一套实验室配置。[软件形态与系统支持](../../iop/product.zh-CN.md)。
+0.8.1 改进[仪器接入](../../iop/instrument-setup.zh-CN.md)、并行调度和实验程序连续调用。[Agent 接入](../../iop/agent-setup.zh-CN.md)复用同一套实验室配置。[软件形态与系统支持](../../iop/product.zh-CN.md)。
 
 IOP Runtime 是安装在仪器所在计算机上的常驻软件。它保持设备连接，接收实验程序，安排串行与并行操作，保存参数、读数、结果和文件。人和 Agent 使用同一套 HTTP 接口、Python 客户端和命令行；浏览器可以查看设备、提交实验和读取结果。
 
-**0.8.0 已实现：** 后台服务、设备登记与发现、依赖调度、跨步骤设备占用、实验程序包执行、实验记录、Python 客户端、网页界面和各系统的登录自启动入口。
+**0.8.1 已实现：** 后台服务、设备登记与发现、依赖调度、跨步骤设备占用、实验程序包执行、实验记录、Python 客户端、网页界面和各系统的登录自启动入口。
 
 Rust 管理 SDK、计算程序和实验程序的进程执行，Python 处理 HTTP 与工作流调度，TypeScript 提供完整客户端。见[当前架构](architecture.zh-CN.md)。
 

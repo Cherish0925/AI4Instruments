@@ -92,3 +92,15 @@ Start discovery with `discover_instruments()`, then inspect progress with `disco
 Python and TypeScript `run.invoke()` wait for the target operation and return as soon as its result is available. Submit independent calls concurrently; the service schedules device, bus and platform resources. When all steps are known, submit one workflow using `after` and `bindings`. Put feedback-dependent loops inside experiment programs.
 
 [Instrument setup](instrument-setup.md) · [Measurements](performance/README.md)
+
+
+## 0.8.1 · Identity and automatic setup
+
+Read `lab_context` first. `discovery.instruments` retains identity, source, presence and required setup fields. Use automatically registered instruments directly. `complete_instrument_setup` entries in `next_steps` identify the remaining protocol, communication settings, driver or model operations.
+
+- `identify_instrument(device)`: schedule an identity read and save its result; returns a run ID.
+- `instrument_profiles()`: read bundled and local model descriptions.
+- `save_instrument_profile(definition)`: save model operations and add new operations to identified devices.
+- `retry_instrument_discovery(connection_key)`: retry a connection immediately; omit the key to retry all.
+
+Python: `identify()`, `instrument_profiles()`, `save_instrument_profile()`, `retry_discovery()`. TypeScript: `identify()`, `instrumentProfiles()`, `saveInstrumentProfile()`, `retryDiscovery()`. Read `configuration_schema("instrument-profile")` for the description format.

@@ -109,6 +109,8 @@ class Handler(BaseHTTPRequestHandler):
             elif parts == ['v1', 'adapters'] and method == 'GET':
                 from .plugins import adapters
                 result = adapters()
+            elif parts == ['v1', 'instrument-profiles']:
+                result = engine.save_instrument_profile(body) if method == 'POST' else engine.instrument_profiles()
             elif parts == ['v1','platforms']:
                 result = engine.apply_platform(body['definition'], body.get('expected_revision', 0)) if method == 'POST' else engine.list_platforms()
             elif parts == ['v1','resources','resolve'] and method == 'POST':
@@ -137,6 +139,11 @@ class Handler(BaseHTTPRequestHandler):
                     result = engine.device_records[parts[2]]
             elif len(parts) == 4 and parts[:2] == ['v1', 'devices'] and parts[3] == 'reconnect' and method == 'POST':
                 result = engine.reconnect(parts[2])
+            elif len(parts) == 4 and parts[:2] == ['v1', 'devices'] and parts[3] == 'identify' and method == 'POST':
+                result = engine.identify(parts[2], body.get('request_id'))
+            elif parts == ['v1', 'discovery', 'retry'] and method == 'POST':
+                engine.enrollment.retry(body.get('key'))
+                result = engine.request_scan()
             elif parts == ['v1','discovery']:
                 result = engine.request_scan() if method == 'POST' else engine.inventory() if query.get('cached') == 'true' else engine.scan()
                 result['registered'] = list(engine.descriptions.values())

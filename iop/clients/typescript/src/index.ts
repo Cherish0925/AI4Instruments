@@ -36,11 +36,18 @@ export class IOP {
   }
   devices() { return this.request<Record<string, unknown>[]>('/v1/devices'); }
   context(refresh = false) { return this.request<Record<string, unknown>>('/v1/context' + (refresh ? '?refresh=true' : '')); }
-  schema(name: 'device' | 'platform' | 'workflow') { return this.request<Record<string, unknown>>('/v1/schemas/' + name); }
+  schema(name: 'device' | 'platform' | 'workflow' | 'instrument-profile') { return this.request<Record<string, unknown>>('/v1/schemas/' + name); }
   discover() { return this.request<Record<string, unknown>>('/v1/discovery'); }
   startDiscovery() { return this.request<Record<string, unknown>>('/v1/discovery', {}); }
   inventory() { return this.request<Record<string, unknown>>('/v1/discovery?cached=true'); }
   register(record: Record<string, unknown>) { return this.request('/v1/devices', record); }
+  instrumentProfiles() { return this.request('/v1/instrument-profiles'); }
+  saveInstrumentProfile(profile: Record<string, unknown>) { return this.request('/v1/instrument-profiles', profile); }
+  retryDiscovery(key?: string) { return this.request('/v1/discovery/retry', { key }); }
+  async identify(device: string, requestId = crypto.randomUUID()): Promise<Run> {
+    const record = await this.request<RunRecord>(`/v1/devices/${encodeURIComponent(device)}/identify`, { request_id: requestId });
+    return this.run(record.id);
+  }
   registerMany(devices: Record<string, unknown>[]) { return this.request('/v1/devices/batch', { devices }); }
   adapters() { return this.request<Record<string, unknown>[]>('/v1/adapters'); }
   resources() { return this.request('/v1/resources'); }

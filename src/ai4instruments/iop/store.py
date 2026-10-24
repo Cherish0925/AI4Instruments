@@ -38,6 +38,7 @@ class Store:
             id TEXT NOT NULL, revision INTEGER NOT NULL, body TEXT NOT NULL,
             PRIMARY KEY(id,revision));
           CREATE TABLE IF NOT EXISTS resource_holds(resource TEXT PRIMARY KEY, body TEXT NOT NULL);
+          CREATE TABLE IF NOT EXISTS discovery_records(key TEXT PRIMARY KEY, body TEXT NOT NULL);
         ''')
         columns = {row[1] for row in self.db.execute('PRAGMA table_info(artifacts)')}
         if 'name' not in columns:
@@ -46,6 +47,16 @@ class Store:
             self.db.execute('UPDATE artifacts SET name=? WHERE id=?', (json.loads(body)['name'], identifier))
         self.db.execute('CREATE UNIQUE INDEX IF NOT EXISTS artifacts_name ON artifacts(run_id,name)')
         self.db.commit()
+
+    def discovery_records(self):
+        with self.lock:
+            return {key:json.loads(body) for key, body in self.db.execute('SELECT key,body FROM discovery_records')}
+
+    def save_discovery_records(self, records):
+        with self.transaction():
+            self.db.executemany('INSERT INTO discovery_records(key,body) VALUES(?,?) '
+                                'ON CONFLICT(key) DO UPDATE SET body=excluded.body',
+                                ((r['key'], dumps(r)) for r in records))
 
     @contextmanager
     def transaction(self):

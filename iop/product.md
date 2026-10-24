@@ -4,9 +4,9 @@
 
 IOP Runtime is persistent software installed on the instrument computer. It maintains connections, executes experiments, coordinates resources and stores records and files. Desktop, browser, command-line and agent clients use the same service.
 
-## Changes in 0.8.0
+## Changes in 0.8.1
 
-Automatic device IDs, batch descriptions and shared background discovery reduce setup work. Configurable interfaces and USB inventory are displayed separately. Instrument operations and responses share a panel. Program calls wait directly for the target operation; scheduling groups start records, while status queries read compact summaries.
+0.8.1 adds automatic instrument identification, LXI discovery, SDK enumeration and saved model operations. Connected instruments share one description across desktop, browser and Agent clients.
 
 [Instrument setup](instrument-setup.md) · [Measurements](performance/README.md)
 
@@ -43,7 +43,8 @@ To update, finish current experiments, stop the old service with `iop stop`, and
 | --- | --- | --- |
 | Connections, execution, scheduling, records and files | Runtime | Continuously |
 | Read saved instruments, topology, parameters and results | Agent or experiment program | On connection and when configuration changes |
-| Match a new model to its driver and operations | Agent, with supplied documentation when needed | First connection of a new instrument |
+| Read identity and match known model operations | Runtime | First connection and rediscovery |
+| Add an unrecognized protocol or model operation | Agent or person, using manufacturer documentation | When discovery reports missing setup |
 | Specify wiring, samples, shared objects and experimental intent | Saved platform; agent asks the operator for missing information | Initial setup or a physical change |
 | Plan experiments, define dependencies, analyze results and choose subsequent experiments | Agent or person | During research |
 
@@ -51,7 +52,7 @@ Reuse saved platforms. Saving a description does not execute physical actions. I
 
 ## Current implementation and remaining product work
 
-0.8.0 supplies the shared service, the interfaces above, general adapters, platform configuration, scheduling, records and files, MCP integration and a laboratory context API. The release workflow builds on native operating systems and exercises installation, browser and desktop interfaces, and agent communication.
+0.8.1 supplies the shared service, the interfaces above, general adapters, platform configuration, scheduling, records and files, MCP integration and a laboratory context API. The release workflow builds on native operating systems and exercises installation, browser and desktop interfaces, and agent communication.
 
 Remaining product work includes standalone installers, signing and notarization, automatic updates, a broad model/driver catalogue and extended operation in independent laboratories. General adapters support their protocols; model-specific commands, SDKs and operation descriptions still require their corresponding implementations.
 

@@ -18,12 +18,19 @@ const child = spawn(
 from ai4instruments.iop.config import initialize,save_json,home_path
 from ai4instruments.iop.engine import Engine
 from ai4instruments.iop.cli import serve
-from ai4instruments.iop.store import now
+import socketserver, threading
+import ai4instruments.iop.discovery as discovery
 p=home_path(sys.argv[1]); c=initialize(p,False,0);c['discovery_interval']=0;c['resource_pools']={'cpu':8,'gpu':2};save_json(p/'config.json',c)
-def inventory(self):
-    self.discovery={'connections':[{'transport':'serial','address':'COM7','name':'Simulated serial connection','manufacturer':'Simulation','serial_number':'SIM-007','status':'discovered'}],'providers':[{'name':'serial','available':True}],'updated':now()}
-    return self.discovery
-Engine.scan=inventory
+class Instrument(socketserver.StreamRequestHandler):
+    def handle(self):
+        for line in self.rfile:
+            response='Stanford_Research_Systems,SR830,SIM-830,1.0' if line.strip()==b'*IDN?' else '1.25'
+            self.wfile.write((response+chr(10)).encode());self.wfile.flush()
+instrument=socketserver.ThreadingTCPServer(('127.0.0.1',0),Instrument);instrument.daemon_threads=True
+threading.Thread(target=instrument.serve_forever,daemon=True).start()
+def inventory(*_):
+    return discovery.normalize({'connections':[{'transport':'serial','address':'COM7','name':'Simulated serial connection','manufacturer':'Simulation','serial_number':'SIM-007','status':'discovered','provider':'serial'}, {'transport':'tcp','address':'127.0.0.1:'+str(instrument.server_address[1]),'name':'SR830 protocol simulator','protocol':'scpi','provider':'lxi-network','connection':{'transport':'tcp','host':'127.0.0.1','port':instrument.server_address[1]}}],'providers':[{'name':'serial','available':True},{'name':'lxi-network','available':True}]})
+discovery.discover=inventory
 serve(p)
 `,
     home,
@@ -100,7 +107,32 @@ try {
   await page.click("#overview-discover");
   await page.waitForSelector('[data-register="0"]');
   assert.equal(await page.locator("#discovery-section pre").count(), 0);
-  await page.click('[data-register="0"]');
+  const identified = (await api("devices")).find(
+    (d) => d.identity?.model === "SR830",
+  );
+  assert.ok(identified);
+  await page.click(`[data-device="${identified.id}"]`);
+  assert.ok(
+    (await page.locator(".instrument-identity").innerText()).includes(
+      "SIM-830",
+    ),
+  );
+  await page.selectOption("#device-operation", "read_x");
+  await page.click("#device-invoke");
+  await page.waitForSelector("#device-response .badge.completed");
+  assert.ok(
+    (await page.locator("#device-response").innerText()).includes("1.25"),
+  );
+  if (images)
+    await page.screenshot({
+      path: join(images, "instrument-identified.png"),
+      fullPage: true,
+      style: "#toast{visibility:hidden}",
+    });
+  await page.click("#modal-close");
+  await page.click('[data-connection="0"]');
+  assert.ok((await page.locator("#modal").innerText()).includes("通信协议"));
+  await page.click("#connection-configure");
   assert.equal(await page.locator("#reg-driver").inputValue(), "scpi-serial");
   assert.equal(await page.locator("#reg-port").inputValue(), "COM7");
   const generatedID = await page.locator("#reg-id").inputValue();

@@ -92,3 +92,15 @@ HTTP 接口为 `GET /v1/context` 和 `GET /v1/schemas/{name}`。具体仪器的�
 实验程序中的 Python `run.invoke()` 与 TypeScript `run.invoke()` 等待目标操作完成后立即获得结果。互不依赖的操作可以并发提交；同设备、共享总线和平台资源由服务安排。已知整段步骤时用一次工作流提交表达 `after` 与 `bindings`，避免 Agent 逐步发送单条指令。涉及反馈决策的循环放在实验程序内。
 
 [仪器接入说明](instrument-setup.zh-CN.md) · [实测方法与结果](performance/README.md)
+
+
+## 0.8.1 · 仪器身份与自动接入
+
+先读 `lab_context`；`discovery.instruments` 保存身份、来源、当前发现状态和未完成项。已自动登记的设备直接使用，无需重复编写说明。`next_steps` 中的 `complete_instrument_setup` 指出具体缺少的协议、通信参数、驱动或型号操作。
+
+- `identify_instrument(device)`：通过实验调度器读取并保存身份，返回实验编号。
+- `instrument_profiles()`：读取内置与本地型号说明。
+- `save_instrument_profile(definition)`：保存型号操作，并补入已识别设备。
+- `retry_instrument_discovery(connection_key)`：立即重新识别指定连接；省略地址则重试全部。
+
+Python 对应 `identify()`、`instrument_profiles()`、`save_instrument_profile()`、`retry_discovery()`；TypeScript 对应 `identify()`、`instrumentProfiles()`、`saveInstrumentProfile()`、`retryDiscovery()`。型号说明格式使用 `configuration_schema("instrument-profile")`。

@@ -1,0 +1,71 @@
+{
+  "id": "srs-sr830",
+  "match": {
+    "manufacturer": [
+      "Stanford_Research_Systems",
+      "Stanford Research Systems"
+    ],
+    "model": "SR830"
+  },
+  "driver": "scpi",
+  "documentation": [
+    "https://www.thinksrs.com/downloads/pdfs/manuals/SR830m.pdf"
+  ],
+  "config": {
+    "operations": {
+      "read_x": {
+        "description": "Read the in-phase component.",
+        "parameters": {},
+        "query": "OUTP? 1",
+        "result": {
+          "type": "number",
+          "unit": "V"
+        }
+      },
+      "read_y": {
+        "description": "Read the quadrature component.",
+        "parameters": {},
+        "query": "OUTP? 2",
+        "result": {
+          "type": "number",
+          "unit": "V"
+        }
+      },
+      "read_magnitude": {
+        "description": "Read the signal magnitude.",
+        "parameters": {},
+        "query": "OUTP? 3",
+        "result": {
+          "type": "number",
+          "unit": "V"
+        }
+      },
+      "read_phase": {
+        "description": "Read the signal phase.",
+        "parameters": {},
+        "query": "OUTP? 4",
+        "result": {
+          "type": "number",
+          "unit": "deg"
+        }
+      },
+      "read_xy": {
+        "description": "Read X and Y sampled together; returns two comma-separated values in volts.",
+        "parameters": {},
+        "query": "SNAP? 1,2",
+        "result": {
+          "type": "string"
+        }
+      },
+      "read_frequency": {
+        "description": "Read the reference frequency.",
+        "parameters": {},
+        "query": "FREQ?",
+        "result": {
+          "type": "number",
+          "unit": "Hz"
+        }
+      }
+    }
+  }
+}

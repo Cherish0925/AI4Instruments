@@ -1,4 +1,4 @@
-# IOP HTTP API · 0.8.0
+# IOP HTTP API · 0.8.1
 
 [中文安装](README.zh-CN.md) · [Installation](README.md)
 
@@ -12,7 +12,7 @@ Base URL: `http://127.0.0.1:8765`. API bodies are JSON objects. Requests to `/v1
 | GET | `/v1/ui` | — | Desktop availability and local connection status |
 | POST | `/v1/ui/desktop` | `{"view":"devices"}` | Open a native window on the service computer; local requests only |
 | GET | `/v1/context` | `refresh=true` for a new connection scan | Compact laboratory description: instruments, platforms, drivers, resources and remaining setup |
-| GET | `/v1/schemas/{name}` | `device`, `platform`, `workflow` | Packaged JSON schema |
+| GET | `/v1/schemas/{name}` | `device`, `platform`, `workflow`, `instrument-profile` | Packaged JSON schema |
 | GET | `/v1/adapters` | — | Built-in and installed driver entries |
 | GET | `/v1/resources` | — | Configured capacities and current allocation |
 | POST | `/v1/resources` | `{"capacities":{"cpu":16,"solver":2}}` | Replace named capacities; accepted work must still fit |
@@ -22,6 +22,9 @@ Base URL: `http://127.0.0.1:8765`. API bodies are JSON objects. Requests to `/v1
 | GET | `/v1/devices/{device_id}` | — | One instrument description |
 | GET | `/v1/devices/{device_id}/configuration` | — | Saved driver configuration, suitable for export and registration |
 | POST | `/v1/devices/batch` | `{"devices":[...]}` | Per-input index with `device` or `error`; successful entries remain saved |
+| GET / POST | `/v1/instrument-profiles` | Model description for POST | List or save exact manufacturer/model matching and operations |
+| POST | `/v1/devices/{device_id}/identify` | Optional `request_id` | Accepted identity-query run; saves reported identity and model operations |
+| POST | `/v1/discovery/retry` | Optional `key` connection key | Clear retry delay and start shared background discovery |
 | POST | `/v1/discovery` | `{}` | Start or join a background scan; returns cached inventory and `scanning` immediately |
 | POST | `/v1/devices` | Device record | Registered description; persists configuration; identical retries reuse the device |
 | GET | `/v1/discovery` | `cached=true` to reuse the last scan | Current scan, provider availability and registered devices |
@@ -159,3 +162,9 @@ An instrument's `id` may be omitted on registration. The service generates and s
 `GET /v1/operations/{id}?wait=25` waits for that operation to finish, or returns its current state after at most 25 seconds. Python and TypeScript clients use this path for calls inside experiment programs; they do not read the experiment's entire event history for each operation.
 
 Use `GET /v1/runs?details=false` and `GET /v1/runs/{id}?details=false` for summaries. Results, operation lists, experiment definitions and full platform definitions are excluded before the response enters the application. Read `/result` and cursor-paged `/operations` only when needed.
+
+## Instrument discovery records
+
+`instruments` contains persistent identity and setup records with `key`, `device_id`, `identity`, `identity_source`, `required`, `status`, `present`, `first_seen`, `last_seen` and `connection_info`. Presence is `true` for observed, `false` for absent from a working source and `null` when unconfirmed. `identification_summary` reports identified/configured counts and incomplete setup. `groups` retains interface aliases; `related_connections` links USB interfaces sharing VID/PID and serial number without merging logical channels.
+
+The list of required fields uses `protocol`, `communication_parameters`, `control_interface`, `driver` and `model_operations`. `GET /v1/context` includes the corresponding `complete_instrument_setup` tasks. Background identity reads are serialized with device operations. Discovery never runs a profile's measurement or output commands.

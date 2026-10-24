@@ -9,7 +9,7 @@ from .plugins import adapters
 from .store import dumps, now
 
 
-SCHEMAS = ('device', 'platform', 'workflow')
+SCHEMAS = ('device', 'platform', 'workflow', 'instrument-profile')
 
 
 def schema_document(name):
@@ -51,6 +51,11 @@ def laboratory(engine, refresh=False):
     result['adapters'] = adapters()
     result['schemas'] = {name: '/v1/schemas/' + name for name in SCHEMAS}
     result['next_steps'] = []
+    for instrument in inventory.get('instruments', []):
+        if instrument.get('required') and instrument.get('present') is not False and instrument.get('transport') != 'usb':
+            result['next_steps'].append({'action':'complete_instrument_setup', 'connection':instrument['key'],
+                                         'identity':instrument.get('identity', {}), 'required':instrument['required'],
+                                         'device_id':instrument.get('device_id')})
     if not devices and not inventory.get('updated'):
         result['next_steps'].append({'action': 'discover', 'reason': 'The first connection inventory is not available yet.'})
     if result['setup']['offline_devices']:

@@ -38,7 +38,7 @@ def create_server(client):
         return client.request('/v1/devices/' + quote(device, safe=''))
 
     @server.tool(annotations=read_only)
-    def configuration_schema(name: Literal['device', 'platform', 'workflow']) -> dict:
+    def configuration_schema(name: Literal['device', 'platform', 'workflow', 'instrument-profile']) -> dict:
         """Read the JSON schema before preparing a device, platform or workflow definition."""
         return client.schema(name)
 
@@ -56,6 +56,26 @@ def create_server(client):
     def discover_instruments(refresh: bool = True) -> dict:
         """Start a shared background scan, or read its cached results with refresh=false. While scanning=true, other laboratory work can continue. Interfaces and USB inventory are separate collections in the summary."""
         return client.start_discovery() if refresh else client.inventory()
+
+    @server.tool()
+    def identify_instrument(device: str, request_id: str | None = None) -> dict:
+        """Query a configured SCPI instrument through the experiment scheduler. Identity is saved and matching model operations are added. Returns a run ID immediately."""
+        return client.identify(device, request_id).info(details=False)
+
+    @server.tool(annotations=read_only)
+    def instrument_profiles() -> list[dict]:
+        """Read installed model descriptions and their source manuals. Discovery reports required configuration for each connection."""
+        return client.instrument_profiles()
+
+    @server.tool()
+    def save_instrument_profile(definition: dict) -> dict:
+        """Save a reusable model description: id, exact manufacturer/model match, driver, config.operations and source documentation. Use commands from that model's programming manual."""
+        return client.save_instrument_profile(definition)
+
+    @server.tool()
+    def retry_instrument_discovery(connection_key: str | None = None) -> dict:
+        """Retry discovery after correcting a connection or installing a driver. Existing experiments keep their instruments."""
+        return client.retry_discovery(connection_key)
 
     @server.tool()
     def configure_platform(definition: dict, expected_revision: int = 0, preview: bool = False) -> dict:

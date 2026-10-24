@@ -4,7 +4,6 @@ import importlib
 import math
 import socket
 import time
-import csv
 from concurrent.futures import CancelledError
 from .store import now
 
@@ -116,6 +115,7 @@ class SCPI(Driver):
         self.connection = None
         self.manager = None
         self.received = bytearray()
+        self.expected_identity = None
         self.timeout = float(self.config.get("timeout", 5))
         if not math.isfinite(self.timeout) or self.timeout <= 0:
             raise ValueError("timeout must be positive")
@@ -166,6 +166,9 @@ class SCPI(Driver):
             self.connection.write_termination = self.termination
         else:
             raise ValueError("Unknown SCPI transport: " + kind)
+        if self.expected_identity:
+            from .identification import parse_identity, verify_identity
+            verify_identity(self.expected_identity, parse_identity(self.exchange('*IDN?', True)))
 
     def exchange(self, command, read=False):
         if "\n" in command or "\r" in command:
@@ -238,9 +241,8 @@ class SCPI(Driver):
             encoding = spec.get("result", {})
             result["value"] = float(value) if encoding.get("type") == "number" else value
             if operation == 'identify':
-                fields = next(csv.reader([value]))
-                if len(fields) == 4:
-                    result['identity'] = dict(zip(('manufacturer', 'model', 'serial_number', 'firmware'), (v.strip() for v in fields)))
+                from .identification import parse_identity
+                result['identity'] = parse_identity(value)
             if "unit" in encoding:
                 result["unit"] = encoding["unit"]
         else:
@@ -281,4 +283,7 @@ def make_driver(record, registry):
             cls = matches[0].load()
         else:
             cls = getattr(importlib.import_module(module), class_name)
-    return cls(record["id"], record.get("config", {}), registry)
+    driver = cls(record["id"], record.get("config", {}), registry)
+    if name == 'scpi':
+        driver.expected_identity = record.get('identity')
+    return driver

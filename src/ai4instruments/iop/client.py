@@ -71,6 +71,20 @@ class Client:
     def inventory(self):
         return self.request('/v1/discovery?cached=true')
 
+    def instrument_profiles(self):
+        return self.request('/v1/instrument-profiles')
+
+    def save_instrument_profile(self, profile):
+        return self.request('/v1/instrument-profiles', profile)
+
+    def identify(self, device, request_id=None):
+        from urllib.parse import quote
+        return Run(self, self.request('/v1/devices/' + quote(device, safe='') + '/identify',
+                                     {'request_id':request_id or str(uuid.uuid4())})['id'])
+
+    def retry_discovery(self, key=None):
+        return self.request('/v1/discovery/retry', {'key':key})
+
     def register(self, record):
         return self.request('/v1/devices', record)
 

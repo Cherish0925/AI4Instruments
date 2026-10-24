@@ -39,7 +39,7 @@ with tempfile.TemporaryDirectory(prefix='iop install ') as temporary:
         assert Path(launch['command']).samefile(python)
         assert str(home) in launch['args']
         assert config['token'] not in json.dumps(launch)
-        subprocess.run([str(python), '-c', 'from ai4instruments.iop.context import schema_document; assert schema_document("platform")["title"]; import mcp'],
+        subprocess.run([str(python), '-c', 'from ai4instruments.iop.context import schema_document; assert schema_document("platform")["title"]; assert schema_document("instrument-profile")["title"]; from ai4instruments.iop.identification import profiles; assert len(profiles({})) >= 4; import mcp'],
                        env=environment, check=True, timeout=30)
         assert (home / 'config.json').read_text(encoding='utf-8') == original
         print('Installed application passed: CLI, local service, Agent configuration, MCP dependency and packaged schemas.')

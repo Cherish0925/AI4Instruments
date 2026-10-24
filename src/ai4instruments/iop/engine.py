@@ -1,6 +1,7 @@
 """One scheduler for experiment dependencies, device resources and worker processes."""
 from __future__ import annotations
 import base64
+import copy
 import io
 import json
 import mimetypes
@@ -70,6 +71,9 @@ class Engine:
         self.scan_request_lock = threading.Lock()
         self.scan_request = None
         self.store = Store(self.home / "records.sqlite3")
+        from .identification import Enrollment
+        self.enrollment = Enrollment(self)
+        self.discovery['instruments'] = [dict(r, present=None) for r in self.enrollment.records.values()]
         self.platforms = {p['id']: p for p in self.store.platforms()}
         self.platform_resources = platform_model.resource_index(self.platforms)
         self.resource_holds = self.store.resource_holds()
@@ -132,6 +136,7 @@ class Engine:
             return result
 
     def _scan(self):
+        started = time.monotonic()
         from .discovery import discover, match_profiles
         inventory = discover(self.config.get('software_profiles', []))
         if self.stopping:
@@ -151,18 +156,25 @@ class Engine:
                         if candidate.get('transport') == c['transport'] and candidate.get('address') == address:
                             candidate.update(status='registered', id=record['id'])
                 if record["driver"] == "scpi" and c.get("transport", "tcp") == "tcp":
-                    inventory["connections"].append({"transport":"tcp", "address":str(c.get("host"))+":"+str(c.get("port",5025)), "id":record["id"], "status":"registered"})
+                    inventory["connections"].append({"transport":"tcp", "address":str(c.get("host"))+":"+str(c.get("port",5025)), "id":record["id"], "status":"registered", "provider":"configured", "present":None})
             for record in self.device_records.values():
                 c = record.get("config", {})
                 if record["driver"] == "modbus" and c.get("transport","tcp") == "tcp":
-                    inventory["connections"].append({"transport":"modbus-tcp","address":str(c.get("host"))+":"+str(c.get("port",502)),"id":record["id"],"status":"registered"})
+                    inventory["connections"].append({"transport":"modbus-tcp","address":str(c.get("host"))+":"+str(c.get("port",502)),"id":record["id"],"status":"registered", "provider":"configured", "present":None})
                 elif record["driver"] == "http":
-                    inventory["connections"].append({"transport":"http","address":c.get("base_url"),"id":record["id"],"status":"registered"})
+                    inventory["connections"].append({"transport":"http","address":c.get("base_url"),"id":record["id"],"status":"registered", "provider":"configured", "present":None})
             inventory["updated"] = now()
             from .discovery import normalize
             normalize(inventory)
+            inventory['phase'] = 'identifying'
+            self.discovery = json.loads(dumps(inventory))
+        self.enrollment.scan(inventory)
+        with self.lock:
+            normalize(inventory)
+            inventory['phase'] = 'complete'
+            inventory['duration_s'] = round(time.monotonic() - started, 3)
             self.discovery = inventory
-            return inventory
+        return inventory
 
     def _resources(self, values, operation=None):
         if not isinstance(values, (list, tuple)):
@@ -315,9 +327,10 @@ class Engine:
                 'requirements': procedure.get('requirements', {}),
                 'request_id': request_id})
 
-    def register(self, record, persist=True):
+    def register(self, record, persist=True, enrollment_key=None):
         # SDK startup can take time; it must not hold the experiment scheduler lock.
         with self.registration_lock:
+            from .identification import same_registration
             record = json.loads(dumps(record))
             device_id = record.get("id", "")
             if not device_id:
@@ -329,16 +342,20 @@ class Engine:
                 suffix = hashlib.sha256(dumps(identity).encode()).hexdigest()[:10]
                 stem = re.sub(r'[^a-z0-9]+', '-', str(config.get('name') or record.get('driver', 'instrument')).lower()).strip('-')[:50] or 'instrument'
                 # Identity comes from the connection; display names may be localized.
-                prior = next((d for d in self.config.get('devices', []) if
-                              {k:v for k,v in d.items() if k != 'id'} == {k:v for k,v in record.items() if k != 'id'}), None)
+                prior = next((d for d in self.config.get('devices', []) if same_registration(d, record)), None)
                 device_id = prior['id'] if prior else stem + '-' + suffix
                 record['id'] = device_id
             platform_model.name(device_id, 'Device ID')
+            from .discovery import device_connection
+            endpoint = device_connection(record)
+            with self.enrollment.lock:
+                if endpoint in self.enrollment.probing and endpoint != enrollment_key:
+                    raise ValueError('Instrument identification is in progress for this connection. Retry when it finishes.')
             with self.lock:
                 if self.stopping:
                     raise ValueError("Service is stopping")
                 if device_id in self.devices:
-                    if self.device_records[device_id] == record:
+                    if same_registration(self.device_records[device_id], record):
                         return self.descriptions[device_id]
                     raise ValueError("Device is already registered: " + device_id)
                 if any(device_id == r['id'] for p in self.platforms.values() for r in p['definition']['resources']):
@@ -364,7 +381,8 @@ class Engine:
                         raise ValueError("Service is stopping")
                     self.devices[device_id] = driver
                     self.device_records[device_id] = record
-                    self.descriptions[device_id] = json.loads(dumps({"id":device_id, "driver":record["driver"], **description}))
+                    metadata = {k:record[k] for k in ('identity', 'identity_source', 'instrument_profile', 'documentation') if k in record}
+                    self.descriptions[device_id] = json.loads(dumps({"id":device_id, "driver":record["driver"], **description, **metadata}))
                     self.allocation.limits['device:' + device_id] = concurrency
                     if persist:
                         saved = {d['id']: d for d in self.config.get('devices', [])}
@@ -397,6 +415,87 @@ class Engine:
             except Exception as error:
                 results.append({'index': index, 'error': str(error)})
         return {'results': results}
+
+    def identify(self, device_id, request_id=None):
+        with self.lock:
+            if self.device_records[device_id]['driver'] != 'scpi':
+                raise ValueError('Use this instrument SDK to read its identity.')
+            return self.submit({'name':'Instrument identity', 'request_id':request_id,
+                                'steps':[{'id':'identity', 'device':device_id, 'operation':'identify'}]})
+
+    def learn_identity(self, device_id, identity):
+        from .identification import description, profiles, verify_identity
+        record = self.device_records[device_id]
+        if record.get('identity'):
+            try:
+                verify_identity(record['identity'], identity)
+            except ValueError:
+                self.devices[device_id].close()
+                raise
+        before = copy.deepcopy(record)
+        enriched = description(identity, {}, profiles(self.config))
+        record['identity'] = identity
+        record['identity_source'] = 'scpi-idn'
+        self.devices[device_id].expected_identity = identity
+        if enriched.get('instrument_profile'):
+            record['instrument_profile'] = enriched['instrument_profile']
+            record['documentation'] = enriched.get('documentation', [])
+            record['config']['operations'] = {**enriched['config'].get('operations', {}),
+                                              **record['config'].get('operations', {})}
+            self.devices[device_id].config.update(record['config'])
+        metadata = {k:record[k] for k in ('identity', 'identity_source', 'instrument_profile', 'documentation') if k in record}
+        if before == record:
+            return
+        self.descriptions[device_id] = {'id':device_id, 'driver':record['driver'], **self.devices[device_id].describe(), **metadata}
+        self.config['devices'] = [record if d['id'] == device_id else d for d in self.config['devices']]
+        save_json(self.home / 'config.json', self.config)
+
+    def instrument_profiles(self):
+        from .identification import profiles
+        return profiles(self.config)
+
+    def save_instrument_profile(self, profile):
+        from .identification import validate_profile
+        profile = json.loads(dumps(profile))
+        validate_profile(profile)
+        with self.lock:
+            saved = {p['id']:p for p in self.config.get('instrument_profiles', [])}
+            saved[profile['id']] = profile
+            self.config['instrument_profiles'] = list(saved.values())
+            save_json(self.home/'config.json', self.config)
+            for record in list(self.device_records.values()):
+                if record['driver'] == 'scpi' and record.get('identity'):
+                    self.learn_identity(record['id'], record['identity'])
+        self.enrollment.retry()
+        return profile
+
+    def replace_device(self, record, enrollment_key=None):
+        """Retain an instrument ID when its verified SCPI endpoint changes."""
+        with self.registration_lock:
+            with self.lock:
+                device_id = record['id']
+                old = self.device_records[device_id]
+                if old['driver'] != 'scpi' or record['driver'] != 'scpi':
+                    raise ValueError('Automatic endpoint changes require the SCPI driver.')
+                if any(o['device'] == device_id and o['state'] not in TERMINAL for o in self.operations.values()) or self.allocation.used['device:'+device_id]:
+                    raise ValueError('This instrument is in use; its new endpoint will be applied after the experiment.')
+                self.reconnecting.add(device_id)
+            try:
+                new = make_driver(record, self.devices)
+                with self.lock:
+                    self.devices[device_id].close()
+                    self.devices[device_id] = new
+                    self.device_records[device_id] = record
+                    metadata = {k:record[k] for k in ('identity', 'identity_source', 'instrument_profile', 'documentation') if k in record}
+                    self.descriptions[device_id] = {'id':device_id, 'driver':record['driver'], **new.describe(), **metadata}
+                    self.config['devices'] = [record if d['id'] == device_id else d for d in self.config['devices']]
+                    save_json(self.home/'config.json', self.config)
+                    with self.store.transaction():
+                        self.store.event('instrument.connection_changed', device_id=device_id, connection=enrollment_key)
+                    return self.descriptions[device_id]
+            finally:
+                with self.lock:
+                    self.reconnecting.discard(device_id)
 
     def _operation(self, run_id, step):
         device_id, name = step["device"], step["operation"]
@@ -733,7 +832,7 @@ class Engine:
                 for name in sorted(affected):
                     created[name] = make_driver(self.device_records[name], registry)
                     registry[name] = created[name]
-                    if created[name].describe() != {k: v for k, v in self.descriptions[name].items() if k not in {'id', 'driver'}}:
+                    if created[name].describe() != {k: v for k, v in self.descriptions[name].items() if k not in {'id', 'driver', 'identity', 'identity_source', 'instrument_profile', 'documentation'}}:
                         raise ValueError('Driver description changed; update the device configuration before reuse')
                 with self.lock:
                     self.devices.update(created)
@@ -784,6 +883,8 @@ class Engine:
             op = self.operations[op_id]; run = self.runs[op['run_id']]
             try:
                 op['result'] = json.loads(dumps(future.result()))
+                if op['operation'] == 'identify' and self.device_records[op['device']]['driver'] == 'scpi' and op['result'].get('identity'):
+                    self.learn_identity(op['device'], op['result']['identity'])
                 op['state'] = 'completed'
             except CancelledError:
                 op['state'] = 'cancelled'

@@ -1,8 +1,8 @@
 # IOP Runtime
 
-[中文](README.zh-CN.md) · [Download](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.8.0) · [Desktop & browser](interface.md) · [Installation](../docs/runtime/README.md) · [Platform configuration](platforms.md) · [Agent integration](agent-setup.md)
+[中文](README.zh-CN.md) · [Download](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.8.1) · [Desktop & browser](interface.md) · [Installation](../docs/runtime/README.md) · [Platform configuration](platforms.md) · [Agent integration](agent-setup.md)
 
-0.8.0 improves instrument setup, parallel scheduling and repeated experiment-program calls. Background discovery, automatic IDs and reusable instrument descriptions reduce setup work. [Application interfaces, system support and responsibilities](product.md).
+0.8.1 adds automatic instrument identification, LXI discovery, SDK enumeration and saved model operations. Connected instruments share one description across desktop, browser and Agent clients. [Instrument setup](instrument-setup.md).
 
 **One persistent service for people and agents to use experimental platforms.** It connects physical instruments, computational programs and remote task services, maintains platform descriptions, schedules serial and parallel experiments, and preserves operations and data. Accepted experiments continue after the submitting terminal, browser or agent session closes.
 
@@ -12,7 +12,7 @@ One computer can serve several experimental platforms. Each platform describes i
 
 ## Start
 
-Download and extract the matching IOP 0.8.0 archive. For a native desktop window, run `install-desktop.ps1` on Windows or `sh install-desktop.sh` on macOS / Linux, then open **IOP Runtime** from the application menu. Use `install.ps1` / `install.sh` for browser or server use. Python 3.10+ is required; archives include the Rust executor and installers download the required dependencies.
+Download and extract the matching IOP 0.8.1 archive. For a native desktop window, run `install-desktop.ps1` on Windows or `sh install-desktop.sh` on macOS / Linux, then open **IOP Runtime** from the application menu. Use `install.ps1` / `install.sh` for browser or server use. Python 3.10+ is required; archives include the Rust executor and installers download the required dependencies.
 
 | Archive | Runtime environment |
 | --- | --- |
@@ -50,7 +50,7 @@ The screenshot shows a simulated platform with operations, results and connectio
 
 Physical topology and experimental timing are separate. A trigger cable alone does not establish synchronized acquisition: the program must configure and prepare the devices before triggering. Software orders operations; device clocks and hardware triggers provide precise timing.
 
-## Implemented in 0.8.0
+## Implemented in 0.8.1
 
 | Component | Implementation |
 | --- | --- |

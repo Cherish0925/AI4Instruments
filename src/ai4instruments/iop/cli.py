@@ -84,6 +84,8 @@ def parser():
     sub.add_parser('mcp-config', help='Print the MCP launcher configuration for this installation')
     p = sub.add_parser('register'); p.add_argument('file')
     p = sub.add_parser('reconnect'); p.add_argument('device')
+    p = sub.add_parser('identify', help='Read and save instrument identity'); p.add_argument('device'); p.add_argument('--wait', action='store_true')
+    p = sub.add_parser('instrument-profile', help='List or save model-specific operations'); p.add_argument('file', nargs='?')
     p = sub.add_parser('resources'); p.add_argument('--set', dest='capacities', help='JSON object of resource capacities')
     p = sub.add_parser('run'); p.add_argument('file'); p.add_argument('--wait', action='store_true')
     p = sub.add_parser('package'); p.add_argument('path'); p.add_argument('--resources', nargs='*', default=[]); p.add_argument('--requirements', default='{}'); p.add_argument('--parameters', default='{}'); p.add_argument('--project'); p.add_argument('--platform'); p.add_argument('--wait', action='store_true')
@@ -151,6 +153,11 @@ def main():
             output(client.adapters())
         elif args.command == 'reconnect':
             output(client.reconnect(args.device))
+        elif args.command == 'identify':
+            run = client.identify(args.device)
+            output(run.result() if args.wait else {'run_id': run.id})
+        elif args.command == 'instrument-profile':
+            output(client.save_instrument_profile(json.loads(Path(args.file).read_text(encoding='utf-8'))) if args.file else client.instrument_profiles())
         elif args.command == 'resources':
             output(client.configure_resources(json.loads(args.capacities)) if args.capacities is not None else client.resources())
         elif args.command == 'register':

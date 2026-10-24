@@ -20,7 +20,8 @@
         "result": {
           "type": "number",
           "unit": "V"
-        }
+        },
+        "effect": "observe"
       },
       "read_y": {
         "description": "Read the quadrature component.",
@@ -29,7 +30,8 @@
         "result": {
           "type": "number",
           "unit": "V"
-        }
+        },
+        "effect": "observe"
       },
       "read_magnitude": {
         "description": "Read the signal magnitude.",
@@ -38,7 +40,8 @@
         "result": {
           "type": "number",
           "unit": "V"
-        }
+        },
+        "effect": "observe"
       },
       "read_phase": {
         "description": "Read the signal phase.",
@@ -47,7 +50,8 @@
         "result": {
           "type": "number",
           "unit": "deg"
-        }
+        },
+        "effect": "observe"
       },
       "read_xy": {
         "description": "Read X and Y sampled together; returns two comma-separated values in volts.",
@@ -55,7 +59,8 @@
         "query": "SNAP? 1,2",
         "result": {
           "type": "string"
-        }
+        },
+        "effect": "observe"
       },
       "read_frequency": {
         "description": "Read the reference frequency.",
@@ -64,7 +69,8 @@
         "result": {
           "type": "number",
           "unit": "Hz"
-        }
+        },
+        "effect": "observe"
       }
     }
   }

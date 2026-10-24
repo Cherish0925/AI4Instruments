@@ -1,0 +1,5 @@
+{
+  "name": "Acquisition with saved progress",
+  "command": ["{python}", "experiment.py"],
+  "resume": true
+}

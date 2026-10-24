@@ -51,6 +51,7 @@ class Engine:
         self.endpoint = ""
         self.devices, self.descriptions, self.device_records = {}, {}, {}
         self.reconnecting, self.offline = set(), {}
+        self.communication = {}
         self.runs, self.operations, self.futures, self.processes = {}, {}, {}, {}
         self.allocation = Allocator()
         self.capacities = capacities(config.get('resource_pools', {}))
@@ -88,9 +89,16 @@ class Engine:
                 self.offline[device.get('id', 'unknown')] = str(error)
         for run in self.store.recover():
             self.runs[run["id"]] = run
-            for op in reversed(self.store.list("operations", run["id"], 10000)):
-                self.operations[op["id"]] = op
+            cursor = 0
+            while True:
+                page = self.store.operation_page(run['id'], cursor, 1000)
+                if not page['operations']:
+                    break
+                for op in page['operations']:
+                    self.operations[op['id']] = op
+                cursor = page['cursor']
             self._index_run(run)
+        self.resource_holds = self.store.resource_holds()
         self.thread = threading.Thread(target=self._loop, name="iop-scheduler", daemon=True)
 
     def start(self):
@@ -99,11 +107,13 @@ class Engine:
         if interval > 0:
             def inventory_loop():
                 while not self.discovery_stop.is_set():
+                    started = time.monotonic()
                     try:
                         self.scan()
                     except Exception as error:
-                        self.discovery = {"connections":[], "providers":[{"name":"inventory", "available":False, "detail":str(error)}]}
-                    self.discovery_stop.wait(interval)
+                        with self.lock:
+                            self.discovery['error'] = str(error)
+                    self.discovery_stop.wait(max(0.1, interval - (time.monotonic() - started)))
             self.discovery_thread = threading.Thread(target=inventory_loop, name="iop-discovery", daemon=True)
             self.discovery_thread.start()
 
@@ -138,7 +148,26 @@ class Engine:
     def _scan(self):
         started = time.monotonic()
         from .discovery import discover, match_profiles
-        inventory = discover(self.config.get('software_profiles', []))
+        with self.lock:
+            previous = json.loads(dumps(self.discovery))
+            self.discovery.pop('error', None)
+            self.discovery['phase'] = 'discovering'
+        def publish(partial):
+            from .discovery import normalize
+            with self.lock:
+                finished = {p['name'] for p in partial['providers'] if p.get('available')}
+                failed = {p['name'] for p in partial['providers'] if not p.get('available')}
+                current = json.loads(dumps(partial))
+                current['connections'] += [dict(c, present=None) if c.get('provider') in failed else c
+                    for c in previous.get('connections', []) if c.get('provider') not in finished]
+                # A failed provider leaves the last observation visible, with unknown presence.
+                keys = {(c.get('transport'), c.get('address')) for c in partial['connections']}
+                current['connections'] = current['connections'][:len(partial['connections'])] + [c
+                    for c in current['connections'][len(partial['connections']):]
+                    if (c.get('transport'), c.get('address')) not in keys]
+                current.update(phase='discovering', instruments=previous.get('instruments', []), updated=now())
+                self.discovery = normalize(current)
+        inventory = discover(self.config.get('software_profiles', []), on_update=publish)
         if self.stopping:
             return inventory
         for record in match_profiles(inventory, self.config.get("profiles", [])):
@@ -168,13 +197,45 @@ class Engine:
             normalize(inventory)
             inventory['phase'] = 'identifying'
             self.discovery = json.loads(dumps(inventory))
-        self.enrollment.scan(inventory)
+        def identified(row):
+            with self.lock:
+                from .discovery import connection_key, normalize
+                for candidate in self.discovery['connections']:
+                    if connection_key(candidate) == row['key']:
+                        candidate['identification'] = copy.deepcopy(row)
+                        if row.get('device_id'):
+                            candidate.update(id=row['device_id'], status='registered')
+                records = {r['key']: r for r in self.discovery.get('instruments', [])}
+                records[row['key']] = copy.deepcopy(row)
+                self.discovery['instruments'] = list(records.values())
+                normalize(self.discovery)
+        self.enrollment.scan(inventory, on_update=identified)
         with self.lock:
             normalize(inventory)
             inventory['phase'] = 'complete'
             inventory['duration_s'] = round(time.monotonic() - started, 3)
             self.discovery = inventory
+            old = {r['key']: r for r in previous.get('instruments', [])}
+            with self.store.transaction():
+                for row in inventory.get('instruments', []):
+                    fields = ('present', 'status', 'device_id', 'identity', 'required')
+                    if any(row.get(k) != old.get(row['key'], {}).get(k) for k in fields):
+                        self.store.event('instrument.changed', connection=row['key'],
+                            device_id=row.get('device_id'), state={k: row.get(k) for k in fields})
         return inventory
+
+    def device_states(self):
+        """Discovery presence, communication and resource use are independent observations."""
+        from .discovery import device_connection
+        with self.lock:
+            seen = {r['key']: r for r in self.discovery.get('instruments', [])}
+            return {device: {'present': seen.get(device_connection(record), {}).get('present'),
+                'last_seen': seen.get(device_connection(record), {}).get('last_seen'),
+                'communication': dict(self.communication.get(device, {})),
+                'state': 'reconnecting' if device in self.reconnecting else
+                         'offline' if device in self.offline else
+                         'busy' if self.allocation.used['device:' + device] else 'ready',
+                'error': self.offline.get(device)} for device, record in self.device_records.items()}
 
     def _resources(self, values, operation=None):
         if not isinstance(values, (list, tuple)):
@@ -383,6 +444,7 @@ class Engine:
                     self.device_records[device_id] = record
                     metadata = {k:record[k] for k in ('identity', 'identity_source', 'instrument_profile', 'documentation') if k in record}
                     self.descriptions[device_id] = json.loads(dumps({"id":device_id, "driver":record["driver"], **description, **metadata}))
+                    self.descriptions[device_id]['revision'] = self.store.save_device(record)['revision']
                     self.allocation.limits['device:' + device_id] = concurrency
                     if persist:
                         saved = {d['id']: d for d in self.config.get('devices', [])}
@@ -416,6 +478,10 @@ class Engine:
                 results.append({'index': index, 'error': str(error)})
         return {'results': results}
 
+    def configure_device(self, device_id, definition, expected_revision):
+        from .device_configuration import configure
+        return configure(self, device_id, definition, expected_revision)
+
     def identify(self, device_id, request_id=None):
         with self.lock:
             if self.device_records[device_id]['driver'] != 'scpi':
@@ -442,11 +508,18 @@ class Engine:
             record['documentation'] = enriched.get('documentation', [])
             record['config']['operations'] = {**enriched['config'].get('operations', {}),
                                               **record['config'].get('operations', {})}
-            self.devices[device_id].config.update(record['config'])
+            if not record.get('execution'):
+                self.devices[device_id].config.update(record['config'])
+        if record.get('execution') and before != record:
+            driver = self.devices[device_id]
+            driver.description = driver.worker.call('instrument_description',
+                {'device': device_id, 'identity': identity, 'config': record['config']}, timeout=driver.worker.startup_timeout)
+            driver.description.setdefault('resources', []).append('worker:' + driver.worker_id)
         metadata = {k:record[k] for k in ('identity', 'identity_source', 'instrument_profile', 'documentation') if k in record}
         if before == record:
             return
         self.descriptions[device_id] = {'id':device_id, 'driver':record['driver'], **self.devices[device_id].describe(), **metadata}
+        self.descriptions[device_id]['revision'] = self.store.save_device(record)['revision']
         self.config['devices'] = [record if d['id'] == device_id else d for d in self.config['devices']]
         save_json(self.home / 'config.json', self.config)
 
@@ -488,6 +561,7 @@ class Engine:
                     self.device_records[device_id] = record
                     metadata = {k:record[k] for k in ('identity', 'identity_source', 'instrument_profile', 'documentation') if k in record}
                     self.descriptions[device_id] = {'id':device_id, 'driver':record['driver'], **new.describe(), **metadata}
+                    self.descriptions[device_id]['revision'] = self.store.save_device(record)['revision']
                     self.config['devices'] = [record if d['id'] == device_id else d for d in self.config['devices']]
                     save_json(self.home/'config.json', self.config)
                     with self.store.transaction():
@@ -498,6 +572,7 @@ class Engine:
                     self.reconnecting.discard(device_id)
 
     def _operation(self, run_id, step):
+        from .errors import RequestError
         device_id, name = step["device"], step["operation"]
         if device_id not in self.devices:
             raise ValueError("Device is not registered: " + device_id)
@@ -512,13 +587,18 @@ class Engine:
         if set(bindings) & step.get('arguments', {}).keys() or set(bindings) - specs[name].get('parameters', {}).keys():
             raise ValueError('Bindings must name operation parameters not supplied in arguments')
         static = {**specs[name], 'parameters': {k: v for k, v in specs[name].get('parameters', {}).items() if k not in bindings}}
-        args = parameters(static, step.get("arguments", {}))
+        try:
+            args = parameters(static, step.get("arguments", {}))
+        except ValueError as error:
+            raise RequestError('invalid_arguments', str(error), status=400, device_id=device_id, operation=name,
+                               parameters=static.get('parameters', {})) from None
         requirements = {}
         for source in (self.descriptions[device_id], specs[name], step):
             for key, count in quantities(source.get('requirements', {}), self.capacities).items():
                 requirements[key] = max(requirements.get(key, 0), count)
         return {"id":identifier("op"), "run_id":run_id, "step":step.get("id"), "device":device_id,
                 "operation":name, "arguments":args, "bindings": bindings, "requirements": requirements,
+                "effect":specs[name].get('effect', 'change'),
                 "after":platform_model.dependencies(step), "state":"queued", "created":now(),
                 "resources":sorted(set(self._resources([device_id], name) + self._resources(step.get("resources", [])))),
                 "request_id":step.get("request_id")}
@@ -572,7 +652,8 @@ class Engine:
             used = {op['device'] for op in operations}
             if package is not None:
                 used = set(platform['definition']['devices']) if platform else (set(spec.get('resources', [])) & self.devices.keys() or self.devices.keys())
-            run['devices'] = {name: self.descriptions[name] for name in used}
+            run['devices'] = copy.deepcopy({name: self.descriptions[name] for name in used})
+            run['device_configurations'] = copy.deepcopy({name: self.device_records[name] for name in used})
             directory = self.home / "runs" / run_id
             directory.mkdir(parents=True)
             (directory / "output").mkdir()
@@ -756,6 +837,8 @@ class Engine:
 
     def _file_record(self, run_id, path, name):
         existing = self.store.artifact_named(run_id, name)
+        if existing and existing.get('stream'):
+            return existing
         item = {"id":existing['id'] if existing else identifier("file"), "run_id":run_id, "name":name, "size":path.stat().st_size,
                 "media_type":mimetypes.guess_type(name)[0] or "application/octet-stream", "created":now()}
         with self.store.transaction():
@@ -774,6 +857,14 @@ class Engine:
             save_json(self.home / "runs" / run_id / "output" / "result.json", result)
             self._save_run(run, "run.result")
             return result
+
+    def checkpoint(self, run_id, name, state):
+        from .recovery import checkpoint
+        return checkpoint(self, run_id, name, state)
+
+    def resume(self, run_id, request_id):
+        from .recovery import resume
+        return resume(self, run_id, request_id)
 
     def artifact(self, run_id, name, data):
         return self.artifact_stream(run_id, name, io.BytesIO(data), len(data))
@@ -832,7 +923,7 @@ class Engine:
                 for name in sorted(affected):
                     created[name] = make_driver(self.device_records[name], registry)
                     registry[name] = created[name]
-                    if created[name].describe() != {k: v for k, v in self.descriptions[name].items() if k not in {'id', 'driver', 'identity', 'identity_source', 'instrument_profile', 'documentation'}}:
+                    if created[name].describe() != {k: v for k, v in self.descriptions[name].items() if k not in {'id', 'driver', 'identity', 'identity_source', 'instrument_profile', 'documentation', 'revision'}}:
                         raise ValueError('Driver description changed; update the device configuration before reuse')
                 with self.lock:
                     self.devices.update(created)
@@ -853,6 +944,10 @@ class Engine:
 
     def run_info(self, run_id, details=True):
         result = self.store.get('runs', run_id, summary=not details)
+        result['progress'] = {name: {k: v for k, v in record.items() if k != 'state'}
+                              for name, record in self.store.checkpoints(run_id).items()}
+        result['can_resume'] = (result['kind'] == 'package' and result.get('package', {}).get('resume') is True
+                                and result['state'] in TERMINAL - {'completed'} and bool(result['progress']))
         if details:
             result['operation_records'] = list(reversed(self.store.list('operations', run_id, 10000)))
         return result
@@ -896,6 +991,9 @@ class Engine:
                 from .process_driver import DriverUnavailable
                 if isinstance(error, DriverUnavailable):
                     op['outcome_unknown'] = True
+                    worker = getattr(self.devices[op['device']], 'worker', None)
+                    self.offline.update({name: str(error) for name, driver in self.devices.items()
+                        if name == op['device'] or (worker is not None and getattr(driver, 'worker', None) is worker)})
                     affected = self._amounts(op).keys() | self._amounts(run, reserve=True).keys()
                     self.store.hold_resources(affected, op_id, str(error))
                     self.resource_holds = self.store.resource_holds()
@@ -904,6 +1002,8 @@ class Engine:
                     self._save_run(run, 'run.failing')
                     self._stop_pending(run)
             op['ended'] = now()
+            self.communication[op['device']] = {'time': op['ended'], 'operation_id': op_id,
+                'state': op['state'], 'error': op.get('error')}
             with self.store.transaction():
                 self.store.put('operations', op)
                 self.store.event('operation.' + op['state'], run['id'], operation_id=op_id,
@@ -922,7 +1022,10 @@ class Engine:
                     self.store.put('runs', run)
         for run in list(self.runs.values()):
             unresolved = set(run['involved_resources']) & self.resource_holds.keys()
-            if run['state'] in {'queued', 'running'} and unresolved:
+            observation = bool(unresolved) and run['kind'] == 'workflow' and all(
+                self.operations[oid].get('effect') == 'observe' or not (set(self.operations[oid]['resources']) & unresolved)
+                for oid in run['operations'])
+            if run['state'] in {'queued', 'running'} and unresolved and not observation:
                 run.update(state='cancelling', end_state='interrupted',
                            error='Device outcome is unresolved: ' + ', '.join(sorted(unresolved)))
                 self._stop_pending(run)

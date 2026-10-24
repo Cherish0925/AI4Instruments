@@ -33,7 +33,8 @@
         "result": {
           "type": "number",
           "unit": "V"
-        }
+        },
+        "effect": "observe"
       },
       "read_current": {
         "description": "Read measured channel current.",
@@ -50,7 +51,8 @@
         "result": {
           "type": "number",
           "unit": "A"
-        }
+        },
+        "effect": "observe"
       },
       "read_power": {
         "description": "Read measured channel power.",
@@ -67,7 +69,8 @@
         "result": {
           "type": "number",
           "unit": "W"
-        }
+        },
+        "effect": "observe"
       },
       "read_output": {
         "description": "Read whether the selected output is ON or OFF.",
@@ -83,7 +86,8 @@
         "query": ":OUTP? {channel}",
         "result": {
           "type": "string"
-        }
+        },
+        "effect": "observe"
       },
       "set_output": {
         "description": "Enable or disable a channel using its saved voltage and current settings.",

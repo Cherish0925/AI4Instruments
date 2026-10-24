@@ -12,7 +12,8 @@ export type RunRecord = { id: string; state: string; result?: unknown; error?: s
 export type Event = { sequence: number; kind: string; run_id?: string; [key: string]: unknown };
 export type Submission = { name?: string; project?: string; experiment?: string; platform?: string; resources?: string[]; requirements?: Record<string, number>; parameters?: Record<string, unknown>; request_id?: string };
 export class IOPError extends Error {
-  constructor(message: string, readonly status: number) { super(message); this.name = 'IOPError'; }
+  constructor(message: string, readonly status: number, readonly details: Record<string, unknown> = {}) { super(message); this.name = 'IOPError'; }
+  get code() { return this.details.code as string | undefined; }
 }
 const terminal = new Set(['completed', 'failed', 'cancelled', 'interrupted']);
 const delay = (ms: number, signal?: AbortSignal): Promise<void> => new Promise((resolve, reject) => {
@@ -31,11 +32,15 @@ export class IOP {
       headers: { 'Authorization': 'Bearer ' + this.token, 'Content-Type': 'application/json' },
       body: body === undefined ? undefined : JSON.stringify(body), signal: signal ?? AbortSignal.timeout(this.timeout) });
     const value = await response.json();
-    if (!response.ok) throw new IOPError(value.error ?? response.statusText, response.status);
+    if (!response.ok) throw new IOPError(value.error ?? response.statusText, response.status, value);
     return value as T;
   }
   devices() { return this.request<Record<string, unknown>[]>('/v1/devices'); }
-  context(refresh = false) { return this.request<Record<string, unknown>>('/v1/context' + (refresh ? '?refresh=true' : '')); }
+  context(refresh = false, detail: 'summary' | 'full' = 'summary') { return this.request<Record<string, unknown>>('/v1/context?' + new URLSearchParams({ refresh: String(refresh), detail })); }
+  changes(after = 0, limit = 100, wait = 0) { return this.request<{changes: Event[]; cursor: number}>('/v1/context/changes?' + new URLSearchParams({ after: String(after), limit: String(limit), wait: String(wait) })); }
+  devicePage(offset = 0, limit = 100) { return this.request('/v1/context/devices?' + new URLSearchParams({offset:String(offset),limit:String(limit)})); }
+  deviceHistory(device: string) { return this.request<{id: string; revision: number; definition: Record<string, unknown>}[]>(`/v1/devices/${encodeURIComponent(device)}/history`); }
+  configureDevice(device: string, definition: Record<string, unknown>, expectedRevision: number) { return this.request(`/v1/devices/${encodeURIComponent(device)}/configuration`, { definition, expected_revision: expectedRevision }); }
   schema(name: 'device' | 'platform' | 'workflow' | 'instrument-profile') { return this.request<Record<string, unknown>>('/v1/schemas/' + name); }
   discover() { return this.request<Record<string, unknown>>('/v1/discovery'); }
   startDiscovery() { return this.request<Record<string, unknown>>('/v1/discovery', {}); }
@@ -87,6 +92,14 @@ export class Run {
   constructor(readonly client: IOP, readonly id: string) {}
   info(details = true) { return this.client.request<RunRecord>('/v1/runs/' + encodeURIComponent(this.id) + (details ? '' : '?details=false')); }
   cancel() { return this.client.request<RunRecord>(`/v1/runs/${encodeURIComponent(this.id)}/cancel`, {}); }
+  checkpoints() { return this.client.request<Record<string, {name: string; revision: number; updated: string; state: unknown}>>(`/v1/runs/${encodeURIComponent(this.id)}/checkpoints`); }
+  checkpoint(state: unknown, name = 'main') { return this.client.request(`/v1/runs/${encodeURIComponent(this.id)}/checkpoints`, { name, state }); }
+  resume(requestId = crypto.randomUUID()) { return this.client.request<RunRecord>(`/v1/runs/${encodeURIComponent(this.id)}/resume`, { request_id: requestId }); }
+  async stream(name: string, definition?: Record<string, unknown>) {
+    const stream = new DataStream(this, name);
+    if (definition) await this.client.request(stream.path, { definition });
+    return stream;
+  }
   async wait(options: { signal?: AbortSignal; interval?: number; details?: boolean } = {}): Promise<RunRecord> {
     let cursor = 0;
     for (;;) {
@@ -146,5 +159,20 @@ export class Run {
       }
       if (!page.events.length) await delay(200, signal);
     }
+  }
+}
+export class DataStream {
+  readonly path: string;
+  constructor(readonly run: Run, name: string) { this.path = `/v1/runs/${encodeURIComponent(run.id)}/streams/${encodeURIComponent(name)}`; }
+  info() { return this.run.client.request<{name: string; definition: Record<string, unknown>; chunks: number; bytes: number; next_sequence: number}>(this.path); }
+  chunks(after = -1, limit = 100) { return this.run.client.request<{chunks: Record<string, unknown>[]; cursor: number}>(this.path + '/chunks?' + new URLSearchParams({ after: String(after), limit: String(limit) })); }
+  async append(data: Blob, sequence: number, signal?: AbortSignal) {
+    const response = await fetch(this.run.client.endpoint + this.path + '/chunks?sequence=' + sequence, {
+      method: 'POST', headers: { Authorization: 'Bearer ' + this.run.client.token, 'Content-Type': 'application/octet-stream' },
+      body: data, signal: signal ?? AbortSignal.timeout(this.run.client.timeout)
+    });
+    const value = await response.json();
+    if (!response.ok) throw new IOPError(value.error ?? response.statusText, response.status, value);
+    return value as {id: string; sequence: number; size: number};
   }
 }

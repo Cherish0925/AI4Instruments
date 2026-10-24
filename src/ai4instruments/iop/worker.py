@@ -44,6 +44,11 @@ def main():
                     reply({'id':message['id'],'result':{'devices':list(devices)}})
                 elif method=='describe':
                     reply({'id':message['id'],'result':devices[p['device']].describe()})
+                elif method=='instrument_description':
+                    driver = devices[p['device']]
+                    driver.expected_identity = p['identity']
+                    driver.config.update(p['config'])
+                    reply({'id':message['id'],'result':driver.describe()})
                 elif method=='invoke':
                     from .execution import Context
                     context = p.get('context', {})

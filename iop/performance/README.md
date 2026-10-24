@@ -1,3 +1,18 @@
+# IOP Runtime 0.8.2
+
+同一台 Linux x86_64 主机上交替运行，每项每版本各 3 次，表中为中位数。模拟操作立即返回，包含调度与 SQLite 记录。
+
+| 工作 | 0.8.1 | 0.8.2 |
+| --- | ---: | ---: |
+| 5000 步串行依赖 | 3.0682 s | 3.0964 s |
+| 5000 个独立操作 | 1.7326 s | 1.6132 s |
+
+串行用时基本持平，独立操作略快。新增的程序进度、数据分块与仪器配置保持按需执行；常规调度不遍历这些历史内容。此结果不代表硬件采样率。
+
+Three alternating runs per version, with identical workloads and local SQLite recording. These measure runtime scheduling, not instrument sampling. [完整输出 / Raw measurements](0.8.2.json).
+
+---
+
 # IOP Runtime 0.8.0
 
 同一台 Linux x86_64 主机上交替运行 0.7.0 与 0.8.0，每项各 3 次，以下为执行用时中位数。模拟操作立即返回，包含 SQLite 保存；程序调用包含本机 HTTP 通信。

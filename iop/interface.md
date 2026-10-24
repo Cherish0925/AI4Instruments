@@ -1,6 +1,6 @@
 # IOP Runtime · Desktop and browser
 
-[中文](interface.zh-CN.md) · [Download 0.8.1](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.8.1) · [IOP project](README.md)
+[中文](interface.zh-CN.md) · [Download 0.8.2](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.8.2) · [IOP project](README.md)
 
 IOP Runtime is installed software that runs continuously on the laboratory computer. Its native window and browser interface connect to the same service and share instruments, platform configuration, experiments and data. Accepted experiments continue when either window closes.
 

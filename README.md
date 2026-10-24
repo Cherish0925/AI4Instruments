@@ -2,7 +2,7 @@
   <img src="assets/readme-header.png" alt="From Instruments4AI to AI4Instruments — AI design and implementation + AI development and use." width="1280">
 </p>
 
-0.8.1 adds automatic instrument identification, LXI discovery, SDK enumeration and saved model operations. Connected instruments share one description across desktop, browser and Agent clients. [Instrument setup](iop/instrument-setup.md).
+0.8.2 adds incremental discovery, concise Agent context, versioned instrument settings, resumable programs, binary data chunks and distributions with Python included. [Continuing experiments](iop/continuity.md).
 
 [Read the paper](paper/manuscript.md) · [PDF](paper/AI4Instruments.pdf) · [Operations](docs/operations.md) · [Try the example](examples/README.md) · [Discuss](https://github.com/Cherish0925/AI4Instruments/discussions/1) · [中文](README.zh-CN.md)
 
@@ -10,7 +10,7 @@
 
 **Install a persistent instrument service, configure experimental platforms, and run experiment programs from people or agents.** One computer can manage multiple platforms; shared instruments remain coordinated across them.
 
-[IOP project](iop/README.md) · [Download 0.8.1](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.8.1) · [Install](docs/runtime/README.md) · [Configure platforms](iop/platforms.md) · [Agent integration](iop/agent-setup.md)
+[IOP project](iop/README.md) · [Download 0.8.2](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.8.2) · [Install](docs/runtime/README.md) · [Configure platforms](iop/platforms.md) · [Agent integration](iop/agent-setup.md)
 
 IOP provides a shared [desktop and browser interface](iop/interface.md) for registration, topology, experiments, results and files. The persistent service coordinates execution; desktop, browser and agents share configuration and records. [Architecture](docs/runtime/architecture.md).
 

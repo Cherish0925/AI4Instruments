@@ -16,6 +16,12 @@ from .discovery import discover
 from .engine import relative_path
 from .store import dumps
 from .resources import QueueFull
+from .errors import RequestError
+
+
+class RequestBody(dict):
+    def __missing__(self, field):
+        raise RequestError('missing_field', 'Provide field: ' + field, status=400, field=field)
 
 
 class Server(ThreadingHTTPServer):
@@ -74,24 +80,34 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send({'service':'IOP', 'version':VERSION})
             expected = 'Bearer ' + engine.config['token']
             if not hmac.compare_digest(self.headers.get('Authorization', ''), expected):
-                return self._send({'error':'A service token is required'}, 401)
+                return self._send({'error':'A service token is required', 'code':'authentication_required'}, 401)
             body = {}
             if method == 'POST':
                 length = int(self.headers.get('Content-Length', '0'))
                 if len(parts) == 4 and parts[:2] == ['v1', 'runs'] and parts[3] == 'files':
                     return self._send(engine.artifact_stream(parts[2], query['name'], self.rfile, length))
+                if len(parts) == 6 and parts[:2] == ['v1', 'runs'] and parts[3] == 'streams' and parts[5] == 'chunks':
+                    from .streams import append
+                    return self._send(append(engine, parts[2], parts[4], query['sequence'], self.rfile, length))
                 if not 0 < length <= 64 * 1024 * 1024:
                     raise ValueError('Request body must be between 1 byte and 64 MiB')
                 body = json.loads(self.rfile.read(length))
                 if not isinstance(body, dict):
                     raise ValueError('Expected a JSON object')
+                body = RequestBody(body)
             result = None
             if parts == ['v1','status'] and method == 'GET':
                 result = {'version':VERSION, 'hostname':platform.node(), 'system':platform.system(),
                           'uptime_s':round(time.monotonic() - self.server.started), **engine.metrics()}
             elif parts == ['v1', 'context'] and method == 'GET':
                 from .context import laboratory
-                result = laboratory(engine, query.get('refresh') == 'true')
+                result = laboratory(engine, query.get('refresh') == 'true', query.get('detail', 'summary'))
+            elif parts == ['v1', 'context', 'changes'] and method == 'GET':
+                from .context import changes
+                result = changes(engine, query.get('after', 0), query.get('limit', 100), query.get('wait', 0))
+            elif parts == ['v1', 'context', 'devices'] and method == 'GET':
+                from .context import device_page
+                result = device_page(engine, query.get('offset', 0), query.get('limit', 100))
             elif len(parts) == 3 and parts[:2] == ['v1', 'schemas'] and method == 'GET':
                 from .context import schema_document
                 result = schema_document(parts[2])
@@ -133,7 +149,12 @@ class Handler(BaseHTTPRequestHandler):
             elif parts == ['v1', 'devices', 'batch'] and method == 'POST':
                 result = engine.register_many(body['devices'])
             elif len(parts) == 3 and parts[:2] == ['v1','devices'] and method == 'GET':
-                result = engine.descriptions[parts[2]]
+                with engine.lock:
+                    result = dict(engine.descriptions[parts[2]], status=engine.device_states()[parts[2]])
+            elif len(parts) == 4 and parts[:2] == ['v1', 'devices'] and parts[3] == 'history' and method == 'GET':
+                result = engine.store.device_history(parts[2], query.get('limit', 100))
+            elif len(parts) == 4 and parts[:2] == ['v1', 'devices'] and parts[3] == 'configuration' and method == 'POST':
+                result = engine.configure_device(parts[2], body['definition'], body['expected_revision'])
             elif len(parts) == 4 and parts[:2] == ['v1', 'devices'] and parts[3] == 'configuration' and method == 'GET':
                 with engine.lock:
                     result = engine.device_records[parts[2]]
@@ -159,6 +180,14 @@ class Handler(BaseHTTPRequestHandler):
                 result = engine.store.wait_operation(parts[2], query.get('wait', 0))
             elif len(parts) == 3 and parts[:2] == ['v1','runs'] and method == 'GET':
                 result = engine.run_info(parts[2], details=query.get('details', 'true') != 'false')
+            elif len(parts) in (5, 6) and parts[:2] == ['v1', 'runs'] and parts[3] == 'streams':
+                from .streams import describe, chunks
+                if len(parts) == 6 and parts[5] == 'chunks' and method == 'GET':
+                    result = chunks(engine, parts[2], parts[4], query.get('after', -1), query.get('limit', 100))
+                elif len(parts) == 5:
+                    result = describe(engine, parts[2], parts[4], body['definition'] if method == 'POST' else None)
+                else:
+                    raise KeyError(url.path)
             elif len(parts) == 4 and parts[:2] == ['v1','runs']:
                 run_id, action = parts[2:]
                 if action == 'operations' and method == 'POST':
@@ -167,6 +196,11 @@ class Handler(BaseHTTPRequestHandler):
                     result = engine.store.operation_page(run_id, query.get('after', 0), query.get('limit', 200))
                 elif action == 'cancel' and method == 'POST':
                     result = engine.cancel(run_id)
+                elif action == 'resume' and method == 'POST':
+                    result = engine.resume(run_id, body.get('request_id'))
+                elif action == 'checkpoints':
+                    engine.store.get('runs', run_id)
+                    result = engine.checkpoint(run_id, body.get('name', 'main'), body['state']) if method == 'POST' else engine.store.checkpoints(run_id)
                 elif action == 'result' and method == 'POST':
                     result = engine.save_result(run_id, body['result'])
                 elif action == 'result' and method == 'GET':
@@ -195,12 +229,14 @@ class Handler(BaseHTTPRequestHandler):
             else:
                 raise KeyError(url.path)
             self._send(result)
+        except RequestError as error:
+            self._send(error.response(), error.status)
         except QueueFull as error:
-            self._send({'error':str(error), 'retry_after':1}, 503)
+            self._send({'error':str(error), 'code':'queue_full', 'retry_after':1}, 503)
         except KeyError as error:
-            self._send({'error':'Not found: ' + str(error)}, 404)
+            self._send({'error':'Not found: ' + str(error), 'code':'not_found'}, 404)
         except (ValueError, TypeError, FileNotFoundError) as error:
-            self._send({'error':str(error)}, 400)
+            self._send({'error':str(error), 'code':'invalid_request'}, 400)
         except (BrokenPipeError, ConnectionResetError):
             pass
         except Exception as error:

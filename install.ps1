@@ -1,20 +1,46 @@
 $ErrorActionPreference = 'Stop'
 $InstallDir = if ($env:IOP_INSTALL_DIR) { $env:IOP_INSTALL_DIR } else { Join-Path $env:LOCALAPPDATA 'AI4Instruments' }
-$Python = if ($env:IOP_PYTHON) { $env:IOP_PYTHON } elseif (Get-Command py -ErrorAction SilentlyContinue) { 'py' } else { 'python' }
+$PythonArchive = Join-Path $PSScriptRoot 'runtime\python.tar.gz'
+if ((Test-Path $PythonArchive) -and -not $env:IOP_PYTHON) {
+    $PythonDir = Join-Path $InstallDir 'runtime\0.8.2'
+    New-Item -ItemType Directory -Path $PythonDir -Force | Out-Null
+    & tar.exe -xzf $PythonArchive -C $PythonDir
+    if ($LASTEXITCODE -ne 0) { throw 'Could not unpack the included Python' }
+    $Python = Join-Path $PythonDir 'python\python.exe'
+    $BundledPython = $true
+} else {
+    $Python = if ($env:IOP_PYTHON) { $env:IOP_PYTHON } elseif (Get-Command py -ErrorAction SilentlyContinue) { 'py' } else { 'python' }
+}
 & $Python -c 'import sys; assert sys.version_info >= (3,10), "Python 3.10 or later is required"'
 if ($LASTEXITCODE -ne 0) { throw 'Python 3.10 or later is required' }
-& $Python -m venv (Join-Path $InstallDir 'venv')
+$PreviousPython = Join-Path $InstallDir 'venv\Scripts\python.exe'
+if (Test-Path $PreviousPython) {
+    & $PreviousPython (Join-Path $PSScriptRoot 'scripts\prepare_iop_upgrade.py')
+    if ($LASTEXITCODE -ne 0) { throw 'The previous installation is still in use' }
+    & $Python -m venv --upgrade (Join-Path $InstallDir 'venv')
+} else {
+    & $Python -m venv (Join-Path $InstallDir 'venv')
+}
 if ($LASTEXITCODE -ne 0) { throw 'Could not create the Python environment' }
 $InstalledPython = Join-Path $InstallDir 'venv\Scripts\python.exe'
 $IOP = Join-Path $InstallDir 'venv\Scripts\iop.exe'
-& $InstalledPython -m pip install --upgrade pip
+$OfflineWheels = Join-Path $PSScriptRoot 'runtime\wheels'
+if (Test-Path $OfflineWheels) {
+    & $InstalledPython -m pip install --no-index --find-links $OfflineWheels --upgrade pip
+} else {
+    & $InstalledPython -m pip install --upgrade pip
+}
 if ($LASTEXITCODE -ne 0) { throw 'Could not prepare pip' }
 $IOPWheel = Get-ChildItem (Join-Path $PSScriptRoot 'dist\*.whl') -ErrorAction SilentlyContinue | Select-Object -First 1
 $IOPSource = if ($IOPWheel) { $IOPWheel.FullName } else { $PSScriptRoot }
 $IOPExtras = 'devices'
 if ($env:IOP_AGENT -ne '0') { $IOPExtras += ',agent' }
 if ($env:IOP_DESKTOP -eq '1') { $IOPExtras += ',desktop' }
-& $InstalledPython -m pip install --prefer-binary "${IOPSource}[$IOPExtras]"
+if ((Test-Path $OfflineWheels) -and $BundledPython -and $env:IOP_DESKTOP -ne '1') {
+    & $InstalledPython -m pip install --no-index --find-links $OfflineWheels "${IOPSource}[$IOPExtras]"
+} else {
+    & $InstalledPython -m pip install --prefer-binary "${IOPSource}[$IOPExtras]"
+}
 if ($LASTEXITCODE -ne 0) { throw 'Could not install IOP' }
 & $IOP init
 if ($LASTEXITCODE -ne 0) { throw 'Could not initialize IOP' }

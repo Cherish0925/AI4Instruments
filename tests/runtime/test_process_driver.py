@@ -70,3 +70,28 @@ for line in sys.stdin:
             with self.assertRaises(DriverUnavailable):
                 driver.invoke('position',{},__import__('threading').Event())
         finally:driver.close()
+
+    def test_startup_and_cancellation_have_separate_native_deadlines(self):
+        import subprocess
+        if subprocess.check_output([executable(), '--version'], text=True).strip() != 'iop-execd 0.8.2':
+            self.skipTest('Rebuild iop-execd 0.8.2 for per-request deadline coverage')
+        worker = Path(self.temp.name, 'unresponsive.py')
+        worker.write_text('''import json,sys,time
+for line in sys.stdin:
+ m=json.loads(line)
+ if m['method']=='configure': time.sleep(0.2); r={}
+ elif m['method']=='describe': r={'operations':{'wait':{'parameters':{}}}}
+ else: time.sleep(30); r={}
+ print(json.dumps({'id':m['id'],'result':r}),flush=True)
+''')
+        self.client.register({'id':'stuck','driver':'process','config':{
+            'command':[sys.executable,str(worker)],'timeout':10,'startup_timeout':5,'cancel_timeout':0.2}})
+        run = self.submit([{'id':'wait','device':'stuck','operation':'wait'}])
+        self.wait_running(run)
+        started = time.monotonic()
+        run.cancel()
+        record = run.wait(5)
+        self.assertLess(time.monotonic()-started, 3)
+        self.assertTrue(record['operation_records'][0]['outcome_unknown'])
+        self.assertIn('stuck', self.engine.offline)
+        self.client.invoke('aux', 'position', timeout=2)

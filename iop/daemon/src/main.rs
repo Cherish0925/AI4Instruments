@@ -86,13 +86,21 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     let Some(line) = line? else { break; };
                     let message: Value = serde_json::from_str(&line)?;
                     let cancel = message["method"] == "cancel";
+                    let duration = message["timeout_s"].as_f64().unwrap_or(timeout);
+                    if !duration.is_finite() || duration <= 0.0 || duration > 31_536_000.0 {
+                        emit(&json!({"id":message["id"],"error":"Timeout must be positive and at most one year"})).await?;
+                        continue;
+                    }
                     if !cancel {
                         if pending.is_some() {
                             emit(&json!({"id":message["id"],"error":"Worker is executing an operation"})).await?;
                             continue;
                         }
                         pending = Some(message["id"].clone());
-                        timer.as_mut().reset(Instant::now() + Duration::from_secs_f64(timeout));
+                        timer.as_mut().reset(Instant::now() + Duration::from_secs_f64(duration));
+                    } else if pending.is_some() {
+                        let deadline = timer.deadline().min(Instant::now() + Duration::from_secs_f64(duration));
+                        timer.as_mut().reset(deadline);
                     }
                     input.write_all(format!("{message}\n").as_bytes()).await?;
                     input.flush().await?;

@@ -7,7 +7,7 @@ import re
 import threading
 import time
 import string
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from .discovery import connection_key, device_connection
 from .store import now
@@ -142,21 +142,27 @@ class Enrollment:
         self.retry_after = {}
         self.checked = set()
 
-    def scan(self, inventory):
+    def scan(self, inventory, on_update=None):
         engine = self.engine
         catalog = profiles(engine.config)
         candidates = list(inventory['groups'])
         visible = {connection_key(c) for c in candidates if c.get('provider') != 'configured'}
         available = {p['name'] for p in inventory.get('providers', []) if p.get('available')}
         with ThreadPoolExecutor(max_workers=8, thread_name_prefix='iop-identify') as pool:
-            rows = list(pool.map(lambda c: self.inspect(c, catalog, visible, available), candidates))
+            jobs = [pool.submit(self.inspect, c, catalog, visible, available) for c in candidates]
+            rows = []
+            for job in as_completed(jobs):
+                row = job.result()
+                rows.append(row)
+                with self.lock:
+                    previous = self.records.get(row['key'], {})
+                    if row.get('provider') == 'configured' and previous.get('provider') not in (None, 'configured'):
+                        row['provider'] = previous['provider']
+                    row['first_seen'] = previous.get('first_seen') or row['last_seen'] or row['last_checked']
+                    self.records[row['key']] = row
+                if on_update:
+                    on_update(row)
         with self.lock:
-            for row in rows:
-                previous = self.records.get(row['key'], {})
-                if row.get('provider') == 'configured' and previous.get('provider') not in (None, 'configured'):
-                    row['provider'] = previous['provider']
-                row['first_seen'] = previous.get('first_seen') or row['last_seen'] or row['last_checked']
-                self.records[row['key']] = row
             for key, previous in self.records.items():
                 if key not in visible:
                     previous['present'] = False if previous.get('provider') in available else None

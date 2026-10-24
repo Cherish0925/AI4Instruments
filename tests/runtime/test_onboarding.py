@@ -72,7 +72,7 @@ class SetupCase(unittest.TestCase):
 
     def test_background_scan_is_shared_and_does_not_hold_up_experiments(self):
         entered, release = threading.Event(), threading.Event()
-        def inventory(*_):
+        def inventory(*_, **__):
             entered.set()
             if not release.wait(5):
                 raise TimeoutError('scan was not released')

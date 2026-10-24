@@ -77,7 +77,7 @@ class Simulated(Driver):
         operations = {
             "move_to": {"description":"Move and report the settled simulated angle", "parameters":{
                 "angle_deg":{"type":"number", "unit":"deg"}, "duration":duration}},
-            "position": {"description":"Read the simulated angle", "parameters":{}},
+            "position": {"description":"Read the simulated angle", "effect":"observe", "parameters":{}},
             "configure": {"description":"Set simulated acquisition duration", "parameters":{
                 "exposure_s":{**duration, "default":0.02}}},
             "measure": {"description":"Sample ideal half-wave-plate transmission", "parameters":{}},
@@ -133,7 +133,7 @@ class SCPI(Driver):
 
     def describe(self):
         operations = {
-            "identify":{"description":"Read SCPI identification", "parameters":{}, "query":"*IDN?"},
+            "identify":{"description":"Read SCPI identification", "effect":"observe", "parameters":{}, "query":"*IDN?"},
             "query":{"description":"Send a text query and read its response", "parameters":{"command":{"type":"string"}}},
             "write":{"description":"Send a command", "parameters":{"command":{"type":"string"}}},
         }
@@ -263,6 +263,14 @@ class SCPI(Driver):
 
 
 def make_driver(record, registry):
+    execution = record.get('execution', {})
+    if execution:
+        if execution.get('mode') != 'process' or record.get('driver') == 'process':
+            raise ValueError('Use execution.mode=process for an installed instrument driver')
+        from .process_driver import ProcessDriver
+        local = {k: v for k, v in record.items() if k != 'execution'}
+        return ProcessDriver(record['id'], {k: v for k, v in execution.items() if k != 'mode'} |
+                             {'configuration': {'devices': [local]}}, registry)
     if record.get('driver') == 'process':
         from .process_driver import ProcessDriver
         return ProcessDriver(record['id'], record.get('config', {}), registry)

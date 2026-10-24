@@ -2,7 +2,7 @@
   <img src="assets/readme-header.png" alt="From Instruments4AI to AI4Instruments — AI design and implementation + AI development and use." width="1280">
 </p>
 
-0.8.1 增加自动仪器识别、LXI 网络发现、厂商 SDK 枚举与型号操作保存。桌面、浏览器和 Agent 共用仪器身份、连接与操作说明。 [仪器接入](iop/instrument-setup.zh-CN.md)。
+0.8.2 增加逐项发现结果、简洁的 Agent 概况、仪器配置版本、实验程序续接、二进制数据分块和内置 Python 的发行包。 [持续实验](iop/continuity.zh-CN.md)。
 
 [阅读论文](paper/manuscript.md) · [PDF](paper/AI4Instruments.pdf) · [Operations](docs/operations.md) · [运行示例](examples/README.md) · [参与讨论](https://github.com/Cherish0925/AI4Instruments/discussions/1) · [English](README.md)
 
@@ -10,9 +10,9 @@
 
 **安装常驻仪器服务，配置实验平台，让人和 Agent 提交程序开展实验。** 一台计算机可以管理多个平台，共享设备由同一个服务安排使用。
 
-[IOP 工程入口](iop/README.zh-CN.md) · [下载 0.8.1](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.8.1) · [安装](docs/runtime/README.zh-CN.md) · [配置实验平台](iop/platforms.zh-CN.md) · [Agent 接入](iop/agent-setup.zh-CN.md)
+[IOP 工程入口](iop/README.zh-CN.md) · [下载 0.8.2](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.8.2) · [安装](docs/runtime/README.zh-CN.md) · [配置实验平台](iop/platforms.zh-CN.md) · [Agent 接入](iop/agent-setup.zh-CN.md)
 
-0.8.1 提供[桌面与网页界面](iop/interface.zh-CN.md)：设备登记、平台连接图、实验操作、结果与文件。常驻服务统一安排执行；桌面、浏览器和 Agent 共用配置与记录。[整体架构](docs/runtime/architecture.zh-CN.md)。
+0.8.2 提供[桌面与网页界面](iop/interface.zh-CN.md)：设备登记、平台连接图、实验操作、结果与文件。常驻服务统一安排执行；桌面、浏览器和 Agent 共用配置与记录。[整体架构](docs/runtime/architecture.zh-CN.md)。
 
 AI4Instruments 探索一套面向 AI 的仪器方法论、设计规范与开放生态，让 AI 参与科学与工程仪器的构思、规划设计、生产制造、软硬件开发、实验使用与持续改进，贯穿仪器的整个生命周期。
 

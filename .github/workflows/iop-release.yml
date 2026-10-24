@@ -57,6 +57,7 @@ jobs:
         if: runner.os != 'Linux'
         timeout-minutes: 5
         run: python iop/interface/test/desktop.py
+      - run: python scripts/prepare_iop_python.py
       - run: python scripts/build_iop_bundle.py
       - name: Verify the release installer and installed service
         timeout-minutes: 10

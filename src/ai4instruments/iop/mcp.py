@@ -28,9 +28,11 @@ def create_server(client):
         'Reuse request_id after a connection failure; the runtime schedules devices and retains results.'))
 
     @server.tool()
-    def lab_context(refresh: bool = False) -> dict:
-        """Read service, devices, platform configuration, available drivers and remaining setup. Refresh rescans connections and applies installed discovery profiles."""
-        return client.context(refresh)
+    def lab_context(refresh: bool = False, after: int | None = None, device_offset: int | None = None) -> dict:
+        """Read a compact laboratory overview. Pass its cursor as after on subsequent reads to receive only changes. Device and platform descriptions are fetched when needed."""
+        if device_offset is not None:
+            return client.device_page(device_offset)
+        return client.changes(after) if after is not None else client.context(refresh)
 
     @server.tool(annotations=read_only)
     def describe_instrument(device: str) -> dict:
@@ -46,6 +48,13 @@ def create_server(client):
     def register_instrument(definition: dict) -> dict:
         """Register an installed driver and connection configuration. Repeating the identical definition reuses the device."""
         return client.register(definition)
+
+    @server.tool()
+    def instrument_configuration(device: str, definition: dict | None = None, expected_revision: int | None = None) -> dict:
+        """Read current and previous instrument settings, or save a replacement definition at the current revision while idle. Reapply a previous definition to restore it."""
+        if definition is None:
+            return {'versions': client.device_history(device)}
+        return client.configure_device(device, definition, expected_revision)
 
     @server.tool()
     def register_instruments(definitions: list[dict]) -> dict:
@@ -124,6 +133,15 @@ def create_server(client):
     def cancel_experiment(run_id: str) -> dict:
         """Request cancellation. In-flight instrument operations finish or report their actual cancellation before their resources are released."""
         return client.run(run_id).cancel()
+
+    @server.tool()
+    def continue_program(run_id: str, request_id: str | None = None) -> dict:
+        """Read saved program progress, or pass request_id to continue a stopped program that declares resume:true. The program reads its progress and reuses completed operation IDs."""
+        run = client.run(run_id)
+        if request_id is None:
+            return {'run': run.info(details=False), 'checkpoints': run.checkpoints()}
+        run.resume(request_id)
+        return run.info(details=False)
 
     @server.tool()
     def reconnect_instrument(device: str) -> dict:

@@ -8,6 +8,7 @@ import subprocess
 import sys
 import threading
 import uuid
+import math
 from concurrent.futures import CancelledError
 from pathlib import Path
 from .drivers import Driver
@@ -31,6 +32,11 @@ class Worker:
         self.lock = threading.Lock()
         self.messages = queue.Queue()
         self.failed = False
+        self.timeout = float(config.get('timeout', 300))
+        self.startup_timeout = float(config.get('startup_timeout', 30))
+        self.cancel_timeout = float(config.get('cancel_timeout', 2))
+        if any(not math.isfinite(v) or v <= 0 for v in (self.timeout, self.startup_timeout, self.cancel_timeout)):
+            raise ValueError('Worker timeouts must be positive finite seconds')
         command = config.get('command', ['{python}', '-m', 'ai4instruments.iop.worker'])
         if not isinstance(command, list) or not command or any(not isinstance(x,str) for x in command):
             raise ValueError('Worker command must be an executable and argument list')
@@ -47,7 +53,7 @@ class Worker:
                 self.messages.put(None)
         self.reader = threading.Thread(target=read, daemon=True); self.reader.start()
         try:
-            self.call('configure', config.get('configuration', {}))
+            self.call('configure', config.get('configuration', {}), timeout=self.startup_timeout)
         except BaseException:
             self.close()
             raise
@@ -60,16 +66,19 @@ class Worker:
             self.failed = True
             raise DriverUnavailable('Driver process is unavailable') from None
 
-    def call(self, method, params, cancelled=None):
+    def call(self, method, params, cancelled=None, timeout=None):
         with self.lock:
             if self.failed:
                 raise DriverUnavailable('Driver requires reconnection after its last interruption')
             request_id = str(uuid.uuid4())
-            self.send({'id': request_id, 'method': method, 'params': params})
+            deadline = self.timeout if timeout is None else float(timeout)
+            if not math.isfinite(deadline) or deadline <= 0:
+                raise ValueError('Operation timeout must be positive finite seconds')
+            self.send({'id': request_id, 'method': method, 'params': params, 'timeout_s': deadline})
             cancel_sent = False
             while True:
                 if cancelled is not None and cancelled.is_set() and not cancel_sent:
-                    self.send({'method':'cancel','params':{'id':request_id}})
+                    self.send({'method':'cancel','params':{'id':request_id}, 'timeout_s':self.cancel_timeout})
                     cancel_sent = True
                 try:
                     response = self.messages.get(timeout=0.05)
@@ -119,7 +128,7 @@ class ProcessDriver(Driver):
         created = self.worker is None
         if created:
             self.worker = Worker(config)
-        try: self.description = self.worker.call('describe', {'device':device_id})
+        try: self.description = self.worker.call('describe', {'device':device_id}, timeout=self.worker.startup_timeout)
         except BaseException:
             if created: self.worker.close()
             raise
@@ -130,7 +139,8 @@ class ProcessDriver(Driver):
 
     def invoke(self, operation, arguments, cancelled):
         context = {name: str(getattr(cancelled, name)) for name in ('run_id', 'operation_id', 'output_dir') if hasattr(cancelled, name)}
-        return self.worker.call('invoke', {'device':self.id,'operation':operation,'arguments':arguments,'context':context}, cancelled)
+        return self.worker.call('invoke', {'device':self.id,'operation':operation,'arguments':arguments,'context':context}, cancelled,
+                                timeout=self.description['operations'][operation].get('timeout'))
 
     def close(self):
         self.worker.close()

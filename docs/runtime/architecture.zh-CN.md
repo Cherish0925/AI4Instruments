@@ -2,11 +2,11 @@
 
 [English](architecture.md) · [安装](README.zh-CN.md) · [实验执行](../../iop/execution.zh-CN.md) · [驱动扩展](../../iop/software.zh-CN.md)
 
-0.8.1 改进[仪器接入](../../iop/instrument-setup.zh-CN.md)、并行调度和实验程序连续调用。[Agent 接入](../../iop/agent-setup.zh-CN.md)复用同一套实验室配置。[软件形态与系统支持](../../iop/product.zh-CN.md)。
+0.8.2 改进[仪器接入](../../iop/instrument-setup.zh-CN.md)、并行调度和实验程序连续调用。[Agent 接入](../../iop/agent-setup.zh-CN.md)复用同一套实验室配置。[软件形态与系统支持](../../iop/product.zh-CN.md)。
 
 IOP Runtime 是运行在实验室计算机上的仪器运行服务。人、Agent 和实验程序使用同一接口，连接实体仪器、计算程序和远端任务服务。一台计算机可管理多个实验平台；平台说明记录设备、物理连接、共享对象与初始化方法。
 
-## 0.8.1 的实现
+## 0.8.2 的实现
 
 | 组成 | 职责 | 源码 |
 | --- | --- | --- |

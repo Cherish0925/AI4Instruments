@@ -96,7 +96,7 @@ HTTP 接口为 `GET /v1/context` 和 `GET /v1/schemas/{name}`。具体仪器的�
 
 ## 0.8.1 · 仪器身份与自动接入
 
-先读 `lab_context`；`discovery.instruments` 保存身份、来源、当前发现状态和未完成项。已自动登记的设备直接使用，无需重复编写说明。`next_steps` 中的 `complete_instrument_setup` 指出具体缺少的协议、通信参数、驱动或型号操作。
+先读 `lab_context`；`discover_instruments(refresh=false)` 的 `instruments` 保存身份、来源、当前发现状态和未完成项。已自动登记的设备直接使用，无需重复编写说明。`next_steps` 中的 `complete_instrument_setup` 指出具体缺少的协议、通信参数、驱动或型号操作。
 
 - `identify_instrument(device)`：通过实验调度器读取并保存身份，返回实验编号。
 - `instrument_profiles()`：读取内置与本地型号说明。
@@ -104,3 +104,7 @@ HTTP 接口为 `GET /v1/context` 和 `GET /v1/schemas/{name}`。具体仪器的�
 - `retry_instrument_discovery(connection_key)`：立即重新识别指定连接；省略地址则重试全部。
 
 Python 对应 `identify()`、`instrument_profiles()`、`save_instrument_profile()`、`retry_discovery()`；TypeScript 对应 `identify()`、`instrumentProfiles()`、`saveInstrumentProfile()`、`retryDiscovery()`。型号说明格式使用 `configuration_schema("instrument-profile")`。
+
+## 0.8.2 · 连续使用
+
+默认概况按需读取完整说明；后续用 `lab_context(after=cursor)` 获取变化。`instrument_configuration` 读取或修改有版本的仪器配置；`continue_program` 读取进度或继续声明支持续接的程序。[持续实验与数据传输](continuity.zh-CN.md)。

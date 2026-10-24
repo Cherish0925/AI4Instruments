@@ -1,16 +1,15 @@
-IOP Runtime 0.8.1 connects discovery, instrument identity and saved model operations.
+IOP Runtime 0.8.2 connects instrument configuration, continuing experiments and data transfer.
 
-- Discover LXI SCPI-raw, HiSLIP and VXI-11 announcements alongside USB, serial and VISA resources.
-- Read instrument manufacturer, model, serial number and firmware; automatically register recognized SCPI endpoints.
-- Reuse identity across rediscovery and address changes. Read identities through the scheduler for existing connections, and verify saved identity when reconnecting.
-- Match exact manufacturer/model descriptions and load named operations. The bundled catalogue covers selected operations for SR830 and eight RIGOL DP800 models; add local descriptions through CLI, HTTP, MCP or the shared interface.
-- Enumerate installed NI-DAQmx and Basler pypylon SDK devices. SDK and VISA discovery run in separate processes; installed discovery plugins can return identity, channels and driver configurations.
-- Save discovery history and expose specific remaining setup fields to Agents. Desktop and browser show identity, source, interface information and documentation together.
+- Discovery publishes completed providers and identified instruments incrementally. Driver availability, discovery presence and recent communication are reported separately.
+- Agent context defaults to a concise overview with detail URLs, device pagination and an event cursor. Subsequent reads can request changes without repeating measurement results.
+- Instrument configurations retain versions and can be edited or restored while idle, from the shared interface, HTTP, CLI, Python, TypeScript or MCP.
+- Programs can save progress and continue under the original run ID after interruption. Stable operation IDs retain completed results. Each attempt retains its terminal output.
+- Binary streams retain ordered batches with format/channel descriptions, idempotent retries and artifact downloads. File transfer runs outside the instrument scheduler lock.
+- Installed Python drivers can use the Rust supervisor through `execution.mode=process`. Startup, operation and cancellation deadlines are separate.
+- Six OS/architecture archives include a pinned Python distribution and offline Runtime/Agent dependencies. Core installation no longer requires a system Python or dependency downloads. Desktop installers additionally download native UI dependencies.
 
-Downloads: six OS/architecture archives and the TypeScript client. Archives contain the Python wheel and Rust executor. Run `install-desktop.ps1` on Windows or `sh install-desktop.sh` on macOS/Linux for the desktop application; use `install.ps1` / `install.sh` for browser/server operation. Python 3.10+ and an internet connection for dependencies are required.
+Windows, macOS and Linux: x86_64 and ARM64. Use `install.ps1` / `sh install.sh`, or the corresponding `install-desktop` script. The installer stops an idle previous service; complete or cancel accepted experiments before upgrading. Laboratory configuration and records are retained. Vendor SDKs and OS device drivers are installed for the instruments that need them.
 
-Stop the previous service after experiments finish, then run the new installer. Existing configuration and records are retained.
+中文：0.8.2 改进连续使用：发现结果逐项显示，Agent 按需读取说明和变化，仪器配置可以在线编辑并保留版本，程序可以从保存的进度继续，连续数据按序分块保存。Windows、macOS、Linux 的六个发行包内置 Python 和核心依赖。桌面、浏览器、命令行和 Agent 继续使用同一个运行服务。
 
-中文：0.8.1 将发现连接、读取仪器身份、保存型号操作连成同一流程，增加 LXI 网络发现、NI-DAQmx/pypylon 枚举与发现扩展。桌面、网页和 Agent 共用身份、连接、资料与未完成设置。内置型号操作覆盖 SR830 与 8 个 RIGOL DP800 型号的部分功能；其他型号使用通用接口或安装对应说明与驱动。USB 转串口名称不会作为仪器身份，物理接线和样品关系仍由平台配置记录。
-
-[中文接入说明](https://github.com/Cherish0925/AI4Instruments/blob/main/iop/instrument-setup.zh-CN.md) · [English setup](https://github.com/Cherish0925/AI4Instruments/blob/main/iop/instrument-setup.md) · [Model descriptions and SDK extensions](https://github.com/Cherish0925/AI4Instruments/tree/main/iop/instruments)
+[持续实验与接入说明](https://github.com/Cherish0925/AI4Instruments/blob/main/iop/continuity.zh-CN.md) · [Continuing experiments](https://github.com/Cherish0925/AI4Instruments/blob/main/iop/continuity.md) · [API](https://github.com/Cherish0925/AI4Instruments/blob/main/docs/runtime/http-api.md) · [Scheduling measurements](https://github.com/Cherish0925/AI4Instruments/blob/main/iop/performance/README.md)

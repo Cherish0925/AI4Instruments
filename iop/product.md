@@ -4,9 +4,9 @@
 
 IOP Runtime is persistent software installed on the instrument computer. It maintains connections, executes experiments, coordinates resources and stores records and files. Desktop, browser, command-line and agent clients use the same service.
 
-## Changes in 0.8.1
+## Changes in 0.8.2
 
-0.8.1 adds automatic instrument identification, LXI discovery, SDK enumeration and saved model operations. Connected instruments share one description across desktop, browser and Agent clients.
+0.8.2 adds incremental discovery, concise Agent context, versioned instrument settings, resumable programs, binary data chunks and distributions with Python included. [Continuing experiments](continuity.md).
 
 [Instrument setup](instrument-setup.md) · [Measurements](performance/README.md)
 
@@ -33,7 +33,7 @@ IDE-hosted agents use MCP, SDKs or the CLI. There is no separate IOP IDE extensi
 | Linux | x86_64, ARM64 | ZIP and shell installer. Service builds target glibc 2.35+. Desktop needs a graphical session and Qt libraries; ARM64 desktop requires glibc 2.39+. |
 | WSL | Corresponding Linux architecture | Linux service and browser interface. Instruments must be exposed to WSL; Windows-only SDKs run in the Windows service. |
 
-Python 3.10+ is required. Installers create a separate environment and download dependencies. Archives include a matching Rust executor. Distributions currently use ZIPs and scripts; they do not yet include Python, signed Windows installers, notarized macOS installers or automatic updates.
+Archives include Python, the matching Rust executor and Runtime/Agent dependencies for offline core installation. Desktop installers additionally download native UI dependencies. Distributions use ZIPs and scripts; signed Windows installers, notarized macOS installers and automatic updates are not included.
 
 To update, finish current experiments, stop the old service with `iop stop`, and run the new installer. Configuration and experiment data in the default `~/.iop` directory are retained.
 
@@ -52,7 +52,7 @@ Reuse saved platforms. Saving a description does not execute physical actions. I
 
 ## Current implementation and remaining product work
 
-0.8.1 supplies the shared service, the interfaces above, general adapters, platform configuration, scheduling, records and files, MCP integration and a laboratory context API. The release workflow builds on native operating systems and exercises installation, browser and desktop interfaces, and agent communication.
+0.8.2 supplies the shared service, the interfaces above, general adapters, platform configuration, scheduling, records and files, MCP integration and a laboratory context API. The release workflow builds on native operating systems and exercises installation, browser and desktop interfaces, and agent communication.
 
 Remaining product work includes standalone installers, signing and notarization, automatic updates, a broad model/driver catalogue and extended operation in independent laboratories. General adapters support their protocols; model-specific commands, SDKs and operation descriptions still require their corresponding implementations.
 

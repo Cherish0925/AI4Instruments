@@ -96,7 +96,7 @@ Python and TypeScript `run.invoke()` wait for the target operation and return as
 
 ## 0.8.1 · Identity and automatic setup
 
-Read `lab_context` first. `discovery.instruments` retains identity, source, presence and required setup fields. Use automatically registered instruments directly. `complete_instrument_setup` entries in `next_steps` identify the remaining protocol, communication settings, driver or model operations.
+Read `lab_context` first. `discover_instruments(refresh=false).instruments` retains identity, source, presence and required setup fields. Use automatically registered instruments directly. `complete_instrument_setup` entries in `next_steps` identify the remaining protocol, communication settings, driver or model operations.
 
 - `identify_instrument(device)`: schedule an identity read and save its result; returns a run ID.
 - `instrument_profiles()`: read bundled and local model descriptions.
@@ -104,3 +104,7 @@ Read `lab_context` first. `discovery.instruments` retains identity, source, pres
 - `retry_instrument_discovery(connection_key)`: retry a connection immediately; omit the key to retry all.
 
 Python: `identify()`, `instrument_profiles()`, `save_instrument_profile()`, `retry_discovery()`. TypeScript: `identify()`, `instrumentProfiles()`, `saveInstrumentProfile()`, `retryDiscovery()`. Read `configuration_schema("instrument-profile")` for the description format.
+
+## 0.8.2 · Continuing work
+
+The default context links to full descriptions; use `lab_context(after=cursor)` for subsequent changes. `instrument_configuration` reads or edits versioned settings. `continue_program` reads progress or continues a program declaring resume support. [Program progress and binary data](continuity.md).

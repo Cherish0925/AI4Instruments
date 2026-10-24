@@ -39,6 +39,18 @@ class Store:
             PRIMARY KEY(id,revision));
           CREATE TABLE IF NOT EXISTS resource_holds(resource TEXT PRIMARY KEY, body TEXT NOT NULL);
           CREATE TABLE IF NOT EXISTS discovery_records(key TEXT PRIMARY KEY, body TEXT NOT NULL);
+          CREATE TABLE IF NOT EXISTS device_versions(
+            id TEXT NOT NULL, revision INTEGER NOT NULL, body TEXT NOT NULL,
+            PRIMARY KEY(id,revision));
+          CREATE TABLE IF NOT EXISTS checkpoints(
+            run_id TEXT NOT NULL, name TEXT NOT NULL, body TEXT NOT NULL,
+            PRIMARY KEY(run_id,name));
+          CREATE TABLE IF NOT EXISTS streams(
+            run_id TEXT NOT NULL, name TEXT NOT NULL, body TEXT NOT NULL,
+            chunks INTEGER NOT NULL DEFAULT 0, bytes INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(run_id,name));
+          CREATE TABLE IF NOT EXISTS stream_chunks(
+            run_id TEXT NOT NULL, stream TEXT NOT NULL, sequence INTEGER NOT NULL, size INTEGER NOT NULL,
+            body TEXT NOT NULL, PRIMARY KEY(run_id,stream,sequence));
         ''')
         columns = {row[1] for row in self.db.execute('PRAGMA table_info(artifacts)')}
         if 'name' not in columns:
@@ -57,6 +69,42 @@ class Store:
             self.db.executemany('INSERT INTO discovery_records(key,body) VALUES(?,?) '
                                 'ON CONFLICT(key) DO UPDATE SET body=excluded.body',
                                 ((r['key'], dumps(r)) for r in records))
+
+    def device_history(self, device_id, limit=100):
+        with self.lock:
+            return [json.loads(row[0]) for row in self.db.execute(
+                'SELECT body FROM device_versions WHERE id=? ORDER BY revision DESC LIMIT ?',
+                (device_id, min(max(int(limit), 1), 1000)))]
+
+    def save_device(self, definition):
+        with self.transaction():
+            previous = self.device_history(definition['id'], 1)
+            if previous and previous[0]['definition'] == definition:
+                return previous[0]
+            record = {'id': definition['id'], 'revision': previous[0]['revision'] + 1 if previous else 1,
+                      'updated': now(), 'definition': definition}
+            self.db.execute('INSERT INTO device_versions VALUES(?,?,?)',
+                            (record['id'], record['revision'], dumps(record)))
+            self.event('device.configured', device_id=record['id'], revision=record['revision'])
+            return record
+
+    def checkpoints(self, run_id):
+        with self.lock:
+            return {name: json.loads(body) for name, body in self.db.execute(
+                'SELECT name,body FROM checkpoints WHERE run_id=? ORDER BY name', (run_id,))}
+
+    def save_checkpoint(self, run_id, name, state):
+        with self.transaction():
+            old = self.checkpoints(run_id).get(name, {})
+            record = {'name': name, 'revision': old.get('revision', 0) + 1, 'updated': now(), 'state': state}
+            self.db.execute('INSERT INTO checkpoints VALUES(?,?,?) ON CONFLICT(run_id,name) DO UPDATE SET body=excluded.body',
+                            (run_id, name, dumps(record)))
+            self.event('run.checkpoint', run_id, name=name, revision=record['revision'])
+            return record
+
+    def cursor(self):
+        with self.lock:
+            return self.db.execute('SELECT COALESCE(MAX(sequence),0) FROM events').fetchone()[0]
 
     @contextmanager
     def transaction(self):
@@ -83,7 +131,7 @@ class Store:
         if table not in {"runs", "operations", "artifacts"}:
             raise ValueError(table)
         with self.lock:
-            body = "json_remove(body, '$.result', '$.operations', '$.definition', '$.manifest', '$.platform.definition')" if summary and table == 'runs' else 'body'
+            body = "json_remove(body, '$.result', '$.operations', '$.definition', '$.manifest', '$.platform.definition', '$.spec', '$.devices', '$.device_configurations')" if summary and table == 'runs' else 'body'
             row = self.db.execute(f"SELECT {body} FROM {table} WHERE id=?", (identifier,)).fetchone()
             if row is None:
                 raise KeyError(identifier)
@@ -128,7 +176,7 @@ class Store:
         with self.lock:
             where, args = (" WHERE run_id=?", [run_id]) if run_id else ("", [])
             args.append(min(max(int(limit), 1), 10000))
-            body = "json_remove(body, '$.result', '$.operations', '$.definition', '$.manifest', '$.platform.definition')" if summary and table == 'runs' else 'body'
+            body = "json_remove(body, '$.result', '$.operations', '$.definition', '$.manifest', '$.platform.definition', '$.spec', '$.devices', '$.device_configurations')" if summary and table == 'runs' else 'body'
             rows = self.db.execute(f"SELECT {body} FROM {table}{where} ORDER BY rowid DESC LIMIT ?", args)
             return [json.loads(r[0]) for r in rows]
 
@@ -169,7 +217,14 @@ class Store:
                 self.put("runs", run)
                 self.event("run.interrupted", run["id"])
                 for op_row in self.db.execute("SELECT body FROM operations WHERE run_id=? AND state IN ('queued','running')", (run["id"],)).fetchall():
-                    op = json.loads(op_row[0]); op.update(state="interrupted", ended=now())
+                    op = json.loads(op_row[0])
+                    if op['state'] == 'running':
+                        op['outcome_unknown'] = True
+                        for resource in set(op['resources']) | set(run['resources']):
+                            record = {'resource':resource, 'operation_id':op['id'],
+                                      'reason':'Service stopped before the instrument returned a result', 'time':now()}
+                            self.db.execute('INSERT OR REPLACE INTO resource_holds VALUES(?,?)', (resource,dumps(record)))
+                    op.update(state="interrupted" if op['state'] == 'running' else 'cancelled', ended=now())
                     self.put("operations", op)
                     self.event("operation.interrupted", run["id"], operation_id=op["id"])
             rows = self.db.execute("SELECT body FROM runs WHERE state='queued' ORDER BY rowid").fetchall()

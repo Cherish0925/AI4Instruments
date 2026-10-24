@@ -28,7 +28,7 @@ class Instrument(socketserver.StreamRequestHandler):
             self.wfile.write((response+chr(10)).encode());self.wfile.flush()
 instrument=socketserver.ThreadingTCPServer(('127.0.0.1',0),Instrument);instrument.daemon_threads=True
 threading.Thread(target=instrument.serve_forever,daemon=True).start()
-def inventory(*_):
+def inventory(*_, **__):
     return discovery.normalize({'connections':[{'transport':'serial','address':'COM7','name':'Simulated serial connection','manufacturer':'Simulation','serial_number':'SIM-007','status':'discovered','provider':'serial'}, {'transport':'tcp','address':'127.0.0.1:'+str(instrument.server_address[1]),'name':'SR830 protocol simulator','protocol':'scpi','provider':'lxi-network','connection':{'transport':'tcp','host':'127.0.0.1','port':instrument.server_address[1]}}],'providers':[{'name':'serial','available':True},{'name':'lxi-network','available':True}]})
 discovery.discover=inventory
 serve(p)
@@ -129,7 +129,22 @@ try {
       fullPage: true,
       style: "#toast{visibility:hidden}",
     });
-  await page.click("#modal-close");
+  await page.click("#device-edit");
+  await page.waitForSelector("#configuration-json");
+  await page.fill('[data-config-field="name"]', "Laboratory lock-in");
+  if (images)
+    await page.screenshot({
+      path: join(images, "instrument-configuration.png"),
+      fullPage: true,
+      style: "#toast{visibility:hidden}",
+    });
+  await page.click("#configuration-save");
+  await page.waitForSelector("#modal", { state: "hidden" });
+  assert.equal(
+    (await api("devices/" + identified.id)).name,
+    "Laboratory lock-in",
+  );
+  assert.ok((await api("devices/" + identified.id + "/history")).length >= 2);
   await page.click('[data-connection="0"]');
   assert.ok((await page.locator("#modal").innerText()).includes("通信协议"));
   await page.click("#connection-configure");
@@ -314,8 +329,8 @@ try {
     String.raw`import io,sys,zipfile,json
 b=io.BytesIO()
 with zipfile.ZipFile(b,'w') as z:
- z.writestr('package.json',json.dumps({'name':'interface-program','command':['{python}','experiment.py']}))
- z.writestr('experiment.py',"from ai4instruments.iop import Client\nrun=Client().current_run()\nrun.save_file('data.csv', b'time,value\\n0,12\\n')\nrun.save_result({'samples':1})\n")
+ z.writestr('package.json',json.dumps({'name':'interface-program','command':['{python}','experiment.py'],'resume':True}))
+ z.writestr('experiment.py',"from ai4instruments.iop import Client\nrun=Client().current_run()\nif not run.checkpoints():\n run.checkpoint({'next':0})\n raise SystemExit(17)\nrun.save_file('data.csv', b'time,value\\n0,12\\n')\nrun.save_result({'samples':1})\n")
 sys.stdout.buffer.write(b.getvalue())`,
   ]);
   await page.click("#new-run");
@@ -327,6 +342,8 @@ sys.stdout.buffer.write(b.getvalue())`,
     buffer: archive,
   });
   await page.click("#experiment-submit");
+  await page.waitForSelector("#run-resume");
+  await page.click("#run-resume");
   await page.waitForSelector("#run-detail-summary .badge.completed");
   await page.click("[data-detail-tab=results]");
   await page.waitForSelector("#detail-results .result-grid");

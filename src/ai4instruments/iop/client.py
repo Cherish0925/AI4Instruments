@@ -17,7 +17,10 @@ from .engine import TERMINAL
 
 
 class IOPError(RuntimeError):
-    pass
+    def __init__(self, message, status=None, details=None):
+        super().__init__(message)
+        self.status, self.details = status, details or {}
+        self.code = self.details.get('code')
 
 
 class Client:
@@ -47,16 +50,31 @@ class Client:
                 return data if binary else json.loads(data)
         except HTTPError as error:
             try:
-                message = json.loads(error.read()).get('error', str(error))
+                details = json.loads(error.read())
             except Exception:
-                message = str(error)
-            raise IOPError(message) from None
+                details = {'error': str(error)}
+            raise IOPError(details.get('error', str(error)), error.code, details) from None
 
     def devices(self):
         return self.request('/v1/devices')
 
-    def context(self, refresh=False):
-        return self.request('/v1/context' + ('?refresh=true' if refresh else ''))
+    def context(self, refresh=False, detail='summary'):
+        return self.request('/v1/context?' + urlencode({'refresh': str(refresh).lower(), 'detail': detail}))
+
+    def changes(self, after=0, limit=100, wait=0):
+        return self.request('/v1/context/changes?' + urlencode({'after': after, 'limit': limit, 'wait': wait}))
+
+    def device_page(self, offset=0, limit=100):
+        return self.request('/v1/context/devices?' + urlencode({'offset': offset, 'limit': limit}))
+
+    def device_history(self, device):
+        from urllib.parse import quote
+        return self.request('/v1/devices/' + quote(device, safe='') + '/history')
+
+    def configure_device(self, device, definition, expected_revision):
+        from urllib.parse import quote
+        return self.request('/v1/devices/' + quote(device, safe='') + '/configuration',
+                            {'definition': definition, 'expected_revision': expected_revision})
 
     def schema(self, name):
         from urllib.parse import quote
@@ -184,6 +202,21 @@ class Run:
     def cancel(self):
         return self.client.request('/v1/runs/'+self.id+'/cancel', {})
 
+    def checkpoints(self):
+        return self.client.request('/v1/runs/' + self.id + '/checkpoints')
+
+    def checkpoint(self, state, name='main'):
+        return self.client.request('/v1/runs/' + self.id + '/checkpoints', {'name': name, 'state': state})
+
+    def resume(self, request_id=None):
+        return self.client.request('/v1/runs/' + self.id + '/resume', {'request_id': request_id or str(uuid.uuid4())})
+
+    def stream(self, name, definition=None):
+        stream = DataStream(self, name)
+        if definition is not None:
+            self.client.request(stream.path, {'definition': definition})
+        return stream
+
     def invoke(self, device, operation, arguments=None, timeout=None, request_id=None):
         op = self.client.request('/v1/runs/'+self.id+'/operations', {'device':device, 'operation':operation,
                                  'arguments':arguments or {}, 'request_id':request_id or str(uuid.uuid4())})
@@ -244,3 +277,27 @@ class Run:
 
 
 IOP = Client
+
+
+class DataStream:
+    def __init__(self, run, name):
+        from urllib.parse import quote
+        self.client = run.client
+        self.path = '/v1/runs/' + quote(run.id, safe='') + '/streams/' + quote(name, safe='')
+
+    def info(self):
+        return self.client.request(self.path)
+
+    def chunks(self, after=-1, limit=100):
+        return self.client.request(self.path + '/chunks?' + urlencode({'after': after, 'limit': limit}))
+
+    def append(self, data, sequence):
+        request = Request(self.client.endpoint + self.path + '/chunks?' + urlencode({'sequence': sequence}),
+                          data=data, headers={'Authorization': 'Bearer ' + self.client.token,
+                                              'Content-Type': 'application/octet-stream'})
+        try:
+            with self.client._open(request, timeout=self.client.timeout) as response:
+                return json.loads(response.read())
+        except HTTPError as error:
+            details = json.loads(error.read())
+            raise IOPError(details.get('error', str(error)), error.code, details) from None

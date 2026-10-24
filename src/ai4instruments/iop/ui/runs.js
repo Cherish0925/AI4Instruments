@@ -200,7 +200,26 @@ export async function inspectRun(id) {
       $("#modal-title").textContent = run.name || run.id;
       const active = ["running", "queued", "cancelling"].includes(run.state);
       $("#run-detail-summary").innerHTML =
-        `<div class="run-summary"><div><small>${t("状态", "State")}</small>${badge(run.state)}</div><div><small>${t("开始时间", "Started")}</small>${date(run.started || run.created)}</div><div><small>${t("用时", "Elapsed")}</small>${duration(run.started ? (new Date(run.ended || Date.now()) - new Date(run.started)) / 1000 : null)}</div><div><small>${t("操作数", "Operations")}</small>${run.operation_count ?? page.operations.length}</div>${active ? `<button class="button small" id="run-cancel">${icon("stop")}${t("停止实验", "Stop experiment")}</button>` : ""}</div>${run.error ? `<p class="run-error">${esc(typeof run.error === "object" ? JSON.stringify(run.error) : run.error)}</p>` : ""}`;
+        `<div class="run-summary"><div><small>${t("状态", "State")}</small>${badge(run.state)}</div><div><small>${t("开始时间", "Started")}</small>${date(run.started || run.created)}</div><div><small>${t("用时", "Elapsed")}</small>${duration(run.started ? (new Date(run.ended || Date.now()) - new Date(run.started)) / 1000 : null)}</div><div><small>${t("操作数", "Operations")}</small>${run.operation_count ?? page.operations.length}</div>${active ? `<button class="button small" id="run-cancel">${icon("stop")}${t("停止实验", "Stop experiment")}</button>` : ""}</div>${
+          run.can_resume
+            ? `<div class="actions"><button class="button small" id="run-resume">${icon("play")}${t("从保存的进度继续", "Continue from saved progress")}</button><small>${t("程序进度", "Saved progress")} · ${Object.keys(
+                run.progress || {},
+              )
+                .map(esc)
+                .join(", ")}</small></div>`
+            : ""
+        }${run.error ? `<p class="run-error">${esc(typeof run.error === "object" ? JSON.stringify(run.error) : run.error)}</p>` : ""}`;
+      $("#run-resume")?.addEventListener("click", (e) =>
+        busy(e.currentTarget, async () => {
+          await api("runs/" + encodeURIComponent(id) + "/resume", {
+            request_id: crypto.randomUUID(),
+          });
+          terminalLoaded = false;
+          resultLoaded = false;
+          emit("refresh");
+          await load();
+        }),
+      );
       $("#run-cancel")?.addEventListener("click", (e) =>
         busy(e.currentTarget, async () => {
           await api("runs/" + encodeURIComponent(id) + "/cancel", {});

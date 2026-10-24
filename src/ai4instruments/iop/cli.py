@@ -80,10 +80,16 @@ def parser():
     sub.add_parser('shortcuts', help='Install desktop and browser application entries')
     p = sub.add_parser('context', help='Read the laboratory configuration for an agent or program')
     p.add_argument('--refresh', action='store_true'); p.add_argument('--start', action='store_true')
+    p.add_argument('--full', action='store_true'); p.add_argument('--after', type=int)
     sub.add_parser('mcp', help='Expose the shared service to an agent over MCP stdio')
     sub.add_parser('mcp-config', help='Print the MCP launcher configuration for this installation')
     p = sub.add_parser('register'); p.add_argument('file')
     p = sub.add_parser('reconnect'); p.add_argument('device')
+    p = sub.add_parser('device-config', help='Read saved versions or update an idle instrument')
+    p.add_argument('device'); p.add_argument('--file'); p.add_argument('--revision', type=int)
+    p = sub.add_parser('resume', help='Continue a program from its saved progress')
+    p.add_argument('run_id'); p.add_argument('--request-id'); p.add_argument('--wait', action='store_true')
+    p = sub.add_parser('checkpoints', help='Read saved program progress'); p.add_argument('run_id')
     p = sub.add_parser('identify', help='Read and save instrument identity'); p.add_argument('device'); p.add_argument('--wait', action='store_true')
     p = sub.add_parser('instrument-profile', help='List or save model-specific operations'); p.add_argument('file', nargs='?')
     p = sub.add_parser('resources'); p.add_argument('--set', dest='capacities', help='JSON object of resource capacities')
@@ -129,7 +135,7 @@ def main():
             if args.start:
                 from .desktop import ensure_service
                 client = ensure_service(home, args.endpoint)
-            output(client.context(args.refresh))
+            output(client.changes(args.after) if args.after is not None else client.context(args.refresh, 'full' if args.full else 'summary'))
         elif args.command == 'mcp-config':
             from .context import agent_configuration
             output(agent_configuration(home, args.endpoint or os.environ.get('IOP_ENDPOINT')))
@@ -153,6 +159,15 @@ def main():
             output(client.adapters())
         elif args.command == 'reconnect':
             output(client.reconnect(args.device))
+        elif args.command == 'device-config':
+            output(client.configure_device(args.device, json.loads(Path(args.file).read_text(encoding='utf-8')), args.revision)
+                   if args.file else client.device_history(args.device))
+        elif args.command == 'resume':
+            run = client.run(args.run_id)
+            record = run.resume(args.request_id)
+            output(run.wait() if args.wait else {'run_id': run.id, 'attempt': record['attempt']})
+        elif args.command == 'checkpoints':
+            output(client.run(args.run_id).checkpoints())
         elif args.command == 'identify':
             run = client.identify(args.device)
             output(run.result() if args.wait else {'run_id': run.id})

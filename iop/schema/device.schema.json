@@ -2,11 +2,58 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "IOP Instrument",
   "type": "object",
-  "required": ["driver"],
+  "required": [
+    "driver"
+  ],
   "properties": {
-    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,79}$", "description": "Optional. The service generates a stable ID when omitted."},
-    "driver": {"type": "string", "minLength": 1, "description": "An installed adapter name or Python module:Class. Read /v1/adapters."},
-    "config": {"type": "object", "description": "Driver-specific connection settings and named operations."},
-    "resources": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,79}$",
+      "description": "Optional. The service generates a stable ID when omitted."
+    },
+    "driver": {
+      "type": "string",
+      "minLength": 1,
+      "description": "An installed adapter name or Python module:Class. Read /v1/adapters."
+    },
+    "config": {
+      "type": "object",
+      "description": "Driver-specific connection settings and named operations."
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "execution": {
+      "type": "object",
+      "required": [
+        "mode"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "const": "process"
+        },
+        "timeout": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Maximum operation duration in seconds; default 300."
+        },
+        "startup_timeout": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Driver startup and description timeout in seconds; default 30."
+        },
+        "cancel_timeout": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "description": "Time to finish cancellation before the SDK process ends; default 2."
+        }
+      }
+    }
   }
 }

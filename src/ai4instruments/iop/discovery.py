@@ -9,7 +9,7 @@ import time
 import sys
 import importlib.util
 from importlib.metadata import entry_points
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 
@@ -213,7 +213,7 @@ def _sdk(name):
     return json.loads(result.stdout), [{'name':name, 'available':True}]
 
 
-def discover(software_profiles=()):
+def discover(software_profiles=(), on_update=None):
     started = time.monotonic()
     providers = [('serial', _serial, ()), ('visa', _visa, ()), ('usb-inventory', _usb, ()),
                  ('software-profiles', _software, (software_profiles,)), ('lxi-network', _network, ())]
@@ -221,14 +221,20 @@ def discover(software_profiles=()):
     sdks.update(e.name for e in entry_points(group='ai4instruments.discovery'))
     providers.extend((name, _sdk, (name,)) for name in sorted(sdks))
     with ThreadPoolExecutor(max_workers=8, thread_name_prefix='iop-inventory') as pool:
-        jobs = [pool.submit(fn, *args) for _, fn, args in providers]
+        jobs = {pool.submit(fn, *args): name for name, fn, args in providers}
         results = []
-        for (name, _, _), job in zip(providers, jobs):
+        for job in as_completed(jobs):
+            name = jobs[job]
             try:
                 rows, status = job.result()
                 results.append(([dict(c, provider=name) for c in rows], status))
             except Exception as error:
                 results.append(([], [{'name': name, 'available': False, 'detail': str(error)}]))
+            if on_update:
+                on_update(normalize({'connections': [c for rows, _ in results for c in rows],
+                                     'providers': [p for _, rows in results for p in rows],
+                                     'pending_providers': sorted(set(jobs.values()) -
+                                         {p['name'] for _, status in results for p in status})}))
     return normalize({'connections': [c for rows, _ in results for c in rows],
                       'providers': [p for _, rows in results for p in rows],
                       'duration_s': round(time.monotonic() - started, 3)})

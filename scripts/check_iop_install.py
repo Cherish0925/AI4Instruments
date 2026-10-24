@@ -18,7 +18,8 @@ with tempfile.TemporaryDirectory(prefix='iop install ') as temporary:
     source, = (temporary / 'download').iterdir()
     prefix, home = temporary / 'application', temporary / 'laboratory'
     environment = dict(os.environ, IOP_INSTALL_DIR=str(prefix), IOP_HOME=str(home),
-                       IOP_PYTHON=sys.executable, IOP_DESKTOP='0', IOP_AGENT='1')
+                       IOP_DESKTOP='0', IOP_AGENT='1', PIP_NO_INDEX='1')
+    environment.pop('IOP_PYTHON', None)
     environment.pop('IOP_ENDPOINT', None)
     environment.pop('IOP_TOKEN', None)
     environment.pop('PYTHONPATH', None)
@@ -35,6 +36,7 @@ with tempfile.TemporaryDirectory(prefix='iop install ') as temporary:
         context = json.loads(run('context', '--start'))
         assert context['service']['version'] == json.loads((root / 'iop/release.json').read_text())['version']
         assert context['devices'] == []
+        assert context['service']['python'].startswith('3.13.')
         launch = json.loads(run('mcp-config'))['mcpServers']['iop']
         assert Path(launch['command']).samefile(python)
         assert str(home) in launch['args']
@@ -42,6 +44,11 @@ with tempfile.TemporaryDirectory(prefix='iop install ') as temporary:
         subprocess.run([str(python), '-c', 'from ai4instruments.iop.context import schema_document; assert schema_document("platform")["title"]; assert schema_document("instrument-profile")["title"]; from ai4instruments.iop.identification import profiles; assert len(profiles({})) >= 4; import mcp'],
                        env=environment, check=True, timeout=30)
         assert (home / 'config.json').read_text(encoding='utf-8') == original
+        # Run the same installer over an idle running installation; it must stop
+        # the service and preserve its configuration before replacing files.
+        subprocess.run(command, env=environment, check=True, timeout=480)
+        assert (home / 'config.json').read_text(encoding='utf-8') == original
+        assert json.loads(run('context', '--start'))['service']['version'] == version
         print('Installed application passed: CLI, local service, Agent configuration, MCP dependency and packaged schemas.')
     finally:
         try:

@@ -528,7 +528,7 @@ export function inspectDevice(id) {
           (k) => `<option value="${esc(k)}">${esc(operationName(k))}</option>`,
         )
         .join("")}</select>`,
-    )}<p id="operation-description" class="inline-note"></p><div id="operation-parameters" class="form-grid"></div><button class="button primary" id="device-invoke">${icon("play")}${t("执行操作", "Run operation")}</button></div><section id="device-response" class="device-response" aria-live="polite"><h3>${t("返回内容", "Response")}</h3><p class="inline-note">${t("执行后显示仪器返回内容", "The instrument response appears here after execution")}</p></section><div class="actions"><button class="button small" id="device-reconnect">${icon("refresh")}${t("重新连接", "Reconnect")}</button><button class="button small" id="device-export">${icon("download")}${t("导出说明", "Export description")}</button></div>${d.driver === "scpi" && d.identity?.model ? `<button class="button small" id="model-description">${t("补充型号操作", "Add model operations")}</button>` : ""}${jsonDetails(d, t("完整仪器说明", "Full instrument description"))}`,
+    )}<p id="operation-description" class="inline-note"></p><div id="operation-parameters" class="form-grid"></div><button class="button primary" id="device-invoke">${icon("play")}${t("执行操作", "Run operation")}</button></div><section id="device-response" class="device-response" aria-live="polite"><h3>${t("返回内容", "Response")}</h3><p class="inline-note">${t("执行后显示仪器返回内容", "The instrument response appears here after execution")}</p></section><div class="actions"><button class="button small" id="device-reconnect">${icon("refresh")}${t("重新连接", "Reconnect")}</button><button class="button small" id="device-edit">${t("编辑说明", "Edit configuration")}</button><button class="button small" id="device-export">${icon("download")}${t("导出说明", "Export description")}</button></div>${d.driver === "scpi" && d.identity?.model ? `<button class="button small" id="model-description">${t("补充型号操作", "Add model operations")}</button>` : ""}${jsonDetails(d, t("完整仪器说明", "Full instrument description"))}`,
     t("仪器说明", "Instrument description"),
   );
   $("#modal").classList.add("inspector");
@@ -552,6 +552,7 @@ export function inspectDevice(id) {
       toast(t("驱动已重新连接", "Driver reconnected"));
       emit("refresh");
     });
+  $("#device-edit").onclick = () => editConfiguration(id);
   $("#device-export").onclick = (e) =>
     busy(e.currentTarget, async () => {
       const record = await api(
@@ -614,5 +615,71 @@ export function inspectDevice(id) {
         cursor = events.cursor;
       }
       emit("refresh");
+    });
+}
+
+async function editConfiguration(id) {
+  const versions = await api("devices/" + encodeURIComponent(id) + "/history");
+  const current = versions[0];
+  modal(
+    t("仪器配置", "Instrument configuration"),
+    `<div class="form-stack">${field(t("保存的版本", "Saved versions"), `<select id="configuration-version">${versions.map((v) => `<option value="${v.revision}">${v.revision} · ${esc(v.updated)}</option>`).join("")}</select>`)}<div id="configuration-fields" class="form-grid"></div>${field(t("完整说明", "Full definition"), '<textarea id="configuration-json" spellcheck="false" style="min-height:240px"></textarea>')}<p class="inline-note">${t("保存后直接生效。选择旧版本再保存，可恢复之前的配置。", "Changes take effect when saved. Select an older version and save to restore its settings.")}</p><p id="configuration-error" class="error-text" role="alert"></p><button class="button primary" id="configuration-save">${t("保存配置", "Save configuration")}</button></div>`,
+    id,
+  );
+  function show(definition) {
+    $("#configuration-json").value = JSON.stringify(definition, null, 2);
+    const labels = {
+      name: t("名称", "Name"),
+      host: t("主机", "Host"),
+      port: t("端口", "Port"),
+      resource: t("VISA 地址", "VISA resource"),
+      timeout: t("响应时间（秒）", "Response timeout (s)"),
+      baudrate: t("波特率", "Baud rate"),
+      base_url: t("服务地址", "Service URL"),
+    };
+    const entries = Object.entries(definition.config || {}).filter(
+      ([k, v]) => labels[k] && ["string", "number"].includes(typeof v),
+    );
+    $("#configuration-fields").innerHTML = entries
+      .map(([k, v]) =>
+        field(
+          labels[k],
+          `<input data-config-field="${esc(k)}" value="${esc(v)}" type="${typeof v === "number" ? "number" : "text"}" step="any">`,
+        ),
+      )
+      .join("");
+    $$("[data-config-field]").forEach(
+      (input) =>
+        (input.oninput = () => {
+          try {
+            const value = readJSON("#configuration-json");
+            value.config[input.dataset.configField] =
+              input.type === "number" ? Number(input.value) : input.value;
+            $("#configuration-json").value = JSON.stringify(value, null, 2);
+          } catch (error) {
+            $("#configuration-error").textContent = error.message;
+          }
+        }),
+    );
+  }
+  show(current.definition);
+  $("#configuration-version").onchange = (event) =>
+    show(
+      versions.find((v) => v.revision === Number(event.target.value))
+        .definition,
+    );
+  $("#configuration-save").onclick = (event) =>
+    busy(event.currentTarget, async () => {
+      try {
+        await api("devices/" + encodeURIComponent(id) + "/configuration", {
+          definition: readJSON("#configuration-json"),
+          expected_revision: current.revision,
+        });
+        closeModal();
+        emit("refresh");
+        toast(t("仪器配置已保存", "Instrument configuration saved"));
+      } catch (error) {
+        $("#configuration-error").textContent = error.message;
+      }
     });
 }

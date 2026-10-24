@@ -17,7 +17,12 @@ test('TypeScript experiment package calls the running service and streams result
     const program = `import {IOP} from './iop.mjs';
 const client = new IOP(process.env.IOP_ENDPOINT, process.env.IOP_TOKEN);
 const run = client.run(process.env.IOP_RUN_ID);
+const previous = await run.checkpoints();
+if (!previous.main) { await run.checkpoint({next:0}); process.exit(17); }
 const result = await run.invoke('stage','position');
+const stream = await run.stream('signal',{format:'uint8',channels:[{name:'sample'}]});
+await stream.append(new Blob([new Uint8Array(4096).fill(7)]),0);
+await stream.append(new Blob([new Uint8Array(4096).fill(7)]),0);
 await run.upload('samples.bin',new Blob([new Uint8Array(1048577).fill(42)]));
 await run.saveResult({angle:result.angle_actual});
 `;
@@ -27,7 +32,7 @@ await run.saveResult({angle:result.angle_actual});
 from pathlib import Path
 p=Path(sys.argv[1])
 with zipfile.ZipFile(p/'package.zip','w') as z:
- z.writestr('package.json',json.dumps({'command':['node','experiment.mjs']}))
+ z.writestr('package.json',json.dumps({'command':['node','experiment.mjs'],'resume':True}))
  for name in ('experiment.mjs','iop.mjs'): z.write(p/name,name)
 `,home],{env});
     child = spawn(python,['-u','-c',`import sys
@@ -48,7 +53,19 @@ serve(p)
     await client.configureResources({cpu:4});
     assert.ok((await client.adapters()).some(item=>item.name==='command'));
     const run = await client.submitPackage(new Uint8Array(await readFile(join(home,'package.zip'))),{resources:['stage']});
+    assert.equal((await run.wait()).state, 'failed');
+    assert.equal((await run.checkpoints()).main.state.next, 0);
+    assert.equal((await run.resume('next-attempt')).attempt, 2);
     assert.deepEqual(await run.result(),{angle:0});
+    assert.equal((await (await run.stream('signal')).info()).chunks, 1);
+    const context = await client.context();
+    assert.ok(!('connections' in context.discovery));
+    const history = await client.deviceHistory('stage');
+    const definition = {...history[0].definition, config:{...history[0].definition.config, name:'Translation'}};
+    await client.configureDevice('stage', definition, history[0].revision);
+    const changes = await client.changes(context.cursor);
+    assert.ok(changes.changes.some(e => e.kind === 'device.configured'));
+    await assert.rejects(client.configureDevice('stage', definition, history[0].revision), e => e.code === 'configuration_changed');
     const file = (await run.files()).find(item=>item.name==='output/samples.bin');
     assert.equal(file.size,1048577);
     const response = await run.download(file.id);

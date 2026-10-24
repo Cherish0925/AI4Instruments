@@ -1,4 +1,4 @@
-# IOP HTTP API · 0.8.1
+# IOP HTTP API · 0.8.2
 
 [中文安装](README.zh-CN.md) · [Installation](README.md)
 
@@ -168,3 +168,27 @@ Use `GET /v1/runs?details=false` and `GET /v1/runs/{id}?details=false` for summa
 `instruments` contains persistent identity and setup records with `key`, `device_id`, `identity`, `identity_source`, `required`, `status`, `present`, `first_seen`, `last_seen` and `connection_info`. Presence is `true` for observed, `false` for absent from a working source and `null` when unconfirmed. `identification_summary` reports identified/configured counts and incomplete setup. `groups` retains interface aliases; `related_connections` links USB interfaces sharing VID/PID and serial number without merging logical channels.
 
 The list of required fields uses `protocol`, `communication_parameters`, `control_interface`, `driver` and `model_operations`. `GET /v1/context` includes the corresponding `complete_instrument_setup` tasks. Background identity reads are serialized with device operations. Discovery never runs a profile's measurement or output commands.
+
+## Continuing work · 0.8.2
+
+| Method | Path | Input | Response |
+| --- | --- | --- | --- |
+| GET | `/v1/context` | `detail=summary` (default) or `full` | Summary with event cursor and detail URLs, or complete laboratory inventory |
+| GET | `/v1/context/changes` | `after`, `limit`, `wait` | Bounded change summaries and cursor; no measurement arrays |
+| GET | `/v1/context/devices` | `offset`, `limit` | Compact device page and continuation URL |
+| GET | `/v1/devices/{id}/history` | `limit` | Saved definitions, newest revision first |
+| POST | `/v1/devices/{id}/configuration` | `definition`, `expected_revision` | New configuration revision, applied while the instrument is idle |
+| GET | `/v1/runs/{id}/checkpoints` | — | Named program progress, state and revisions |
+| POST | `/v1/runs/{id}/checkpoints` | `name` (default `main`), `state` | Saved progress after this program's instrument operations finish |
+| POST | `/v1/runs/{id}/resume` | `request_id` | Requeue the same run with a new attempt; requires package `resume:true` and saved progress |
+| GET / POST | `/v1/runs/{id}/streams/{name}` | POST: `definition` with `format` | Data description, bytes, chunk count and next sequence |
+| GET | `/v1/runs/{id}/streams/{name}/chunks` | `after=-1`, `limit=100` | Ordered chunk descriptions and cursor |
+| POST | `/v1/runs/{id}/streams/{name}/chunks?sequence=N` | Binary body and `Content-Length` | Saved artifact; an identical retry returns the original artifact |
+
+A chunk sequence starts at zero. A different body at an existing sequence returns `chunk_changed`; a gap returns `chunk_out_of_order` with `next_sequence`. Fetch bytes through `/v1/artifacts/{id}`. Descriptions state formats and units; the service does not infer binary layouts. Transfers read at most 256 KiB at a time outside the scheduler lock.
+
+`GET /v1/devices/{id}` adds `status`: discovery `present` and `last_seen`, latest `communication`, and driver/resource `state`. An available driver is not a measurement of present physical connectivity. Provider results appear during `phase=discovering`; individual identities update during `identifying`.
+
+HTTP errors retain `error` and add `code`. Configuration conflicts return HTTP 409 and `current_revision`; incorrect arguments return HTTP 400 and the operation's parameter descriptions. Python `IOPError` exposes `status`, `code` and `details`; TypeScript exposes the same fields.
+
+A resumable program re-enters its original command and reads its checkpoints. Completed operation request IDs still return their saved results. After an abrupt stop, operations that had started without a result retain affected resources; operations that had not started are cancelled within the interrupted program. Explicit `effect:"observe"` workflows can read affected device state before `/v1/resources/resolve`. Continuation requires the original instrument and platform definitions; restoring an equivalent saved definition is supported. See [continuing experiments](../../iop/continuity.md) and the [example package](../../examples/iop/resumable-acquisition).

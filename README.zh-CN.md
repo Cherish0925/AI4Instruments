@@ -2,7 +2,7 @@
   <img src="assets/readme-header.png" alt="From Instruments4AI to AI4Instruments — AI design and implementation + AI development and use." width="1280">
 </p>
 
-0.8.0 新增 MCP 接入、统一实验室说明、配置格式接口与设备恢复。Agent 直接复用已有仪器和平台配置。[软件形态、系统支持与职责分工](iop/product.zh-CN.md)。
+0.8.0 改进仪器接入、并行调度和实验程序连续调用。后台发现、自动 ID 和可复用的仪器说明减少配置步骤。[软件形态、系统支持与职责分工](iop/product.zh-CN.md)。
 
 [阅读论文](paper/manuscript.md) · [PDF](paper/AI4Instruments.pdf) · [Operations](docs/operations.md) · [运行示例](examples/README.md) · [参与讨论](https://github.com/Cherish0925/AI4Instruments/discussions/1) · [English](README.md)
 

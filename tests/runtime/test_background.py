@@ -46,7 +46,9 @@ class BackgroundCase(unittest.TestCase):
             finally:
                 try:client.request('/v1/shutdown',{})
                 except OSError:pass
-                deadline=time.monotonic()+10
+                # An in-flight USB inventory command has a 15-second timeout.
+                # Allow it to finish and the service to close its open files.
+                deadline=time.monotonic()+30
                 while time.monotonic()<deadline:
                     try:
                         lock=InstanceLock(home);lock.close()
@@ -55,7 +57,9 @@ class BackgroundCase(unittest.TestCase):
                         log.unlink()
                         break
                     except (RuntimeError,OSError):time.sleep(0.05)
-                else:self.fail('Background service did not finish')
+                else:
+                    log=Path(home)/'service.log'
+                    self.fail('Background service did not finish\n'+(log.read_text(encoding='utf-8',errors='replace') if log.exists() else 'No service log'))
 
 
 if __name__=='__main__':unittest.main()

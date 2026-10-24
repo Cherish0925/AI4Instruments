@@ -2,7 +2,7 @@
 
 [English](README.md) · [服务架构](architecture.zh-CN.md) · [HTTP 接口](http-api.md) · [仪器驱动](drivers.md) · [源码](../../src/ai4instruments/iop)
 
-0.8.0 新增 [MCP 与 Agent 接入](../../iop/agent-setup.zh-CN.md)、统一实验室说明和仪器配置恢复。[软件形态与系统支持](../../iop/product.zh-CN.md)。
+0.8.0 改进[仪器接入](../../iop/instrument-setup.zh-CN.md)、并行调度和实验程序连续调用。[Agent 接入](../../iop/agent-setup.zh-CN.md)复用同一套实验室配置。[软件形态与系统支持](../../iop/product.zh-CN.md)。
 
 IOP Runtime 是安装在仪器所在计算机上的常驻软件。它保持设备连接，接收实验程序，安排串行与并行操作，保存参数、读数、结果和文件。人和 Agent 使用同一套 HTTP 接口、Python 客户端和命令行；浏览器可以查看设备、提交实验和读取结果。
 

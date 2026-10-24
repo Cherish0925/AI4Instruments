@@ -2,7 +2,7 @@
 
 [English](README.md) · [下载软件](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.8.0) · [桌面与网页](interface.zh-CN.md) · [安装与使用](../docs/runtime/README.zh-CN.md) · [平台配置](platforms.zh-CN.md) · [Agent 接入](agent-setup.zh-CN.md)
 
-0.8.0 新增 MCP 接入、统一实验室说明、配置格式接口与设备恢复。Agent 直接复用已有仪器和平台配置。[软件形态、系统支持与职责分工](product.zh-CN.md)。
+0.8.0 改进仪器接入、并行调度和实验程序连续调用。后台发现、自动 ID 和可复用的仪器说明减少配置步骤。[软件形态、系统支持与职责分工](product.zh-CN.md)。
 
 **让人和 Agent 通过同一个常驻服务使用实验平台。** 服务运行在实验室计算机上，连接实体仪器、计算程序和远端任务服务，执行实验程序，安排串行与并行，保存操作过程和数据。终端、浏览器或 Agent 会话关闭后，已经受理的实验继续运行。
 

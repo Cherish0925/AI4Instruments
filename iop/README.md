@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md) · [Download](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.8.0) · [Desktop & browser](interface.md) · [Installation](../docs/runtime/README.md) · [Platform configuration](platforms.md) · [Agent integration](agent-setup.md)
 
-0.8.0 adds MCP integration, a shared laboratory context, configuration schemas and device recovery. Agents reuse saved instrument and platform descriptions. [Application interfaces, system support and responsibilities](product.md).
+0.8.0 improves instrument setup, parallel scheduling and repeated experiment-program calls. Background discovery, automatic IDs and reusable instrument descriptions reduce setup work. [Application interfaces, system support and responsibilities](product.md).
 
 **One persistent service for people and agents to use experimental platforms.** It connects physical instruments, computational programs and remote task services, maintains platform descriptions, schedules serial and parallel experiments, and preserves operations and data. Accepted experiments continue after the submitting terminal, browser or agent session closes.
 

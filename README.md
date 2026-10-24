@@ -2,7 +2,7 @@
   <img src="assets/readme-header.png" alt="From Instruments4AI to AI4Instruments — AI design and implementation + AI development and use." width="1280">
 </p>
 
-0.8.0 adds MCP integration, a shared laboratory context, configuration schemas and device recovery. Agents reuse saved instrument and platform descriptions. [Application interfaces, system support and responsibilities](iop/product.md).
+0.8.0 improves instrument setup, parallel scheduling and repeated experiment-program calls. Background discovery, automatic IDs and reusable instrument descriptions reduce setup work. [Application interfaces, system support and responsibilities](iop/product.md).
 
 [Read the paper](paper/manuscript.md) · [PDF](paper/AI4Instruments.pdf) · [Operations](docs/operations.md) · [Try the example](examples/README.md) · [Discuss](https://github.com/Cherish0925/AI4Instruments/discussions/1) · [中文](README.zh-CN.md)
 

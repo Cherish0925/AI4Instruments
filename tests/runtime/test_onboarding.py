@@ -27,11 +27,7 @@ class Recorded(Driver):
 
 
 class SetupCase(unittest.TestCase):
-    def setUp(self):
-        fixture.ServiceCase.setUp(self)
-        self.engine.discovery_stop.set()
-        if self.engine.discovery_thread:
-            self.engine.discovery_thread.join(10)
+    setUp = fixture.ServiceCase.setUp
     tearDown = fixture.ServiceCase.tearDown
 
     def test_grouped_starts_commit_before_calls_and_retry_a_failed_write(self):

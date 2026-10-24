@@ -27,6 +27,9 @@ class ServiceCase(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.config = initialize(self.temp.name, True, 0)
+        # These cases exercise simulated instruments. Discovery has its own
+        # tests and must not enumerate the host's USB devices for every case.
+        self.config['discovery_interval'] = 0
         self.engine = Engine(self.temp.name, self.config)
         self.server = Server(('127.0.0.1',0), self.engine)
         self.engine.start()

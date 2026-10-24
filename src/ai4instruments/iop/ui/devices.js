@@ -18,9 +18,11 @@ import {
   go,
   readJSON,
   uniqueID,
+  operationResult,
 } from "./core.js";
 let filter = "",
-  kind = "all";
+  kind = "all",
+  inventoryKind = "interface";
 const mode = (d) =>
   d.mode === "simulation"
     ? t("模拟设备", "Simulation")
@@ -88,7 +90,7 @@ export function renderDevices() {
     )
     .join(
       "",
-    )}</div></div><div id="device-grid" class="card-grid"></div><div id="discovery-section"></div>`;
+    )}</div></div><div id="device-grid" class="device-list"></div><div id="discovery-section"></div>`;
 }
 function renderGrid() {
   const list = state.devices.filter(
@@ -99,25 +101,8 @@ function renderGrid() {
         .includes(filter.toLowerCase()),
   );
   $("#device-grid").innerHTML = list.length
-    ? list
-        .map(
-          (d) =>
-            `<button class="device-card" data-device="${esc(d.id)}"><div class="card-top"><span class="device-icon">${icon(d.mode === "software" ? "code" : "device")}</span><span class="badge">${mode(d)}</span></div><h3>${esc(d.name || d.id)}</h3><div class="mono">${esc(d.id)}</div><div class="card-bottom"><span>${Object.keys(d.operations).length} ${t("个操作", "operations")} · ${esc(d.transport || d.driver)}</span>${icon("arrow")}</div></button>`,
-        )
-        .join("")
-    : empty(
-        "device",
-        state.devices.length
-          ? t("没有匹配的设备", "No matching devices")
-          : t("还没有注册设备", "No registered devices"),
-        state.devices.length
-          ? t("尝试其他名称或类型。", "Try another name or category.")
-          : t(
-              "发现连接后，选择驱动并注册。也可以导入已有的仪器说明。",
-              "Discover a connection and register it with a driver, or import an existing instrument description.",
-            ),
-        `<button class="button" id="empty-register">${icon("plus")}${t("注册设备", "Register device")}</button>`,
-      );
+    ? `<div class="panel table-wrap"><table><thead><tr><th>${t("已添加设备", "Saved instruments")}</th><th>${t("接口", "Interface")}</th><th>${t("操作", "Operations")}</th><th></th></tr></thead><tbody>${list.map((d) => `<tr><td><button class="device-name" data-device="${esc(d.id)}">${icon(d.mode === "software" ? "code" : "device")}<span><strong>${esc(d.name || d.id)}</strong><small>${esc(d.id)}</small></span></button></td><td><span class="badge">${esc(d.transport || d.driver)}</span><small>${esc(d.connection?.resource || d.connection?.port || d.connection?.host || mode(d))}</small></td><td>${Object.keys(d.operations).length}</td><td><button class="button small" data-device="${esc(d.id)}">${t("打开", "Open")}${icon("chevron")}</button></td></tr>`).join("")}</tbody></table></div>`
+    : `<div class="setup-inline">${icon("device")}<span>${state.devices.length ? t("没有匹配的设备", "No matching instruments") : t("选择下方接口添加仪器，也可以导入仪器说明。", "Add an instrument from the connections below, or import a description.")}</span><button class="button small" id="empty-register">${t("添加设备", "Add instrument")}</button></div>`;
   $$("[data-device]", $("#device-grid")).forEach(
     (n) => (n.onclick = () => inspectDevice(n.dataset.device)),
   );
@@ -126,11 +111,13 @@ function renderGrid() {
 export function bindDevices() {
   renderGrid();
   renderInventory();
+  if (state.inventory?.scanning && !scan.running) scan();
   $("#scan").onclick = (e) => scan(e.currentTarget);
   $("#register-device").onclick = () => registerDevice();
   $("#device-search").oninput = (e) => {
     filter = e.target.value;
     renderGrid();
+    renderInventory();
   };
   $$("[data-kind]").forEach(
     (b) =>
@@ -142,35 +129,94 @@ export function bindDevices() {
   );
 }
 export async function scan(button) {
-  await busy(button, async () => {
-    toast(t("正在读取连接列表…", "Reading available connections…"));
-    state.inventory = await api("discovery", undefined, { timeout: 90000 });
-    emit("refresh");
-    if (state.view === "devices") renderInventory();
-    toast(
-      t(
-        `发现 ${state.inventory.connections.length} 个连接`,
-        `Found ${state.inventory.connections.length} connections`,
-      ),
-    );
-  });
+  if (scan.running) return;
+  scan.running = true;
+  try {
+    await busy(button, async () => {
+      state.inventory = await api("discovery", {});
+      if (state.view === "devices") renderInventory();
+      while (state.inventory.scanning) {
+        await new Promise((resolve) => setTimeout(resolve, 400));
+        state.inventory = await api("discovery?cached=true");
+        if (state.view === "devices") renderInventory();
+      }
+      if (state.inventory.error) throw Error(state.inventory.error);
+      emit("refresh");
+      toast(t("连接列表已更新", "Connections updated"));
+    });
+  } finally {
+    scan.running = false;
+  }
 }
 function renderInventory() {
   const el = $("#discovery-section");
   if (!el || !state.inventory) return;
   const data = state.inventory;
-  el.innerHTML = `<div class="section-title"><h2>${t("发现的连接", "Discovered connections")}<span class="count">${data.connections.length}</span></h2><small>${t("选择连接，补充仪器说明后注册", "Select a connection and its instrument driver")}</small></div><div class="panel">${data.connections.length ? `<div class="table-wrap"><table><thead><tr><th>${t("名称", "Name")}</th><th>${t("接口与地址", "Interface & address")}</th><th>${t("制造商", "Manufacturer")}</th><th></th></tr></thead><tbody>${data.connections.map((c, i) => `<tr><td><strong>${esc(c.name || c.id || t("未命名连接", "Unnamed connection"))}</strong>${c.serial_number ? `<small>${esc(c.serial_number)}</small>` : ""}</td><td><span class="badge">${esc(c.transport)}</span><small class="discovery-address">${esc(c.address)}</small></td><td>${esc(c.manufacturer || "—")}</td><td>${c.status === "registered" ? `<span class="badge">${t("已注册", "Registered")}</span>` : `<button class="button small" data-register="${i}">${t("注册", "Register")}${icon("plus")}</button>`}</td></tr>`).join("")}</tbody></table></div>` : empty("search", t("没有发现新的连接", "No connections found"), t("检查连接线和系统驱动；网络设备可直接按地址注册。", "Check the connection and system driver. Network devices can be registered by address."))}<div class="provider-list">${(data.providers || []).map((p) => `<span title="${esc(p.detail || "")}"><i class="dot ${p.available ? "online" : ""}"></i>${esc(p.name)}${!p.available ? " · " + t("不可用", "Unavailable") : ""}</span>`).join("")}</div></div>`;
-  $$("[data-register]", el).forEach(
+  const all = data.groups || data.connections;
+  const category = (c) => (c.transport === "usb" ? "usb" : "interface");
+  const list = all.filter(
+    (c) =>
+      category(c) === inventoryKind &&
+      `${c.name} ${c.address} ${c.manufacturer} ${c.serial_number}`
+        .toLowerCase()
+        .includes(filter.toLowerCase()),
+  );
+  const counts = (k) => all.filter((c) => category(c) === k).length;
+  el.innerHTML = `<div class="section-title"><div class="tabs inventory-tabs">${[
+    ["interface", t("可配置接口", "Instrument interfaces")],
+    ["usb", t("USB 清单", "USB inventory")],
+  ]
+    .map(
+      ([k, label]) =>
+        `<button data-inventory-kind="${k}" class="${inventoryKind === k ? "active" : ""}">${label}<span class="count">${counts(k)}</span></button>`,
+    )
+    .join(
+      "",
+    )}</div><small>${data.scanning ? t("正在扫描…", "Scanning…") : t("选择接口，保存仪器说明", "Choose an interface and save its instrument description")}</small></div><div class="panel">${
+    list.length
+      ? `<div class="table-wrap"><table><thead><tr><th>${t("名称", "Name")}</th><th>${t("接口与地址", "Interface & address")}</th><th>${t("制造商", "Manufacturer")}</th><th></th></tr></thead><tbody>${list
+          .map(
+            (c, i) =>
+              `<tr><td><strong>${esc(c.name || c.id || t("未命名连接", "Unnamed connection"))}</strong>${c.serial_number ? `<small>${esc(c.serial_number)}</small>` : ""}</td><td><span class="badge">${esc(c.transport)}</span><small class="discovery-address">${esc(c.address)}</small>${
+                (c.interfaces?.length || 0) > 1
+                  ? `<small>${t("另有接口：", "Also available: ")}${esc(
+                      c.interfaces
+                        .filter((v) => v.transport !== c.transport)
+                        .map((v) => v.transport)
+                        .join(", "),
+                    )}</small>`
+                  : ""
+              }</td><td>${esc(c.manufacturer || "—")}</td><td>${c.status === "registered" ? `<span class="badge">${t("已添加", "Saved")}</span>` : `<button class="button small" data-register="${i}">${category(c) === "usb" ? t("配置 SDK", "Configure SDK") : t("添加", "Add")}${icon("plus")}</button>`}</td></tr>`,
+          )
+          .join("")}</tbody></table></div>`
+      : `<div class="setup-inline">${icon("search")}<span>${data.scanning ? t("正在读取计算机上的连接", "Reading connections on this computer") : t("没有匹配的连接；网络仪器可直接按地址添加。", "No matching connections. Network instruments can be added by address.")}</span></div>`
+  }<div class="provider-list">${(data.providers || []).map((p) => `<span title="${esc(p.detail || "")}"><i class="dot ${p.available ? "online" : ""}"></i>${esc(p.name)}${!p.available ? " · " + t("不可用", "Unavailable") : ""}</span>`).join("")}${data.duration_s != null ? `<span>${t("扫描用时", "Scan time")} ${data.duration_s}s</span>` : ""}</div></div>`;
+  $$("[data-inventory-kind]", el).forEach(
     (b) =>
-      (b.onclick = () =>
-        registerDevice(data.connections[Number(b.dataset.register)])),
+      (b.onclick = () => {
+        inventoryKind = b.dataset.inventoryKind;
+        renderInventory();
+      }),
+  );
+  $$("[data-register]", el).forEach(
+    (b) => (b.onclick = () => registerDevice(list[Number(b.dataset.register)])),
   );
 }
 export function registerDevice(candidate) {
+  const label = [candidate?.name, candidate?.address].filter(Boolean).join("-");
+  const stem =
+    label
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")
+      .slice(0, 60) || "instrument";
+  let generatedID = stem;
+  for (let i = 2; state.devices.some((d) => d.id === generatedID); i++)
+    generatedID = stem + "-" + i;
   const body = modal(
     t("注册仪器或软件", "Register an instrument or software"),
-    `<div class="form-stack"><p class="inline-note">${candidate ? esc(candidate.name || candidate.address) + " · " + esc(candidate.address) : t("选择设备使用的接口，或导入已有的说明文件。", "Select the interface used by the device, or import an existing description.")}</p><div class="form-grid">${field(t("设备 ID", "Device ID"), '<input id="reg-id" placeholder="instrument-01" maxlength="80">')}${field(t("显示名称", "Display name"), `<input id="reg-name" value="${esc(candidate?.name || "")}" placeholder="${t("例如：信号发生器", "e.g. Signal generator")}">`)}${field(t("驱动与接口", "Driver & interface"), `<select id="reg-driver"><option value="scpi-tcp">SCPI · TCP/IP</option><option value="scpi-serial">SCPI · ${t("串口", "Serial")}</option><option value="scpi-visa">SCPI · VISA</option><option value="modbus-tcp">Modbus · TCP/IP</option><option value="modbus-serial">Modbus · RTU</option><option value="http">HTTP API</option><option value="command">${t("命令行程序", "Command-line program")}</option><option value="process">${t("独立 SDK 进程", "SDK worker process")}</option></select>`)}${field(t("导入仪器说明", "Import description"), '<input type="file" id="reg-import" accept=".json">')}</div><div id="reg-fields" class="form-grid"></div><details class="raw"><summary>${icon("code")}${t("完整仪器说明", "Full instrument description")}</summary><textarea id="reg-json" spellcheck="false"></textarea><div style="padding:10px 15px"><button class="button small" id="reg-use-json">${t("使用此说明注册", "Register this description")}</button></div></details></div><div class="form-actions"><button class="button" id="reg-cancel">${t("取消", "Cancel")}</button><button class="button primary" id="reg-save">${t("注册设备", "Register device")}</button></div>`,
-    "INSTRUMENT",
+    `<div class="form-stack"><p class="inline-note">${candidate ? esc(candidate.name || candidate.address) + " · " + esc(candidate.address) : t("选择设备使用的接口，或导入已有的说明文件。", "Select the interface used by the device, or import an existing description.")}</p><div class="form-grid">${field(t("设备 ID", "Device ID"), `<input id="reg-id" value="${esc(generatedID)}" maxlength="80" aria-describedby="reg-id-note"><small id="reg-id-note">${t("自动生成，可修改", "Generated automatically; editable")}</small>`)}${field(t("显示名称", "Display name"), `<input id="reg-name" value="${esc(candidate?.name || "")}" placeholder="${t("例如：信号发生器", "e.g. Signal generator")}">`)}${field(t("驱动与接口", "Driver & interface"), `<select id="reg-driver"><option value="scpi-tcp">SCPI · TCP/IP</option><option value="scpi-serial">SCPI · ${t("串口", "Serial")}</option><option value="scpi-visa">SCPI · VISA</option><option value="modbus-tcp">Modbus · TCP/IP</option><option value="modbus-serial">Modbus · RTU</option><option value="http">HTTP API</option><option value="command">${t("命令行程序", "Command-line program")}</option><option value="process">${t("独立 SDK 进程", "SDK worker process")}</option></select>`)}${field(t("导入仪器说明", "Import description"), '<input type="file" id="reg-import" accept=".json">')}</div><div id="reg-fields" class="form-grid"></div><details class="raw"><summary>${icon("code")}${t("完整仪器说明", "Full instrument description")}</summary><textarea id="reg-json" spellcheck="false"></textarea><div style="padding:10px 15px"><button class="button small" id="reg-use-json">${t("使用此说明注册", "Register this description")}</button></div></details></div><div class="form-actions"><button class="button" id="reg-cancel">${t("取消", "Cancel")}</button><button class="button primary" id="reg-save">${t("注册设备", "Register device")}</button></div>`,
+    t("仪器说明", "Instrument description"),
   );
   const selected =
     candidate?.transport === "serial"
@@ -179,8 +225,15 @@ export function registerDevice(candidate) {
         ? "scpi-visa"
         : candidate?.transport === "command"
           ? "command"
-          : "scpi-tcp";
+          : candidate?.transport === "usb"
+            ? "process"
+            : "scpi-tcp";
   $("#reg-driver").value = selected;
+  let imported = false;
+  $("#reg-save").insertAdjacentHTML(
+    "beforebegin",
+    '<p id="reg-error" class="error-text" role="alert"></p>',
+  );
   function fields() {
     const kind = $("#reg-driver").value;
     $("#reg-fields").innerHTML = kind.endsWith("-tcp")
@@ -215,6 +268,14 @@ export function registerDevice(candidate) {
                 t("程序命令（JSON 数组）", "Program command (JSON array)"),
                 `<textarea id="reg-command" style="min-height:80px">${esc(JSON.stringify(candidate?.transport === "command" ? [candidate.address] : ["{python}", "/path/to/worker.py"]))}</textarea>`,
               );
+    if (kind.startsWith("scpi"))
+      $("#reg-fields").insertAdjacentHTML(
+        "beforeend",
+        field(
+          t("结束符", "Line ending"),
+          '<select id="reg-termination"><option value="lf">LF</option><option value="crlf">CRLF</option><option value="cr">CR</option></select>',
+        ),
+      );
     if (["http", "command"].includes(kind))
       $("#reg-fields").insertAdjacentHTML(
         "beforeend",
@@ -251,6 +312,10 @@ export function registerDevice(candidate) {
       });
     else if (kind === "http") config.base_url = $("#reg-url").value.trim();
     else config.command = readJSON("#reg-command");
+    if ($("#reg-termination"))
+      config.termination = { lf: "\n", crlf: "\r\n", cr: "\r" }[
+        $("#reg-termination").value
+      ];
     if ($("#reg-operations")) config.operations = readJSON("#reg-operations");
     return { id: $("#reg-id").value.trim(), driver, config };
   }
@@ -260,21 +325,32 @@ export function registerDevice(candidate) {
     } catch {}
   }
   async function save(value) {
-    await api("devices", value);
+    const saved = await api("devices", value);
     if (candidate) {
       candidate.status = "registered";
-      candidate.id = value.id;
+      candidate.id = saved.id;
     }
     closeModal();
     emit("refresh");
-    toast(t("设备已注册", "Device registered"));
+    toast(t("设备已保存", "Instrument saved"));
   }
   fields();
-  $("#reg-driver").onchange = fields;
+  $("#reg-driver").onchange = () => {
+    imported = false;
+    fields();
+  };
   body.addEventListener("input", (e) => {
-    if (e.target.id !== "reg-json") updateJSON();
+    if (e.target.id !== "reg-json" && !imported) updateJSON();
   });
-  $("#reg-save").onclick = (e) => busy(e.currentTarget, () => save(record()));
+  $("#reg-save").onclick = (e) =>
+    busy(e.currentTarget, async () => {
+      $("#reg-error").textContent = "";
+      try {
+        await save(imported ? readJSON("#reg-json") : record());
+      } catch (error) {
+        $("#reg-error").textContent = error.message;
+      }
+    });
   $("#reg-use-json").onclick = (e) =>
     busy(e.currentTarget, () => save(readJSON("#reg-json")));
   $("#reg-cancel").onclick = closeModal;
@@ -282,6 +358,7 @@ export function registerDevice(candidate) {
     try {
       const f = e.target.files[0];
       if (f) {
+        imported = true;
         $("#reg-json").value = JSON.stringify(
           JSON.parse(await f.text()),
           null,
@@ -294,30 +371,62 @@ export function registerDevice(candidate) {
     }
   };
 }
+const operationName = (name) =>
+  ({
+    identify: t("读取身份", "Read identity"),
+    query: t("查询", "Query"),
+    write: t("发送命令", "Send command"),
+  })[name] || name;
 export function inspectDevice(id) {
   const d = state.devices.find((v) => v.id === id);
   if (!d) return;
   const body = modal(
     d.name || d.id,
-    `<div class="run-summary"><div><small>ID</small><code>${esc(d.id)}</code></div><div><small>${t("驱动", "Driver")}</small>${esc(d.driver)}</div><div><small>${t("类型", "Type")}</small>${mode(d)}</div><button class="button small" id="device-reconnect">${icon("refresh")}${t("重新连接", "Reconnect")}</button></div><div class="form-stack">${field(
-      t("可用操作", "Available operation"),
+    `<div class="run-summary"><div><small>ID</small><code>${esc(d.id)}</code></div><div><small>${t("接口", "Interface")}</small>${esc(d.transport || d.driver)}</div><div><small>${t("地址", "Address")}</small>${esc(d.connection?.resource || d.connection?.port || d.connection?.host || "—")}</div></div><div class="form-stack">${field(
+      t("仪器操作", "Instrument operation"),
       `<select id="device-operation">${Object.keys(d.operations)
-        .map((k) => `<option value="${esc(k)}">${esc(k)}</option>`)
+        .map(
+          (k) => `<option value="${esc(k)}">${esc(operationName(k))}</option>`,
+        )
         .join("")}</select>`,
-    )}<div id="operation-parameters" class="form-grid"></div></div>${jsonDetails(d, t("完整仪器说明", "Full instrument description"))}<div class="form-actions"><small>${t("操作通过运行服务执行并保留记录", "Operations run through the service and remain in experiment history")}</small><button class="button primary" id="device-invoke">${icon("play")}${t("执行操作", "Run operation")}</button></div>`,
-    t("仪器说明", "INSTRUMENT"),
+    )}<p id="operation-description" class="inline-note"></p><div id="operation-parameters" class="form-grid"></div><button class="button primary" id="device-invoke">${icon("play")}${t("执行操作", "Run operation")}</button></div><section id="device-response" class="device-response" aria-live="polite"><h3>${t("返回内容", "Response")}</h3><p class="inline-note">${t("执行后显示仪器返回内容", "The instrument response appears here after execution")}</p></section><div class="actions"><button class="button small" id="device-reconnect">${icon("refresh")}${t("重新连接", "Reconnect")}</button><button class="button small" id="device-export">${icon("download")}${t("导出说明", "Export description")}</button></div>${jsonDetails(d, t("完整仪器说明", "Full instrument description"))}`,
+    t("仪器说明", "Instrument description"),
   );
-  const render = () =>
-    ($("#operation-parameters").innerHTML = parametersHTML(
-      d.operations[$("#device-operation").value],
-    ));
-  render();
-  $("#device-operation").onchange = render;
+  $("#modal").classList.add("inspector");
+  function renderOperation() {
+    const op = $("#device-operation").value;
+    $("#operation-parameters").innerHTML = parametersHTML(d.operations[op]);
+    $("#operation-description").textContent =
+      op === "identify" && d.driver === "scpi"
+        ? t(
+            "发送 *IDN?，读取制造商、型号、序列号与固件版本。",
+            "Send *IDN? to read manufacturer, model, serial number and firmware.",
+          )
+        : d.operations[op].description || "";
+  }
+  renderOperation();
+  $("#device-operation").onchange = renderOperation;
   $("#device-reconnect").onclick = (e) =>
     busy(e.currentTarget, async () => {
       await api("devices/" + encodeURIComponent(id) + "/reconnect", {});
       toast(t("驱动已重新连接", "Driver reconnected"));
       emit("refresh");
+    });
+  $("#device-export").onclick = (e) =>
+    busy(e.currentTarget, async () => {
+      const record = await api(
+        "devices/" + encodeURIComponent(id) + "/configuration",
+      );
+      const url = URL.createObjectURL(
+        new Blob([JSON.stringify(record, null, 2)], {
+          type: "application/json",
+        }),
+      );
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = id + ".json";
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
     });
   $("#device-invoke").onclick = (e) =>
     busy(e.currentTarget, async () => {
@@ -327,13 +436,43 @@ export function inspectDevice(id) {
         d.operations[op],
       );
       const run = await api("runs", {
-        name: (d.name || d.id) + " · " + op,
+        name: (d.name || d.id) + " · " + operationName(op),
         request_id: uniqueID(),
         steps: [
           { id: "operation", device: id, operation: op, arguments: args },
         ],
       });
-      emit("run", run.id);
+      emit("refresh");
+      const output = $("#device-response");
+      const trace = () => {
+        const b = $("[data-device-run]", output);
+        if (b) b.onclick = () => emit("run", run.id);
+      };
+      let cursor = 0;
+      while (body.isConnected && $("#modal").open) {
+        const page = await api(
+          "runs/" + encodeURIComponent(run.id) + "/operations?limit=1",
+        );
+        if (!body.isConnected) break;
+        const operation = page.operations[0];
+        output.innerHTML = `<div class="section-title"><h3>${t("返回内容", "Response")}</h3>${badge(operation?.state || "queued")}</div>${operation?.error ? `<p class="error-text">${esc(operation.error)}</p>` : operationResult(operation?.result)}<button class="button small" data-device-run>${t("查看实验记录", "View experiment record")}${icon("arrow")}</button>`;
+        trace();
+        if (
+          operation &&
+          ["completed", "failed", "cancelled", "interrupted"].includes(
+            operation.state,
+          )
+        )
+          break;
+        const events = await api(
+          "events?run_id=" +
+            encodeURIComponent(run.id) +
+            "&after=" +
+            cursor +
+            "&wait=2",
+        );
+        cursor = events.cursor;
+      }
       emit("refresh");
     });
 }

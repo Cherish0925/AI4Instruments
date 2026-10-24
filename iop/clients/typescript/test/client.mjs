@@ -12,6 +12,7 @@ test('retains platform, request identity, and reconnects to an accepted run',asy
     res.setHeader('Content-Type','application/json');
     if(req.method==='POST')res.end(JSON.stringify({id:'run-1',state:'queued'}));
     else if(req.url.startsWith('/v1/events')){events++;res.end(JSON.stringify({events:events===1?[{sequence:7,kind:'run.completed',run_id:'run-1'}]:[],cursor:7}));}
+    else if(req.url === '/v1/runs/run-1/result')res.end(JSON.stringify({read:{value:42}}));
     else res.end(JSON.stringify({id:'run-1',state:'completed',result:{read:{value:42}}}));
   });
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));

@@ -155,7 +155,7 @@ def main():
             output(client.configure_resources(json.loads(args.capacities)) if args.capacities is not None else client.resources())
         elif args.command == 'register':
             records = json.loads(Path(args.file).read_text(encoding='utf-8'))
-            output([client.register(record) for record in records] if isinstance(records,list) else client.register(records))
+            output(client.register_many(records) if isinstance(records,list) else client.register(records))
         elif args.command == 'run':
             spec = json.loads(Path(args.file).read_text(encoding='utf-8'))
             run = client.run(client.request('/v1/runs', spec)['id'])

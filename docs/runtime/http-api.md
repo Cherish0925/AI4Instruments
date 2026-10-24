@@ -1,4 +1,4 @@
-# IOP HTTP API · 0.7.0
+# IOP HTTP API · 0.8.0
 
 [中文安装](README.zh-CN.md) · [Installation](README.md)
 
@@ -20,6 +20,9 @@ Base URL: `http://127.0.0.1:8765`. API bodies are JSON objects. Requests to `/v1
 | GET | `/v1/status` | — | Active/queued counts, worker limits, service errors, version, hostname, system and uptime |
 | GET | `/v1/devices` | — | Instrument descriptions |
 | GET | `/v1/devices/{device_id}` | — | One instrument description |
+| GET | `/v1/devices/{device_id}/configuration` | — | Saved driver configuration, suitable for export and registration |
+| POST | `/v1/devices/batch` | `{"devices":[...]}` | Per-input index with `device` or `error`; successful entries remain saved |
+| POST | `/v1/discovery` | `{}` | Start or join a background scan; returns cached inventory and `scanning` immediately |
 | POST | `/v1/devices` | Device record | Registered description; persists configuration; identical retries reuse the device |
 | GET | `/v1/discovery` | `cached=true` to reuse the last scan | Current scan, provider availability and registered devices |
 | POST | `/v1/runs` | Workflow below | Accepted run record |
@@ -148,3 +151,11 @@ A step's `bindings` maps parameter names to `{ "step": "source-step", "path": ["
 HTTP 503 indicates that the configured active-work capacity has been reached and includes `retry_after` in seconds. Submission retries should retain their request identifier. Queued work and accepted experiments continue while new work waits at the caller.
 
 The command adapter's operation context and HTTP asynchronous job descriptions are documented in [software extensions](../../iop/software.md). The schemas for [platforms](../../iop/schema/platform.schema.json) and [workflows](../../iop/schema/workflow.schema.json) are shipped with the source and installation archives.
+
+## Instrument setup and efficient reads
+
+An instrument's `id` may be omitted on registration. The service generates and saves it; identical registrations reuse the same driver. `GET /v1/discovery?cached=true` reports the current background scan without starting another. `connections` retains raw interfaces, `groups` combines known aliases, and `summary` separates configurable interfaces from USB inventory. Windows `COMn` and `ASRLn::INSTR` are recognized as the same endpoint. A USB entry alone does not specify the device's command language.
+
+`GET /v1/operations/{id}?wait=25` waits for that operation to finish, or returns its current state after at most 25 seconds. Python and TypeScript clients use this path for calls inside experiment programs; they do not read the experiment's entire event history for each operation.
+
+Use `GET /v1/runs?details=false` and `GET /v1/runs/{id}?details=false` for summaries. Results, operation lists, experiment definitions and full platform definitions are excluded before the response enters the application. Read `/result` and cursor-paged `/operations` only when needed.

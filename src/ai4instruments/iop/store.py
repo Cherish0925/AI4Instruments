@@ -68,11 +68,12 @@ class Store:
         self.db.execute(f"INSERT INTO {table}({','.join(keys)}) VALUES({','.join('?' for _ in keys)}) "
                         "ON CONFLICT(id) DO UPDATE SET state=excluded.state,body=excluded.body", values)
 
-    def get(self, table, identifier):
+    def get(self, table, identifier, summary=False):
         if table not in {"runs", "operations", "artifacts"}:
             raise ValueError(table)
         with self.lock:
-            row = self.db.execute(f"SELECT body FROM {table} WHERE id=?", (identifier,)).fetchone()
+            body = "json_remove(body, '$.result', '$.operations', '$.definition', '$.manifest', '$.platform.definition')" if summary and table == 'runs' else 'body'
+            row = self.db.execute(f"SELECT {body} FROM {table} WHERE id=?", (identifier,)).fetchone()
             if row is None:
                 raise KeyError(identifier)
             return json.loads(row[0])
@@ -86,6 +87,19 @@ class Store:
             row = self.db.execute(f"SELECT body FROM {table} WHERE request_id=?", (request_id,)).fetchone()
             return json.loads(row[0]) if row else None
 
+    def wait_operation(self, identifier, wait=0):
+        wait = float(wait)
+        if not 0 <= wait <= 25:
+            raise ValueError('Operation wait must be between 0 and 25 seconds')
+        deadline = time.monotonic() + wait
+        with self.changed:
+            while True:
+                record = self.get('operations', identifier)
+                remaining = deadline - time.monotonic()
+                if record['state'] not in {'queued', 'running'} or remaining <= 0:
+                    return record
+                self.changed.wait(remaining)
+
     def artifact_named(self, run_id, name):
         with self.lock:
             row = self.db.execute('SELECT body FROM artifacts WHERE run_id=? AND name=?', (run_id, name)).fetchone()
@@ -97,13 +111,14 @@ class Store:
                                   (run_id, int(after), min(max(int(limit), 1), 1000))).fetchall()
         return {'operations':[json.loads(body) for _, body in rows], 'cursor':rows[-1][0] if rows else int(after)}
 
-    def list(self, table, run_id=None, limit=100):
+    def list(self, table, run_id=None, limit=100, summary=False):
         if table not in {"runs", "operations", "artifacts"}:
             raise ValueError(table)
         with self.lock:
             where, args = (" WHERE run_id=?", [run_id]) if run_id else ("", [])
             args.append(min(max(int(limit), 1), 10000))
-            rows = self.db.execute(f"SELECT body FROM {table}{where} ORDER BY rowid DESC LIMIT ?", args)
+            body = "json_remove(body, '$.result', '$.operations', '$.definition', '$.manifest', '$.platform.definition')" if summary and table == 'runs' else 'body'
+            rows = self.db.execute(f"SELECT {body} FROM {table}{where} ORDER BY rowid DESC LIMIT ?", args)
             return [json.loads(r[0]) for r in rows]
 
     def event(self, kind, run_id=None, **data):

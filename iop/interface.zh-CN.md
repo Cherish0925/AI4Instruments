@@ -1,6 +1,6 @@
 # IOP Runtime · 桌面与网页
 
-[English](interface.md) · [下载 0.7.0](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.7.0) · [IOP 工程](README.zh-CN.md)
+[English](interface.md) · [下载 0.8.0](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.8.0) · [IOP 工程](README.zh-CN.md)
 
 IOP Runtime 是安装在实验室计算机上的常驻软件。桌面窗口和浏览器是它的两个操作入口：连接相同的服务，使用相同的仪器、平台配置、实验和数据。窗口关闭后，已经提交的实验继续运行。
 

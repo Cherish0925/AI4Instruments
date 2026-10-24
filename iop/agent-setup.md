@@ -44,6 +44,8 @@ An individual instrument can operate without a platform. A platform records rela
 | `describe_instrument` | Operations, arguments and units for one device |
 | `configuration_schema` | Device, platform or workflow JSON schema |
 | `register_instrument` | Register a connection using an installed driver |
+| `register_instruments` | Register multiple descriptions, returning each result; IDs may be omitted |
+| `discover_instruments` | Start background discovery or read the cached inventory |
 | `configure_platform` | Save or preview platform configuration |
 | `configure_resources` | Set named resource capacities |
 | `run_procedure` | Execute initialization or another saved procedure |
@@ -82,3 +84,11 @@ const schema = await lab.schema('workflow');
 ```
 
 HTTP exposes `GET /v1/context` and `GET /v1/schemas/{name}`. Retrieve detailed operations at `GET /v1/devices/{id}` only for instruments needed by the current task.
+
+## Multiple instruments and repeated calls
+
+Start discovery with `discover_instruments()`, then inspect progress with `discover_instruments(refresh=false)`. Serial, VISA and USB inventory remain distinct; model commands come from instrument descriptions, installed drivers and manufacturer documentation. `register_instruments(definitions)` registers multiple devices and returns each generated ID or error. IDs do not require operator input.
+
+Python and TypeScript `run.invoke()` wait for the target operation and return as soon as its result is available. Submit independent calls concurrently; the service schedules device, bus and platform resources. When all steps are known, submit one workflow using `after` and `bindings`. Put feedback-dependent loops inside experiment programs.
+
+[Instrument setup](instrument-setup.md) · [Measurements](performance/README.md)

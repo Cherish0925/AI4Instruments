@@ -103,10 +103,11 @@ try {
   await page.click('[data-register="0"]');
   assert.equal(await page.locator("#reg-driver").inputValue(), "scpi-serial");
   assert.equal(await page.locator("#reg-port").inputValue(), "COM7");
-  await page.fill("#reg-id", "serial-01");
+  const generatedID = await page.locator("#reg-id").inputValue();
+  assert.ok(generatedID);
   await page.fill("#reg-name", "模拟串口设备");
   await page.click("#reg-save");
-  await page.waitForSelector('[data-device="serial-01"]');
+  await page.waitForSelector(`[data-device="${generatedID}"]`);
   await api("devices", {
     id: "sim-axis",
     driver: "simulated",
@@ -195,8 +196,29 @@ try {
   await page.fill("#palette-input", "sim-axis");
   await page.click('[data-palette="0"]');
   await page.waitForSelector("#device-operation");
+  const deviceDownload = page.waitForEvent("download");
+  await page.click("#device-export");
+  const exportedDevice = await deviceDownload;
+  const description = JSON.parse(
+    await readFile(await exportedDevice.path(), "utf8"),
+  );
+  assert.equal(description.driver, "simulated");
+  assert.equal(description.config.kind, "stage");
   await page.selectOption("#device-operation", "position");
   await page.click("#device-invoke");
+  await page.waitForSelector("#device-response .badge.completed");
+  assert.ok(
+    (await page.locator("#device-response").innerText()).includes(
+      "angle_actual",
+    ),
+  );
+  if (images)
+    await page.screenshot({
+      path: join(images, "instrument-response.png"),
+      fullPage: true,
+      style: "#toast{visibility:hidden}",
+    });
+  await page.click("[data-device-run]");
   await page.waitForSelector("#run-detail-summary .badge.completed");
   await page.click("#modal-close");
   await page.click('[data-view="settings"]');
@@ -275,6 +297,7 @@ sys.stdout.buffer.write(b.getvalue())`,
   await page.click("#experiment-submit");
   await page.waitForSelector("#run-detail-summary .badge.completed");
   await page.click("[data-detail-tab=results]");
+  await page.waitForSelector("#detail-results .result-grid");
   assert.match(await page.locator("#detail-results").innerText(), /samples/);
   await page.click("[data-detail-tab=files]");
   const row = page.locator("#detail-files tr").filter({ hasText: "data.csv" });

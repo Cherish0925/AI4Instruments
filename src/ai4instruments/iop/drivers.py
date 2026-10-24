@@ -4,6 +4,7 @@ import importlib
 import math
 import socket
 import time
+import csv
 from concurrent.futures import CancelledError
 from .store import now
 
@@ -114,12 +115,21 @@ class SCPI(Driver):
         super().__init__(*args)
         self.connection = None
         self.manager = None
+        self.received = bytearray()
         self.timeout = float(self.config.get("timeout", 5))
-        if self.timeout <= 0:
+        if not math.isfinite(self.timeout) or self.timeout <= 0:
             raise ValueError("timeout must be positive")
         self.termination = self.config.get("termination", "\n")
         if not self.termination:
             raise ValueError("A text SCPI termination is required")
+        transport = self.config.get('transport', 'tcp')
+        required = {'tcp': 'host', 'serial': 'port', 'visa': 'resource'}
+        if transport not in required:
+            raise ValueError('Unknown SCPI transport: ' + str(transport))
+        if not isinstance(self.config.get(required[transport]), str) or not self.config[required[transport]].strip():
+            raise ValueError('Specify the SCPI ' + required[transport])
+        if transport == 'serial' and int(self.config.get('baudrate', 9600)) <= 0:
+            raise ValueError('Baud rate must be positive')
 
     def describe(self):
         operations = {
@@ -128,7 +138,8 @@ class SCPI(Driver):
             "write":{"description":"Send a command", "parameters":{"command":{"type":"string"}}},
         }
         operations.update(self.config.get("operations", {}))
-        return {"name":self.config.get("name", self.id), "mode":"hardware", "transport":self.config.get("transport", "tcp"),
+        connection = {k: self.config[k] for k in ('host', 'port', 'resource', 'baudrate', 'termination') if k in self.config}
+        return {"name":self.config.get("name", self.id), "mode":"hardware", "transport":self.config.get("transport", "tcp"), 'connection': connection,
                 "operations":operations}
 
     def connect(self):
@@ -141,7 +152,10 @@ class SCPI(Driver):
         elif kind == "serial":
             import serial
             self.connection = serial.Serial(self.config["port"], int(self.config.get("baudrate", 9600)),
-                                            timeout=self.timeout, write_timeout=self.timeout)
+                                            timeout=self.timeout, write_timeout=self.timeout,
+                                            bytesize=self.config.get('bytesize', 8), parity=self.config.get('parity', 'N'),
+                                            stopbits=self.config.get('stopbits', 1), xonxoff=self.config.get('xonxoff', False),
+                                            rtscts=self.config.get('rtscts', False), dsrdtr=self.config.get('dsrdtr', False))
         elif kind == "visa":
             import pyvisa
             backend = self.config.get("backend")
@@ -156,8 +170,8 @@ class SCPI(Driver):
     def exchange(self, command, read=False):
         if "\n" in command or "\r" in command:
             raise ValueError("Use one text command per operation")
-        self.connect()
         try:
+            self.connect()
             kind = self.config.get("transport", "tcp")
             if kind == "visa":
                 return self.connection.query(command).strip() if read else self.connection.write(command)
@@ -168,19 +182,34 @@ class SCPI(Driver):
                 self.connection.write(wire)
             if not read:
                 return None
-            response = bytearray()
-            terminator = self.termination.encode()
+            terminator = self.termination.encode(self.config.get('encoding', 'ascii'))
             deadline = time.monotonic() + self.timeout
-            while not response.endswith(terminator):
-                if time.monotonic() >= deadline:
+            search_from = 0
+            while True:
+                end = self.received.find(terminator, search_from)
+                if end >= 0:
+                    response = bytes(self.received[:end])
+                    del self.received[:end + len(terminator)]
+                    if kind == 'tcp':
+                        self.connection.settimeout(self.timeout)
+                    else:
+                        self.connection.timeout = self.timeout
+                    return response.decode(self.config.get('encoding', 'ascii'))
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
                     raise TimeoutError("Instrument response timed out")
-                chunk = self.connection.recv(1) if kind == "tcp" else self.connection.read(1)
+                search_from = max(0, len(self.received) - len(terminator) + 1)
+                if kind == 'tcp':
+                    self.connection.settimeout(remaining)
+                    chunk = self.connection.recv(65536)
+                else:
+                    self.connection.timeout = remaining
+                    chunk = self.connection.read(min(65536, max(1, self.connection.in_waiting)))
                 if not chunk:
                     raise TimeoutError("Instrument returned no complete response")
-                response.extend(chunk)
-                if len(response) > 8 * 1024 * 1024:
+                self.received.extend(chunk)
+                if len(self.received) > 8 * 1024 * 1024:
                     raise ValueError("Response exceeds text-query size")
-            return response[:-len(terminator)].decode(self.config.get("encoding", "ascii"))
         except Exception:
             self.close()
             raise
@@ -202,11 +231,16 @@ class SCPI(Driver):
                     break
                 if time.monotonic() >= deadline:
                     raise TimeoutError("Completion response did not arrive")
-                time.sleep(float(completion.get("interval", 0.1)))
+                if cancelled.wait(float(completion.get("interval", 0.1))):
+                    raise CancelledError('Operation cancelled')
         result = {"time":now(), "source":"device" if is_query else "driver", "command":command}
         if is_query:
             encoding = spec.get("result", {})
             result["value"] = float(value) if encoding.get("type") == "number" else value
+            if operation == 'identify':
+                fields = next(csv.reader([value]))
+                if len(fields) == 4:
+                    result['identity'] = dict(zip(('manufacturer', 'model', 'serial_number', 'firmware'), (v.strip() for v in fields)))
             if "unit" in encoding:
                 result["unit"] = encoding["unit"]
         else:
@@ -216,6 +250,7 @@ class SCPI(Driver):
         return result
 
     def close(self):
+        self.received.clear()
         for obj in (self.connection, self.manager):
             if obj is not None:
                 try:

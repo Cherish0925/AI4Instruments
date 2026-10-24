@@ -21,6 +21,7 @@ import {
   readJSON,
   emit,
   uniqueID,
+  operationResult,
 } from "./core.js";
 import { parametersHTML, parameterValues } from "./devices.js";
 let query = "",
@@ -149,16 +150,34 @@ export async function inspectRun(id) {
   let cursor = 0,
     next = 0,
     pages = [],
-    terminalLoaded = false;
+    terminalLoaded = false,
+    resultLoaded = false,
+    activeTab = "steps";
   $$("[data-detail-tab]", body).forEach(
     (b) =>
       (b.onclick = () => {
+        activeTab = b.dataset.detailTab;
+        loadResult();
         for (const n of $$("[data-detail-tab]", body)) {
           n.classList.toggle("active", n === b);
           $("#detail-" + n.dataset.detailTab).hidden = n !== b;
         }
       }),
   );
+  async function loadResult() {
+    if (activeTab !== "results" || resultLoaded || !terminalLoaded) return;
+    resultLoaded = true;
+    $("#detail-results").innerHTML =
+      `<p class="inline-note">${t("正在读取结果…", "Loading results…")}</p>`;
+    try {
+      const value = await api("runs/" + encodeURIComponent(id) + "/result");
+      if (body.isConnected && $("#modal").dataset.runDetail === id)
+        $("#detail-results").innerHTML = resultView(value);
+    } catch (error) {
+      resultLoaded = false;
+      if (body.isConnected) toast(error.message, true);
+    }
+  }
   async function load() {
     if (
       !$("#modal").open ||
@@ -193,7 +212,7 @@ export async function inspectRun(id) {
         ? page.operations
             .map(
               (o, i) =>
-                `<div class="operation-row"><span class="operation-index">${String(pages.length * 100 + i + 1).padStart(2, "0")}</span><div><h3>${esc(o.step || o.id)} <span class="muted">· ${esc(o.device)} / ${esc(o.operation)}</span></h3><small>${date(o.started || o.created)}${o.ended ? " · " + duration((new Date(o.ended) - new Date(o.started)) / 1000) : ""}${o.progress?.message ? " · " + esc(o.progress.message) : ""}</small>${o.progress?.fraction != null ? `<div class="progress-track"><i style="width:${Math.max(0, Math.min(100, o.progress.fraction * 100))}%"></i></div>` : ""}${o.error ? `<p class="error-text">${esc(typeof o.error === "string" ? o.error : JSON.stringify(o.error))}</p>` : ""}<details class="raw"><summary>${t("参数与返回值", "Arguments & result")}</summary><pre>${esc(JSON.stringify({ arguments: o.arguments, result: o.result }, null, 2))}</pre></details></div>${badge(o.state)}</div>`,
+                `<div class="operation-row"><span class="operation-index">${String(pages.length * 100 + i + 1).padStart(2, "0")}</span><div><h3>${esc(o.step || o.id)} <span class="muted">· ${esc(o.device)} / ${esc(o.operation)}</span></h3><small>${date(o.started || o.created)}${o.ended ? " · " + duration((new Date(o.ended) - new Date(o.started)) / 1000) : ""}${o.progress?.message ? " · " + esc(o.progress.message) : ""}</small>${o.progress?.fraction != null ? `<div class="progress-track"><i style="width:${Math.max(0, Math.min(100, o.progress.fraction * 100))}%"></i></div>` : ""}${o.error ? `<p class="error-text">${esc(typeof o.error === "string" ? o.error : JSON.stringify(o.error))}</p>` : ""}${o.result != null ? operationResult(o.result) : ""}<details class="raw"><summary>${t("参数与完整返回值", "Arguments & full response")}</summary><pre>${esc(JSON.stringify({ arguments: o.arguments, result: o.result }, null, 2))}</pre></details></div>${badge(o.state)}</div>`,
             )
             .join("")
         : empty(
@@ -205,6 +224,8 @@ export async function inspectRun(id) {
             ),
           );
       next = page.cursor;
+      $("#ops-prev").parentElement.hidden =
+        !pages.length && page.operations.length < 100;
       $("#ops-prev").disabled = !pages.length;
       $("#ops-next").disabled = page.operations.length < 100;
       $("#ops-page").textContent = t(
@@ -232,10 +253,8 @@ export async function inspectRun(id) {
               busy(b, () => downloadFile(files[Number(b.dataset.download)]))),
         );
         if (!active) {
-          const value = await api("runs/" + encodeURIComponent(id) + "/result");
-          if ($("#modal").dataset.runDetail === id && body.isConnected)
-            $("#detail-results").innerHTML = resultView(value);
           terminalLoaded = true;
+          await loadResult();
         } else
           $("#detail-results").innerHTML =
             `<p class="inline-note">${t("实验正在进行，完成后在此显示汇总结果。", "The experiment is running. Its summary will appear here on completion.")}</p>`;

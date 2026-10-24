@@ -155,7 +155,7 @@ export async function busy(button, fn) {
 export function modal(title, html, eyebrow = "") {
   const el = $("#modal");
   delete el.dataset.runDetail;
-  el.classList.remove("wide");
+  el.classList.remove("wide", "inspector");
   $("#modal-title").textContent = title;
   $("#modal-eyebrow").textContent = eyebrow;
   $("#modal-body").innerHTML = html;
@@ -164,6 +164,45 @@ export function modal(title, html, eyebrow = "") {
   return $("#modal-body");
 }
 export const closeModal = () => $("#modal").close();
+export function operationResult(value) {
+  if (value === undefined || value === null)
+    return `<p class="inline-note">${t("等待仪器返回", "Waiting for the instrument")}</p>`;
+  const labels = {
+    manufacturer: t("制造商", "Manufacturer"),
+    model: t("型号", "Model"),
+    serial_number: t("序列号", "Serial number"),
+    firmware: t("固件", "Firmware"),
+  };
+  if (value.identity)
+    return `<div class="identity-grid">${Object.entries(value.identity)
+      .map(
+        ([k, v]) =>
+          `<div><small>${labels[k] || esc(k)}</small><strong>${esc(v)}</strong></div>`,
+      )
+      .join("")}</div><pre class="response-text">${esc(value.value)}</pre>`;
+  if (value.value !== undefined)
+    return `<pre class="response-text">${esc((typeof value.value === "object" ? JSON.stringify(value.value, null, 2) : String(value.value)).slice(0, 6000))}${value.unit ? " " + esc(value.unit) : ""}</pre>${String(value.value).length > 6000 ? `<small>${t("显示前 6000 字符，完整内容保存在实验记录中。", "Showing the first 6000 characters. The complete response is in the experiment record.")}</small>` : ""}`;
+  if (value.sent === true)
+    return `<p class="response-text">${t("命令已发送", "Command sent")} · <code>${esc(value.command)}</code></p>`;
+  if (typeof value === "object" && !Array.isArray(value)) {
+    const fields = Object.entries(value).filter(
+      ([k]) => !["time", "source", "unit"].includes(k),
+    );
+    if (
+      fields.length &&
+      fields.every(([, v]) => v === null || typeof v !== "object")
+    )
+      return `<div class="identity-grid">${fields
+        .slice(0, 12)
+        .map(
+          ([k, v]) =>
+            `<div><small>${esc(k)}</small><strong>${esc(v)}${fields.length === 1 && value.unit ? " " + esc(value.unit) : ""}</strong></div>`,
+        )
+        .join("")}</div>`;
+  }
+  const text = JSON.stringify(value, null, 2);
+  return `<pre class="response-text">${esc(text.slice(0, 6000))}${text.length > 6000 ? "…" : ""}</pre>`;
+}
 export const field = (label, input, note = "") =>
   `<label class="field"><span>${label}</span>${input}${note ? `<small>${note}</small>` : ""}</label>`;
 export const empty = (glyph, title, description, action = "") =>

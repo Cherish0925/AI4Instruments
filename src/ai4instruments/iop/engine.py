@@ -13,6 +13,8 @@ import time
 import uuid
 import zipfile
 import queue
+import hashlib
+import re
 from collections import OrderedDict, deque
 from concurrent.futures import ThreadPoolExecutor, CancelledError
 from pathlib import Path, PurePosixPath
@@ -64,6 +66,9 @@ class Engine:
         self.discovery = {"connections":[], "providers":[]}
         self.discovery_stop = threading.Event()
         self.discovery_thread = None
+        self.scan_lock = threading.Lock()
+        self.scan_request_lock = threading.Lock()
+        self.scan_request = None
         self.store = Store(self.home / "records.sqlite3")
         self.platforms = {p['id']: p for p in self.store.platforms()}
         self.platform_resources = platform_model.resource_index(self.platforms)
@@ -99,16 +104,44 @@ class Engine:
             self.discovery_thread.start()
 
     def scan(self):
+        if not self.scan_lock.acquire(blocking=False):
+            with self.scan_lock:
+                return self.inventory()
+        try:
+            return self._scan()
+        finally:
+            self.scan_lock.release()
+
+    def inventory(self):
+        with self.lock:
+            return {**json.loads(dumps(self.discovery)), 'scanning': self.scan_lock.locked()}
+
+    def request_scan(self):
+        with self.scan_request_lock:
+            if not self.stopping and not self.scan_lock.locked() and not (self.scan_request and self.scan_request.is_alive()):
+                def scan():
+                    try:
+                        self.scan()
+                    except Exception as error:
+                        with self.lock:
+                            self.discovery['error'] = str(error)
+                self.scan_request = threading.Thread(target=scan, name='iop-requested-discovery', daemon=True)
+                self.scan_request.start()
+            result = self.inventory()
+            result['scanning'] = bool(self.scan_request and self.scan_request.is_alive()) or result['scanning']
+            return result
+
+    def _scan(self):
         from .discovery import discover, match_profiles
         inventory = discover(self.config.get('software_profiles', []))
         if self.stopping:
             return inventory
         for record in match_profiles(inventory, self.config.get("profiles", [])):
-            if record["id"] not in self.devices:
+            if record.get("id") not in self.devices:
                 try:
                     self.register(record)
                 except Exception as error:
-                    inventory.setdefault("profile_errors", []).append({"device":record["id"], "error":str(error)})
+                    inventory.setdefault("profile_errors", []).append({"device":record.get("id"), "error":str(error)})
         with self.lock:
             for record in self.device_records.values():
                 c = record.get("config", {})
@@ -126,6 +159,8 @@ class Engine:
                 elif record["driver"] == "http":
                     inventory["connections"].append({"transport":"http","address":c.get("base_url"),"id":record["id"],"status":"registered"})
             inventory["updated"] = now()
+            from .discovery import normalize
+            normalize(inventory)
             self.discovery = inventory
             return inventory
 
@@ -285,6 +320,19 @@ class Engine:
         with self.registration_lock:
             record = json.loads(dumps(record))
             device_id = record.get("id", "")
+            if not device_id:
+                config = record.get('config', {})
+                identity = {k: config[k] for k in ('transport', 'host', 'port', 'resource', 'base_url', 'command') if k in config}
+                identity['driver'] = record.get('driver', '')
+                if len(identity) == 1:
+                    identity['config'] = config
+                suffix = hashlib.sha256(dumps(identity).encode()).hexdigest()[:10]
+                stem = re.sub(r'[^a-z0-9]+', '-', str(config.get('name') or record.get('driver', 'instrument')).lower()).strip('-')[:50] or 'instrument'
+                # Identity comes from the connection; display names may be localized.
+                prior = next((d for d in self.config.get('devices', []) if
+                              {k:v for k,v in d.items() if k != 'id'} == {k:v for k,v in record.items() if k != 'id'}), None)
+                device_id = prior['id'] if prior else stem + '-' + suffix
+                record['id'] = device_id
             platform_model.name(device_id, 'Device ID')
             with self.lock:
                 if self.stopping:
@@ -296,12 +344,10 @@ class Engine:
                 if any(device_id == r['id'] for p in self.platforms.values() for r in p['definition']['resources']):
                     raise ValueError('Device ID already names a shared platform resource: ' + device_id)
                 if record["driver"] == "scpi":
-                    c = record.get("config", {}); transport = c.get("transport", "tcp")
-                    address = (transport, c.get("host"), c.get("port", 5025) if transport == "tcp" else c.get("port"), c.get("resource"))
+                    from .discovery import device_connection
+                    address = device_connection(record)
                     for old in self.device_records.values():
-                        o = old.get("config", {}); kind = o.get("transport", "tcp")
-                        other = (kind, o.get("host"), o.get("port", 5025) if kind == "tcp" else o.get("port"), o.get("resource"))
-                        if old["driver"] == "scpi" and address == other:
+                        if address == device_connection(old):
                             raise ValueError("This connection already belongs to " + old["id"])
             driver = make_driver(record, self.devices)
             try:
@@ -329,11 +375,28 @@ class Engine:
                             self.store.event("device.registered", device_id=device_id)
                     self.offline.pop(device_id, None)
                     self.errors = [error for error in self.errors if error.get('device') != device_id]
+                    from .discovery import connection_key, device_connection, normalize
+                    key = device_connection(record)
+                    for candidate in self.discovery.get('connections', []):
+                        if key and connection_key(candidate) == key:
+                            candidate.update(status='registered', id=device_id)
+                    normalize(self.discovery)
                     return self.descriptions[device_id]
             except BaseException:
                 if not any(getattr(other,'worker',None) is getattr(driver,'worker',object()) for other in self.devices.values()):
                     driver.close()
                 raise
+
+    def register_many(self, records):
+        if not isinstance(records, list) or len(records) > 1000:
+            raise ValueError('Provide up to 1000 instrument descriptions')
+        results = []
+        for index, record in enumerate(records):
+            try:
+                results.append({'index': index, 'device': self.register(record)})
+            except Exception as error:
+                results.append({'index': index, 'error': str(error)})
+        return {'results': results}
 
     def _operation(self, run_id, step):
         device_id, name = step["device"], step["operation"]
@@ -690,11 +753,9 @@ class Engine:
                     self.reconnecting.difference_update(affected)
 
     def run_info(self, run_id, details=True):
-        result = self.store.get('runs', run_id)
+        result = self.store.get('runs', run_id, summary=not details)
         if details:
             result['operation_records'] = list(reversed(self.store.list('operations', run_id, 10000)))
-        else:
-            result = {key: result[key] for key in ('id', 'state', 'name', 'created', 'started', 'ended', 'error') if key in result}
         return result
 
     def _progress(self, op_id, value):
@@ -819,9 +880,10 @@ class Engine:
         if self.last_scheduled_run in run_ids:
             index = run_ids.index(self.last_scheduled_run) + 1
             run_ids = run_ids[index:] + run_ids[:index]
-        candidates = deque((rid, iter(list(self.ready[rid]))) for rid in run_ids)
+        candidates = deque((rid, iter(self.ready[rid])) for rid in run_ids)
         blocked = set()
-        while candidates and len(self.futures) < self.worker_count:
+        dispatch = []
+        while candidates and len(self.futures) + len(dispatch) < self.worker_count:
             rid, items = candidates.popleft()
             try:
                 op_id = next(items)
@@ -833,7 +895,6 @@ class Engine:
             if not self.allocation.can_claim(rid, amounts, blocked | waiting):
                 blocked.update(amounts)
                 continue
-            self.ready[rid].pop(op_id)
             self.last_scheduled_run = rid
             op.update(state='running', started=now())
             self.allocation.claim(op_id, rid, amounts)
@@ -849,13 +910,34 @@ class Engine:
                             value = value[key]
                         args[name] = value
                     op['arguments'] = parameters(self.descriptions[op['device']]['operations'][op['operation']], args)
-                with self.store.transaction():
-                    self.store.put('operations', op)
-                    self.store.event('operation.started', rid, operation_id=op_id, device=op['device'], operation=op['operation'])
-                future = self.pool.submit(self.devices[op['device']].invoke, op['operation'], op['arguments'], context)
+                error = None
             except Exception as error:
+                dispatch.append((op, context, error))
+            else:
+                dispatch.append((op, context, None))
+        # Commit one group of starts before any of those device calls execute.
+        # Iterators remain valid because ready queues change only after selection.
+        if dispatch:
+            try:
+                with self.store.transaction():
+                    for op, _, _ in dispatch:
+                        self.store.put('operations', op)
+                        self.store.event('operation.started', op['run_id'], operation_id=op['id'], device=op['device'], operation=op['operation'])
+            except Exception:
+                for op, _, _ in dispatch:
+                    op['state'] = 'queued'
+                    op.pop('started', None)
+                    self.allocation.release(op['id'])
+                    self.cancellations.pop(op['id'], None)
+                raise
+        for op, context, error in dispatch:
+            op_id = op['id']
+            self.ready[op['run_id']].pop(op_id)
+            if error is not None:
                 from concurrent.futures import Future
                 future = Future(); future.set_exception(error)
+            else:
+                future = self.pool.submit(self.devices[op['device']].invoke, op['operation'], op['arguments'], context)
             self.futures[op_id] = future
             def completed(_, oid=op_id):
                 self.completed.put(oid)
@@ -893,6 +975,9 @@ class Engine:
         if self.thread.is_alive():
             self.thread.join()
         self.pool.shutdown(wait=True)
+        for scanner in (self.discovery_thread, self.scan_request):
+            if scanner and scanner.is_alive():
+                scanner.join()
         for driver in self.devices.values():
             driver.close()
         self.store.close()

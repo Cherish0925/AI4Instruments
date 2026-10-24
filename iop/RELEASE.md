@@ -1,17 +1,19 @@
-IOP Runtime 0.7.0 connects agent clients to the same persistent service used by the desktop, browser, CLI and experiment programs.
+IOP Runtime 0.8.0 improves instrument setup, repeated program calls, parallel scheduling and the shared desktop/browser interface.
 
-- MCP stdio integration with tools for laboratory context, instrument descriptions, platform setup, experiment submission, progress, files and reconnection.
-- `iop mcp-config` generates the command and arguments for the installed application. `iop context --start` starts or connects to the service and reads the laboratory configuration.
-- `/v1/context` provides a compact description of instruments, platforms, available drivers, resources and remaining setup. JSON schemas for instruments, platforms and workflows are included in the installation.
-- Desktop/browser settings can export the laboratory description. Existing configurations are reused; initialization remains a named experiment procedure.
-- Identical instrument-registration retries reuse their connection. Startup failures retain their device configurations when other instruments are registered, and can be reconnected later.
-- Selecting a remote endpoint no longer attempts to start a local service. Concurrent local startup requests wait for the shared service to become available.
-- Release checks now exercise unpacked installers on all six native targets, MCP communication, and Linux ARM64 desktop/browser operation in addition to the existing targets.
+- Instrument IDs are generated automatically when omitted. Batch registration returns the outcome of each description. Saved driver configurations can be exported and reused.
+- Serial, VISA, USB and configured-software discovery run concurrently. Background scan requests share one scan; other laboratory work continues. Known Windows COM/VISA aliases are grouped and cannot open duplicate SCPI drivers. USB inventory is displayed separately from configurable interfaces.
+- Instrument operations stay in a side panel with readable responses, SCPI identity fields and direct access to experiment records. Large experiment results load only when requested. Short operation histories no longer show unnecessary pagination.
+- SCPI text responses use buffered reads, preserve trailing data, handle split line endings and support configurable serial framing and flow control. Profile substitution preserves operation command templates.
+- The scheduler commits groups of ready-operation start records before dispatch, retaining device/resource ordering. A failed start-record write releases the selected allocations for a later attempt without sending device commands.
+- Python and TypeScript experiment-program calls wait for the target operation directly. The former fixed Python polling delay and repeated TypeScript event-history reads are removed. Status summaries avoid materializing full experiment results and definitions in the application.
+- MCP adds background discovery and batch instrument registration. Chinese and English instrument-setup guides describe the common path from a connection to reusable model operations and experiment programs.
 
-Download the ZIP matching your operating system and CPU. Windows: run install-desktop.ps1 for desktop use or install.ps1 for browser/server use. macOS/Linux: run sh install-desktop.sh or sh install.sh. Python 3.10+ is required. Archives include the native Rust executor; installers create a separate Python environment and download dependencies. The Agent component is installed by default; IOP_AGENT=0 omits MCP dependencies.
+Three alternating measurements per version on the same Linux host gave these median execution times: 5,000 independent immediate operations, 2.995 s → 1.508 s; 200 sequential Python SDK calls over local HTTP, 10.607 s → 0.965 s; 5,000 serially dependent immediate operations, 3.347 s → 3.091 s. SQLite recording is included. These are local simulated-operation measurements, not physical instrument sampling rates. Raw data and scripts: iop/performance/.
 
-Linux service packages target glibc 2.35+; ARM64 desktop requires glibc 2.39+. macOS build targets are Apple Silicon 14+ and Intel 15+. Windows offers x86_64 and ARM64 packages, with WebView2 for desktop use. See iop/product.md and iop/interface.md for platform requirements. These are ZIP/script installations; standalone signed installers and automatic updates are not included.
+Download the ZIP matching the operating system and CPU. Windows: install-desktop.ps1 or install.ps1. macOS/Linux: sh install-desktop.sh or sh install.sh. Python 3.10+ is required; installers create a separate environment and download dependencies. Archives include the Rust process executor. The Agent component is installed by default; IOP_AGENT=0 omits it.
 
-Finish active experiments and stop the old service before updating. Configuration and data in ~/.iop are retained. Closing an interface or agent leaves accepted experiments running; stopping the service records active experiments as interrupted.
+Linux service packages target glibc 2.35+; ARM64 desktop requires glibc 2.39+. macOS targets are Apple Silicon 14+ and Intel 15+. Windows offers x86_64 and ARM64 packages, with WebView2 for desktop use. See iop/product.md for requirements. These remain ZIP/script installations; standalone signed installers and automatic updates are separate product work.
 
-中文：0.7.0 新增 MCP、统一实验室说明、仪器与平台配置格式接口，以及桌面和网页中的说明导出。Agent 复用已有仪器说明与平台配置，提交实验后可以退出，再通过运行编号查询。修复远端连接误启动本机服务、并发启动和失败设备配置保留问题。安装脚本默认包含 Agent 组件。中文说明：iop/product.zh-CN.md 与 iop/agent-setup.zh-CN.md。
+Finish active experiments and stop the old service before updating. Configuration and data in ~/.iop are retained. Closing an interface or Agent leaves accepted experiments running; stopping the service records active experiments as interrupted.
+
+中文：0.8.0 增加自动 ID、批量接入、共享后台扫描、接口归组和仪器说明导出；改进仪器操作与结果展示。缓冲读取 SCPI 响应，合并调度写入，连续实验调用直接等待目标操作完成。所有入口共用原有 Runtime、驱动与平台配置。中文说明：iop/instrument-setup.zh-CN.md、iop/agent-setup.zh-CN.md、iop/product.zh-CN.md。

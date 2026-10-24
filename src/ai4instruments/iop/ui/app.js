@@ -210,6 +210,8 @@ function render(force = false) {
     state.status?.active_runs,
     state.status?.active_operations,
     state.status?.queued_runs,
+    state.inventory?.updated,
+    state.inventory?.scanning,
   ]);
   if (!force && signature === lastRender) return;
   if (
@@ -289,7 +291,12 @@ export async function refresh(force = false) {
   try {
     const full = force || Date.now() - lastInventory > 15000;
     const tasks = [api("status"), api("runs?limit=200&details=false")];
-    if (full) tasks.push(api("devices"), api("platforms"));
+    if (full)
+      tasks.push(
+        api("devices"),
+        api("platforms"),
+        api("discovery?cached=true"),
+      );
     const values = await Promise.all(tasks);
     state.status = values[0];
     state.resources = values[0].resources;
@@ -297,6 +304,8 @@ export async function refresh(force = false) {
     if (full) {
       state.devices = values[2];
       state.platforms = values[3];
+      state.inventory =
+        values[4].updated || values[4].scanning ? values[4] : state.inventory;
       lastInventory = Date.now();
     }
     if (!state.ui) {
@@ -305,7 +314,8 @@ export async function refresh(force = false) {
         api("discovery?cached=true"),
       ]);
       state.ui = ui;
-      state.inventory = inventory.updated ? inventory : null;
+      state.inventory =
+        inventory.updated || inventory.scanning ? inventory : null;
       updateMode();
     }
     updateConnection(true);

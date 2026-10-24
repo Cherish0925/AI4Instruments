@@ -44,6 +44,8 @@ iop context --start
 | `describe_instrument` | 读取单台仪器的操作、参数和单位 |
 | `configuration_schema` | 读取仪器、平台或实验步骤的 JSON 格式 |
 | `register_instrument` | 用已安装驱动登记连接 |
+| `register_instruments` | 批量保存仪器说明，分别返回每项结果；ID 可省略 |
+| `discover_instruments` | 启动后台扫描，或读取已有结果 |
 | `configure_platform` | 保存或预览平台说明 |
 | `configure_resources` | 设置资源可用数量 |
 | `run_procedure` | 执行已保存的初始化或其他过程 |
@@ -82,3 +84,11 @@ const schema = await lab.schema('workflow');
 ```
 
 HTTP 接口为 `GET /v1/context` 和 `GET /v1/schemas/{name}`。具体仪器的完整操作说明位于 `GET /v1/devices/{id}`，按任务需要读取。
+
+## 多设备接入与连续调用
+
+首次扫描用 `discover_instruments()`，随后用 `discover_instruments(refresh=false)` 读取进度。串口、VISA、USB 清单分开识别；操作语言和型号能力来自仪器说明、已安装驱动及制造商资料。使用 `register_instruments(definitions)` 一次接入多台设备，读取每项返回的 ID 和错误。设备 ID 不需要人填写。
+
+实验程序中的 Python `run.invoke()` 与 TypeScript `run.invoke()` 等待目标操作完成后立即获得结果。互不依赖的操作可以并发提交；同设备、共享总线和平台资源由服务安排。已知整段步骤时用一次工作流提交表达 `after` 与 `bindings`，避免 Agent 逐步发送单条指令。涉及反馈决策的循环放在实验程序内。
+
+[仪器接入说明](instrument-setup.zh-CN.md) · [实测方法与结果](performance/README.md)

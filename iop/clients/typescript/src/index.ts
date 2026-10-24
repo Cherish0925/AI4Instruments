@@ -38,7 +38,10 @@ export class IOP {
   context(refresh = false) { return this.request<Record<string, unknown>>('/v1/context' + (refresh ? '?refresh=true' : '')); }
   schema(name: 'device' | 'platform' | 'workflow') { return this.request<Record<string, unknown>>('/v1/schemas/' + name); }
   discover() { return this.request<Record<string, unknown>>('/v1/discovery'); }
+  startDiscovery() { return this.request<Record<string, unknown>>('/v1/discovery', {}); }
+  inventory() { return this.request<Record<string, unknown>>('/v1/discovery?cached=true'); }
   register(record: Record<string, unknown>) { return this.request('/v1/devices', record); }
+  registerMany(devices: Record<string, unknown>[]) { return this.request('/v1/devices/batch', { devices }); }
   adapters() { return this.request<Record<string, unknown>[]>('/v1/adapters'); }
   resources() { return this.request('/v1/resources'); }
   configureResources(capacities: Record<string, number>) { return this.request('/v1/resources', { capacities }); }
@@ -77,20 +80,20 @@ export class Run {
   constructor(readonly client: IOP, readonly id: string) {}
   info(details = true) { return this.client.request<RunRecord>('/v1/runs/' + encodeURIComponent(this.id) + (details ? '' : '?details=false')); }
   cancel() { return this.client.request<RunRecord>(`/v1/runs/${encodeURIComponent(this.id)}/cancel`, {}); }
-  async wait(options: { signal?: AbortSignal; interval?: number } = {}): Promise<RunRecord> {
+  async wait(options: { signal?: AbortSignal; interval?: number; details?: boolean } = {}): Promise<RunRecord> {
     let cursor = 0;
     for (;;) {
       options.signal?.throwIfAborted();
       const record = await this.info(false);
-      if (terminal.has(record.state)) return this.info();
+      if (terminal.has(record.state)) return options.details === false ? record : this.info();
       const page = await this.client.events(cursor, this.id, Math.min(25, Math.max(0, this.client.timeout / 1000 - 1)), options.signal);
       cursor = page.cursor;
     }
   }
   async result(options: { signal?: AbortSignal; interval?: number } = {}): Promise<unknown> {
-    const record = await this.wait(options);
+    const record = await this.wait({ ...options, details: false });
     if (record.state !== 'completed') throw new IOPError(`${record.state}: ${record.error ?? this.id}`, 0);
-    return record.result;
+    return this.client.request(`/v1/runs/${encodeURIComponent(this.id)}/result`);
   }
   files() { return this.client.request<{ id: string; name: string; size: number; media_type: string }[]>(`/v1/runs/${encodeURIComponent(this.id)}/artifacts`); }
   operations(after = 0, limit = 200) { return this.client.request<{ operations: RunRecord[]; cursor: number }>(`/v1/runs/${encodeURIComponent(this.id)}/operations?` + new URLSearchParams({after:String(after),limit:String(limit)})); }
@@ -99,11 +102,9 @@ export class Run {
     let record = await this.client.request<RunRecord>(`/v1/runs/${encodeURIComponent(this.id)}/operations`, {
       device, operation, arguments: args, request_id: options.requestId ?? crypto.randomUUID()
     }, options.signal);
-    let cursor = 0;
     while (!terminal.has(record.state)) {
-      const page = await this.client.events(cursor, this.id, Math.min(25, Math.max(0, this.client.timeout / 1000 - 1)), options.signal);
-      cursor = page.cursor;
-      record = await this.client.request<RunRecord>('/v1/operations/' + encodeURIComponent(record.id), undefined, options.signal);
+      const wait = Math.min(25, Math.max(0, this.client.timeout / 1000 - 1));
+      record = await this.client.request<RunRecord>('/v1/operations/' + encodeURIComponent(record.id) + '?wait=' + wait, undefined, options.signal);
     }
     if (record.state !== 'completed') throw new IOPError(record.error ?? record.state, 0);
     return record.result;

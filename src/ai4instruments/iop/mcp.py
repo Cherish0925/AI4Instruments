@@ -15,7 +15,7 @@ def create_server(client):
         else:
             from mcp.server.fastmcp import FastMCP as Server
     except ImportError as error:
-        raise RuntimeError('Install the Agent component: python -m pip install "ai4instruments[agent]"') from error
+        raise RuntimeError('Run the IOP release installer with IOP_AGENT=1, or install ".[agent]" from the source directory.') from error
     from mcp.types import ToolAnnotations
     read_only = ToolAnnotations(readOnlyHint=True, openWorldHint=False)
 
@@ -46,6 +46,16 @@ def create_server(client):
     def register_instrument(definition: dict) -> dict:
         """Register an installed driver and connection configuration. Repeating the identical definition reuses the device."""
         return client.register(definition)
+
+    @server.tool()
+    def register_instruments(definitions: list[dict]) -> dict:
+        """Register multiple instrument descriptions. IDs may be omitted. Each result names its input index and device or error; successful items remain saved."""
+        return client.register_many(definitions)
+
+    @server.tool()
+    def discover_instruments(refresh: bool = True) -> dict:
+        """Start a shared background scan, or read its cached results with refresh=false. While scanning=true, other laboratory work can continue. Interfaces and USB inventory are separate collections in the summary."""
+        return client.start_discovery() if refresh else client.inventory()
 
     @server.tool()
     def configure_platform(definition: dict, expected_revision: int = 0, preview: bool = False) -> dict:

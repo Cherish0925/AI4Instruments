@@ -128,17 +128,20 @@ class Handler(BaseHTTPRequestHandler):
                 else:
                     with engine.lock:
                         result = list(engine.descriptions.values())
+            elif parts == ['v1', 'devices', 'batch'] and method == 'POST':
+                result = engine.register_many(body['devices'])
             elif len(parts) == 3 and parts[:2] == ['v1','devices'] and method == 'GET':
                 result = engine.descriptions[parts[2]]
+            elif len(parts) == 4 and parts[:2] == ['v1', 'devices'] and parts[3] == 'configuration' and method == 'GET':
+                with engine.lock:
+                    result = engine.device_records[parts[2]]
             elif len(parts) == 4 and parts[:2] == ['v1', 'devices'] and parts[3] == 'reconnect' and method == 'POST':
                 result = engine.reconnect(parts[2])
-            elif parts == ['v1','discovery'] and method == 'GET':
-                result = dict(engine.discovery) if query.get('cached') == 'true' else engine.scan()
+            elif parts == ['v1','discovery']:
+                result = engine.request_scan() if method == 'POST' else engine.inventory() if query.get('cached') == 'true' else engine.scan()
                 result['registered'] = list(engine.descriptions.values())
             elif parts == ['v1','runs']:
-                result = engine.submit(body) if method == 'POST' else engine.store.list('runs', limit=int(query.get('limit',100)))
-                if method == 'GET' and query.get('details') == 'false':
-                    result = [{k:v for k,v in run.items() if k not in ('result','operations','definition','manifest')} for run in result]
+                result = engine.submit(body) if method == 'POST' else engine.store.list('runs', limit=int(query.get('limit',100)), summary=query.get('details') == 'false')
             elif parts == ['v1','packages'] and method == 'POST':
                 data = base64.b64decode(body.pop('archive'), validate=True)
                 result = engine.submit(body, data)
@@ -146,7 +149,7 @@ class Handler(BaseHTTPRequestHandler):
                 rows = engine.store.events(query.get('after',0), query.get('run_id'), query.get('limit',200), query.get('wait',0))
                 result = {'events':rows, 'cursor':rows[-1]['sequence'] if rows else int(query.get('after',0))}
             elif len(parts) == 3 and parts[:2] == ['v1','operations'] and method == 'GET':
-                result = engine.store.get('operations', parts[2])
+                result = engine.store.wait_operation(parts[2], query.get('wait', 0))
             elif len(parts) == 3 and parts[:2] == ['v1','runs'] and method == 'GET':
                 result = engine.run_info(parts[2], details=query.get('details', 'true') != 'false')
             elif len(parts) == 4 and parts[:2] == ['v1','runs']:

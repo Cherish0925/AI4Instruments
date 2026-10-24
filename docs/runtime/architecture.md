@@ -2,11 +2,11 @@
 
 [中文](architecture.zh-CN.md) · [Installation](README.md) · [Execution](../../iop/execution.md) · [Extensions](../../iop/software.md)
 
-0.7.0 adds [MCP and agent integration](../../iop/agent-setup.md), a shared laboratory context and instrument configuration recovery. [Application interfaces and system support](../../iop/product.md).
+0.8.0 adds [MCP and agent integration](../../iop/agent-setup.md), a shared laboratory context and instrument configuration recovery. [Application interfaces and system support](../../iop/product.md).
 
 IOP Runtime runs on laboratory computers between people, agents, experiment programs and their instruments or computational tools. A computer may manage several experimental platforms. Platform definitions describe device membership, physical connections, shared objects and initialization.
 
-## Implementation in 0.7.0
+## Implementation in 0.8.0
 
 | Component | Responsibility | Source |
 | --- | --- | --- |

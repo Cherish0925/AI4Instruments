@@ -65,8 +65,17 @@ class Client:
     def discover(self):
         return self.request('/v1/discovery')
 
+    def start_discovery(self):
+        return self.request('/v1/discovery', {})
+
+    def inventory(self):
+        return self.request('/v1/discovery?cached=true')
+
     def register(self, record):
         return self.request('/v1/devices', record)
+
+    def register_many(self, records):
+        return self.request('/v1/devices/batch', {'devices': records})
 
     def reconnect(self, device):
         return self.request('/v1/devices/' + device + '/reconnect', {})
@@ -137,13 +146,13 @@ class Run:
     def info(self, details=True):
         return self.client.request('/v1/runs/'+self.id + ('' if details else '?details=false'))
 
-    def wait(self, timeout=None, interval=0.1):
+    def wait(self, timeout=None, interval=0.1, details=True):
         deadline = time.monotonic() + timeout if timeout is not None else None
         cursor = 0
         while True:
             info = self.info(details=False)
             if info['state'] in TERMINAL:
-                return self.info()
+                return self.info() if details else info
             if deadline is not None and time.monotonic() >= deadline:
                 raise TimeoutError('Experiment is still running: '+self.id)
             remaining = max(0, deadline - time.monotonic()) if deadline is not None else 25
@@ -153,10 +162,10 @@ class Run:
                 time.sleep(min(interval, remaining))
 
     def result(self, timeout=None):
-        info = self.wait(timeout)
+        info = self.wait(timeout, details=False)
         if info['state'] != 'completed':
             raise IOPError(f"{self.id}: {info['state']}: {info.get('error','')}")
-        return info['result']
+        return self.client.request('/v1/runs/' + self.id + '/result')
 
     def cancel(self):
         return self.client.request('/v1/runs/'+self.id+'/cancel', {})
@@ -168,8 +177,9 @@ class Run:
         while op['state'] not in TERMINAL:
             if deadline is not None and time.monotonic() >= deadline:
                 raise TimeoutError('Operation is still running: '+op['id'])
-            time.sleep(0.05)
-            op = self.client.request('/v1/operations/'+op['id'])
+            remaining = max(0, deadline - time.monotonic()) if deadline is not None else 25
+            wait = min(25, max(0, self.client.timeout - 1), remaining)
+            op = self.client.request('/v1/operations/' + op['id'] + '?' + urlencode({'wait': wait}))
         if op['state'] != 'completed':
             raise IOPError(op.get('error', op['state']))
         return op['result']

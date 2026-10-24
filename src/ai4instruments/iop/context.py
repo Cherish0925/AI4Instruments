@@ -25,14 +25,15 @@ def laboratory(engine, refresh=False):
     if refresh:
         engine.scan()
     with engine.lock:
-        inventory = json.loads(dumps(engine.discovery))
+        inventory = engine.inventory()
         devices = [{key: value for key, value in record.items() if key != 'operations'} |
                    {'operations': list(record['operations'])}
                    for record in engine.descriptions.values()]
         platforms = engine.list_platforms()
         assigned = {d for p in platforms for d in p['definition']['devices']}
         unassigned = sorted(engine.devices.keys() - assigned)
-        pending = [c for c in inventory.get('connections', []) if c.get('status') != 'registered']
+        pending = [c for c in inventory.get('groups', inventory.get('connections', []))
+                   if c.get('status') != 'registered' and c.get('transport') != 'usb']
         active = [{k: r[k] for k in ('id', 'name', 'kind', 'state') if k in r}
                   for r in engine.runs.values()]
         result = {

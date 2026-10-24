@@ -1634,3 +1634,126 @@ input::file-selector-button {
 .platform-card {
   min-width: 0;
 }
+
+/* Instrument work stays beside its connection and returned data. */
+.device-list {
+  margin-bottom: 24px;
+}
+.device-name {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  text-align: left;
+  border: 0;
+  background: none;
+  padding: 4px 0;
+  color: var(--text);
+}
+.device-name > .icon {
+  color: var(--accent);
+}
+.device-name small {
+  font-family: ui-monospace, monospace;
+}
+.setup-inline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.setup-inline span {
+  flex: 1;
+  color: var(--muted);
+}
+.inventory-tabs {
+  margin: 0;
+  border: 0;
+}
+.inventory-tabs button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.modal.inspector {
+  position: fixed;
+  inset: 12px 12px 12px auto;
+  width: min(560px, calc(100vw - 24px));
+  max-width: none;
+  height: calc(100dvh - 24px);
+  max-height: none;
+  margin: 0;
+}
+.modal.inspector .run-summary {
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.device-response {
+  margin: 24px 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 20px;
+}
+.device-response h3 {
+  margin-bottom: 12px;
+}
+.device-response .section-title {
+  margin: 0 0 12px;
+}
+.response-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 12px 0;
+  font:
+    13px/1.65 ui-monospace,
+    SFMono-Regular,
+    Consolas,
+    monospace;
+  max-height: 320px;
+  overflow: auto;
+}
+.identity-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.identity-grid small,
+.identity-grid strong {
+  display: block;
+}
+.identity-grid small {
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.identity-grid strong {
+  font-weight: 550;
+  overflow-wrap: anywhere;
+}
+.operation-row .response-text {
+  background: var(--bg);
+  padding: 12px;
+  border-radius: 8px;
+}
+#reg-error:empty {
+  display: none;
+}
+@media (max-width: 640px) {
+  .setup-inline {
+    flex-wrap: wrap;
+  }
+  .inventory-tabs {
+    flex-wrap: wrap;
+  }
+  .section-title:has(.inventory-tabs) {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .modal.inspector {
+    inset: 0;
+    width: 100%;
+    height: 100dvh;
+    border-radius: 0;
+  }
+}

@@ -127,6 +127,11 @@ class Handler(BaseHTTPRequestHandler):
                 result = adapters()
             elif parts == ['v1', 'instrument-profiles']:
                 result = engine.save_instrument_profile(body) if method == 'POST' else engine.instrument_profiles()
+            elif parts == ['v1', 'instrument-catalog'] and method == 'GET':
+                result = engine.instrument_catalog.summary(engine.config,
+                    match={k: query[k] for k in ('manufacturer', 'model', 'serial_number', 'firmware') if k in query},
+                    profile_id=query.get('id'), offset=query.get('offset', 0),
+                    limit=query.get('limit', 50), details=query.get('details') == 'true')
             elif parts == ['v1','platforms']:
                 result = engine.apply_platform(body['definition'], body.get('expected_revision', 0)) if method == 'POST' else engine.list_platforms()
             elif parts == ['v1','resources','resolve'] and method == 'POST':

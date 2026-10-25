@@ -108,3 +108,7 @@ Python: `identify()`, `instrument_profiles()`, `save_instrument_profile()`, `ret
 ## 0.8.2 · Continuing work
 
 The default context links to full descriptions; use `lab_context(after=cursor)` for subsequent changes. `instrument_configuration` reads or edits versioned settings. `continue_program` reads progress or continues a program declaring resume support. [Program progress and binary data](continuity.md).
+
+## 0.8.3 · Installed model descriptions
+
+`instrument_profiles(manufacturer=..., model=...)` returns short pages. Continue with `next_offset`; set `details=true` for operation definitions. Sources include package versions and original documentation. Equally applicable descriptions remain explicit choices applied through existing device configuration. [Instrument support packages](instrument-packages.md).

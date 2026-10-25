@@ -129,6 +129,19 @@ try {
       fullPage: true,
       style: "#toast{visibility:hidden}",
     });
+  await page.click("#model-description");
+  await page.waitForSelector("#model-choice");
+  assert.ok(
+    (await page.locator("#model-choice").innerText()).includes("srs-sr830"),
+  );
+  if (images)
+    await page.screenshot({
+      path: join(images, "installed-models.png"),
+      fullPage: true,
+    });
+  await page.click("#model-apply");
+  await page.waitForSelector("#model-choice", { state: "hidden" });
+  await page.click(`[data-device="${identified.id}"]`);
   await page.click("#device-edit");
   await page.waitForSelector("#configuration-json");
   await page.fill('[data-config-field="name"]', "Laboratory lock-in");

@@ -7,7 +7,7 @@ if (Test-Path $PreviousPython) {
 }
 $PythonArchive = Join-Path $PSScriptRoot 'runtime\python.tar.gz'
 if ((Test-Path $PythonArchive) -and -not $env:IOP_PYTHON) {
-    $PythonDir = Join-Path $InstallDir 'runtime\0.8.2'
+    $PythonDir = Join-Path $InstallDir 'runtime\0.8.3'
     $PythonSource = Join-Path $PSScriptRoot 'runtime\source.json'
     $InstalledSource = Join-Path $PythonDir 'source.json'
     if (-not (Test-Path $InstalledSource) -or (Get-Content $InstalledSource -Raw) -ne (Get-Content $PythonSource -Raw)) {

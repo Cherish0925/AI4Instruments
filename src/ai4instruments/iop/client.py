@@ -92,6 +92,13 @@ class Client:
     def instrument_profiles(self):
         return self.request('/v1/instrument-profiles')
 
+    def instrument_catalog(self, *, manufacturer=None, model=None, serial_number=None, firmware=None,
+                           id=None, offset=0, limit=50, details=False):
+        from urllib.parse import urlencode
+        fields = {k: v for k, v in locals().items() if k not in ('self', 'urlencode') and v is not None}
+        fields['details'] = 'true' if details else 'false'
+        return self.request('/v1/instrument-catalog?' + urlencode(fields))
+
     def save_instrument_profile(self, profile):
         return self.request('/v1/instrument-profiles', profile)
 

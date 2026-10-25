@@ -4,9 +4,9 @@
 
 IOP Runtime is persistent software installed on the instrument computer. It maintains connections, executes experiments, coordinates resources and stores records and files. Desktop, browser, command-line and agent clients use the same service.
 
-## Changes in 0.8.2
+## Changes in 0.8.3
 
-0.8.2 adds incremental discovery, concise Agent context, versioned instrument settings, resumable programs, binary data chunks and distributions with Python included. [Continuing experiments](continuity.md).
+0.8.3 adds incremental discovery, concise Agent context, versioned instrument settings, resumable programs, binary data chunks and distributions with Python included. [Continuing experiments](continuity.md).
 
 [Instrument setup](instrument-setup.md) · [Measurements](performance/README.md)
 
@@ -52,7 +52,7 @@ Reuse saved platforms. Saving a description does not execute physical actions. I
 
 ## Current implementation and remaining product work
 
-0.8.2 supplies the shared service, the interfaces above, general adapters, platform configuration, scheduling, records and files, MCP integration and a laboratory context API. The release workflow builds on native operating systems and exercises installation, browser and desktop interfaces, and agent communication.
+0.8.3 supplies the shared service, the interfaces above, general adapters, platform configuration, scheduling, records and files, MCP integration and a laboratory context API. The release workflow builds on native operating systems and exercises installation, browser and desktop interfaces, and agent communication.
 
 Remaining product work includes standalone installers, signing and notarization, automatic updates, a broad model/driver catalogue and extended operation in independent laboratories. General adapters support their protocols; model-specific commands, SDKs and operation descriptions still require their corresponding implementations.
 

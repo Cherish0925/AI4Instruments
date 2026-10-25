@@ -1,6 +1,8 @@
 """Modbus and HTTP instruments using the same operation interface."""
 from __future__ import annotations
 import json
+import math
+import threading
 from concurrent.futures import CancelledError
 from urllib.parse import quote, urlencode
 from urllib.request import Request, urlopen
@@ -8,19 +10,74 @@ from .drivers import Driver
 from .store import now
 
 
+class _ModbusBus:
+    def __init__(self, config, transport):
+        self.transport = transport
+        self.settings = ({k: config.get(k, default) for k, default in
+                          (('baudrate', 19200), ('bytesize', 8), ('parity', 'N'), ('stopbits', 1))}
+                         if transport == 'serial' else {})
+        self.address = config['port'] if transport == 'serial' else config['host']
+        self.port = int(config.get('port', 502)) if transport == 'tcp' else None
+        self.client = None
+        self.owners = set()
+        self.lock = threading.RLock()
+
+    def connect(self, timeout):
+        if self.client is None:
+            from pymodbus.client import ModbusTcpClient, ModbusSerialClient
+            options = {'timeout': timeout, 'retries': 0}
+            self.client = (ModbusSerialClient(self.address, **self.settings, **options) if self.transport == 'serial'
+                           else ModbusTcpClient(self.address, port=self.port, **options))
+        self.client.comm_params.timeout_connect = timeout
+        if not self.client.connect():
+            self.close()
+            raise ConnectionError('Could not connect to Modbus bus')
+        if self.client.socket is not None:
+            if self.transport == 'serial':
+                self.client.socket.timeout = self.client.socket.write_timeout = timeout
+            else:
+                self.client.socket.settimeout(timeout)
+        return self.client
+
+    def close(self):
+        if self.client is not None:
+            self.client.close()
+            self.client = None
+
+
 class Modbus(Driver):
     def __init__(self, *args):
         super().__init__(*args)
-        self.connection = None
-        self.transport = self.config.get('transport','tcp')
-        if self.transport not in {'tcp','serial'}:
+        self.transport = self.config.get('transport', 'tcp')
+        if self.transport not in {'tcp', 'serial'}:
             raise ValueError('Modbus transport must be tcp or serial')
-        self.bus = ('serial',self.config['port']) if self.transport=='serial' else ('tcp',self.config['host'],self.config.get('port',502))
+        self.unit = self.config.get('device_id', 1)
+        if type(self.unit) is not int or not 1 <= self.unit <= 247:
+            raise ValueError('Modbus device_id must be an integer from 1 to 247')
+        self.timeout = float(self.config.get('timeout', 3))
+        if not math.isfinite(self.timeout) or self.timeout <= 0:
+            raise ValueError('Modbus timeout must be a positive number')
+        from .discovery import device_connection
+        self.bus = device_connection({'driver': 'modbus', 'config': self.config})
+        session = _ModbusBus(self.config, self.transport)
+        for other in self.registry.values():
+            if isinstance(other, Modbus) and other.bus == self.bus and other._session is not None:
+                if other._session.settings != session.settings:
+                    raise ValueError('Devices on one Modbus bus must use the same serial settings')
+                session = other._session
+                break
+        self._session = session
+        with session.lock:
+            session.owners.add(self)
+
+    @property
+    def connection(self):
+        return self._session.client if self._session else None
 
     def describe(self):
         address={'type':'integer','minimum':0,'maximum':65535}
         count={'type':'integer','minimum':1,'maximum':125,'default':1}
-        device={'type':'integer','minimum':1,'maximum':247,'default':self.config.get('device_id',1)}
+        device={'type':'integer','enum':[self.unit],'default':self.unit}
         operations={
             'read_holding_registers':{'parameters':{'address':address,'count':count,'device_id':device}},
             'read_input_registers':{'parameters':{'address':address,'count':count,'device_id':device}},
@@ -32,29 +89,17 @@ class Modbus(Driver):
         }
         operations.update(self.config.get('operations',{}))
         return {'name':self.config.get('name',self.id),'mode':'hardware','transport':'modbus-'+self.transport,
-                'resources':['modbus:'+':'.join(map(str,self.bus))], 'operations':operations}
+                'connection':{'bus':self.bus, 'device_id':self.unit},
+                'resources':['modbus:'+self.bus], 'operations':operations}
 
     def connect(self):
-        if self.connection is not None:
-            return
-        # Logical devices on one serial bus share the same open connection.
-        for other in self.registry.values():
-            if isinstance(other,Modbus) and other is not self and other.bus==self.bus and other.connection is not None:
-                self.connection=other.connection
-                return
-        from pymodbus.client import ModbusTcpClient, ModbusSerialClient
-        options={'timeout':float(self.config.get('timeout',3)),'retries':0}
-        if self.transport=='tcp':
-            self.connection=ModbusTcpClient(self.config['host'],port=int(self.config.get('port',502)),**options)
-        else:
-            self.connection=ModbusSerialClient(self.config['port'],baudrate=int(self.config.get('baudrate',19200)),
-                parity=self.config.get('parity','N'),stopbits=int(self.config.get('stopbits',1)),**options)
-        if not self.connection.connect():
-            raise ConnectionError('Could not connect to Modbus device')
+        if self._session is None:
+            raise ConnectionError('Modbus device is closed')
+        with self._session.lock:
+            self._session.connect(self.timeout)
 
     def invoke(self, operation, arguments, cancelled):
         if cancelled.is_set():raise CancelledError()
-        self.connect()
         spec=self.describe()['operations'][operation]
         function=spec.get('function',operation)
         allowed={'read_holding_registers','read_input_registers','read_coils','read_discrete_inputs','write_register','write_registers','write_coil'}
@@ -64,8 +109,24 @@ class Modbus(Driver):
         if 'value_parameter' in spec:
             value=values.pop(spec['value_parameter'])
             values['value']=round((value-float(spec.get('offset',0)))/float(spec.get('scale',1)))
-        values.setdefault('device_id',self.config.get('device_id',1))
-        response=getattr(self.connection,function)(**values)
+        values.setdefault('device_id', self.unit)
+        if values['device_id'] != self.unit:
+            raise ValueError('Use the instrument registered at the requested Modbus address')
+        session = self._session
+        if session is None:
+            raise ConnectionError('Modbus device is closed')
+        with session.lock:
+            if cancelled.is_set():
+                raise CancelledError()
+            if self not in session.owners:
+                raise ConnectionError('Modbus device is closed')
+            try:
+                client = session.connect(self.timeout)
+                response = getattr(client, function)(**values)
+            except Exception:
+                # Drop this connection for all users; do not repeat the request.
+                session.close()
+                raise
         if response.isError():raise RuntimeError(str(response))
         result={'time':now(),'source':'device','function':function}
         if function.startswith('read_'):
@@ -81,9 +142,12 @@ class Modbus(Driver):
         return result
 
     def close(self):
-        if self.connection is not None:
-            self.connection.close()
-            self.connection=None
+        session, self._session = self._session, None
+        if session is not None:
+            with session.lock:
+                session.owners.discard(self)
+                if not session.owners:
+                    session.close()
 
 
 class HTTP(Driver):

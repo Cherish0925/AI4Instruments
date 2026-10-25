@@ -52,6 +52,9 @@ serve(p)
     client = new IOP(endpoint,config.token);
     await client.configureResources({cpu:4});
     assert.ok((await client.adapters()).some(item=>item.name==='command'));
+    const catalog = await client.instrumentCatalog({model:'SR830'});
+    assert.equal(catalog.total, 1);
+    assert.ok(catalog.profiles[0].operations.includes('read_x'));
     const run = await client.submitPackage(new Uint8Array(await readFile(join(home,'package.zip'))),{resources:['stage']});
     assert.equal((await run.wait()).state, 'failed');
     assert.equal((await run.checkpoints()).main.state.next, 0);

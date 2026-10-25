@@ -8,7 +8,6 @@ import threading
 import time
 import string
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from pathlib import Path
 from .discovery import connection_key, device_connection
 from .store import now
 
@@ -18,7 +17,7 @@ def same_registration(saved, requested):
     saved, requested = copy.deepcopy(saved), copy.deepcopy(requested)
     for row in (saved, requested):
         row.pop('id', None)
-    for key in ('identity', 'identity_source', 'instrument_profile', 'documentation'):
+    for key in ('identity', 'identity_source', 'instrument_profile', 'documentation', 'profile_candidates'):
         if key not in requested:
             saved.pop(key, None)
     # Enrichment adds named operations; repeating the original registration remains idempotent.
@@ -100,27 +99,24 @@ def profile_matches(profile, identity):
 
 
 def profiles(config):
-    directory = Path(__file__).with_name('instruments')
-    if not directory.exists():
-        directory = Path(__file__).resolve().parents[3] / 'iop' / 'instruments'
-    result = [validate_profile(json.loads(path.read_text(encoding='utf-8'))) for path in sorted(directory.glob('*.json'))]
-    result.extend(config.get('instrument_profiles', []))
-    return result
+    from .catalog import InstrumentCatalog
+    return InstrumentCatalog().profiles(config)
 
 
 def description(identity, connection, catalog):
     record = {'driver': 'scpi', 'config': dict(connection, name=' '.join(
         str(identity.get(k, '')).replace('_', ' ') for k in ('manufacturer', 'model')).strip())}
-    matching = [p for p in catalog if profile_matches(p, identity)]
-    if matching:
-        # Locally supplied descriptions follow the bundled descriptions.
-        profile = matching[-1]
+    from .catalog import select
+    profile, alternatives = select(identity, catalog)
+    if profile:
         record['driver'] = profile.get('driver', 'scpi')
         record['config'].update(copy.deepcopy(profile.get('config', {})))
         # The observed endpoint always wins over an example endpoint in a profile.
         record['config'].update(connection)
         record['instrument_profile'] = profile['id']
         record['documentation'] = profile.get('documentation', [])
+    elif alternatives:
+        record['profile_candidates'] = alternatives
     record['identity'] = identity
     record['identity_source'] = 'scpi-idn'
     return record
@@ -144,7 +140,7 @@ class Enrollment:
 
     def scan(self, inventory, on_update=None):
         engine = self.engine
-        catalog = profiles(engine.config)
+        catalog = engine.instrument_profiles()
         candidates = list(inventory['groups'])
         visible = {connection_key(c) for c in candidates if c.get('provider') != 'configured'}
         available = {p['name'] for p in inventory.get('providers', []) if p.get('available')}
@@ -170,7 +166,7 @@ class Enrollment:
                         self.checked.discard(previous.get('device_id'))
             engine.store.save_discovery_records(self.records.values())
             inventory['instruments'] = copy.deepcopy([r for r in self.records.values()
-                if r.get('present') or r.get('device_id') or r.get('identity', {}).get('model')])
+                if r.get('present') or r.get('device_id') or r.get('device_ids') or r.get('identity', {}).get('model')])
         by_key = {r['key']: r for r in rows}
         for row in inventory['connections']:
             report = by_key.get(connection_key(row))
@@ -182,7 +178,7 @@ class Enrollment:
                     row['name'] = ' '.join(report['identity'].get(k, '') for k in ('manufacturer', 'model')).strip()
         inventory['identification_summary'] = {
             'identified': sum(bool(r.get('identity', {}).get('model')) for r in rows),
-            'configured': sum(bool(r.get('device_id')) for r in rows),
+            'configured': len({d for r in rows for d in ([r['device_id']] if r.get('device_id') else r.get('device_ids', []))}),
             'needs_configuration': sum(bool(r.get('required')) for r in rows if r['transport'] != 'usb'),
         }
 
@@ -199,6 +195,10 @@ class Enrollment:
             if candidate.get('provider') == 'configured' and self.records.get(key, {}).get('provider') in available:
                 report['present'] = False
             with engine.lock:
+                device_ids = [d for d in candidate.get('device_ids', []) if d in engine.device_records]
+                if len(device_ids) > 1:
+                    report.update(device_ids=device_ids, status='ready')
+                    return report
                 existing = engine.device_records.get(candidate.get('id') or self.records.get(key, {}).get('device_id')) or next((d for d in engine.device_records.values() if device_connection(d) == key), None)
                 if existing and existing['driver'] == 'scpi' and device_connection(existing) != key and device_connection(existing) not in visible:
                     existing = None
@@ -239,6 +239,8 @@ class Enrollment:
             device = self.adopt(record, key, visible, available)
             report.update(device_id=device['id'], status='ready' if record.get('instrument_profile') else 'identified')
             report['required'] = [] if record.get('instrument_profile') else ['model_operations']
+            if record.get('profile_candidates'):
+                report.update(profile_candidates=record['profile_candidates'], required=['instrument_profile'])
             report['documentation'] = record.get('documentation', [])
             with self.lock:
                 self.retry_after.pop(key, None)
@@ -268,6 +270,8 @@ class Enrollment:
             return report
         if identity.get('model') and record['id'] in self.checked:
             report['required'] = [] if record['config'].get('operations') else ['model_operations']
+            if record.get('profile_candidates') and not record['config'].get('operations'):
+                report.update(profile_candidates=record['profile_candidates'], required=['instrument_profile'])
             report['status'] = 'ready' if not report['required'] else 'identified'
             return report
         with self.lock:

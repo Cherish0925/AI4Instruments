@@ -92,6 +92,9 @@ def parser():
     p = sub.add_parser('checkpoints', help='Read saved program progress'); p.add_argument('run_id')
     p = sub.add_parser('identify', help='Read and save instrument identity'); p.add_argument('device'); p.add_argument('--wait', action='store_true')
     p = sub.add_parser('instrument-profile', help='List or save model-specific operations'); p.add_argument('file', nargs='?')
+    p = sub.add_parser('instrument-catalog', help='Find installed model descriptions and their package versions')
+    p.add_argument('--manufacturer'); p.add_argument('--model'); p.add_argument('--id')
+    p.add_argument('--offset', type=int, default=0); p.add_argument('--details', action='store_true')
     p = sub.add_parser('resources'); p.add_argument('--set', dest='capacities', help='JSON object of resource capacities')
     p = sub.add_parser('run'); p.add_argument('file'); p.add_argument('--wait', action='store_true')
     p = sub.add_parser('package'); p.add_argument('path'); p.add_argument('--resources', nargs='*', default=[]); p.add_argument('--requirements', default='{}'); p.add_argument('--parameters', default='{}'); p.add_argument('--project'); p.add_argument('--platform'); p.add_argument('--wait', action='store_true')
@@ -173,6 +176,9 @@ def main():
             output(run.result() if args.wait else {'run_id': run.id})
         elif args.command == 'instrument-profile':
             output(client.save_instrument_profile(json.loads(Path(args.file).read_text(encoding='utf-8'))) if args.file else client.instrument_profiles())
+        elif args.command == 'instrument-catalog':
+            output(client.instrument_catalog(manufacturer=args.manufacturer, model=args.model,
+                                            id=args.id, offset=args.offset, details=args.details))
         elif args.command == 'resources':
             output(client.configure_resources(json.loads(args.capacities)) if args.capacities is not None else client.resources())
         elif args.command == 'register':

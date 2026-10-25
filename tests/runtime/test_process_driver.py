@@ -73,8 +73,9 @@ for line in sys.stdin:
 
     def test_startup_and_cancellation_have_separate_native_deadlines(self):
         import subprocess
-        if subprocess.check_output([executable(), '--version'], text=True).strip() != 'iop-execd 0.8.2':
-            self.skipTest('Rebuild iop-execd 0.8.2 for per-request deadline coverage')
+        from ai4instruments.iop.config import VERSION
+        if subprocess.check_output([executable(), '--version'], text=True).strip() != 'iop-execd ' + VERSION:
+            self.skipTest('Rebuild iop-execd ' + VERSION + ' for per-request deadline coverage')
         worker = Path(self.temp.name, 'unresponsive.py')
         worker.write_text('''import json,sys,time
 for line in sys.stdin:

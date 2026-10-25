@@ -13,9 +13,11 @@ Model descriptions map reported manufacturer/model names to documented operation
 | [rigol-dp800-two-channel.json](rigol-dp800-two-channel.json) | DP821, DP821A | Same operations with two-channel selection | Same guide |
 | [rigol-dp800-one-channel.json](rigol-dp800-one-channel.json) | DP811, DP811A | Same operations with CH1 | Same guide |
 
-Discovery only reads identity. Measurement and output commands run when an experiment or operator requests them. Local model descriptions are loaded after bundled descriptions; the last exact match supplies new operation names. Existing device operations take precedence. Descriptions are stored in `config.json.instrument_profiles` and packaged in distributions.
+Discovery only reads identity. Measurement and output commands run when an experiment or operator requests them. Local descriptions take precedence over installed packages, which take precedence over built-in descriptions. Within a source tier, narrower identity matches take precedence; equally applicable descriptions remain explicit alternatives. Existing device operations take precedence. Descriptions are stored in `config.json.instrument_profiles` and packaged in distributions.
 
 Automated verification uses protocol simulators and mocked SDK enumeration. These profiles have not been exercised on physical instruments in this development environment.
+
+See [instrument support packages](../instrument-packages.md) for independent distribution and catalogue queries.
 
 ## Add another model
 

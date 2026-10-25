@@ -22,7 +22,7 @@ def describe(record, driver):
 
 def configure(engine, device_id, definition, expected_revision):
     from .engine import TERMINAL
-    from .discovery import device_connection
+    from .discovery import connection_conflict
     definition = copy.deepcopy(definition)
     if definition.get('id') != device_id:
         raise ValueError('Keep the instrument ID when editing its configuration')
@@ -44,9 +44,8 @@ def configure(engine, device_id, definition, expected_revision):
                     any(device_id in r.get('devices', {}) for r in engine.runs.values())):
                 raise RequestError('device_busy', 'Wait for this instrument’s accepted experiments before changing its configuration.',
                                    device_id=device_id)
-            endpoint = device_connection(definition)
-            if endpoint and any(d['id'] != device_id and device_connection(d) == endpoint for d in engine.device_records.values()):
-                raise RequestError('connection_in_use', 'Another instrument already uses this connection.')
+            if any(d['id'] != device_id and connection_conflict(definition, d) for d in engine.device_records.values()):
+                raise RequestError('connection_in_use', 'Another instrument already uses this address.')
             # Reuse identity unless the caller explicitly registers a different instrument.
             if old.get('identity') != definition.get('identity'):
                 raise ValueError('Keep the saved instrument identity; register a replacement instrument with a new ID')

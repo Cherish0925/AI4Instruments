@@ -72,9 +72,10 @@ def create_server(client):
         return client.identify(device, request_id).info(details=False)
 
     @server.tool(annotations=read_only)
-    def instrument_profiles() -> list[dict]:
-        """Read installed model descriptions and their source manuals. Discovery reports required configuration for each connection."""
-        return client.instrument_profiles()
+    def instrument_profiles(manufacturer: str | None = None, model: str | None = None,
+                            id: str | None = None, offset: int = 0, details: bool = False) -> dict:
+        """Find model descriptions by manufacturer/model or ID. Returns a short page with package versions and manuals; use details=true for operation definitions and next_offset for more results."""
+        return client.instrument_catalog(manufacturer=manufacturer, model=model, id=id, offset=offset, details=details)
 
     @server.tool()
     def save_instrument_profile(definition: dict) -> dict:

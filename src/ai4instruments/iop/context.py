@@ -54,8 +54,18 @@ def laboratory(engine, refresh=False, detail='summary'):
     result['adapters'] = adapters()
     result['schemas'] = {name: '/v1/schemas/' + name for name in SCHEMAS}
     result['next_steps'] = []
+    if engine.instrument_catalog.errors:
+        result['next_steps'].append({'action': 'read_instrument_catalog',
+                                    'errors': len(engine.instrument_catalog.errors), 'details': '/v1/instrument-catalog'})
     for instrument in inventory.get('instruments', []):
         if instrument.get('required') and instrument.get('present') is not False and instrument.get('transport') != 'usb':
+            if instrument['required'] == ['instrument_profile']:
+                from urllib.parse import urlencode
+                result['next_steps'].append({'action': 'select_instrument_profile', 'device_id': instrument.get('device_id'),
+                    'catalog': '/v1/instrument-catalog?' + urlencode(instrument.get('identity', {})),
+                    'configuration': '/v1/devices/' + instrument['device_id'] + '/configuration',
+                    'history': '/v1/devices/' + instrument['device_id'] + '/history'})
+                continue
             result['next_steps'].append({'action':'complete_instrument_setup', 'connection':instrument['key'],
                                          'identity':instrument.get('identity', {}), 'required':instrument['required'],
                                          'device_id':instrument.get('device_id'),
@@ -77,6 +87,7 @@ def laboratory(engine, refresh=False, detail='summary'):
         'physical_setup': 'Reuse saved platform descriptions. Ask only for missing wiring, sample details and experimental requirements.',
         'request_id': 'Reuse the same request_id when retrying the same experiment submission.',
         'changes': '/v1/context/changes?after={cursor}',
+        'instrument_catalog': '/v1/instrument-catalog',
     }
     if detail == 'summary':
         states = engine.device_states()

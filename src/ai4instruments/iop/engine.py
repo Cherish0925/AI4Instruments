@@ -72,6 +72,8 @@ class Engine:
         self.scan_request_lock = threading.Lock()
         self.scan_request = None
         self.store = Store(self.home / "records.sqlite3")
+        from .catalog import InstrumentCatalog
+        self.instrument_catalog = InstrumentCatalog()
         from .identification import Enrollment
         self.enrollment = Enrollment(self)
         self.discovery['instruments'] = [dict(r, present=None) for r in self.enrollment.records.values()]
@@ -183,13 +185,17 @@ class Engine:
                     address = c.get('resource') if c['transport'] == 'visa' else c.get('port')
                     for candidate in inventory['connections']:
                         if candidate.get('transport') == c['transport'] and candidate.get('address') == address:
-                            candidate.update(status='registered', id=record['id'])
+                            ids = sorted(set(candidate.get('device_ids', [])) | {record['id']})
+                            candidate.update(status='registered', device_ids=ids)
+                            candidate.pop('id', None)
+                            if len(ids) == 1:
+                                candidate['id'] = ids[0]
                 if record["driver"] == "scpi" and c.get("transport", "tcp") == "tcp":
                     inventory["connections"].append({"transport":"tcp", "address":str(c.get("host"))+":"+str(c.get("port",5025)), "id":record["id"], "status":"registered", "provider":"configured", "present":None})
             for record in self.device_records.values():
                 c = record.get("config", {})
                 if record["driver"] == "modbus" and c.get("transport","tcp") == "tcp":
-                    inventory["connections"].append({"transport":"modbus-tcp","address":str(c.get("host"))+":"+str(c.get("port",502)),"id":record["id"],"status":"registered", "provider":"configured", "present":None})
+                    inventory["connections"].append({"transport":"tcp","protocol":"modbus","address":str(c.get("host"))+":"+str(c.get("port",502)),"id":record["id"],"status":"registered", "provider":"configured", "present":None})
                 elif record["driver"] == "http":
                     inventory["connections"].append({"transport":"http","address":c.get("base_url"),"id":record["id"],"status":"registered", "provider":"configured", "present":None})
             inventory["updated"] = now()
@@ -421,12 +427,10 @@ class Engine:
                     raise ValueError("Device is already registered: " + device_id)
                 if any(device_id == r['id'] for p in self.platforms.values() for r in p['definition']['resources']):
                     raise ValueError('Device ID already names a shared platform resource: ' + device_id)
-                if record["driver"] == "scpi":
-                    from .discovery import device_connection
-                    address = device_connection(record)
-                    for old in self.device_records.values():
-                        if address == device_connection(old):
-                            raise ValueError("This connection already belongs to " + old["id"])
+                from .discovery import connection_conflict
+                for old in self.device_records.values():
+                    if connection_conflict(record, old):
+                        raise ValueError("This instrument address already belongs to " + old["id"])
             driver = make_driver(record, self.devices)
             try:
                 description = driver.describe()
@@ -490,7 +494,7 @@ class Engine:
                                 'steps':[{'id':'identity', 'device':device_id, 'operation':'identify'}]})
 
     def learn_identity(self, device_id, identity):
-        from .identification import description, profiles, verify_identity
+        from .identification import description, verify_identity
         record = self.device_records[device_id]
         if record.get('identity'):
             try:
@@ -499,17 +503,20 @@ class Engine:
                 self.devices[device_id].close()
                 raise
         before = copy.deepcopy(record)
-        enriched = description(identity, {}, profiles(self.config))
+        enriched = description(identity, {}, self.instrument_profiles())
         record['identity'] = identity
         record['identity_source'] = 'scpi-idn'
         self.devices[device_id].expected_identity = identity
         if enriched.get('instrument_profile'):
+            record.pop('profile_candidates', None)
             record['instrument_profile'] = enriched['instrument_profile']
             record['documentation'] = enriched.get('documentation', [])
             record['config']['operations'] = {**enriched['config'].get('operations', {}),
                                               **record['config'].get('operations', {})}
             if not record.get('execution'):
                 self.devices[device_id].config.update(record['config'])
+        elif enriched.get('profile_candidates') and not record['config'].get('operations'):
+            record['profile_candidates'] = enriched['profile_candidates']
         if record.get('execution') and before != record:
             driver = self.devices[device_id]
             driver.description = driver.worker.call('instrument_description',
@@ -524,8 +531,7 @@ class Engine:
         save_json(self.home / 'config.json', self.config)
 
     def instrument_profiles(self):
-        from .identification import profiles
-        return profiles(self.config)
+        return self.instrument_catalog.profiles(self.config)
 
     def save_instrument_profile(self, profile):
         from .identification import validate_profile

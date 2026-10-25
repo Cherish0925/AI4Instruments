@@ -1,15 +1,13 @@
-IOP Runtime 0.8.2 connects instrument configuration, continuing experiments and data transfer.
+IOP Runtime 0.8.3 improves shared instrument connections and independently installed model descriptions.
 
-- Discovery publishes completed providers and identified instruments incrementally. Driver availability, discovery presence and recent communication are reported separately.
-- Agent context defaults to a concise overview with detail URLs, device pagination and an event cursor. Subsequent reads can request changes without repeating measurement results.
-- Instrument configurations retain versions and can be edited or restored while idle, from the shared interface, HTTP, CLI, Python, TypeScript or MCP.
-- Programs can save progress and continue under the original run ID after interruption. Stable operation IDs retain completed results. Each attempt retains its terminal output.
-- Binary streams retain ordered batches with format/channel descriptions, idempotent retries and artifact downloads. File transfer runs outside the instrument scheduler lock.
-- Installed Python drivers can use the Rust supervisor through `execution.mode=process`. Startup, operation and cancellation deadlines are separate.
-- Six OS/architecture archives include a pinned Python distribution and offline Runtime/Agent dependencies. Core installation no longer requires a system Python or dependency downloads. Desktop installers additionally download native UI dependencies.
+- Modbus devices on one bus share a connection with separate device addresses and response timeouts. Reconfiguring an idle device preserves its neighbours' connection. Independent buses continue in parallel.
+- Registration distinguishes a physical bus from an instrument address, rejects duplicate device addresses, and retains every device in shared-connection discovery results.
+- Installed Python packages can supply JSON model descriptions through `ai4instruments.instrument_profiles`. Reading them does not import the package or start its SDK.
+- The model catalogue supports filtering, pagination, package versions and original documentation through HTTP, CLI, Python, TypeScript and MCP. Invalid package files leave other descriptions available.
+- More specific identity matches take precedence within a source tier. Equally applicable descriptions remain explicit choices. The interface can apply an installed description through existing versioned configuration.
 
-Windows, macOS and Linux: x86_64 and ARM64. Use `install.ps1` / `sh install.sh`, or the corresponding `install-desktop` script. The installer stops an idle previous service; complete or cancel accepted experiments before upgrading. Laboratory configuration and records are retained. Vendor SDKs and OS device drivers are installed for the instruments that need them.
+Windows, macOS and Linux: x86_64 and ARM64. All six archives include Python and offline Runtime/Agent dependencies. Desktop installation additionally downloads native UI dependencies. Vendor SDKs and OS device drivers are installed for the instruments that need them.
 
-中文：0.8.2 改进连续使用：发现结果逐项显示，Agent 按需读取说明和变化，仪器配置可以在线编辑并保留版本，程序可以从保存的进度继续，连续数据按序分块保存。Windows、macOS、Linux 的六个发行包内置 Python 和核心依赖。桌面、浏览器、命令行和 Agent 继续使用同一个运行服务。
+中文：0.8.3 修复共享总线的连接与配置更新，完整保留总线上的仪器列表，并支持随独立安装包提供型号说明。目录可按制造商与型号查询；来源、版本及操作可直接查看和采用。桌面、浏览器和 Agent 使用同一套配置与接口。
 
-[持续实验与接入说明](https://github.com/Cherish0925/AI4Instruments/blob/main/iop/continuity.zh-CN.md) · [Continuing experiments](https://github.com/Cherish0925/AI4Instruments/blob/main/iop/continuity.md) · [API](https://github.com/Cherish0925/AI4Instruments/blob/main/docs/runtime/http-api.md) · [Scheduling measurements](https://github.com/Cherish0925/AI4Instruments/blob/main/iop/performance/README.md)
+[仪器支持包与共享总线](https://github.com/Cherish0925/AI4Instruments/blob/main/iop/instrument-packages.zh-CN.md) · [Instrument support packages](https://github.com/Cherish0925/AI4Instruments/blob/main/iop/instrument-packages.md) · [API](https://github.com/Cherish0925/AI4Instruments/blob/main/docs/runtime/http-api.md)

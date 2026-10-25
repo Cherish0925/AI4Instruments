@@ -217,6 +217,7 @@ const requirementNames = {
   communication_parameters: ["通信参数", "Communication settings"],
   control_interface: ["控制接口", "Control interface"],
   model_operations: ["型号专用操作", "Model-specific operations"],
+  instrument_profile: ["选择型号说明", "Choose a model description"],
 };
 function identificationLabel(report) {
   const labels = {
@@ -258,10 +259,15 @@ function inspectConnection(candidate) {
   const details = { ...candidate };
   delete details.interfaces;
   delete details.identification;
+  const connected = report.device_ids || candidate.device_ids || [];
   const body = modal(
     candidate.name || candidate.address,
-    `<div class="section-title"><span class="badge">${identificationLabel(report)}</span><code>${esc(candidate.transport)}</code></div>${identityHTML(report)}<p class="discovery-address">${esc(candidate.address)}</p>${requirements.length ? `<p class="inline-note">${t("待补充：", "To complete: ")}${esc(requirements.join(" · "))}</p>` : ""}${report.error ? `<p class="error-text">${esc(report.error)}</p>` : ""}<div class="actions">${report.device_id || candidate.id ? `<button class="button primary" id="connection-open">${t("打开仪器", "Open instrument")}${icon("arrow")}</button>` : `<button class="button primary" id="connection-configure">${t("填写仪器说明", "Configure instrument")}</button>`}<button class="button" id="connection-retry">${icon("refresh")}${t("重新识别", "Identify again")}</button></div>${jsonDetails(details, t("计算机与接口信息", "Computer and interface information"))}${report.first_seen ? `<p class="inline-note">${t("首次发现", "First seen")} · ${esc(new Date(report.first_seen).toLocaleString())}</p>` : ""}`,
+    `<div class="section-title"><span class="badge">${identificationLabel(report)}</span><code>${esc(candidate.transport)}</code></div>${identityHTML(report)}<p class="discovery-address">${esc(candidate.address)}</p>${requirements.length ? `<p class="inline-note">${t("待补充：", "To complete: ")}${esc(requirements.join(" · "))}</p>` : ""}${report.error ? `<p class="error-text">${esc(report.error)}</p>` : ""}<div class="actions">${connected.length > 1 ? connected.map((id) => `<button class="button" data-connected-device="${esc(id)}">${esc(state.devices.find((d) => d.id === id)?.name || id)}${icon("arrow")}</button>`).join("") : report.device_id || candidate.id ? `<button class="button primary" id="connection-open">${t("打开仪器", "Open instrument")}${icon("arrow")}</button>` : `<button class="button primary" id="connection-configure">${t("填写仪器说明", "Configure instrument")}</button>`}<button class="button" id="connection-retry">${icon("refresh")}${t("重新识别", "Identify again")}</button></div>${jsonDetails(details, t("计算机与接口信息", "Computer and interface information"))}${report.first_seen ? `<p class="inline-note">${t("首次发现", "First seen")} · ${esc(new Date(report.first_seen).toLocaleString())}</p>` : ""}`,
     t("连接详情", "Connection details"),
+  );
+  $$("[data-connected-device]", body).forEach(
+    (button) =>
+      (button.onclick = () => inspectDevice(button.dataset.connectedDevice)),
   );
   $("#connection-open")?.addEventListener("click", () =>
     inspectDevice(report.device_id || candidate.id),
@@ -279,10 +285,10 @@ function inspectConnection(candidate) {
       scan();
     });
 }
-function editModel(device) {
-  modal(
+async function editModel(device) {
+  const body = modal(
     t("型号操作说明", "Model operations"),
-    `<p class="inline-note">${esc(device.identity.manufacturer)} · ${esc(device.identity.model)}</p><div class="form-stack">${field(t("导入型号说明", "Import model description"), '<input type="file" id="model-import" accept=".json">')}${field(t("操作与参数（JSON）", "Operations and parameters (JSON)"), '<textarea id="model-operations" spellcheck="false" style="min-height:200px">{}</textarea>')}${field(t("仪器资料链接", "Documentation links"), '<textarea id="model-docs" placeholder="https://"></textarea>')}<p id="model-error" class="error-text" role="alert"></p><button class="button primary" id="model-save">${t("保存型号说明", "Save model description")}</button></div>`,
+    `<p class="inline-note">${esc(device.identity.manufacturer)} · ${esc(device.identity.model)}</p><section id="installed-models" style="margin:16px 0"></section><details id="model-manual" class="raw" open><summary>${t("编写或导入型号说明", "Write or import a description")}</summary><div class="form-stack">${field(t("导入型号说明", "Import model description"), '<input type="file" id="model-import" accept=".json">')}${field(t("操作与参数（JSON）", "Operations and parameters (JSON)"), '<textarea id="model-operations" spellcheck="false" style="min-height:200px">{}</textarea>')}${field(t("仪器资料链接", "Documentation links"), '<textarea id="model-docs" placeholder="https://"></textarea>')}<p id="model-error" class="error-text" role="alert"></p><button class="button primary" id="model-save">${t("保存型号说明", "Save model description")}</button></div></details>`,
     t("仪器说明", "Instrument description"),
   );
   let profile = {
@@ -326,6 +332,79 @@ function editModel(device) {
         $("#model-error").textContent = error.message;
       }
     });
+  const choices = [];
+  async function loadChoices(offset = 0) {
+    const query = new URLSearchParams({
+      ...device.identity,
+      details: "true",
+      offset: String(offset),
+    });
+    const page = await api("instrument-catalog?" + query);
+    if (!body.isConnected) return;
+    choices.push(...page.profiles);
+    const root = $("#installed-models", body);
+    if (!choices.length) return;
+    $("#model-manual", body).open = false;
+    root.innerHTML = `${field(t("已安装的型号说明", "Installed model descriptions"), `<select id="model-choice">${choices.map((p, i) => `<option value="${i}">${esc(p.id)} · ${esc(p.source.package || t(p.source.kind === "local" ? "实验室" : "内置", p.source.kind === "local" ? "Laboratory" : "Built in"))} ${esc(p.source.version || "")}</option>`).join("")}</select>`)}<div id="model-preview" style="margin-top:16px"></div><div class="actions" style="margin-top:12px"><button class="button" id="model-apply">${t("用于这台仪器", "Use for this instrument")}</button>${page.next_offset !== null ? `<button class="button" id="model-more">${t("更多说明", "More descriptions")}</button>` : ""}</div>`;
+    const preview = () => {
+      const selected = choices[Number($("#model-choice", body).value)];
+      const operations = Object.entries(selected.config.operations);
+      $("#model-preview", body).innerHTML =
+        `<p class="inline-note">${t("补充以下操作，保留已有操作。", "Add these operations while retaining existing ones.")}</p><div class="table-wrap"><table><tbody>${operations
+          .slice(0, 8)
+          .map(
+            ([name, op]) =>
+              `<tr><td>${esc(name)}</td><td><code>${esc(op.query || op.write)}</code></td><td>${esc(op.result?.unit || "")}</td></tr>`,
+          )
+          .join(
+            "",
+          )}</tbody></table></div>${operations.length > 8 ? `<p class="inline-note">${operations.length} ${t("个操作", "operations")}</p>` : ""}<div class="actions" style="margin-top:12px">${(
+          selected.documentation || []
+        )
+          .filter((url) => /^https?:\/\//.test(url))
+          .map(
+            (url, i) =>
+              `<a href="${esc(url)}" target="_blank" rel="noreferrer">${t("仪器资料", "Documentation")} ${i + 1}${icon("arrow")}</a>`,
+          )
+          .join("")}</div>`;
+    };
+    $("#model-choice", body).onchange = preview;
+    preview();
+    $("#model-more", body)?.addEventListener("click", (e) =>
+      busy(e.currentTarget, () => loadChoices(page.next_offset)),
+    );
+    $("#model-apply", body).onclick = (e) =>
+      busy(e.currentTarget, async () => {
+        try {
+          const selected = choices[Number($("#model-choice", body).value)];
+          const [current] = await api(
+            `devices/${encodeURIComponent(device.id)}/history`,
+          );
+          const definition = current.definition;
+          definition.config.operations = {
+            ...selected.config.operations,
+            ...(definition.config.operations || {}),
+          };
+          definition.instrument_profile = selected.id;
+          definition.documentation = selected.documentation || [];
+          delete definition.profile_candidates;
+          await api(`devices/${encodeURIComponent(device.id)}/configuration`, {
+            definition,
+            expected_revision: current.revision,
+          });
+          closeModal();
+          emit("refresh");
+          toast(t("仪器说明已更新", "Instrument description updated"));
+        } catch (error) {
+          $("#model-error", body).textContent = error.message;
+        }
+      });
+  }
+  try {
+    await loadChoices();
+  } catch (error) {
+    if (body.isConnected) $("#model-error", body).textContent = error.message;
+  }
 }
 
 export function registerDevice(candidate) {

@@ -165,6 +165,16 @@ def device_connection(record):
     return connection_key({'transport': transport, 'address': address})
 
 
+def connection_conflict(first, second):
+    """A Modbus bus has multiple device addresses; SCPI owns its endpoint."""
+    key = device_connection(first)
+    if key is None or key != device_connection(second):
+        return False
+    if first.get('driver') == second.get('driver') == 'modbus':
+        return first.get('config', {}).get('device_id', 1) == second.get('config', {}).get('device_id', 1)
+    return True
+
+
 def normalize(inventory):
     """Keep raw interfaces available; group only proven aliases for presentation."""
     groups = {}
@@ -186,10 +196,17 @@ def normalize(inventory):
     for rows in physical.values():
         for row in rows:
             row['related_connections'] = sorted({r['connection_key'] for r in rows if r['connection_key'] != row['connection_key']})
-    inventory['groups'] = [
-        {**min(rows, key=lambda c: (c.get('provider') == 'configured', c.get('transport') == 'visa')), 'interfaces': rows}
-        for rows in groups.values()
-    ]
+    inventory['groups'] = []
+    for rows in groups.values():
+        group = {**min(rows, key=lambda c: (c.get('provider') == 'configured', c.get('transport') == 'visa')), 'interfaces': rows}
+        devices = sorted({d for row in rows for d in ([row['id']] if row.get('id') else row.get('device_ids', []))})
+        if devices:
+            group.update(device_ids=devices, status='registered')
+            if len(devices) == 1:
+                group['id'] = devices[0]
+            else:
+                group.pop('id', None)
+        inventory['groups'].append(group)
     inventory['summary'] = {
         'interfaces': sum(g['category'] == 'interface' for g in inventory['groups']),
         'usb_entries': sum(g['category'] == 'usb' for g in inventory['groups']),

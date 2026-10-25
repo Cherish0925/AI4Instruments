@@ -108,3 +108,7 @@ Python 对应 `identify()`、`instrument_profiles()`、`save_instrument_profile(
 ## 0.8.2 · 连续使用
 
 默认概况按需读取完整说明；后续用 `lab_context(after=cursor)` 获取变化。`instrument_configuration` 读取或修改有版本的仪器配置；`continue_program` 读取进度或继续声明支持续接的程序。[持续实验与数据传输](continuity.zh-CN.md)。
+
+## 0.8.3 · 已安装的型号说明
+
+`instrument_profiles(manufacturer=..., model=...)` 默认返回简短分页结果；按 `next_offset` 继续读取，使用 `details=true` 获取命令定义。说明附带来源、包版本和资料链接。型号匹配存在同等候选时，通过已有仪器配置选择所需说明。[仪器支持包](instrument-packages.zh-CN.md)。

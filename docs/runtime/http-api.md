@@ -192,3 +192,13 @@ A chunk sequence starts at zero. A different body at an existing sequence return
 HTTP errors retain `error` and add `code`. Configuration conflicts return HTTP 409 and `current_revision`; incorrect arguments return HTTP 400 and the operation's parameter descriptions. Python `IOPError` exposes `status`, `code` and `details`; TypeScript exposes the same fields.
 
 A resumable program re-enters its original command and reads its checkpoints. Completed operation request IDs still return their saved results. After an abrupt stop, operations that had started without a result retain affected resources; operations that had not started are cancelled within the interrupted program. Explicit `effect:"observe"` workflows can read affected device state before `/v1/resources/resolve`. Continuation requires the original instrument and platform definitions; restoring an equivalent saved definition is supported. See [continuing experiments](../../iop/continuity.md) and the [example package](../../examples/iop/resumable-acquisition).
+
+## Installed model descriptions and shared buses (0.8.3)
+
+`GET /v1/instrument-catalog` accepts `manufacturer`, `model`, `serial_number`, `firmware`, `id`, `offset`, `limit` (default 50, maximum 200) and `details=true`. It returns `profiles`, `total`, `offset`, `next_offset` and `errors`. Default profile summaries contain matching conditions, operation names, documentation and `source`; detailed records include executable operation definitions. Package sources include the distribution name, version, entry-point resource and JSON filename. No package code executes during this read.
+
+MCP `instrument_profiles` uses this paginated catalogue. The existing `/v1/instrument-profiles` endpoint continues to list complete definitions or save a laboratory description. Installed package resources are read at service startup. See [package format](../../iop/instrument-packages.md).
+
+If equally specific descriptions match, discovery reports `required: ["instrument_profile"]` and `profile_candidates`. Select a description and apply its missing operations through the existing versioned device configuration endpoint. Existing operations retain precedence. Matching within a source tier does not depend on file order.
+
+Shared connection groups include `device_ids`; a singular `id` is present only for one registered instrument. Modbus registration uses both the bus connection and `config.device_id` to identify a device. Operations address that configured unit. One process shares one connection per bus; different devices retain their own response timeouts. Serial bus settings must agree. Independent buses can execute concurrently.

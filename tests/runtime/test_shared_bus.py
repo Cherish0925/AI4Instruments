@@ -1,5 +1,6 @@
 """Several logical instruments use one physical bus throughout configuration changes."""
 import copy
+import importlib.util
 import socketserver
 import struct
 import threading
@@ -54,6 +55,7 @@ class SharedBusCase(unittest.TestCase):
     def read(self, device):
         return self.client.submit([{'id': 'read', 'device': device, 'operation': 'temperature'}])
 
+    @unittest.skipUnless(importlib.util.find_spec('pymodbus'), 'Install the devices extra for Modbus communication')
     def test_configuring_one_unit_preserves_the_other_connection(self):
         server = self.bus()
         a = self.register(server, 'a', 1)
@@ -103,6 +105,7 @@ class SharedBusCase(unittest.TestCase):
                                 'arguments': {'address': 0, 'device_id': 2}}])
         self.assertEqual(server.requests, [])
 
+    @unittest.skipUnless(importlib.util.find_spec('pymodbus'), 'Install the devices extra for Modbus communication')
     def test_shared_bus_serializes_requests_and_another_bus_continues(self):
         first, second = self.bus(), self.bus()
         self.register(first, 'a', 1)
@@ -122,6 +125,7 @@ class SharedBusCase(unittest.TestCase):
         self.assertEqual(first.requests, [1, 2])
         self.assertEqual(first.connections, 1)
 
+    @unittest.skipUnless(importlib.util.find_spec('pymodbus'), 'Install the devices extra for Modbus communication')
     def test_editing_idle_unit_does_not_close_an_active_neighbour(self):
         server = self.bus()
         a = self.register(server, 'a', 1)
@@ -144,6 +148,7 @@ class SharedBusCase(unittest.TestCase):
             server.release.set(); pool.shutdown()
 
 
+@unittest.skipUnless(importlib.util.find_spec('pymodbus'), 'Install the devices extra for Modbus communication')
 class SerialBusCase(unittest.TestCase):
     def test_one_serial_handle_per_bus_and_each_unit_uses_its_own_timeout(self):
         class Client:

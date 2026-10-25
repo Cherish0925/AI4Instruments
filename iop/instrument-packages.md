@@ -56,6 +56,8 @@ Run `python -m pip install .` with the Python executable in the IOP installation
 
 Register each instrument on an RS-485 bus or TCP gateway with its own `config.device_id`. A bus address and device address identify one registered instrument. Operations retain that instrument's address.
 
+TCP accepts the full 0–255 unit-identifier field, including 0 and 255 used by directly connected TCP devices. Serial instruments use individual addresses 1–247. Set the value specified by the instrument or gateway manual; see the [Modbus TCP implementation guide](https://www.modbus.org/file/secure/messagingimplementationguide.pdf).
+
 Modbus devices in one process share their connection and serialize requests on the bus. Editing an idle instrument's name or operations keeps its neighbours' connection open. Independent buses run concurrently. Baud rate, byte size, stop bits and parity agree across one serial bus; each device can use its own response timeout. Failed reads or writes are not automatically repeated.
 
 For process isolation, place devices sharing a bus in the same `process` worker. Multiple processes cannot own the same exclusive serial port. Instruments remain separate in the device list; connection details list every registered instrument on that bus.

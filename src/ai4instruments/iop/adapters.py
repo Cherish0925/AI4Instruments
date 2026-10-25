@@ -52,8 +52,9 @@ class Modbus(Driver):
         if self.transport not in {'tcp', 'serial'}:
             raise ValueError('Modbus transport must be tcp or serial')
         self.unit = self.config.get('device_id', 1)
-        if type(self.unit) is not int or not 1 <= self.unit <= 247:
-            raise ValueError('Modbus device_id must be an integer from 1 to 247')
+        minimum, maximum = (1, 247) if self.transport == 'serial' else (0, 255)
+        if type(self.unit) is not int or not minimum <= self.unit <= maximum:
+            raise ValueError(f'Modbus {self.transport} device_id must be an integer from {minimum} to {maximum}')
         self.timeout = float(self.config.get('timeout', 3))
         if not math.isfinite(self.timeout) or self.timeout <= 0:
             raise ValueError('Modbus timeout must be a positive number')

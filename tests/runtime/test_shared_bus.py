@@ -106,6 +106,16 @@ class SharedBusCase(unittest.TestCase):
         self.assertEqual(server.requests, [])
 
     @unittest.skipUnless(importlib.util.find_spec('pymodbus'), 'Install the devices extra for Modbus communication')
+    def test_tcp_accepts_zero_and_255_unit_identifiers(self):
+        server = self.bus()
+        for unit in (0, 255):
+            device = 'tcp-' + str(unit)
+            self.register(server, device, unit)
+            self.assertAlmostEqual(self.read(device).result(3)['read']['value'], (unit * 100 + 1) * 0.1)
+        self.assertEqual(server.requests, [0, 255])
+        self.assertEqual(server.connections, 1)
+
+    @unittest.skipUnless(importlib.util.find_spec('pymodbus'), 'Install the devices extra for Modbus communication')
     def test_shared_bus_serializes_requests_and_another_bus_continues(self):
         first, second = self.bus(), self.bus()
         self.register(first, 'a', 1)

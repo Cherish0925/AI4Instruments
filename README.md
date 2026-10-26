@@ -8,6 +8,8 @@
 
 ## IOP Runtime
 
+[**Software overview · HTML (Chinese)**](iop/overview.html?raw=1): architecture, platform setup, experiment execution, physical and digital operations, agent integration, and installation. Download the self-contained file for offline reading.
+
 **Install a persistent instrument service, configure experimental platforms, and run experiment programs from people or agents.** One computer can manage multiple platforms; shared instruments remain coordinated across them.
 
 [IOP project](iop/README.md) · [Download 0.8.3](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.8.3) · [Install](docs/runtime/README.md) · [Configure platforms](iop/platforms.md) · [Agent integration](iop/agent-setup.md)

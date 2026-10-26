@@ -6,7 +6,9 @@ IOP Runtime 是安装在仪器计算机上的常驻软件。它维护仪器连�
 
 ## 0.8.3 的变化
 
-0.8.3 增加逐项发现结果、简洁的 Agent 概况、仪器配置版本、实验程序续接、二进制数据分块和内置 Python 的发行包。 [持续实验](continuity.zh-CN.md)。
+0.8.3 改进 Modbus 共享总线的连接管理，支持独立安装的 SCPI 型号说明包，并提供跨客户端的目录筛选、分页与界面采用流程。[仪器支持包](instrument-packages.zh-CN.md)。
+
+逐项发现结果、简洁的 Agent 概况、仪器配置版本、实验程序续接、二进制数据分块和内置 Python 的发行包已在 0.8.2 提供，当前版本继续沿用。[持续实验](continuity.zh-CN.md) · [软件总览 HTML](overview.html?raw=1)。
 
 [仪器接入](instrument-setup.zh-CN.md) · [性能测量](performance/README.md)
 

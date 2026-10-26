@@ -8,6 +8,8 @@
 
 ## IOP Runtime · 仪器运行服务
 
+[**软件总览 · HTML**](iop/overview.html?raw=1)：结构图、平台配置、实验执行、物理与数字操作、Agent 集成和安装。下载后可独立打开。
+
 **安装常驻仪器服务，配置实验平台，让人和 Agent 提交程序开展实验。** 一台计算机可以管理多个平台，共享设备由同一个服务安排使用。
 
 [IOP 工程入口](iop/README.zh-CN.md) · [下载 0.8.3](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.8.3) · [安装](docs/runtime/README.zh-CN.md) · [配置实验平台](iop/platforms.zh-CN.md) · [Agent 接入](iop/agent-setup.zh-CN.md)

@@ -1,5 +1,7 @@
 # IOP Runtime
 
+[**Software overview · HTML (Chinese)**](overview.html?raw=1) — Architecture, experiment execution, physical and digital operations, agent integration, and downloads for 0.8.3. A self-contained file for offline reading.
+
 [中文](README.zh-CN.md) · [Download](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.8.3) · [Desktop & browser](interface.md) · [Installation](../docs/runtime/README.md) · [Platform configuration](platforms.md) · [Agent integration](agent-setup.md)
 
 0.8.3 improves shared buses and independently installed model descriptions. [Instrument support packages](instrument-packages.md) · [Continuing experiments](continuity.md).

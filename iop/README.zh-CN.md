@@ -1,5 +1,7 @@
 # IOP Runtime · 仪器运行服务
 
+[**软件总览 · HTML**](overview.html?raw=1) — 0.8.3 的软件结构、实验流程、物理与数字操作、Agent 集成和下载入口。单文件，下载后可离线打开。
+
 [English](README.md) · [下载软件](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.8.3) · [桌面与网页](interface.zh-CN.md) · [安装与使用](../docs/runtime/README.zh-CN.md) · [平台配置](platforms.zh-CN.md) · [Agent 接入](agent-setup.zh-CN.md)
 
 0.8.3 改进共享总线，支持独立安装的型号说明包。[仪器支持包与接入](instrument-packages.zh-CN.md) · [持续实验](continuity.zh-CN.md)。

@@ -6,7 +6,9 @@ IOP Runtime is persistent software installed on the instrument computer. It main
 
 ## Changes in 0.8.3
 
-0.8.3 adds incremental discovery, concise Agent context, versioned instrument settings, resumable programs, binary data chunks and distributions with Python included. [Continuing experiments](continuity.md).
+0.8.3 improves connection sharing for Modbus buses, adds independently installed SCPI model-description packages, and provides catalogue filtering, pagination and UI adoption across clients. [Instrument packages](instrument-packages.md).
+
+Incremental discovery, concise agent context, versioned instrument settings, resumable programs, binary data chunks and bundled Python were introduced in 0.8.2 and remain available. [Continuing experiments](continuity.md) · [Software overview HTML (Chinese)](overview.html?raw=1).
 
 [Instrument setup](instrument-setup.md) · [Measurements](performance/README.md)
 

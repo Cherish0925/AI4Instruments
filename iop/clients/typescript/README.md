@@ -1,6 +1,6 @@
 # IOP TypeScript client
 
-Requires Node.js 20+ or a browser with Fetch, AbortSignal.timeout and crypto.randomUUID. Build from source with `npm ci && npm run build`; install a release archive with `npm install ./ai4instruments-iop-0.8.1.tgz`.
+Requires Node.js 20+ or a browser with Fetch, AbortSignal.timeout and crypto.randomUUID. Build from source with `npm ci && npm run build`; install a release archive with `npm install ./ai4instruments-iop-0.8.3.tgz`.
 
 ```typescript
 import { IOP } from '@ai4instruments/iop';

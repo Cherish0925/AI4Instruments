@@ -82,6 +82,10 @@ def parser():
     p.add_argument('--refresh', action='store_true'); p.add_argument('--start', action='store_true')
     p.add_argument('--full', action='store_true'); p.add_argument('--after', type=int)
     sub.add_parser('mcp', help='Expose the shared service to an agent over MCP stdio')
+    from .connector import options as connection_options
+    connection_options(sub.add_parser('connect', help='Install or update a laboratory connector for an agent host'))
+    p = sub.add_parser('mcp-http', help='Serve authenticated MCP over HTTP on loopback')
+    p.add_argument('--port', type=int, default=8766)
     sub.add_parser('mcp-config', help='Print the MCP launcher configuration for this installation')
     p = sub.add_parser('register'); p.add_argument('file')
     p = sub.add_parser('reconnect'); p.add_argument('device')
@@ -121,6 +125,13 @@ def parser():
 def main():
     args = parser().parse_args()
     home = home_path(args.home)
+    if args.command == 'connect':
+        from .connector import install
+        try:
+            output(install(args))
+        except (OSError, ValueError) as exc:
+            raise SystemExit(str(exc)) from None
+        return
     client = Client(args.endpoint, home=home)
     try:
         if args.command == 'init':
@@ -142,6 +153,9 @@ def main():
         elif args.command == 'mcp-config':
             from .context import agent_configuration
             output(agent_configuration(home, args.endpoint or os.environ.get('IOP_ENDPOINT')))
+        elif args.command == 'mcp-http':
+            from .mcp_http import run
+            run(home, args.endpoint, args.port)
         elif args.command == 'mcp':
             from .mcp import run
             run(home, args.endpoint)

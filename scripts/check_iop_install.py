@@ -37,6 +37,10 @@ with tempfile.TemporaryDirectory(prefix='iop install ') as temporary:
         assert context['service']['version'] == json.loads((root / 'iop/release.json').read_text())['version']
         assert context['devices'] == []
         assert context['service']['python'].startswith('3.13.')
+        bundle = json.loads(run('connect', '--name', 'installed-bench', '--local', '--output', str(temporary/'host')))
+        assert Path(bundle['qiushi_zip']).is_file()
+        assert (Path(bundle['research_os'])/'skills/iop-lab/SKILL.md').is_file()
+        assert json.loads(run('connect', '--name', 'installed-bench', '--output', str(temporary/'host'))) == bundle
         launch = json.loads(run('mcp-config'))['mcpServers']['iop']
         assert Path(launch['command']).samefile(python)
         assert str(home) in launch['args']

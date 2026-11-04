@@ -2,9 +2,9 @@
 
 [**Software overview · HTML (Chinese)**](overview.html?raw=1) — Architecture, experiment execution, physical and digital operations, agent integration, and downloads for 0.8.3. A self-contained file for offline reading.
 
-[中文](README.zh-CN.md) · [Download](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.8.3) · [Desktop & browser](interface.md) · [Installation](../docs/runtime/README.md) · [Platform configuration](platforms.md) · [Agent integration](agent-setup.md)
+[中文](README.zh-CN.md) · [Download](https://github.com/Cherish0925/AI4Instruments/releases/latest) · [Desktop & browser](interface.md) · [Installation](../docs/runtime/README.md) · [Platform configuration](platforms.md) · [Agent integration](agent-setup.md)
 
-0.8.3 improves shared buses and independently installed model descriptions. [Instrument support packages](instrument-packages.md) · [Continuing experiments](continuity.md).
+**[Connect a research host to IOP](connect/README.md)** · [English field guide](connect/guide.en.html) · [中文图解](connect/guide.zh-CN.html). 0.8.4 adds named lab connections, installable host packages and an HTTP MCP gateway.
 
 **One persistent service for people and agents to use experimental platforms.** It connects physical instruments, computational programs and remote task services, maintains platform descriptions, schedules serial and parallel experiments, and preserves operations and data. Accepted experiments continue after the submitting terminal, browser or agent session closes.
 
@@ -14,7 +14,7 @@ One computer can serve several experimental platforms. Each platform describes i
 
 ## Start
 
-Download and extract the matching IOP 0.8.3 archive. For a native desktop window, run `install-desktop.ps1` on Windows or `sh install-desktop.sh` on macOS / Linux, then open **IOP Runtime** from the application menu. Use `install.ps1` / `install.sh` for browser or server use. Archives include Python, the Rust executor and Runtime/Agent dependencies for offline core installation. Desktop installers additionally download native UI dependencies.
+Download and extract the matching IOP 0.8.4 archive. For a native desktop window, run `install-desktop.ps1` on Windows or `sh install-desktop.sh` on macOS / Linux, then open **IOP Runtime** from the application menu. Use `install.ps1` / `install.sh` for browser or server use. Archives include Python, the Rust executor and Runtime/Agent dependencies for offline core installation. Desktop installers additionally download native UI dependencies.
 
 | Archive | Runtime environment |
 | --- | --- |
@@ -52,7 +52,7 @@ The screenshot shows a simulated platform with operations, results and connectio
 
 Physical topology and experimental timing are separate. A trigger cable alone does not establish synchronized acquisition: the program must configure and prepare the devices before triggering. Software orders operations; device clocks and hardware triggers provide precise timing.
 
-## Implemented in 0.8.3
+## Runtime components
 
 | Component | Implementation |
 | --- | --- |

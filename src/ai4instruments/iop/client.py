@@ -9,7 +9,7 @@ import time
 import uuid
 import zipfile
 from pathlib import Path
-from urllib.request import Request, urlopen, build_opener, ProxyHandler
+from urllib.request import Request, build_opener, ProxyHandler, HTTPRedirectHandler
 from urllib.error import HTTPError
 from urllib.parse import urlencode, urlparse
 from .config import home_path
@@ -23,6 +23,18 @@ class IOPError(RuntimeError):
         self.code = self.details.get('code')
 
 
+def origin(url):
+    url = urlparse(url)
+    return (url.scheme.lower(), url.hostname, url.port or (443 if url.scheme == 'https' else 80))
+
+
+class SameServiceRedirect(HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        if origin(req.full_url) != origin(newurl):
+            raise IOPError('The configured service redirected to another address.', code)
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
 class Client:
     def __init__(self, endpoint=None, token=None, home=None, timeout=30):
         config = {}
@@ -30,11 +42,16 @@ class Client:
         if path.exists():
             config = json.loads(path.read_text(encoding='utf-8'))
         host = config.get('host','127.0.0.1')
-        self.endpoint = (endpoint or os.environ.get('IOP_ENDPOINT') or f"http://{'127.0.0.1' if host == '0.0.0.0' else host}:{config.get('port',8765)}").rstrip('/')
-        self.token = token if token is not None else os.environ.get('IOP_TOKEN', config.get('token',''))
+        local = f"http://{'127.0.0.1' if host == '0.0.0.0' else host}:{config.get('port',8765)}"
+        self.endpoint = (endpoint or os.environ.get('IOP_ENDPOINT') or local).rstrip('/')
+        saved = config.get('token', '') if origin(self.endpoint) == origin(local) else ''
+        self.token = token if token is not None else os.environ.get('IOP_TOKEN', saved)
         self.timeout = timeout
         # Loopback instrument services communicate directly, independent of OS proxy settings.
-        self._open = build_opener(ProxyHandler({})).open if urlparse(self.endpoint).hostname in {'127.0.0.1','localhost','::1'} else urlopen
+        handlers = [SameServiceRedirect()]
+        if urlparse(self.endpoint).hostname in {'127.0.0.1','localhost','::1'}:
+            handlers.append(ProxyHandler({}))
+        self._open = build_opener(*handlers).open
 
     @classmethod
     def connect(cls, endpoint=None, **kwargs):

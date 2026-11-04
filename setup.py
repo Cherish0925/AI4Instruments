@@ -9,6 +9,9 @@ import shutil
 class BuildPython(build_py):
     def run(self):
         super().run()
+        destination = Path(self.build_lib) / 'ai4instruments/iop/connector'
+        destination.mkdir(parents=True, exist_ok=True)
+        shutil.copy2('iop/connect/skills/iop-lab/SKILL.md', destination/'SKILL.md')
         destination = Path(self.build_lib) / 'ai4instruments/iop/schema'
         destination.mkdir(parents=True, exist_ok=True)
         for source in Path('iop/schema').glob('*.schema.json'):

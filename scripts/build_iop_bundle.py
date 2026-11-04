@@ -24,7 +24,7 @@ with zipfile.ZipFile(output / (name + '.zip'), 'w', zipfile.ZIP_DEFLATED) as arc
     archive.write(root / 'scripts/prepare_iop_upgrade.py', name + '/scripts/prepare_iop_upgrade.py')
     for document in (root / 'iop').glob('*.md'):
         archive.write(document, name + '/iop/' + document.name)
-    for folder in ('iop/examples','iop/schema','iop/performance','iop/interface/screenshots','docs/runtime','examples/iop'):
+    for folder in ('iop/examples','iop/schema','iop/connect','iop/performance','iop/interface/screenshots','docs/runtime','examples/iop'):
         for file in (root / folder).rglob('*'):
             if file.is_file() and '__pycache__' not in file.parts:
                 archive.write(file,name + '/' + file.relative_to(root).as_posix())
@@ -35,7 +35,7 @@ Runtime, browser interface and Agent installation work without a system Python o
 Linux/macOS/WSL: sh install.sh
 Windows: powershell -NoProfile -ExecutionPolicy Bypass -File .\\install.ps1
 The installer prints the installed command paths.
-Agent MCP connection: iop mcp-config
+Agent plugin installer: iop connect --name bench --local\nDirect MCP settings: iop mcp-config
 Laboratory configuration: iop context --start
 
 Desktop installation: install-desktop.sh or install-desktop.ps1 (downloads the native UI dependencies)

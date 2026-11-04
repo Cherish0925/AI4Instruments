@@ -1,5 +1,7 @@
 # IOP 常驻服务
 
+[为研究系统安装插件或连接云端 MCP](../../iop/connect/README.zh-CN.md)
+
 [English](README.md) · [服务架构](architecture.zh-CN.md) · [HTTP 接口](http-api.md) · [仪器驱动](drivers.md) · [源码](../../src/ai4instruments/iop)
 
 0.8.3 改进共享总线并支持独立安装的[型号说明包](../../iop/instrument-packages.zh-CN.md)。[持续实验](../../iop/continuity.zh-CN.md)说明完整使用流程。[Agent 接入](../../iop/agent-setup.zh-CN.md)复用同一套实验室配置。[软件形态与系统支持](../../iop/product.zh-CN.md)。

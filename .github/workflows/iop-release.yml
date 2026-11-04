@@ -66,6 +66,18 @@ jobs:
         with:
           name: iop-${{ matrix.os }}
           path: release/*.zip
+  connector:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python scripts/build_iop_connector.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: iop-connect
+          path: release/IOP-Connect-*.zip
   typescript:
     runs-on: ubuntu-latest
     steps:
@@ -123,7 +135,7 @@ jobs:
           QTWEBENGINE_CHROMIUM_FLAGS: '--disable-gpu --no-sandbox'
         run: python iop/interface/test/desktop.py
   publish:
-    needs: [native, typescript, interface]
+    needs: [native, typescript, interface, connector]
     runs-on: ubuntu-latest
     permissions:
       contents: write

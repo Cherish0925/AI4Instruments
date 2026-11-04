@@ -6,12 +6,12 @@ if [ -f "$IOP_PREFIX/venv/bin/python" ]; then
     "$IOP_PREFIX/venv/bin/python" "$IOP_ROOT/scripts/prepare_iop_upgrade.py"
 fi
 if [ -f "$IOP_ROOT/runtime/python.tar.gz" ] && [ -z "${IOP_PYTHON:-}" ]; then
-    if ! cmp -s "$IOP_ROOT/runtime/source.json" "$IOP_PREFIX/runtime/0.8.3/source.json"; then
-        mkdir -p "$IOP_PREFIX/runtime/0.8.3"
-        tar -xzf "$IOP_ROOT/runtime/python.tar.gz" -C "$IOP_PREFIX/runtime/0.8.3"
-        cp "$IOP_ROOT/runtime/source.json" "$IOP_PREFIX/runtime/0.8.3/source.json"
+    if ! cmp -s "$IOP_ROOT/runtime/source.json" "$IOP_PREFIX/runtime/0.8.4/source.json"; then
+        mkdir -p "$IOP_PREFIX/runtime/0.8.4"
+        tar -xzf "$IOP_ROOT/runtime/python.tar.gz" -C "$IOP_PREFIX/runtime/0.8.4"
+        cp "$IOP_ROOT/runtime/source.json" "$IOP_PREFIX/runtime/0.8.4/source.json"
     fi
-    IOP_PYTHON="$IOP_PREFIX/runtime/0.8.3/python/bin/python3"
+    IOP_PYTHON="$IOP_PREFIX/runtime/0.8.4/python/bin/python3"
     IOP_BUNDLED=1
 else
     IOP_PYTHON=${IOP_PYTHON:-python3}
@@ -47,3 +47,5 @@ if [ "${IOP_DESKTOP:-0}" = "1" ]; then
     "$IOP_PREFIX/venv/bin/iop" shortcuts
     printf '\nOpen IOP Runtime from your application menu, or run:\n  "%s/venv/bin/iop" desktop\n' "$IOP_PREFIX"
 fi
+
+printf 'Install an agent connector:\n  "%s/venv/bin/iop" connect --name bench --local\n' "$IOP_PREFIX"

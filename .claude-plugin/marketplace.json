@@ -1,0 +1,1 @@
+{"name":"ai4instruments","owner":{"name":"AI4Instruments"},"plugins":[{"name":"iop-lab","source":"./iop/connect","description":"IOP laboratory operations and experiment results."}]}

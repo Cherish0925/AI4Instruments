@@ -1,2 +1,3 @@
 include iop/schema/*.schema.json
 include iop/instruments/*.json
+include iop/connect/skills/iop-lab/SKILL.md

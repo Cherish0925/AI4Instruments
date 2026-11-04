@@ -1,0 +1,1 @@
+{"name":"ai4instruments","interface":{"displayName":"AI4Instruments"},"plugins":[{"name":"iop-lab","source":{"source":"local","path":"./iop/connect"},"policy":{"installation":"AVAILABLE","authentication":"ON_INSTALL"},"category":"Productivity"}]}

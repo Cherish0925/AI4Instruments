@@ -8,7 +8,7 @@ from typing import Literal
 from urllib.parse import quote
 
 
-def create_server(client):
+def create_server(client, *, http=False):
     try:
         if sys.version_info >= (3, 11):
             from mcp.server import MCPServer as Server
@@ -19,7 +19,8 @@ def create_server(client):
     from mcp.types import ToolAnnotations
     read_only = ToolAnnotations(readOnlyHint=True, openWorldHint=False)
 
-    server = Server('IOP Runtime', instructions=(
+    options = {'stateless_http': True, 'json_response': True} if http and sys.version_info < (3, 11) else {}
+    server = Server('IOP Runtime', **options, instructions=(
         'Read lab_context first. Reuse saved instrument and platform descriptions. '
         'Ask for physical wiring and sample details only when missing. '
         'Read describe_instrument before choosing operations and arguments. '
@@ -112,7 +113,6 @@ def create_server(client):
         return client.submit(steps, name=name, platform=platform, resources=resources or [],
                              requirements=requirements, request_id=request_id).info(details=False)
 
-    @server.tool()
     def submit_program(path: str, request_id: str, platform: str | None = None,
                        resources: list[str] | None = None, parameters: dict | None = None,
                        requirements: dict[str, int] | None = None) -> dict:
@@ -154,7 +154,6 @@ def create_server(client):
         """Return interrupted resources to use after recording the observed instrument state. Read resource_holds in lab_context for the exact resource names."""
         return client.request('/v1/resources/resolve', {'resources': resources, 'observation': observation})
 
-    @server.tool()
     def download_file(artifact_id: str, destination: str) -> dict:
         """Download an experiment output to a new file on this MCP host. Use artifact IDs returned by experiment."""
         path = Path(destination).expanduser().resolve()
@@ -162,6 +161,10 @@ def create_server(client):
             raise ValueError('Choose a new output filename: ' + str(path))
         client.run('').download(artifact_id, path)
         return {'path': str(path), 'size': path.stat().st_size}
+
+    if not http:
+        server.tool()(submit_program)
+        server.tool()(download_file)
 
     @server.resource('iop://laboratory')
     def laboratory_resource() -> str:

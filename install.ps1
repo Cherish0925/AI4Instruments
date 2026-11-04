@@ -7,7 +7,7 @@ if (Test-Path $PreviousPython) {
 }
 $PythonArchive = Join-Path $PSScriptRoot 'runtime\python.tar.gz'
 if ((Test-Path $PythonArchive) -and -not $env:IOP_PYTHON) {
-    $PythonDir = Join-Path $InstallDir 'runtime\0.8.3'
+    $PythonDir = Join-Path $InstallDir 'runtime\0.8.4'
     $PythonSource = Join-Path $PSScriptRoot 'runtime\source.json'
     $InstalledSource = Join-Path $PythonDir 'source.json'
     if (-not (Test-Path $InstalledSource) -or (Get-Content $InstalledSource -Raw) -ne (Get-Content $PythonSource -Raw)) {
@@ -70,3 +70,5 @@ if ($env:IOP_DESKTOP -eq '1') {
     if ($LASTEXITCODE -ne 0) { throw 'Could not create application shortcuts' }
     Write-Host "Open IOP Runtime from the Start menu, or run: & '$IOP' desktop"
 }
+
+Write-Host "Install an agent connector: & `"$(Join-Path $InstallDir 'venv\Scripts\iop.exe')`" connect --name bench --local"

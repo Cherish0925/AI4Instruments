@@ -1,5 +1,7 @@
 # IOP · Agent integration
 
+[Install a host plugin or connect a remote MCP client](connect/README.md)
+
 [中文](agent-setup.zh-CN.md) · [Application and platforms](product.md) · [HTTP API](../docs/runtime/http-api.md) · [Platform schema](schema/platform.schema.json)
 
 Codex, Claude Code, DeepSeek Harness, Qiushi Engine and other research software can connect through MCP, CLI, HTTP or the Python/TypeScript clients. All interfaces use the same service, instruments, platform configuration and experiment records.

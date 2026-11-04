@@ -73,6 +73,16 @@ class InstallCase(unittest.TestCase):
             with self.assertRaises(ValueError):
                 connector.connection(args(root, "--remote", "https://user:password@lab.example"))
 
+    def test_headless_install_uses_explicit_paths_without_a_user_profile(self):
+        with (
+            tempfile.TemporaryDirectory() as tmp,
+            patch.object(Path, "home", side_effect=RuntimeError("no home")),
+        ):
+            placed = connector.install(
+                args(tmp, "--local", "--lab-home", tmp, "--iop-python", sys.executable)
+            )
+            self.assertTrue(Path(placed["mcp"]).is_file())
+
     def test_ssh_is_noninteractive_and_preserves_remote_arguments(self):
         profile = connector.connection(
             args(

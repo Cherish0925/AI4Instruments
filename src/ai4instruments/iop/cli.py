@@ -124,7 +124,6 @@ def parser():
 
 def main():
     args = parser().parse_args()
-    home = home_path(args.home)
     if args.command == 'connect':
         from .connector import install
         try:
@@ -132,6 +131,7 @@ def main():
         except (OSError, ValueError) as exc:
             raise SystemExit(str(exc)) from None
         return
+    home = home_path(args.home)
     client = Client(args.endpoint, home=home)
     try:
         if args.command == 'init':

@@ -42,7 +42,6 @@ def options(parser):
     parser.add_argument(
         "--output",
         type=Path,
-        default=Path.home() / ".iop-connect",
         help="Parent of the generated marketplace",
     )
     parser.add_argument("--lab-home", help="IOP data directory on the lab computer (local or SSH)")
@@ -77,12 +76,13 @@ def connection(args):
     elif importlib.util.find_spec("ai4instruments") is not None:
         python = Path(sys.executable)
     else:
-        default = (
-            Path(os.environ.get("LOCALAPPDATA", Path.home())) / "AI4Instruments"
-            if os.name == "nt"
-            else Path.home() / ".local/share/ai4instruments"
-        )
-        prefix = Path(os.environ.get("IOP_INSTALL_DIR", default))
+        if prefix_env := os.environ.get("IOP_INSTALL_DIR"):
+            prefix = Path(prefix_env)
+        elif os.name == "nt":
+            base = os.environ.get("LOCALAPPDATA")
+            prefix = (Path(base) if base else Path.home()) / "AI4Instruments"
+        else:
+            prefix = Path.home() / ".local/share/ai4instruments"
         python = prefix / ("venv/Scripts/python.exe" if os.name == "nt" else "venv/bin/python")
     if not python.is_absolute() or not python.is_file():
         raise ValueError("Specify the absolute path to the installed IOP Python with --iop-python.")
@@ -228,7 +228,8 @@ def install(args):
     name = args.name
     if not re.fullmatch(r"[a-z][a-z0-9-]{0,47}", name):
         raise ValueError("Use a laboratory name of 1–48 lowercase letters, digits and hyphens.")
-    root = args.output.expanduser().resolve() / name
+    output = args.output if args.output is not None else Path.home() / ".iop-connect"
+    root = output.expanduser().resolve() / name
     root.mkdir(parents=True, mode=0o700, exist_ok=True)
     with install_lock(root):
         return install_locked(args, name, root)

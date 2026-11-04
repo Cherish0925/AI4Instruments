@@ -1,13 +1,10 @@
-IOP Runtime 0.8.3 improves shared instrument connections and independently installed model descriptions.
+IOP Runtime 0.8.4 connects research hosts to a named laboratory. The same instrument service owns experiments, configuration and data after the host disconnects or a connector is updated.
 
-- Modbus devices on one bus share a connection with separate device addresses and response timeouts. Reconfiguring an idle device preserves its neighbours' connection. Independent buses continue in parallel.
-- Registration distinguishes a physical bus from an instrument address, rejects duplicate device addresses, and retains every device in shared-connection discovery results.
-- Installed Python packages can supply JSON model descriptions through `ai4instruments.instrument_profiles`. Reading them does not import the package or start its SDK.
-- The model catalogue supports filtering, pagination, package versions and original documentation through HTTP, CLI, Python, TypeScript and MCP. Invalid package files leave other descriptions available.
-- More specific identity matches take precedence within a source tier. Equally applicable descriptions remain explicit choices. The interface can apply an installed description through existing versioned configuration.
+- Run `iop connect --name bench --local` to prepare Codex and Claude Code marketplaces, a Research OS plugin, a Qiushi command package, and direct MCP settings. Use `--ssh` for a remote lab, or `--remote` plus a host credential reference for a REST bridge.
+- For clients that accept only MCP over HTTP, `iop mcp-http` serves Streamable HTTP at `/mcp` on loopback. Set `IOP_MCP_TOKEN`; use an HTTPS proxy for clients on another machine.
+- The separate IOP Connect ZIP supports existing 0.8.3 stdio installations. Generating a connector does not stop an experiment or change a driver. Upgrade the service itself when it is idle.
+- Windows, macOS and Linux archives still include the runtime Python and Agent dependencies for x86_64 and ARM64.
 
-Windows, macOS and Linux: x86_64 and ARM64. All six archives include Python and offline Runtime/Agent dependencies. Desktop installation additionally downloads native UI dependencies. Vendor SDKs and OS device drivers are installed for the instruments that need them.
+中文：0.8.4 可按实验室名称生成四种宿主的安装包与通用 MCP 设置。更新连接器不重启仪器服务。云端宿主可通过单独的 HTTP MCP 网关接入。
 
-中文：0.8.3 修复共享总线的连接与配置更新，完整保留总线上的仪器列表，并支持随独立安装包提供型号说明。目录可按制造商与型号查询；来源、版本及操作可直接查看和采用。桌面、浏览器和 Agent 使用同一套配置与接口。
-
-[仪器支持包与共享总线](https://github.com/Cherish0925/AI4Instruments/blob/main/iop/instrument-packages.zh-CN.md) · [Instrument support packages](https://github.com/Cherish0925/AI4Instruments/blob/main/iop/instrument-packages.md) · [API](https://github.com/Cherish0925/AI4Instruments/blob/main/docs/runtime/http-api.md)
+[中文安装说明](https://github.com/Cherish0925/AI4Instruments/blob/main/iop/connect/README.zh-CN.md) · [Installation guide](https://github.com/Cherish0925/AI4Instruments/blob/main/iop/connect/README.md)

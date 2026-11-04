@@ -1,5 +1,7 @@
 # IOP instrument service
 
+[Install a host plugin or connect a remote MCP client](../../iop/connect/README.md)
+
 [中文](README.zh-CN.md) · [Architecture](architecture.md) · [HTTP API](http-api.md) · [Device drivers](drivers.md) · [Source](../../src/ai4instruments/iop)
 
 0.8.3 improves shared buses and adds independently installed [model descriptions](../../iop/instrument-packages.md). [Continuing experiments](../../iop/continuity.md) explains the full sequence. [Agent integration](../../iop/agent-setup.md) uses the same saved laboratory configuration. [Application interfaces and system support](../../iop/product.md).

@@ -1,5 +1,7 @@
 # IOP · Agent 接入
 
+[为研究系统安装插件或连接云端 MCP](connect/README.zh-CN.md)
+
 [English](agent-setup.md) · [软件与平台](product.zh-CN.md) · [HTTP API](../docs/runtime/http-api.md) · [平台格式](schema/platform.schema.json)
 
 Codex、Claude Code、DeepSeek Harness、Qiushi Engine 等研究软件可以通过 MCP、CLI、HTTP 或 Python / TypeScript 客户端使用 IOP。各入口连接同一个运行服务，复用同一份仪器说明、平台配置和实验记录。

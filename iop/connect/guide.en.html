@@ -1,0 +1,83 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Connect a research host to the lab · IOP Runtime</title><style>
+:root{color-scheme:light;--ink:#172c33;--muted:#50626b;--line:#cddad7;--paper:#fafbf8;--teal:#126354;--wash:#e6f3ec}
+[hidden]{display:none!important}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}a{color:var(--teal);text-underline-offset:.22em}
+header{border-bottom:1px solid var(--line);padding:1rem max(5%,calc((100% - 76rem)/2));display:flex;justify-content:space-between;gap:1rem;align-items:center}header strong{letter-spacing:.02em;white-space:nowrap}header a{font-size:.83rem}
+main{max-width:76rem;margin:2.7rem auto;padding:0 2rem;display:grid;grid-template-columns:12rem minmax(0,1fr);gap:3.4rem}
+nav{align-self:start;position:sticky;top:2rem}nav a{display:flex;gap:.9rem;padding:.7rem .6rem;text-decoration:none;color:var(--muted);border-left:2px solid var(--line);font-size:.9rem}nav a[aria-current=page]{border-color:var(--teal);color:var(--teal);background:var(--wash);font-weight:650}nav span,.eyebrow{font:600 .67rem/1.6 ui-monospace,monospace;letter-spacing:.1em;color:var(--teal);align-self:center}
+section{max-width:58rem;margin:0 0 3.7rem}h1,h2{margin:.3em 0 .65em;letter-spacing:-.035em;line-height:1.15}h1{font-size:clamp(2.15rem,4.8vw,4rem)}h2{font-size:clamp(1.7rem,3.3vw,2.9rem)}h3{margin:1.5rem 0 .4rem;font-size:1.08rem}p{max-width:76ch}figure{margin:1.8rem 0;padding:1.4rem;background:#eef3ef;border:1px solid var(--line);border-radius:.65rem}.flow{display:grid;grid-template-columns:1fr 2rem 1.15fr 2rem 1fr;align-items:center;gap:.3rem}.node{background:white;border:1px solid var(--line);padding:.8rem;border-radius:.3rem;min-width:0}.node b,.node small{display:block}.node small{font-size:.82rem;color:var(--muted)}.node.core{background:var(--teal);color:white}.node.core small{color:#e4f3ed}.arrow{text-align:center;color:var(--teal)}figcaption{font-size:.82rem;margin-top:1rem;color:var(--muted)}
+table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.94rem}td,th{padding:.78rem .65rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}thead{background:var(--wash)}td:first-child{width:22%;font-weight:600}code{font: .85em/1.55 ui-monospace,monospace;overflow-wrap:anywhere;background:#eaf0ed;padding:.09em .22em;border-radius:.2rem}pre{padding:1rem;background:#193831;color:#edf7f1;border-radius:.4rem;white-space:pre-wrap}pre code{background:none;color:inherit}footer{max-width:76rem;border-top:1px solid var(--line);margin:2rem auto;padding:1rem 2rem;color:var(--muted);font-size:.82rem}.controls{display:flex;gap:1rem;justify-content:space-between}.controls button{background:white;border:1px solid var(--line);border-radius:.3rem;padding:.55rem .9rem;color:var(--ink);cursor:pointer}.controls button:disabled{visibility:hidden}
+@media(max-width:760px){header{padding:.8rem 1rem}main{display:block;margin:1rem auto;padding:0 1rem}nav{position:static;display:flex;flex-wrap:wrap;margin-bottom:1.4rem;gap:.2rem}nav a{display:block;border:0;border-bottom:2px solid var(--line);padding:.32rem .45rem}nav span{display:none}.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg);line-height:1}td,th{padding:.5rem .35rem}footer{padding:1rem}}
+@media print{header,nav,.controls,footer{display:none}main{display:block;margin:0;padding:0}section,section[hidden]{display:block!important;break-before:page;margin:0}section:first-child{break-before:auto}figure,tr{break-inside:avoid}}
+</style><header><strong>AI4Instruments / IOP</strong><a href="guide.zh-CN.html" hreflang="zh-CN">中文</a></header><main><nav aria-label="Sections"><a href="#overview"><span>01</span>How it works</a><a href="#connection"><span>02</span>Choose a connection</a><a href="#installation"><span>03</span>Install and update</a><a href="#experiment"><span>04</span>Run an experiment</a></nav><article><section id="overview"><span class="eyebrow">IOP RUNTIME · 0.8.4</span><h1>Connect a research host to the lab</h1><p>IOP Runtime runs on the computer that operates the instruments. An agent host connects to that service; closing a chat, disabling the plugin, or updating the connector does not cancel an accepted experiment. The Skill explains the operating method. MCP advertises the instruments and operations available in this laboratory.</p>
+<figure><div class="flow"><div class="node "><b>Research host</b><small>People, agents and programs</small></div><span class="arrow" aria-hidden="true">→</span><div class="node core"><b>IOP Runtime</b><small>Schedules work and retains results</small></div><span class="arrow" aria-hidden="true">→</span><div class="node "><b>Lab platform</b><small>Instruments, simulation and computation</small></div></div><figcaption>An accepted experiment stays with the same laboratory when its client changes or a plugin is updated.</figcaption></figure><h3>First connection</h3><p>The operator supplies wiring, sample and site information. The agent turns it into platform settings and an experiment. The runtime schedules operations against those settings and keeps the results. Later sessions reuse the same laboratory.</p></section><section id="connection"><span class="eyebrow">02 / 04</span><h2>Install one connection</h2><p>Install the release on the lab computer. From IOP 0.8.4, run the following on the <strong>agent execution host</strong>. Use the full IOP executable printed by the installer when a desktop application does not inherit the terminal PATH.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">iop</span> connect <span class="at">--name</span> bench <span class="at">--local</span></span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th>Location of the experiment</th>
+<th>Connection</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Instruments on this computer</td>
+<td><code>iop connect --name bench --local</code>. Use <code>--lab-home PATH</code> to select a particular service data directory.</td>
+</tr>
+<tr class="even">
+<td>Lab computer accessible by SSH</td>
+<td><code>iop connect --name bench --ssh lab-server --remote-iop /opt/iop/venv/bin/iop</code>. Use a preconfigured, noninteractive OpenSSH account; absolute remote paths are quoted for a POSIX shell. <code>iop</code> on the remote PATH also works without the path option. Program paths are on the lab computer.</td>
+</tr>
+<tr class="odd">
+<td>Existing IOP REST service</td>
+<td><code>iop connect --name bench --remote https://lab.example.org --token-env BENCH_IOP_TOKEN</code>. Install the IOP bridge on the agent host; supply the named secret in its execution environment. The URL is the service origin. Local file tools work on the bridge host.</td>
+</tr>
+<tr class="even">
+<td>Cloud client that accepts MCP HTTP</td>
+<td>On the lab host provision <code>IOP_MCP_TOKEN</code> and run <code>iop mcp-http --port 8766</code>. Connect to <code>/mcp</code> via an administrator-provided HTTPS reverse proxy; use a bearer credential. Leave the upstream Host as <code>127.0.0.1:8766</code>. The gateway listens on loopback and serves one lab authority; OAuth-only clients need a compatible gateway. Remote clients cannot ask these MCP file tools to read or write the gateway computer's files.</td>
+</tr>
+</tbody>
+</table>
+<p>The connector writes a receipt with paths, without contacting an instrument. Its stable marketplace directory is separate from IOP data. One name selects one lab: use a different name for a second lab. Running <code>iop connect --name bench</code> again reuses that connection and prepares the installed connector version.</p>
+</section><section id="installation"><span class="eyebrow">03 / 04</span><h2>Install in the host</h2><table>
+<thead>
+<tr class="header">
+<th>Host</th>
+<th>Installation and update</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Codex</td>
+<td><code>codex plugin marketplace add "&lt;marketplace&gt;"</code>, then <code>codex plugin add bench@iop-bench</code>. For direct MCP configuration, copy the printed <code>codex_toml</code> section. Refresh a Git marketplace with <code>codex plugin marketplace upgrade ai4instruments</code>, then install the new plugin revision.</td>
+</tr>
+<tr class="even">
+<td>Claude Code</td>
+<td><code>claude plugin marketplace add "&lt;marketplace&gt;"</code>, then <code>claude plugin install bench@iop-bench</code>. After regenerating the package, run <code>claude plugin update bench@iop-bench</code> and reload plugins.</td>
+</tr>
+<tr class="odd">
+<td>Agentic Research OS</td>
+<td>Stage the printed <code>research_os</code> directory inside the target Session workspace. Install it as a <strong>plugin</strong> under its laboratory name. Activate the installed revision in Extensions. On update, install against the current revision, then activate the new revision. The host carries its own included Skill and stdio launch settings.</td>
+</tr>
+<tr class="even">
+<td>Qiushi Engine</td>
+<td>Import the printed <code>qiushi</code> directory as an <strong>MCP package</strong> in the target user's research workspace; use <code>qiushi_zip</code> for ZIP upload. Its current Linux execution backend exposes <code>bench tools</code> and <code>bench call TOOL JSON</code> through <code>run_shell</code>. Update through the same package installer.</td>
+</tr>
+<tr class="odd">
+<td>Other stdio MCP clients</td>
+<td>Read the printed <code>mcp</code> JSON. Register its executable and argument array in the host's MCP settings. If using a remote token, allow the named environment variable through to the child process.</td>
+</tr>
+<tr class="even">
+<td>HTTP/SDK programs</td>
+<td>Use the existing REST, Python or TypeScript client with a specific laboratory endpoint. <code>/v1</code> is the IOP API; <code>/mcp</code> belongs to the separate MCP gateway.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Install directly from GitHub</strong> when the agent host can run <code>iop mcp</code> on its PATH. Add marketplace <code>Cherish0925/AI4Instruments</code> in Codex or Claude Code; install <code>iop-lab@ai4instruments</code>. It uses the IOP connection of that process. For isolated labs or a GUI without that PATH, use the named connection above. A hosted product should assign an account, credential and lab to its execution worker; the connector does not provide tenant isolation.</p>
+<p><strong>Upgrade separately.</strong> Reinstalling the connector does not update the daemon or drivers. Old generated package directories remain available to clients using them. Upgrade the daemon with the matching platform installer after accepted work finishes. User data remains in the same IOP data directory. For the standalone connector ZIP, extract it and run <code>python install.py --name bench</code>; use the installed IOP Python or pass <code>--iop-python PATH</code>. The standalone connector also works with the 0.8.3 stdio service. The HTTP gateway requires 0.8.4.</p>
+</section><section id="experiment"><span class="eyebrow">04 / 04</span><h2>First experiment</h2><p>Read <code>lab_context</code> and <code>describe_instrument</code>. Submit once with a stable <code>request_id</code>; keep the laboratory name and returned run ID. Read <code>experiment(run_id, include_result=true)</code> after reconnecting. Repeat a submission with its original request ID only for the identical experiment. A successful installation does not identify cables, samples, or an unknown instrument's command set.</p>
+</section><div class="controls" hidden><button>← Previous</button><button>Next →</button></div></article></main><footer><a href="https://github.com/Cherish0925/AI4Instruments/releases/latest">Download IOP</a> · <a href="https://github.com/Cherish0925/AI4Instruments/tree/main/iop/connect">Source and instructions</a></footer><script>
+const sections=[...document.querySelectorAll('article section')],tabs=[...document.querySelectorAll('nav a')],bar=document.querySelector('.controls'),buttons=[...bar.querySelectorAll('button')];
+function show(){let i=sections.findIndex(s=>s.id===location.hash.slice(1));if(i<0)i=0;sections.forEach((s,k)=>{s.hidden=k!==i;tabs[k].toggleAttribute('data-current',k===i);if(k===i)tabs[k].setAttribute('aria-current','page');else tabs[k].removeAttribute('aria-current')});buttons[0].disabled=i===0;buttons[1].disabled=i===sections.length-1;bar.hidden=false;}
+function move(n){const i=sections.findIndex(s=>!s.hidden)+n;if(sections[i])location.hash=sections[i].id;}
+buttons[0].onclick=()=>move(-1);buttons[1].onclick=()=>move(1);addEventListener('hashchange',show);addEventListener('keydown',e=>{if(e.altKey||e.ctrlKey||e.metaKey)return;if(['PageUp','PageDown'].includes(e.key)){e.preventDefault();move(e.key==='PageUp'?-1:1)}});show();
+</script></html>

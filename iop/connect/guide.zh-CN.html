@@ -1,0 +1,82 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>把实验室接入研究系统 · IOP Runtime</title><style>
+:root{color-scheme:light;--ink:#172c33;--muted:#50626b;--line:#cddad7;--paper:#fafbf8;--teal:#126354;--wash:#e6f3ec}
+[hidden]{display:none!important}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif}a{color:var(--teal);text-underline-offset:.22em}
+header{border-bottom:1px solid var(--line);padding:1rem max(5%,calc((100% - 76rem)/2));display:flex;justify-content:space-between;gap:1rem;align-items:center}header strong{letter-spacing:.02em;white-space:nowrap}header a{font-size:.83rem}
+main{max-width:76rem;margin:2.7rem auto;padding:0 2rem;display:grid;grid-template-columns:12rem minmax(0,1fr);gap:3.4rem}
+nav{align-self:start;position:sticky;top:2rem}nav a{display:flex;gap:.9rem;padding:.7rem .6rem;text-decoration:none;color:var(--muted);border-left:2px solid var(--line);font-size:.9rem}nav a[aria-current=page]{border-color:var(--teal);color:var(--teal);background:var(--wash);font-weight:650}nav span,.eyebrow{font:600 .67rem/1.6 ui-monospace,monospace;letter-spacing:.1em;color:var(--teal);align-self:center}
+section{max-width:58rem;margin:0 0 3.7rem}h1,h2{margin:.3em 0 .65em;letter-spacing:-.035em;line-height:1.15}h1{font-size:clamp(2.15rem,4.8vw,4rem)}h2{font-size:clamp(1.7rem,3.3vw,2.9rem)}h3{margin:1.5rem 0 .4rem;font-size:1.08rem}p{max-width:76ch}figure{margin:1.8rem 0;padding:1.4rem;background:#eef3ef;border:1px solid var(--line);border-radius:.65rem}.flow{display:grid;grid-template-columns:1fr 2rem 1.15fr 2rem 1fr;align-items:center;gap:.3rem}.node{background:white;border:1px solid var(--line);padding:.8rem;border-radius:.3rem;min-width:0}.node b,.node small{display:block}.node small{font-size:.82rem;color:var(--muted)}.node.core{background:var(--teal);color:white}.node.core small{color:#e4f3ed}.arrow{text-align:center;color:var(--teal)}figcaption{font-size:.82rem;margin-top:1rem;color:var(--muted)}
+table{width:100%;border-collapse:collapse;margin:1.5rem 0;font-size:.94rem}td,th{padding:.78rem .65rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}thead{background:var(--wash)}td:first-child{width:22%;font-weight:600}code{font: .85em/1.55 ui-monospace,monospace;overflow-wrap:anywhere;background:#eaf0ed;padding:.09em .22em;border-radius:.2rem}pre{padding:1rem;background:#193831;color:#edf7f1;border-radius:.4rem;white-space:pre-wrap}pre code{background:none;color:inherit}footer{max-width:76rem;border-top:1px solid var(--line);margin:2rem auto;padding:1rem 2rem;color:var(--muted);font-size:.82rem}.controls{display:flex;gap:1rem;justify-content:space-between}.controls button{background:white;border:1px solid var(--line);border-radius:.3rem;padding:.55rem .9rem;color:var(--ink);cursor:pointer}.controls button:disabled{visibility:hidden}
+@media(max-width:760px){header{padding:.8rem 1rem}main{display:block;margin:1rem auto;padding:0 1rem}nav{position:static;display:flex;flex-wrap:wrap;margin-bottom:1.4rem;gap:.2rem}nav a{display:block;border:0;border-bottom:2px solid var(--line);padding:.32rem .45rem}nav span{display:none}.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg);line-height:1}td,th{padding:.5rem .35rem}footer{padding:1rem}}
+@media print{header,nav,.controls,footer{display:none}main{display:block;margin:0;padding:0}section,section[hidden]{display:block!important;break-before:page;margin:0}section:first-child{break-before:auto}figure,tr{break-inside:avoid}}
+</style><header><strong>AI4Instruments / IOP</strong><a href="guide.en.html" hreflang="en">English</a></header><main><nav aria-label="章节"><a href="#overview"><span>01</span>工作方式</a><a href="#connection"><span>02</span>选择连接</a><a href="#installation"><span>03</span>安装与更新</a><a href="#experiment"><span>04</span>运行实验</a></nav><article><section id="overview"><span class="eyebrow">IOP RUNTIME · 0.8.4</span><h1>把实验室接入研究系统</h1><p>IOP Runtime 常驻在操纵仪器的计算机上。插件把选定的实验室接入研究系统；Skill 写明操作方法；MCP 提供可调用的工具。实验由实验室服务执行，关闭对话或更新插件不会取消已经接收的实验。</p>
+<figure><div class="flow"><div class="node "><b>研究系统</b><small>人、Agent、研究程序</small></div><span class="arrow" aria-hidden="true">→</span><div class="node core"><b>IOP Runtime</b><small>调度仪器，保存过程与结果</small></div><span class="arrow" aria-hidden="true">→</span><div class="node "><b>实验平台</b><small>物理仪器、仿真与计算</small></div></div><figcaption>更换宿主或更新插件时，已接收的实验仍由同一台实验室服务执行。</figcaption></figure><h3>首次接入</h3><p>平台负责人说明接线、样品和现场条件；Agent 把这些条件写成平台配置与实验程序；Runtime 按依赖和资源占用执行，保存每次操作与结果。已有配置可以直接复用。</p></section><section id="connection"><span class="eyebrow">02 / 04</span><h2>选择实验室</h2><p>在实验室电脑安装 Runtime。在<strong>执行 Agent 工具的那台电脑</strong>上使用 IOP 0.8.4 的命令；如果终端找不到 <code>iop</code>，用安装器显示的完整路径。</p>
+<table>
+<thead>
+<tr class="header">
+<th>部署方式</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>本机仪器</td>
+<td><code>iop connect --name bench --local</code>。有多套服务时用 <code>--lab-home 路径</code> 指定实验室数据目录。</td>
+</tr>
+<tr class="even">
+<td>通过 SSH 使用另一台实验室电脑</td>
+<td><code>iop connect --name bench --ssh lab-server --remote-iop /opt/iop/venv/bin/iop</code>。使用已设好的非交互 SSH 账户；远端自定义路径按 POSIX shell 传递。程序包路径属于远端运行 MCP 的电脑。</td>
+</tr>
+<tr class="odd">
+<td>已有 IOP REST 服务</td>
+<td><code>iop connect --name bench --remote https://lab.example.org --token-env BENCH_IOP_TOKEN</code>。工具执行端安装 IOP 桥接程序，由宿主注入该名称对应的凭据。地址填服务根地址。程序包和下载路径属于桥接电脑。</td>
+</tr>
+<tr class="even">
+<td>只接受 HTTP MCP 的云端产品</td>
+<td>实验室管理员设置独立的 <code>IOP_MCP_TOKEN</code>，运行 <code>iop mcp-http --port 8766</code>。通过 HTTPS 反向代理接入 <code>/mcp</code>，提交 Bearer 凭据。网关只监听本机回环地址，代理向上游发送 <code>Host: 127.0.0.1:8766</code>。只支持 OAuth 的宿主需另配网关。HTTP 不开放读写网关本机路径的两个文件工具。</td>
+</tr>
+</tbody>
+</table>
+<p>命令输出各宿主的安装路径，不操作仪器。一个名字绑定一个实验室；另一套实验室用另一个名字。更新时运行 <code>iop connect --name bench</code>，沿用原连接。站点配置和实验数据仍由实验室保存。</p>
+</section><section id="installation"><span class="eyebrow">03 / 04</span><h2>在宿主中安装</h2><table>
+<thead>
+<tr class="header">
+<th>宿主</th>
+<th>安装与更新</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Codex</td>
+<td><code>codex plugin marketplace add "&lt;marketplace&gt;"</code>，再执行 <code>codex plugin add bench@iop-bench</code>。直接注册 MCP 可使用输出中的 <code>codex_toml</code>。Git 来源可用 <code>codex plugin marketplace upgrade ai4instruments</code> 刷新，再安装新版插件。</td>
+</tr>
+<tr class="even">
+<td>Claude Code</td>
+<td><code>claude plugin marketplace add "&lt;marketplace&gt;"</code>，再执行 <code>claude plugin install bench@iop-bench</code>。重新生成连接包后执行 <code>claude plugin update bench@iop-bench</code>，重新加载插件。</td>
+</tr>
+<tr class="odd">
+<td>Agentic Research OS</td>
+<td>将 <code>research_os</code> 对应目录放进目标 Session 的工作目录，在 Extensions 中以 <strong>plugin</strong> 安装，名称用实验室名；激活安装得到的版本。升级时以当前版本为起点安装，再激活新版本。</td>
+</tr>
+<tr class="even">
+<td>求是引擎</td>
+<td>把 <code>qiushi</code> 对应目录作为 <strong>MCP 包</strong>导入目标用户的研究空间；需上传 ZIP 时选 <code>qiushi_zip</code>。现有 Linux 执行后端通过 <code>run_shell</code> 使用 <code>bench tools</code> 和 <code>bench call 工具名 JSON</code>；用同一包安装器更新。</td>
+</tr>
+<tr class="odd">
+<td>其他 stdio MCP 宿主</td>
+<td>在 <code>mcp</code> 对应的 JSON 文件中取出可执行程序与参数数组，一并注册。连接远端 REST 时让宿主向子进程传递指定的凭据变量。</td>
+</tr>
+<tr class="even">
+<td>其他科研程序</td>
+<td>可直接使用 REST、Python 或 TypeScript。IOP 服务接口在 <code>/v1</code>；独立的 HTTP MCP 网关在 <code>/mcp</code>。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>从 GitHub 安装。</strong> 如果宿主能在 PATH 中找到 <code>iop</code>，直接在 Codex 或 Claude Code 添加 <code>Cherish0925/AI4Instruments</code> 插件源，安装 <code>iop-lab@ai4instruments</code>。它使用该进程的 IOP 连接。桌面程序找不到 PATH，或一个账号需要区分多个实验室时，使用上面的具名连接。托管部署应给执行工作进程分配相应实验室和凭据；插件本身不隔离租户。</p>
+<p><strong>分别更新。</strong> 更新插件不会重启 Runtime、替换驱动或移走实验记录。原连接包保留，供已经打开的客户端使用。升级 Runtime 时，等已接收的实验结束，再运行新版本对应平台的安装器。已有 0.8.3 用户也可解压独立连接器 ZIP，运行 <code>python install.py --name bench</code>；可使用 IOP 自带的 Python，或用 <code>--iop-python 路径</code> 指定。HTTP MCP 网关从 0.8.4 提供。</p>
+</section><section id="experiment"><span class="eyebrow">04 / 04</span><h2>第一次使用</h2><p>读取 <code>lab_context</code>，再用 <code>describe_instrument</code> 查询所选设备的操作、参数和单位。接线、样品或校准条件无法从机器读出时，由了解现场的人补齐。提交前选定 <code>request_id</code>，保存实验室名和返回的实验 ID；重连后以 <code>experiment(run_id, include_result=true)</code> 读取结果。只有在原提交的回复丢失时，才用相同请求 ID 重发相同内容。</p>
+</section><div class="controls" hidden><button>← 上一节</button><button>下一节 →</button></div></article></main><footer><a href="https://github.com/Cherish0925/AI4Instruments/releases/latest">下载软件</a> · <a href="https://github.com/Cherish0925/AI4Instruments/tree/main/iop/connect">源代码与安装说明</a></footer><script>
+const sections=[...document.querySelectorAll('article section')],tabs=[...document.querySelectorAll('nav a')],bar=document.querySelector('.controls'),buttons=[...bar.querySelectorAll('button')];
+function show(){let i=sections.findIndex(s=>s.id===location.hash.slice(1));if(i<0)i=0;sections.forEach((s,k)=>{s.hidden=k!==i;tabs[k].toggleAttribute('data-current',k===i);if(k===i)tabs[k].setAttribute('aria-current','page');else tabs[k].removeAttribute('aria-current')});buttons[0].disabled=i===0;buttons[1].disabled=i===sections.length-1;bar.hidden=false;}
+function move(n){const i=sections.findIndex(s=>!s.hidden)+n;if(sections[i])location.hash=sections[i].id;}
+buttons[0].onclick=()=>move(-1);buttons[1].onclick=()=>move(1);addEventListener('hashchange',show);addEventListener('keydown',e=>{if(e.altKey||e.ctrlKey||e.metaKey)return;if(['PageUp','PageDown'].includes(e.key)){e.preventDefault();move(e.key==='PageUp'?-1:1)}});show();
+</script></html>

@@ -25,7 +25,7 @@ class IOPError(RuntimeError):
 
 def origin(url):
     url = urlparse(url)
-    return (url.scheme.lower(), url.hostname, url.port or (443 if url.scheme == 'https' else 80))
+    return (url.scheme.lower(), url.hostname, url.port if url.port is not None else (443 if url.scheme == 'https' else 80))
 
 
 class SameServiceRedirect(HTTPRedirectHandler):

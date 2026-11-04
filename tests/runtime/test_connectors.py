@@ -73,6 +73,37 @@ class InstallCase(unittest.TestCase):
             with self.assertRaises(ValueError):
                 connector.connection(args(root, "--remote", "https://user:password@lab.example"))
 
+    def test_os_assigned_port_reconnects_only_to_the_saved_service(self):
+        import time
+        from ai4instruments.iop.config import InstanceLock
+
+        with tempfile.TemporaryDirectory() as tmp:
+            home = Path(tmp)
+            initialize(home, port=0)
+            cli = [sys.executable, "-m", "ai4instruments.iop", "--home", tmp]
+            subprocess.run([*cli, "start"], capture_output=True, check=True, timeout=20)
+            try:
+                saved = json.loads((home / "config.json").read_text(encoding="utf-8"))
+                self.assertGreater(saved["port"], 0)
+                client = Client(home=home)
+                self.assertEqual(Client(client.endpoint, home=home).token, saved["token"])
+                self.assertGreaterEqual(client.request("/v1/status")["devices"], 0)
+                self.assertEqual(Client("http://127.0.0.1:0", home=home).token, "")
+            finally:
+                subprocess.run([*cli, "stop"], capture_output=True, check=True, timeout=10)
+                until = time.monotonic() + 6
+                while True:
+                    try:
+                        lock = InstanceLock(home)
+                        lock.close()
+                        # On Windows the child may still own its redirected output after releasing the service lock.
+                        (home / "service.log").unlink(missing_ok=True)
+                        break
+                    except (RuntimeError, PermissionError):
+                        if time.monotonic() > until:
+                            raise
+                        time.sleep(0.05)
+
     def test_headless_install_uses_explicit_paths_without_a_user_profile(self):
         with (
             tempfile.TemporaryDirectory() as tmp,

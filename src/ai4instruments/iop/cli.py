@@ -11,7 +11,7 @@ import time
 import webbrowser
 from pathlib import Path
 from .client import Client
-from .config import VERSION, InstanceLock, home_path, initialize
+from .config import VERSION, InstanceLock, home_path, initialize, save_json
 
 
 def output(value):
@@ -27,6 +27,10 @@ def serve(home):
     try:
         engine = Engine(home, config)
         server = Server((config['host'], int(config['port'])), engine)
+        if not int(config['port']):
+            # Port 0 asks the OS for a free port. Save the assigned port before any client is admitted.
+            config['port'] = server.server_port
+            save_json(home / 'config.json', config)
         engine.start()
         def halt(*_):
             threading.Thread(target=server.shutdown, daemon=True).start()
@@ -45,12 +49,15 @@ def serve(home):
 def start(home):
     config = initialize(home)
     host = '127.0.0.1' if config['host'] == '0.0.0.0' else config['host']
-    client = Client(f"http://{host}:{config['port']}", token=config['token'], home=home, timeout=0.5)
-    try:
-        client.request('/v1/status')
-        return 'IOP is already running: ' + client.endpoint
-    except Exception:
-        pass
+    def connection(port):
+        return Client(f"http://{host}:{port}", token=config['token'], home=home, timeout=0.5)
+    client = connection(config['port']) if int(config['port']) else None
+    if client is not None:
+        try:
+            client.request('/v1/status')
+            return 'IOP is already running: ' + client.endpoint
+        except Exception:
+            pass
     with open(home/'service.log','ab') as log:
         options = {'creationflags':subprocess.DETACHED_PROCESS | subprocess.CREATE_NEW_PROCESS_GROUP} if sys.platform == 'win32' else {'start_new_session':True}
         process = subprocess.Popen([sys.executable,'-m','ai4instruments.iop','--home',str(home),'serve'],
@@ -58,6 +65,12 @@ def start(home):
     deadline = time.monotonic() + 10
     while time.monotonic() < deadline:
         try:
+            if client is None:
+                port = int(initialize(home)['port'])
+                if not port:
+                    time.sleep(0.1)
+                    continue
+                client = connection(port)
             client.request('/v1/status')
             return 'IOP is running: '+client.endpoint
         except Exception:

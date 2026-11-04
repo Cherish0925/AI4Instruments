@@ -96,8 +96,10 @@ class InstallCase(unittest.TestCase):
                     try:
                         lock = InstanceLock(home)
                         lock.close()
+                        # On Windows the child may still own its redirected output after releasing the service lock.
+                        (home / "service.log").unlink(missing_ok=True)
                         break
-                    except RuntimeError:
+                    except (RuntimeError, PermissionError):
                         if time.monotonic() > until:
                             raise
                         time.sleep(0.05)

@@ -36,7 +36,7 @@ Desktop and browser share the same interface. Use `iop desktop` for a native win
 
 ![IOP Runtime instruments](interface/screenshots/instruments.png)
 
-[Instrument setup](instrument-setup.md) · [Program-call and scheduling measurements](performance/README.md)
+[Instrument setup](instrument-setup.md) · [Program-call and scheduling measurements](performance/README.md) · [Real laboratory comparison: 0.8.4 and direct control](../docs/laboratory/2026-11-05/README.md)
 
 The screenshot shows a simulated platform with operations, results and connections supplied by the running service.
 

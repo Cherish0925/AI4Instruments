@@ -36,7 +36,7 @@ iop open
 
 ![IOP Runtime 仪器列表](interface/screenshots/instruments.png)
 
-[仪器接入](instrument-setup.zh-CN.md) · [程序调用与调度测量](performance/README.md)
+[仪器接入](instrument-setup.zh-CN.md) · [程序调用与调度测量](performance/README.md) · [真实实验反馈：0.8.4 与直连程序](../docs/laboratory/2026-11-05/README.zh-CN.md)
 
 图中为模拟平台；操作、实验结果和连接图均由运行中的服务提供。
 

@@ -1,3 +1,9 @@
+# Laboratory comparison / 真实实验对照
+
+IOP Runtime 0.8.4 and direct scripts controlling a CETC 3672B VNA and GW Instek GPP-4323 power supply on Windows 11: twelve tasks, 514 paired spectra. The analysis separates task duration, command workload, measurement differences and experiment/data linkage. [English](../../docs/laboratory/2026-11-05/README.md) · [中文](../../docs/laboratory/2026-11-05/README.zh-CN.md).
+
+The software-only scheduling measurements below use simulated operations and describe a different workload.
+
 # IOP Runtime 0.8.2
 
 同一台 Linux x86_64 主机上交替运行，每项每版本各 3 次，表中为中位数。模拟操作立即返回，包含调度与 SQLite 记录。

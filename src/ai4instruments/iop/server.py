@@ -85,7 +85,8 @@ class Handler(BaseHTTPRequestHandler):
             if method == 'POST':
                 length = int(self.headers.get('Content-Length', '0'))
                 if len(parts) == 4 and parts[:2] == ['v1', 'runs'] and parts[3] == 'files':
-                    return self._send(engine.artifact_stream(parts[2], query['name'], self.rfile, length))
+                    return self._send(engine.artifact_stream(parts[2], query['name'], self.rfile, length,
+                                                            json.loads(query.get('operation_ids', '[]'))))
                 if len(parts) == 6 and parts[:2] == ['v1', 'runs'] and parts[3] == 'streams' and parts[5] == 'chunks':
                     from .streams import append
                     return self._send(append(engine, parts[2], parts[4], query['sequence'], self.rfile, length))
@@ -201,6 +202,8 @@ class Handler(BaseHTTPRequestHandler):
                     result = engine.store.operation_page(run_id, query.get('after', 0), query.get('limit', 200))
                 elif action == 'cancel' and method == 'POST':
                     result = engine.cancel(run_id)
+                elif action == 'finish' and method == 'POST':
+                    result = engine.finish(run_id)
                 elif action == 'resume' and method == 'POST':
                     result = engine.resume(run_id, body.get('request_id'))
                 elif action == 'checkpoints':
@@ -211,7 +214,7 @@ class Handler(BaseHTTPRequestHandler):
                 elif action == 'result' and method == 'GET':
                     result = engine.store.get('runs', run_id).get('result')
                 elif action == 'artifacts':
-                    result = engine.artifact(run_id, body['name'], base64.b64decode(body['data'], validate=True)) if method == 'POST' else engine.store.list('artifacts', run_id, 10000)
+                    result = engine.artifact(run_id, body['name'], base64.b64decode(body['data'], validate=True), body.get('operation_ids', [])) if method == 'POST' else engine.store.list('artifacts', run_id, 10000)
                 else:
                     raise KeyError(url.path)
             elif len(parts) == 3 and parts[:2] == ['v1','artifacts'] and method == 'GET':

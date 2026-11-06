@@ -156,6 +156,15 @@ class MCPCase(unittest.TestCase):
                 self.assertEqual(call('submit_experiment', parameters)['id'], run['id'])
                 self.client.run(run['id']).result(5)
                 self.assertIn('read', call('experiment', {'run_id':run['id'], 'include_result':True})['result'])
+                external = call('start_experiment', {'request_id':'adaptive-scan', 'resources':['stage']})
+                operation = {'run_id':external['id'], 'device':'stage', 'operation':'position', 'request_id':'adaptive-read'}
+                accepted_op = call('invoke_operation', operation)
+                completed_op = self.client.run(external['id']).invoke_record('stage', 'position', request_id='adaptive-read')
+                self.assertEqual(completed_op['id'], accepted_op['id'])
+                saved = call('save_experiment_file', {'run_id':external['id'], 'name':'point.json',
+                             'text':json.dumps(completed_op['result']), 'operation_ids':[completed_op['id']]})
+                self.assertEqual(saved['operation_ids'], [completed_op['id']])
+                self.assertEqual(call('finish_experiment', {'run_id':external['id']})['state'], 'completed')
                 accepted = call('submit_experiment', {'steps':[{'id':'wait', 'device':'aux', 'operation':'wait',
                                  'arguments':{'duration':0.5}}], 'request_id':'continue-after-agent'})
                 process.stdin.close()

@@ -114,6 +114,9 @@ def parser():
     p.add_argument('--offset', type=int, default=0); p.add_argument('--details', action='store_true')
     p = sub.add_parser('resources'); p.add_argument('--set', dest='capacities', help='JSON object of resource capacities')
     p = sub.add_parser('run'); p.add_argument('file'); p.add_argument('--wait', action='store_true')
+    p = sub.add_parser('begin', help='Start an externally driven experiment')
+    p.add_argument('--name', default='Experiment'); p.add_argument('--request-id', required=True)
+    p.add_argument('--resources', nargs='*', default=[]); p.add_argument('--platform')
     p = sub.add_parser('package'); p.add_argument('path'); p.add_argument('--resources', nargs='*', default=[]); p.add_argument('--requirements', default='{}'); p.add_argument('--parameters', default='{}'); p.add_argument('--project'); p.add_argument('--platform'); p.add_argument('--wait', action='store_true')
     p = sub.add_parser('platform', help='Configure and initialize experimental platforms')
     ps = p.add_subparsers(dest='platform_action', required=True)
@@ -127,8 +130,9 @@ def parser():
         q = ps.add_parser(action); q.add_argument('id'); q.add_argument('--wait', action='store_true')
         if action == 'run': q.add_argument('procedure')
     p = sub.add_parser('call'); p.add_argument('device'); p.add_argument('operation'); p.add_argument('--arguments', default='{}')
+    p.add_argument('--run-id'); p.add_argument('--request-id')
     p = sub.add_parser('runs'); p.add_argument('--limit',type=int,default=20)
-    for name in ['result','cancel','files']:
+    for name in ['result','cancel','files','finish']:
         p = sub.add_parser(name); p.add_argument('run_id')
     p = sub.add_parser('events'); p.add_argument('--run-id'); p.add_argument('--after',type=int,default=0)
     p = sub.add_parser('service'); p.add_argument('action',choices=['install','uninstall'])
@@ -215,6 +219,10 @@ def main():
             spec = json.loads(Path(args.file).read_text(encoding='utf-8'))
             run = client.run(client.request('/v1/runs', spec)['id'])
             output(run.result() if args.wait else {'run_id':run.id})
+        elif args.command == 'begin':
+            run = client.start_experiment(name=args.name, request_id=args.request_id,
+                                          resources=args.resources, platform=args.platform)
+            output({'run_id':run.id})
         elif args.command == 'package':
             run = client.submit_package(args.path, resources=args.resources, parameters=json.loads(args.parameters), project=args.project, platform=args.platform, requirements=json.loads(args.requirements))
             output(run.result() if args.wait else {'run_id':run.id})
@@ -241,13 +249,19 @@ def main():
                 run = client.procedure(args.id, 'initialize' if action == 'initialize' else args.procedure)
                 output(run.result() if args.wait else {'run_id':run.id})
         elif args.command == 'call':
-            output(client.invoke(args.device, args.operation, json.loads(args.arguments)))
+            if args.request_id and not args.run_id:
+                raise ValueError('Use --run-id with --request-id to retry an experiment operation')
+            output(client.run(args.run_id).invoke_record(args.device, args.operation, json.loads(args.arguments),
+                                                        request_id=args.request_id) if args.run_id else
+                   client.invoke(args.device, args.operation, json.loads(args.arguments)))
         elif args.command == 'runs':
             output(client.request('/v1/runs?limit='+str(args.limit)))
         elif args.command == 'result':
             output(client.run(args.run_id).info())
         elif args.command == 'cancel':
             output(client.run(args.run_id).cancel())
+        elif args.command == 'finish':
+            output(client.run(args.run_id).finish())
         elif args.command == 'files':
             output(client.run(args.run_id).files())
         elif args.command == 'events':

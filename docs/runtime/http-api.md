@@ -28,24 +28,31 @@ Base URL: `http://127.0.0.1:8765`. API bodies are JSON objects. Requests to `/v1
 | POST | `/v1/discovery` | `{}` | Start or join a background scan; returns cached inventory and `scanning` immediately |
 | POST | `/v1/devices` | Device record | Registered description; persists configuration; identical retries reuse the device |
 | GET | `/v1/discovery` | `cached=true` to reuse the last scan | Current scan, provider availability and registered devices |
-| POST | `/v1/runs` | Workflow below | Accepted run record |
+| POST | `/v1/runs` | Workflow below, or `kind: "external"` with `request_id` and optional name/resources/platform | Accepted run record |
 | POST | `/v1/packages` | Package below | Accepted run record |
 | GET | `/v1/runs` | `limit=100&details=false` for compact summaries | Most recent runs first |
 | GET | `/v1/runs/{run_id}` | `details=false` for a compact state | Run; detailed response includes recent `operation_records` |
 | GET | `/v1/runs/{run_id}/operations` | `after=0&limit=200` | `{"operations":[...],"cursor":N}`; ordered operation history |
-| POST | `/v1/runs/{run_id}/operations` | Operation below | Operation in a running package |
+| POST | `/v1/runs/{run_id}/operations` | Operation below | Operation in an external experiment or running package; identical request IDs return existing operations |
 | GET | `/v1/operations/{operation_id}` | — | State, times, result or error |
 | POST | `/v1/runs/{run_id}/cancel` | `{}` | Current run, cancellation requested |
+| POST | `/v1/runs/{run_id}/finish` | `{}` | Finish an external experiment with no pending operations; release its reservation |
 | GET | `/v1/runs/{run_id}/result` | — | Saved result without operation history |
 | POST | `/v1/runs/{run_id}/result` | `{"result": ...}` | Saved result; run must be running |
-| POST | `/v1/runs/{run_id}/artifacts` | `{"name":"scan.csv","data":"<base64>"}` | Saved output file record |
+| POST | `/v1/runs/{run_id}/artifacts` | `{"name":"scan.csv","data":"<base64>","operation_ids":["op_..."]}` | Saved output file; optional links must name completed operations in this run |
 | GET | `/v1/runs/{run_id}/artifacts` | — | File records |
-| POST | `/v1/runs/{run_id}/files?name=raw/data.bin` | Binary body and `Content-Length` | Stream a file without base64 encoding |
+| POST | `/v1/runs/{run_id}/files?name=raw/data.bin` | Binary body and `Content-Length`; optional URL-encoded `operation_ids` JSON array | Stream a file without base64 encoding |
 | GET | `/v1/artifacts/{artifact_id}` | — | File bytes, streamed |
 | GET | `/v1/events` | `after=0&run_id=...&limit=200&wait=25` | `{"events":[...],"cursor":N}` |
 | POST | `/v1/shutdown` | `{}` | `{"stopping":true}` |
 
 `after` is an exclusive event sequence number. Poll using the returned `cursor`; an empty page means no new events. Omit `run_id` for events across the platform. The optional `wait` (0–25 seconds) waits for new events; a terminal run returns immediately. Python and TypeScript watch iterators resume from the returned cursor.
+
+## External experiments (source after 0.8.4)
+
+[Python, TypeScript, MCP and CLI usage](external-experiments.md) · [中文](external-experiments.zh-CN.md)
+
+An external run starts without a steps array and stays open between calls. Use `POST /v1/runs` with `kind: "external"` and a stable submission `request_id`, retain the run ID, invoke operations, save outputs and finish explicitly. Checkpoints and explicit continuation after service interruption share the existing endpoints. This path does not start a process in the service. The released 0.8.4 binaries do not include it.
 
 ## Workflow
 

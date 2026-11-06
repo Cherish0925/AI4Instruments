@@ -9,6 +9,8 @@ export type PlatformDefinition = {
 };
 export type Platform = { id: string; revision: number; updated: string; definition: PlatformDefinition; active_runs?: string[]; missing_devices?: string[] };
 export type RunRecord = { id: string; state: string; result?: unknown; error?: string; platform?: Platform; [key: string]: unknown };
+export type OperationRecord = RunRecord & { run_id: string; device: string; operation: string; device_revision?: number };
+export type ArtifactRecord = { id: string; run_id: string; name: string; size: number; media_type: string; created: string; operation_ids?: string[] };
 export type Event = { sequence: number; kind: string; run_id?: string; [key: string]: unknown };
 export type Submission = { name?: string; project?: string; experiment?: string; platform?: string; resources?: string[]; requirements?: Record<string, number>; parameters?: Record<string, unknown>; request_id?: string };
 export class IOPError extends Error {
@@ -75,6 +77,10 @@ export class IOP {
     const record = await this.request<RunRecord>('/v1/runs', { ...options, steps, request_id: options.request_id ?? crypto.randomUUID() });
     return this.run(record.id);
   }
+  async startExperiment(options: Submission = {}): Promise<Run> {
+    const record = await this.request<RunRecord>('/v1/runs', { ...options, kind: 'external', request_id: options.request_id ?? crypto.randomUUID() });
+    return this.run(record.id);
+  }
   async submitPackage(archive: Uint8Array, options: Submission = {}): Promise<Run> {
     let text = '';
     for (let offset = 0; offset < archive.length; offset += 8192) text += String.fromCharCode(...archive.subarray(offset, offset + 8192));
@@ -96,6 +102,7 @@ export class Run {
   constructor(readonly client: IOP, readonly id: string) {}
   info(details = true) { return this.client.request<RunRecord>('/v1/runs/' + encodeURIComponent(this.id) + (details ? '' : '?details=false')); }
   cancel() { return this.client.request<RunRecord>(`/v1/runs/${encodeURIComponent(this.id)}/cancel`, {}); }
+  finish() { return this.client.request<RunRecord>(`/v1/runs/${encodeURIComponent(this.id)}/finish`, {}); }
   checkpoints() { return this.client.request<Record<string, {name: string; revision: number; updated: string; state: unknown}>>(`/v1/runs/${encodeURIComponent(this.id)}/checkpoints`); }
   checkpoint(state: unknown, name = 'main') { return this.client.request(`/v1/runs/${encodeURIComponent(this.id)}/checkpoints`, { name, state }); }
   resume(requestId = crypto.randomUUID()) { return this.client.request<RunRecord>(`/v1/runs/${encodeURIComponent(this.id)}/resume`, { request_id: requestId }); }
@@ -119,28 +126,31 @@ export class Run {
     if (record.state !== 'completed') throw new IOPError(`${record.state}: ${record.error ?? this.id}`, 0);
     return this.client.request(`/v1/runs/${encodeURIComponent(this.id)}/result`);
   }
-  files() { return this.client.request<{ id: string; name: string; size: number; media_type: string }[]>(`/v1/runs/${encodeURIComponent(this.id)}/artifacts`); }
-  operations(after = 0, limit = 200) { return this.client.request<{ operations: RunRecord[]; cursor: number }>(`/v1/runs/${encodeURIComponent(this.id)}/operations?` + new URLSearchParams({after:String(after),limit:String(limit)})); }
+  files() { return this.client.request<ArtifactRecord[]>(`/v1/runs/${encodeURIComponent(this.id)}/artifacts`); }
+  operations(after = 0, limit = 200) { return this.client.request<{ operations: OperationRecord[]; cursor: number }>(`/v1/runs/${encodeURIComponent(this.id)}/operations?` + new URLSearchParams({after:String(after),limit:String(limit)})); }
   saveResult(result: unknown) { return this.client.request(`/v1/runs/${encodeURIComponent(this.id)}/result`, { result }); }
   async invoke(device: string, operation: string, args: Record<string, unknown> = {}, options: { requestId?: string; signal?: AbortSignal } = {}) {
-    let record = await this.client.request<RunRecord>(`/v1/runs/${encodeURIComponent(this.id)}/operations`, {
+    return (await this.invokeRecord(device, operation, args, options)).result;
+  }
+  async invokeRecord(device: string, operation: string, args: Record<string, unknown> = {}, options: { requestId?: string; signal?: AbortSignal } = {}): Promise<OperationRecord> {
+    let record = await this.client.request<OperationRecord>(`/v1/runs/${encodeURIComponent(this.id)}/operations`, {
       device, operation, arguments: args, request_id: options.requestId ?? crypto.randomUUID()
     }, options.signal);
     while (!terminal.has(record.state)) {
       const wait = Math.min(25, Math.max(0, this.client.timeout / 1000 - 1));
-      record = await this.client.request<RunRecord>('/v1/operations/' + encodeURIComponent(record.id) + '?wait=' + wait, undefined, options.signal);
+      record = await this.client.request<OperationRecord>('/v1/operations/' + encodeURIComponent(record.id) + '?wait=' + wait, undefined, options.signal);
     }
     if (record.state !== 'completed') throw new IOPError(record.error ?? record.state, 0);
-    return record.result;
+    return record;
   }
-  async upload(name: string, file: Blob, signal?: AbortSignal) {
-    const response = await fetch(this.client.endpoint + `/v1/runs/${encodeURIComponent(this.id)}/files?` + new URLSearchParams({ name }), {
+  async upload(name: string, file: Blob, signal?: AbortSignal, operationIds: string[] = []) {
+    const response = await fetch(this.client.endpoint + `/v1/runs/${encodeURIComponent(this.id)}/files?` + new URLSearchParams({ name, operation_ids: JSON.stringify(operationIds) }), {
       method: 'POST', headers: { Authorization: 'Bearer ' + this.client.token, 'Content-Type': 'application/octet-stream' },
       body: file, signal: signal ?? AbortSignal.timeout(this.client.timeout)
     });
     const value = await response.json();
     if (!response.ok) throw new IOPError(value.error ?? response.statusText, response.status);
-    return value as { id: string; name: string; size: number };
+    return value as ArtifactRecord;
   }
   async download(artifactId: string, signal?: AbortSignal): Promise<Response> {
     const response = await fetch(this.client.endpoint + '/v1/artifacts/' + encodeURIComponent(artifactId), {

@@ -164,6 +164,14 @@ class Client:
                    'steps':steps, 'resources':list(resources), 'parameters':parameters or {}, 'platform': platform,
                    'requirements':requirements or {}, 'request_id':request_id or str(uuid.uuid4())})['id'])
 
+    def start_experiment(self, *, name='Experiment', project=None, experiment=None, resources=(),
+                         request_id=None, parameters=None, platform=None, requirements=None):
+        """Start one externally driven run; retain its ID and call finish after saving results."""
+        return Run(self, self.request('/v1/runs', {'kind':'external', 'name':name, 'project':project,
+                   'experiment':experiment, 'resources':list(resources), 'parameters':parameters or {},
+                   'platform':platform, 'requirements':requirements or {},
+                   'request_id':request_id or str(uuid.uuid4())})['id'])
+
     def submit_package(self, path, *, name=None, project=None, experiment=None, resources=(), parameters=None, request_id=None, platform=None, requirements=None):
         path = Path(path)
         if path.is_dir():
@@ -226,6 +234,10 @@ class Run:
     def cancel(self):
         return self.client.request('/v1/runs/'+self.id+'/cancel', {})
 
+    def finish(self):
+        """Finish an external experiment after all accepted operations have ended."""
+        return self.client.request('/v1/runs/'+self.id+'/finish', {})
+
     def checkpoints(self):
         return self.client.request('/v1/runs/' + self.id + '/checkpoints')
 
@@ -242,6 +254,10 @@ class Run:
         return stream
 
     def invoke(self, device, operation, arguments=None, timeout=None, request_id=None):
+        return self.invoke_record(device, operation, arguments, timeout, request_id)['result']
+
+    def invoke_record(self, device, operation, arguments=None, timeout=None, request_id=None):
+        """Return the completed operation, including its ID, configuration revision and result."""
         op = self.client.request('/v1/runs/'+self.id+'/operations', {'device':device, 'operation':operation,
                                  'arguments':arguments or {}, 'request_id':request_id or str(uuid.uuid4())})
         deadline = time.monotonic() + timeout if timeout is not None else None
@@ -253,14 +269,15 @@ class Run:
             op = self.client.request('/v1/operations/' + op['id'] + '?' + urlencode({'wait': wait}))
         if op['state'] != 'completed':
             raise IOPError(op.get('error', op['state']))
-        return op['result']
+        return op
 
     def save_result(self, result):
         return self.client.request('/v1/runs/'+self.id+'/result', {'result':result})
 
-    def save_file(self, name, content):
+    def save_file(self, name, content, *, operation_ids=()):
         data = content.encode() if isinstance(content, str) else content
-        return self.client.request('/v1/runs/'+self.id+'/artifacts', {'name':name, 'data':base64.b64encode(data).decode()})
+        return self.client.request('/v1/runs/'+self.id+'/artifacts', {'name':name, 'data':base64.b64encode(data).decode(),
+                                                                  'operation_ids':list(operation_ids)})
 
     def files(self):
         return self.client.request('/v1/runs/'+self.id+'/artifacts')
@@ -268,11 +285,12 @@ class Run:
     def operations(self, after=0, limit=200):
         return self.client.request('/v1/runs/' + self.id + '/operations?' + urlencode({'after':after,'limit':limit}))
 
-    def upload(self, source, name=None):
+    def upload(self, source, name=None, *, operation_ids=()):
         source = Path(source)
         with source.open('rb') as file:
             data = iter(lambda: file.read(256 * 1024), b'')
-            request = Request(self.client.endpoint + '/v1/runs/' + self.id + '/files?' + urlencode({'name':name or source.name}),
+            request = Request(self.client.endpoint + '/v1/runs/' + self.id + '/files?' + urlencode({
+                'name':name or source.name, 'operation_ids':json.dumps(list(operation_ids))}),
                 data=data, headers={'Authorization':'Bearer ' + self.client.token,
                                     'Content-Type':'application/octet-stream', 'Content-Length':str(os.fstat(file.fileno()).st_size)})
             with self.client._open(request, timeout=self.client.timeout) as response:

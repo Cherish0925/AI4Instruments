@@ -26,6 +26,7 @@ def create_server(client, *, http=False):
         'Read describe_instrument before choosing operations and arguments. '
         'Saving platform configuration does not execute initialization. '
         'Submit experiments or programs once, retain the returned ID and inspect them later. '
+        'For adaptive work, start_experiment, invoke_operation within that run, then finish_experiment. '
         'Reuse request_id after a connection failure; the runtime schedules devices and retains results.'))
 
     @server.tool()
@@ -112,6 +113,33 @@ def create_server(client, *, http=False):
         """Submit instrument operations with after dependencies and optional result bindings. Returns immediately. Reuse request_id only for the identical submission."""
         return client.submit(steps, name=name, platform=platform, resources=resources or [],
                              requirements=requirements, request_id=request_id).info(details=False)
+
+    @server.tool()
+    def start_experiment(request_id: str, name: str = 'Experiment', platform: str | None = None,
+                         resources: list[str] | None = None, parameters: dict | None = None,
+                         requirements: dict[str, int] | None = None) -> dict:
+        """Start one experiment for successive agent decisions. Reserve all mutually dependent devices up front. The run stays open across connections until finished or cancelled."""
+        return client.start_experiment(request_id=request_id, name=name, platform=platform,
+                                       resources=resources or [], parameters=parameters,
+                                       requirements=requirements).info(details=False)
+
+    @server.tool()
+    def invoke_operation(run_id: str, device: str, operation: str, request_id: str,
+                         arguments: dict | None = None) -> dict:
+        """Submit one operation in an external experiment or running program. Returns its operation ID immediately; read experiment for the result before dependent actions. Reuse request_id for an identical retry."""
+        return client.request('/v1/runs/' + quote(run_id, safe='') + '/operations',
+                              {'device':device, 'operation':operation, 'arguments':arguments or {},
+                               'request_id':request_id})
+
+    @server.tool()
+    def finish_experiment(run_id: str) -> dict:
+        """Finish an external experiment after its operations and file transfers complete. Retains records and releases its reserved resources."""
+        return client.run(run_id).finish()
+
+    @server.tool()
+    def save_experiment_file(run_id: str, name: str, text: str, operation_ids: list[str] | None = None) -> dict:
+        """Save a UTF-8 result or analysis file, optionally linked to completed operations in this experiment. Use the SDK's binary upload for large measurement arrays."""
+        return client.run(run_id).save_file(name, text, operation_ids=operation_ids or [])
 
     def submit_program(path: str, request_id: str, platform: str | None = None,
                        resources: list[str] | None = None, parameters: dict | None = None,

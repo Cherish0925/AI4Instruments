@@ -183,3 +183,14 @@ class ExternalCase(unittest.TestCase):
             run.resume('continue-after-interruption')
         self.assertEqual(error.exception.code, 'device_outcome_unknown')
         self.assertEqual(len(run.operations()['operations']), 1)
+
+    def test_external_experiment_does_not_block_an_unrelated_platform_configuration(self):
+        run = self.client.start_experiment()
+        run.invoke('stage', 'position')
+        unrelated = {'schema_version':1, 'id':'other-bench', 'devices':['aux']}
+        self.assertEqual(self.client.configure_platform(unrelated)['revision'], 1)
+        affected = {'schema_version':1, 'id':'scan-bench', 'devices':['stage']}
+        with self.assertRaises(IOPError):
+            self.client.configure_platform(affected)
+        run.finish()
+        self.assertEqual(self.client.configure_platform(affected)['revision'], 1)

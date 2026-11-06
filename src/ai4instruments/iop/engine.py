@@ -374,8 +374,10 @@ class Engine:
             for run in self.runs.values():
                 used = {self.operations[o]['device'] for o in run['operations']}
                 used.update(r[7:] for r in run['resources'] if r.startswith('device:'))
-                if run['kind'] in {'package', 'external'} and not run['resources']:
+                if run['kind'] == 'package' and not run['resources']:
                     used.update(run.get('platform', {}).get('definition', {}).get('devices', self.devices))
+                elif run['kind'] == 'external':
+                    used.update(run['devices'])
                 if affected & used or {'shared:' + r for r in resource_ids} & set(run['resources']):
                     raise ValueError('Wait for or cancel affected experiment before changing platform: ' + run['id'])
             record = {'id': definition['id'], 'revision': revision + 1, 'updated': now(), 'definition': definition}

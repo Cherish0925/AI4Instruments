@@ -31,7 +31,7 @@ export function runRows(runs, compact = false) {
   return runs
     .map(
       (run) =>
-        `<tr class="clickable" data-run="${esc(run.id)}" tabindex="0"><td><strong>${esc(run.name || run.id)}</strong><small>${esc(run.platform?.definition?.name || run.platform?.id || (run.kind === "package" ? t("实验程序", "Experiment program") : t("操作流程", "Workflow")))}</small></td><td>${badge(run.state)}</td>${compact ? "" : `<td>${run.operation_count ?? run.operations?.length ?? "—"}</td>`}<td class="nowrap">${date(run.started || run.created)}</td><td>${icon("chevron")}</td></tr>`,
+        `<tr class="clickable" data-run="${esc(run.id)}" tabindex="0"><td><strong>${esc(run.name || run.id)}</strong><small>${esc(run.platform?.definition?.name || run.platform?.id || (run.kind === "package" ? t("实验程序", "Experiment program") : run.kind === "external" ? t("外部实验", "External experiment") : t("操作流程", "Workflow")))}</small></td><td>${badge(run.state)}</td>${compact ? "" : `<td>${run.operation_count ?? run.operations?.length ?? "—"}</td>`}<td class="nowrap">${date(run.started || run.created)}</td><td>${icon("chevron")}</td></tr>`,
     )
     .join("");
 }

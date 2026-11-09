@@ -1,1 +1,17 @@
-{"name":"iop-lab","version":"1.0.1","description":"Operate instruments and retrieve experiments from IOP Runtime.","skills":"./skills/","mcpServers":"./.mcp.json"}
+{
+  "name": "iop-lab",
+  "version": "1.0.1",
+  "description": "Operate instruments and retrieve experiments from IOP Runtime.",
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "author": {
+    "name": "AI4Instruments"
+  },
+  "homepage": "https://github.com/Cherish0925/AI4Instruments/tree/main/iop",
+  "repository": "https://github.com/Cherish0925/AI4Instruments",
+  "interface": {
+    "displayName": "IOP Runtime",
+    "shortDescription": "Laboratory instruments and continuous experiments",
+    "developerName": "AI4Instruments"
+  }
+}

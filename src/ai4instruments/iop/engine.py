@@ -51,6 +51,7 @@ class Engine:
         self.endpoint = ""
         self.devices, self.descriptions, self.device_records = {}, {}, {}
         self.reconnecting, self.offline = set(), {}
+        self.released = set(config.get('released_devices', []))
         self.communication = {}
         self.runs, self.operations, self.futures, self.processes = {}, {}, {}, {}
         self.allocation = Allocator()
@@ -239,6 +240,7 @@ class Engine:
                 'last_seen': seen.get(device_connection(record), {}).get('last_seen'),
                 'communication': dict(self.communication.get(device, {})),
                 'state': 'reconnecting' if device in self.reconnecting else
+                         'released' if device in self.released else
                          'offline' if device in self.offline else
                          'busy' if self.allocation.used['device:' + device] else 'ready',
                 'error': self.offline.get(device)} for device, record in self.device_records.items()}
@@ -251,6 +253,9 @@ class Engine:
             if not isinstance(value, str) or not value:
                 raise ValueError("Resources must be nonempty names")
             if value in self.devices:
+                if value in self.released:
+                    from .errors import RequestError
+                    raise RequestError('device_released', 'Reconnect this instrument before reserving it.', device_id=value)
                 if value in self.reconnecting or value in self.offline:
                     raise ValueError('Device needs reconnection: ' + value)
                 resources.add("device:" + value)
@@ -331,7 +336,8 @@ class Engine:
         for op in ops:
             if op['state'] != 'queued':
                 continue
-            parents = [by_step[step] for step in op['after'] if by_step[step]['state'] != 'completed']
+            parents = ([self.operations[oid] for oid in op['after_ids'] if self.operations[oid]['state'] != 'completed']
+                       if 'after_ids' in op else [by_step[step] for step in op['after'] if by_step[step]['state'] != 'completed'])
             self.remaining_dependencies[op['id']] = len(parents)
             for parent in parents:
                 self.dependents.setdefault(parent['id'], []).append(op['id'])
@@ -340,9 +346,13 @@ class Engine:
 
     def _operation_ended(self, op):
         self.ready[op['run_id']].pop(op['id'], None)
+        self.remaining_dependencies.pop(op['id'], None)
         self.remaining[op['run_id']] -= 1
+        children = self.dependents.pop(op['id'], [])
         if op['state'] == 'completed':
-            for child in self.dependents.pop(op['id'], []):
+            for child in children:
+                if self.operations[child]['state'] != 'queued':
+                    continue
                 self.remaining_dependencies[child] -= 1
                 if self.remaining_dependencies[child] == 0 and self.operations[child]['state'] == 'queued':
                     self.ready[op['run_id']][child] = None
@@ -376,6 +386,8 @@ class Engine:
                 used.update(r[7:] for r in run['resources'] if r.startswith('device:'))
                 if run['kind'] == 'package' and not run['resources']:
                     used.update(run.get('platform', {}).get('definition', {}).get('devices', self.devices))
+                elif run['kind'] == 'external':
+                    used.update(run['devices'])
                 if affected & used or {'shared:' + r for r in resource_ids} & set(run['resources']):
                     raise ValueError('Wait for or cancel affected experiment before changing platform: ' + run['id'])
             record = {'id': definition['id'], 'revision': revision + 1, 'updated': now(), 'definition': definition}
@@ -431,7 +443,12 @@ class Engine:
                 for old in self.device_records.values():
                     if connection_conflict(record, old):
                         raise ValueError("This instrument address already belongs to " + old["id"])
-            driver = make_driver(record, self.devices)
+            saved_release = self.config.get('released_devices', {}).get(device_id)
+            if saved_release:
+                from .drivers import Released
+                driver = Released(saved_release['description'])
+            else:
+                driver = make_driver(record, self.devices)
             try:
                 description = driver.describe()
                 if not isinstance(description.get("operations"), dict) or not description["operations"]:
@@ -584,6 +601,8 @@ class Engine:
             raise ValueError("Device is not registered: " + device_id)
         if device_id in self.reconnecting or device_id in self.offline:
             raise ValueError('Device needs reconnection: ' + device_id)
+        if device_id in self.released:
+            raise RequestError('device_released', 'Reconnect this instrument before submitting operations.', device_id=device_id)
         specs = self.descriptions[device_id]["operations"]
         if name not in specs:
             raise ValueError("Unknown operation: " + device_id + "." + name)
@@ -607,16 +626,25 @@ class Engine:
                 "effect":specs[name].get('effect', 'change'),
                 "after":platform_model.dependencies(step), "state":"queued", "created":now(),
                 "resources":sorted(set(self._resources([device_id], name) + self._resources(step.get("resources", [])))),
-                "request_id":step.get("request_id")}
+                "request_id":step.get("request_id"),
+                "device_revision":self.descriptions[device_id].get('revision')}
 
     def submit(self, spec, package=None):
         with self.lock:
             if self.stopping:
                 raise ValueError("Service is stopping")
             spec = json.loads(dumps(spec))
+            kind = 'package' if package is not None else spec.get('kind', 'workflow')
+            if kind not in {'workflow', 'package', 'external'} or (kind == 'package' and package is None):
+                raise ValueError('Use a workflow, an external experiment or a submitted package')
+            if kind == 'external':
+                if spec.get('steps'):
+                    raise ValueError('Submit external experiment operations through its run ID')
+                if not isinstance(spec.get('request_id'), str) or not spec['request_id'].strip():
+                    raise ValueError('Provide request_id for the external experiment')
             previous = self.store.request("runs", spec.get("request_id"))
             if previous:
-                if previous["spec"] != spec or (package is not None and (self.home / "runs" / previous["id"] / "package.zip").read_bytes() != package):
+                if previous['kind'] != kind or previous["spec"] != spec or (package is not None and (self.home / "runs" / previous["id"] / "package.zip").read_bytes() != package):
                     raise ValueError("request_id already names a different experiment")
                 return previous
             if len(self.runs) >= int(self.config.get('max_active_runs', 10000)):
@@ -629,7 +657,7 @@ class Engine:
             if platform and spec.get('platform_revision', platform['revision']) != platform['revision']:
                 raise ValueError('Platform revision changed')
             run = {"id":run_id, "state":"queued", "created":now(), "request_id":spec.get("request_id"),
-                   "kind":"package" if package is not None else "workflow", "name":spec.get("name", "Experiment"),
+                   "kind":kind, "name":spec.get("name", "Experiment"),
                    "project":spec.get("project"), "experiment":spec.get("experiment"), "spec":spec,
                    "parameters":spec.get("parameters", {}), "resources":self._resources(spec.get("resources", [])),
                    "requirements":quantities(spec.get('requirements', {}), self.capacities),
@@ -640,7 +668,7 @@ class Engine:
                 if outside:
                     raise ValueError('Reserved devices must belong to the selected platform')
             operations = []
-            if package is None:
+            if kind == 'workflow':
                 steps = spec.get("steps", [])
                 platform_model.steps(steps)
                 operations = [self._operation(run_id, s) for s in steps]
@@ -658,6 +686,8 @@ class Engine:
             used = {op['device'] for op in operations}
             if package is not None:
                 used = set(platform['definition']['devices']) if platform else (set(spec.get('resources', [])) & self.devices.keys() or self.devices.keys())
+            elif kind == 'external':
+                used = set(platform['definition']['devices']) if platform else set(spec.get('resources', [])) & self.devices.keys()
             run['devices'] = copy.deepcopy({name: self.descriptions[name] for name in used})
             run['device_configurations'] = copy.deepcopy({name: self.device_records[name] for name in used})
             directory = self.home / "runs" / run_id
@@ -704,14 +734,22 @@ class Engine:
 
     def invoke(self, run_id, step):
         with self.lock:
-            run = self.runs.get(run_id)
-            if not run or run["kind"] != "package" or run["state"] != "running":
-                raise ValueError("Operations require a running experiment package")
+            step = json.loads(dumps({'arguments': {}, **step}))
             old = self.store.request("operations", step.get("request_id"))
             if old:
-                if old["run_id"] != run_id or old["device"] != step["device"] or old["operation"] != step["operation"] or old["arguments"] != parameters(self.descriptions[step["device"]]["operations"][step["operation"]], step.get("arguments", {})):
+                if old['run_id'] != run_id:
+                    raise ValueError('request_id already names a different operation')
+                saved_run = self.runs.get(run_id) or self.store.get('runs', run_id)
+                same = (old.get('request') == step if 'request' in old else
+                        old['device'] == step['device'] and old['operation'] == step['operation'] and
+                        old['arguments'] == parameters(saved_run['devices'][step['device']]['operations'][step['operation']], step['arguments']))
+                if not same:
                     raise ValueError("request_id already names a different operation")
                 return old
+            run = self.runs.get(run_id)
+            if self.stopping or not run or not (run['kind'] == 'package' and run['state'] == 'running' or
+                               run['kind'] == 'external' and run['state'] in {'queued', 'running'}):
+                raise ValueError("Operations require an active external experiment or running package")
             if len(self.operations) >= int(self.config.get('max_active_operations', 100000)):
                 raise QueueFull('The service has reached its configured number of active operations')
             op = self._operation(run_id, step)
@@ -720,20 +758,44 @@ class Engine:
             if run['resources'] or run.get('requirements'):
                 reserved = self._amounts(run, reserve=True)
                 if any(count > reserved.get(key, 0) for key, count in self._amounts(op).items()):
-                    raise ValueError('Include every device and resource quantity used by this package at submission')
+                    raise ValueError('Include every device and resource quantity used by this experiment at submission')
             if op["after"]:
-                raise ValueError("Package programs express dependencies by waiting for operation results")
+                raise ValueError("Programs express dependencies by waiting for operation results")
+            if op['bindings']:
+                raise ValueError('Programs pass results directly as operation arguments')
+            op['request'] = step
+            if op['device'] not in run['devices']:
+                run['devices'][op['device']] = copy.deepcopy(self.descriptions[op['device']])
+                run['device_configurations'][op['device']] = copy.deepcopy(self.device_records[op['device']])
             run["operations"].append(op["id"])
             run['operation_count'] = run.get('operation_count', 0) + 1
+            run['involved_resources'] = sorted(set(run['involved_resources']) | self._amounts(op).keys())
             with self.store.transaction():
                 self.store.put("runs", run); self.store.put("operations", op)
                 self.store.event("operation.queued", run_id, operation_id=op["id"], device=op["device"], operation=op["operation"])
             self.operations[op["id"]] = op
             self.ready[run_id][op['id']] = None
             self.remaining[run_id] += 1
-            run['involved_resources'] = sorted(set(run['involved_resources']) | self._amounts(op).keys())
+            for key, count in self._amounts(op).items():
+                self.minimum_capacities[run_id][key] = max(self.minimum_capacities[run_id].get(key, 0), count)
             self.wake.set()
             return json.loads(dumps(op))
+
+    def finish(self, run_id):
+        from .errors import RequestError
+        with self.lock:
+            run = self.runs.get(run_id) or self.store.get('runs', run_id)
+            if run['kind'] != 'external':
+                raise RequestError('not_external', 'Only external experiments are finished by their client.')
+            if run['state'] == 'completed':
+                return copy.deepcopy(run)
+            if run['state'] not in {'queued', 'running'}:
+                raise RequestError('experiment_not_active', 'Read the experiment state before finishing it.')
+            if self.remaining[run_id]:
+                raise RequestError('operations_pending', 'Wait for accepted instrument operations before finishing.')
+            self._finish(run, 'completed')
+            self.wake.set()
+            return copy.deepcopy(run)
 
     def _save_run(self, run, kind):
         with self.store.transaction():
@@ -841,12 +903,15 @@ class Engine:
         self.processes.pop(run["id"], None)
         self.runs.pop(run["id"], None)
 
-    def _file_record(self, run_id, path, name):
+    def _file_record(self, run_id, path, name, operation_ids=None):
         existing = self.store.artifact_named(run_id, name)
         if existing and existing.get('stream'):
             return existing
-        item = {"id":existing['id'] if existing else identifier("file"), "run_id":run_id, "name":name, "size":path.stat().st_size,
-                "media_type":mimetypes.guess_type(name)[0] or "application/octet-stream", "created":now()}
+        item = {**(existing or {}), "id":existing['id'] if existing else identifier("file"), "run_id":run_id, "name":name, "size":path.stat().st_size,
+                "media_type":mimetypes.guess_type(name)[0] or "application/octet-stream",
+                "created":existing['created'] if existing else now()}
+        if operation_ids is not None:
+            item['operation_ids'] = operation_ids
         with self.store.transaction():
             self.store.db.execute('INSERT INTO artifacts(id,run_id,body,name) VALUES(?,?,?,?) '
                 'ON CONFLICT(id) DO UPDATE SET body=excluded.body', (item['id'], run_id, dumps(item), name))
@@ -857,7 +922,7 @@ class Engine:
     def save_result(self, run_id, result):
         with self.lock:
             run = self.runs.get(run_id)
-            if not run or run["state"] != "running":
+            if not run or not (run['state'] == 'running' or run['kind'] == 'external' and run['state'] == 'queued'):
                 raise ValueError("Run is not running")
             run["result"] = json.loads(dumps(result))
             save_json(self.home / "runs" / run_id / "output" / "result.json", result)
@@ -872,13 +937,20 @@ class Engine:
         from .recovery import resume
         return resume(self, run_id, request_id)
 
-    def artifact(self, run_id, name, data):
-        return self.artifact_stream(run_id, name, io.BytesIO(data), len(data))
+    def artifact(self, run_id, name, data, operation_ids=()):
+        return self.artifact_stream(run_id, name, io.BytesIO(data), len(data), operation_ids)
 
-    def artifact_stream(self, run_id, name, stream, length):
+    def artifact_stream(self, run_id, name, stream, length, operation_ids=()):
         if type(length) is not int or length < 0:
             raise ValueError('File length must be a nonnegative integer')
         self.store.get('runs', run_id)
+        if not isinstance(operation_ids, (list, tuple)) or any(not isinstance(oid, str) for oid in operation_ids):
+            raise ValueError('operation_ids must be an array of operation IDs')
+        operation_ids = list(dict.fromkeys(operation_ids))
+        for oid in operation_ids:
+            op = self.store.get('operations', oid)
+            if op['run_id'] != run_id or op['state'] != 'completed':
+                raise ValueError('Link files to completed operations in the same experiment')
         rel = relative_path(name)
         incoming = self.home / 'incoming'
         incoming.mkdir(exist_ok=True)
@@ -901,7 +973,7 @@ class Engine:
                     raise ValueError('An output file already has this name')
                 path.parent.mkdir(parents=True, exist_ok=True)
                 temporary.rename(path)
-                return self._file_record(run_id, path, 'output/' + rel.as_posix())
+                return self._file_record(run_id, path, 'output/' + rel.as_posix(), operation_ids)
         finally:
             temporary.unlink(missing_ok=True)
 
@@ -917,6 +989,7 @@ class Engine:
                 worker = getattr(driver, 'worker', None)
                 affected = {name for name, other in self.devices.items()
                             if name == device_id or (worker is not None and getattr(other, 'worker', None) is worker)}
+                affected.update(self.config.get('released_devices', {}).get(device_id, {}).get('group', []))
                 if any(o['device'] in affected and o['state'] not in TERMINAL for o in self.operations.values()):
                     raise ValueError('Wait for or cancel device operations before reconnecting')
                 if any(self.allocation.used['device:' + name] for name in affected):
@@ -935,6 +1008,10 @@ class Engine:
                     self.devices.update(created)
                     for name in affected:
                         self.offline.pop(name, None)
+                    self.released.difference_update(affected)
+                    for name in affected:
+                        self.config.get('released_devices', {}).pop(name, None)
+                    save_json(self.home / 'config.json', self.config)
                     with self.store.transaction():
                         self.store.event('devices.reconnected', devices=sorted(affected))
                 return {'devices': sorted(affected), 'state': 'connected'}
@@ -948,12 +1025,46 @@ class Engine:
                 with self.lock:
                     self.reconnecting.difference_update(affected)
 
+    def release_device(self, device_id):
+        """Release an idle connection and keep it released until explicit reconnection."""
+        from .errors import RequestError
+        with self.registration_lock:
+            with self.lock:
+                driver = self.devices[device_id]
+                worker = getattr(driver, 'worker', None)
+                affected = {name for name, other in self.devices.items()
+                            if name == device_id or worker is not None and getattr(other, 'worker', None) is worker}
+                affected.update(self.config.get('released_devices', {}).get(device_id, {}).get('group', []))
+                if (any(o['device'] in affected and o['state'] not in TERMINAL for o in self.operations.values()) or
+                        any(self.allocation.used['device:' + name] for name in affected)):
+                    raise RequestError('device_busy', 'Finish or cancel accepted operations before releasing this connection.')
+                snapshots = {name: {'description': self.devices[name].describe(), 'group': sorted(affected)} for name in affected}
+                self.reconnecting.update(affected)
+            try:
+                for name in affected:
+                    self.devices[name].close()
+                with self.lock:
+                    self.released.update(affected)
+                    self.config.setdefault('released_devices', {}).update(snapshots)
+                    save_json(self.home / 'config.json', self.config)
+                    with self.store.transaction():
+                        self.store.event('devices.released', devices=sorted(affected))
+                return {'devices': sorted(affected), 'state': 'released'}
+            except Exception as error:
+                with self.lock:
+                    self.offline.update({name: str(error) for name in affected})
+                raise
+            finally:
+                with self.lock:
+                    self.reconnecting.difference_update(affected)
+
     def run_info(self, run_id, details=True):
         result = self.store.get('runs', run_id, summary=not details)
         result['progress'] = {name: {k: v for k, v in record.items() if k != 'state'}
                               for name, record in self.store.checkpoints(run_id).items()}
-        result['can_resume'] = (result['kind'] == 'package' and result.get('package', {}).get('resume') is True
-                                and result['state'] in TERMINAL - {'completed'} and bool(result['progress']))
+        result['can_resume'] = (result['state'] in TERMINAL - {'completed'} and
+            (result['kind'] == 'external' or result['kind'] == 'package' and
+             result.get('package', {}).get('resume') is True and bool(result['progress'])))
         if details:
             result['operation_records'] = list(reversed(self.store.list('operations', run_id, 10000)))
         return result
@@ -1019,7 +1130,7 @@ class Engine:
             del self.futures[op_id]
             self.cancellations.pop(op_id, None)
             self.progress_times.pop(op_id, None)
-            if run['kind'] == 'package':
+            if run['kind'] in {'package', 'external'}:
                 # Long-lived programs keep only in-flight calls in memory. All
                 # completed operations remain in the indexed SQLite history.
                 run['operations'].remove(op_id)
@@ -1115,7 +1226,8 @@ class Engine:
                 if op.get('bindings'):
                     args = dict(op['arguments'])
                     for name, binding in op['bindings'].items():
-                        value = self.operations[self.step_ids[rid][binding['step']]]['result']
+                        source = op.get('binding_ids', {}).get(name) or self.step_ids[rid][binding['step']]
+                        value = (self.operations.get(source) or self.store.get('operations', source))['result']
                         for key in binding.get('path', []):
                             value = value[key]
                         args[name] = value

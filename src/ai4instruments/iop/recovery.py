@@ -12,7 +12,8 @@ def checkpoint(engine, run_id, name, state):
     state = json.loads(dumps(state))
     with engine.lock:
         run = engine.runs.get(run_id)
-        if not run or run['kind'] != 'package' or run['state'] != 'running':
+        if not run or not (run['kind'] == 'package' and run['state'] == 'running' or
+                           run['kind'] == 'external' and run['state'] in {'queued', 'running'}):
             raise RequestError('program_not_running', 'Save progress from a running experiment program.')
         if engine.remaining[run_id]:
             raise RequestError('operations_pending', 'Wait for the program’s instrument operations before saving progress.')
@@ -29,10 +30,10 @@ def resume(engine, run_id, request_id):
             return run
         if engine.stopping or run_id in engine.runs or run['state'] not in TERMINAL - {'completed'}:
             raise RequestError('program_not_stopped', 'Continue an interrupted, failed or cancelled program.')
-        if run['kind'] != 'package' or run['package'].get('resume') is not True:
+        if run['kind'] != 'external' and (run['kind'] != 'package' or run['package'].get('resume') is not True):
             raise RequestError('resume_not_defined', 'The experiment package must declare resume: true and read its saved progress.')
         checkpoints = engine.store.checkpoints(run_id)
-        if not checkpoints:
+        if not checkpoints and run['kind'] != 'external':
             raise RequestError('progress_missing', 'This program has not saved a progress point.')
         unresolved = set(run['involved_resources']) & engine.resource_holds.keys()
         if unresolved:
@@ -43,7 +44,7 @@ def resume(engine, run_id, request_id):
                        {k: v for k, v in description.items() if k != 'revision'}) or
                    (name in run.get('device_configurations', {}) and
                     engine.device_records.get(name) != run['device_configurations'][name]) or
-                   name in engine.offline or name in engine.reconnecting]
+                   name in engine.offline or name in engine.reconnecting or name in engine.released]
         if changed:
             raise RequestError('instruments_changed', 'Restore the program’s instrument descriptions before continuing.', devices=changed)
         if run.get('platform') and engine.platforms.get(run['platform']['id'], {}).get('definition') != run['platform']['definition']:

@@ -4,7 +4,7 @@
 
 [中文](README.zh-CN.md) · [Download](https://github.com/Cherish0925/AI4Instruments/releases/latest) · [Desktop & browser](interface.md) · [Installation](../docs/runtime/README.md) · [Platform configuration](platforms.md) · [Agent integration](agent-setup.md)
 
-**[Connect a research host to IOP](connect/README.md)** · [English field guide](connect/guide.en.html) · [中文图解](connect/guide.zh-CN.html). 0.8.4 adds named lab connections, installable host packages and an HTTP MCP gateway.
+**[Connect a research host to IOP](connect/README.md)** · [English field guide](connect/guide.en.html) · [中文图解](connect/guide.zh-CN.html). 0.8.5 adds continuous experiments, operation batches and saved acquisitions.
 
 **One persistent service for people and agents to use experimental platforms.** It connects physical instruments, computational programs and remote task services, maintains platform descriptions, schedules serial and parallel experiments, and preserves operations and data. Accepted experiments continue after the submitting terminal, browser or agent session closes.
 
@@ -14,7 +14,7 @@ One computer can serve several experimental platforms. Each platform describes i
 
 ## Start
 
-Download and extract the matching IOP 0.8.4 archive. For a native desktop window, run `install-desktop.ps1` on Windows or `sh install-desktop.sh` on macOS / Linux, then open **IOP Runtime** from the application menu. Use `install.ps1` / `install.sh` for browser or server use. Archives include Python, the Rust executor and Runtime/Agent dependencies for offline core installation. Desktop installers additionally download native UI dependencies.
+Download and extract the matching IOP 0.8.5 archive. For a native desktop window, run `install-desktop.ps1` on Windows or `sh install-desktop.sh` on macOS / Linux, then open **IOP Runtime** from the application menu. Use `install.ps1` / `install.sh` for browser or server use. Archives include Python, the Rust executor and Runtime/Agent dependencies for offline core installation. Desktop installers additionally download native UI dependencies.
 
 | Archive | Runtime environment |
 | --- | --- |

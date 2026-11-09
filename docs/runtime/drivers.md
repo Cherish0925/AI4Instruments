@@ -6,6 +6,10 @@ A description names an instrument's operations and their inputs. A driver perfor
 
 ## SCPI
 
+`iop adapters`, Python `client.adapters()` and MCP `available_adapters` expose supported connection fields. TCP `source_address` selects a local IP when the computer has several network interfaces; omit it to use system routing. Serial configuration includes `baudrate`, `bytesize`, `parity`, `stopbits`, `xonxoff`, `rtscts` and `dsrdtr`. Use settings from the instrument manual. / 连接参数可直接查询；多网卡可指定本机 IP，串口参数按仪器手册填写。
+
+Use `release` to hand an idle connection to another program, then `reconnect` to restore it. Shared SDK workers release all their devices together. / 使用 `release` 释放空闲连接，其他软件用完后通过 `reconnect` 接回。
+
 Copy [scpi-meter.json](../../examples/iop/scpi-meter.json), replace the address and model-specific commands, then register it with `iop register device.json`. / 复制示例，按型号手册修改地址与命令后登记。
 
 ```json

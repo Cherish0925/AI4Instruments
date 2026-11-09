@@ -68,7 +68,13 @@ def validate_profile(profile):
 
 
 def parse_identity(response):
-    fields = next(csv.reader([response.strip()]))
+    try:
+        fields = next(csv.reader([response.strip()], skipinitialspace=True, strict=True))
+        # Some instruments quote the entire CSV reply, others quote individual fields.
+        if len(fields) == 1:
+            fields = next(csv.reader([fields[0]], skipinitialspace=True, strict=True))
+    except (csv.Error, StopIteration) as error:
+        raise ValueError('Unrecognized identification reply: ' + str(error)) from None
     if len(fields) != 4 or not fields[0].strip() or not fields[1].strip():
         raise ValueError('The identification response does not contain manufacturer, model, serial number and firmware.')
     return dict(zip(('manufacturer', 'model', 'serial_number', 'firmware'), (s.strip() for s in fields)))
@@ -197,7 +203,7 @@ class Enrollment:
             with engine.lock:
                 device_ids = [d for d in candidate.get('device_ids', []) if d in engine.device_records]
                 if len(device_ids) > 1:
-                    report.update(device_ids=device_ids, status='ready')
+                    report.update(device_ids=device_ids, status='released' if any(i in engine.released for i in device_ids) else 'ready')
                     return report
                 existing = engine.device_records.get(candidate.get('id') or self.records.get(key, {}).get('device_id')) or next((d for d in engine.device_records.values() if device_connection(d) == key), None)
                 if existing and existing['driver'] == 'scpi' and device_connection(existing) != key and device_connection(existing) not in visible:
@@ -207,7 +213,7 @@ class Enrollment:
             with self.lock:
                 previous = self.records.get(key, {})
                 if time.monotonic() < self.retry_after.get(key, 0):
-                    for field in ('identity', 'identity_source', 'status', 'error', 'required'):
+                    for field in ('identity', 'identity_source', 'identity_response', 'communication', 'status', 'error', 'required'):
                         if field in previous:
                             report[field] = previous[field]
                     return report
@@ -231,13 +237,25 @@ class Enrollment:
             probe_config = dict(config, timeout=min(float(config.get('timeout', 2)), 5))
             probe = SCPI('identity-query', probe_config, {})
             try:
-                identity = parse_identity(probe.exchange('*IDN?', True))
+                raw = probe.exchange('*IDN?', True)
+                report['identity_response'] = raw
+                report['communication'] = 'responded'
+                try:
+                    identity = parse_identity(raw)
+                except ValueError as error:
+                    report.update(status='identity_unparsed', error=str(error), required=['identity_format'])
+                    with self.lock:
+                        self.retry_after[key] = float('inf')
+                    return report
             finally:
                 probe.close()
             report.update(identity=identity, identity_source='scpi-idn', status='identified')
             record = description(identity, config, catalog)
             device = self.adopt(record, key, visible, available)
             report.update(device_id=device['id'], status='ready' if record.get('instrument_profile') else 'identified')
+            if device['id'] in engine.released:
+                report.update(status='released', required=[])
+                return report
             report['required'] = [] if record.get('instrument_profile') else ['model_operations']
             if record.get('profile_candidates'):
                 report.update(profile_candidates=record['profile_candidates'], required=['instrument_profile'])
@@ -263,6 +281,9 @@ class Enrollment:
         report.update(device_id=record['id'], identity=identity,
                       identity_source=record.get('identity_source'), status='ready')
         report['documentation'] = record.get('documentation', [])
+        if record['id'] in engine.released:
+            report.update(status='released')
+            return report
         if report['present'] is False:
             report['status'] = 'not_seen'
             return report
@@ -283,6 +304,11 @@ class Enrollment:
                 report.update(status='identifying', operation_id=pending)
                 return report
             if operation['state'] == 'completed':
+                if operation.get('result', {}).get('identity_error'):
+                    report.update(status='identity_unparsed', communication='responded',
+                                  identity_response=operation['result'].get('value'),
+                                  error=operation['result']['identity_error'], required=['identity_format'])
+                    return report
                 with self.lock:
                     self.checked.add(record['id'])
                     self.pending.pop(record['id'], None)
@@ -314,6 +340,8 @@ class Enrollment:
                 existing = next((d for d in engine.device_records.values()
                     if stable and identity_key(d.get('identity', {})) == stable), None)
             if existing:
+                if existing['id'] in engine.released:
+                    return engine.descriptions[existing['id']]
                 old_key = device_connection(existing)
                 with self.lock:
                     previous = self.records.get(old_key, {})

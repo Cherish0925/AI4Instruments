@@ -69,6 +69,33 @@ serve(p)
     const changes = await client.changes(context.cursor);
     assert.ok(changes.changes.some(e => e.kind === 'device.configured'));
     await assert.rejects(client.configureDevice('stage', definition, history[0].revision), e => e.code === 'configuration_changed');
+    const external = await client.startExperiment({name:'External scan', resources:['stage'], request_id:'external-scan'});
+    const measured = await external.invokeRecord('stage','position',{}, {requestId:'external-read'});
+    assert.equal(measured.run_id, external.id);
+    const attached = client.run(external.id);
+    assert.equal((await attached.invokeRecord('stage','position',{}, {requestId:'external-read'})).id, measured.id);
+    await attached.upload('position.json', new Blob([JSON.stringify(measured.result)]), undefined, [measured.id]);
+    await attached.saveResult({points:1});
+    await attached.finish();
+    assert.deepEqual(await external.result(), {points:1});
+    assert.equal((await external.operations()).operations.length, 1);
+    const continuous = await client.startExperiment({resources:['stage','aux'],request_id:'continuous'});
+    const steps = [
+      {id:'move',device:'stage',operation:'move_to',arguments:{angle_deg:21}},
+      {id:'read',device:'stage',operation:'position'},
+      {id:'other',device:'aux',operation:'position',after:[]}
+    ];
+    const batch = await continuous.batch(steps,{requestId:'point-21'});
+    assert.equal(batch[1].result.angle_actual,21);
+    assert.deepEqual((await continuous.batch(steps,{requestId:'point-21'})).map(op=>op.id),batch.map(op=>op.id));
+    const acquisition = await continuous.saveAcquisition('point.json',[batch[1].id],{sample:'example'},{accepted:true});
+    const stored = await (await continuous.download(acquisition.id)).json();
+    assert.deepEqual(stored.operations[0].result,batch[1].result);
+    await continuous.finish();
+    await client.release('stage');
+    await assert.rejects(client.invoke('stage','position'),e=>e.code==='device_released');
+    await client.reconnect('stage');
+    assert.deepEqual((await external.files()).find(f => f.name === 'output/position.json').operation_ids, [measured.id]);
     const file = (await run.files()).find(item=>item.name==='output/samples.bin');
     assert.equal(file.size,1048577);
     const response = await run.download(file.id);

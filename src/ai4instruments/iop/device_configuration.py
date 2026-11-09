@@ -28,6 +28,9 @@ def configure(engine, device_id, definition, expected_revision):
         raise ValueError('Keep the instrument ID when editing its configuration')
     with engine.registration_lock:
         with engine.lock:
+            released = engine.config.get('released_devices', {}).get(device_id)
+            if released and len(released.get('group', [])) > 1:
+                raise RequestError('shared_worker', 'Reconnect the shared SDK worker before changing its configuration.')
             old = engine.device_records[device_id]
             current = engine.store.device_history(device_id, 1)[0]
             if type(expected_revision) is not int or expected_revision != current['revision']:
@@ -58,7 +61,9 @@ def configure(engine, device_id, definition, expected_revision):
             new = make_driver(definition, registry)
             description = describe(definition, new)
             with engine.lock:
-                config = dict(engine.config, devices=[definition if d['id'] == device_id else d for d in engine.config['devices']])
+                config = copy.deepcopy(engine.config)
+                config['devices'] = [definition if d['id'] == device_id else d for d in config['devices']]
+                config.get('released_devices', {}).pop(device_id, None)
                 save_json(engine.home / 'config.json', config)
                 config_written = True
                 version = engine.store.save_device(definition)
@@ -68,6 +73,7 @@ def configure(engine, device_id, definition, expected_revision):
                 engine.descriptions[device_id] = dict(description, revision=version['revision'])
                 engine.allocation.limits['device:' + device_id] = description.get('concurrency', 1)
                 engine.offline.pop(device_id, None)
+                engine.released.discard(device_id)
             return version
         except BaseException:
             if config_written:
@@ -75,7 +81,7 @@ def configure(engine, device_id, definition, expected_revision):
             if new is not None:
                 new.close()
             try:
-                restored = make_driver(old, registry)
+                restored = driver if released else make_driver(old, registry)
                 with engine.lock:
                     engine.devices[device_id] = restored
             except Exception as error:

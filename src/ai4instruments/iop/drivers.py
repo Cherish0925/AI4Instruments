@@ -66,6 +66,15 @@ class Driver:
         pass
 
 
+class Released(Driver):
+    """Keep the device description without opening its SDK or connection on restart."""
+    def __init__(self, description):
+        self.description = description
+
+    def describe(self):
+        return self.description
+
+
 class Simulated(Driver):
     def __init__(self, *args):
         super().__init__(*args)
@@ -130,6 +139,11 @@ class SCPI(Driver):
             raise ValueError('Specify the SCPI ' + required[transport])
         if transport == 'serial' and int(self.config.get('baudrate', 9600)) <= 0:
             raise ValueError('Baud rate must be positive')
+        if 'source_address' in self.config:
+            import ipaddress
+            if not isinstance(self.config['source_address'], str):
+                raise ValueError('source_address must be a local IP address string')
+            ipaddress.ip_address(self.config['source_address'])
 
     def describe(self):
         operations = {
@@ -138,7 +152,8 @@ class SCPI(Driver):
             "write":{"description":"Send a command", "parameters":{"command":{"type":"string"}}},
         }
         operations.update(self.config.get("operations", {}))
-        connection = {k: self.config[k] for k in ('host', 'port', 'resource', 'baudrate', 'termination') if k in self.config}
+        connection = {k: self.config[k] for k in ('host', 'port', 'resource', 'backend', 'baudrate',
+            'bytesize', 'parity', 'stopbits', 'xonxoff', 'rtscts', 'dsrdtr', 'timeout', 'termination', 'source_address') if k in self.config}
         return {"name":self.config.get("name", self.id), "mode":"hardware", "transport":self.config.get("transport", "tcp"), 'connection': connection,
                 "operations":operations}
 
@@ -147,7 +162,9 @@ class SCPI(Driver):
             return
         kind = self.config.get("transport", "tcp")
         if kind == "tcp":
-            self.connection = socket.create_connection((self.config["host"], int(self.config.get("port", 5025))), self.timeout)
+            source = self.config.get('source_address')
+            self.connection = socket.create_connection((self.config["host"], int(self.config.get("port", 5025))),
+                                                      self.timeout, source_address=(source, 0) if source else None)
             self.connection.settimeout(self.timeout)
         elif kind == "serial":
             import serial
@@ -242,7 +259,10 @@ class SCPI(Driver):
             result["value"] = float(value) if encoding.get("type") == "number" else value
             if operation == 'identify':
                 from .identification import parse_identity
-                result['identity'] = parse_identity(value)
+                try:
+                    result['identity'] = parse_identity(value)
+                except ValueError as error:
+                    result['identity_error'] = str(error)
             if "unit" in encoding:
                 result["unit"] = encoding["unit"]
         else:

@@ -4,6 +4,8 @@
 
 [English](README.md) · [服务架构](architecture.zh-CN.md) · [HTTP 接口](http-api.md) · [仪器驱动](drivers.md) · [源码](../../src/ai4instruments/iop)
 
+[外部实验程序](external-experiments.zh-CN.md)说明 0.8.5 的连续调用、批量依赖、客户端重连和采集结果归档。
+
 0.8.3 改进共享总线并支持独立安装的[型号说明包](../../iop/instrument-packages.zh-CN.md)。[持续实验](../../iop/continuity.zh-CN.md)说明完整使用流程。[Agent 接入](../../iop/agent-setup.zh-CN.md)复用同一套实验室配置。[软件形态与系统支持](../../iop/product.zh-CN.md)。
 
 IOP Runtime 是安装在仪器所在计算机上的常驻软件。它保持设备连接，接收实验程序，安排串行与并行操作，保存参数、读数、结果和文件。人和 Agent 使用同一套 HTTP 接口、Python 客户端和命令行；浏览器可以查看设备、提交实验和读取结果。

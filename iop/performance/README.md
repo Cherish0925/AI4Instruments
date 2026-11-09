@@ -1,5 +1,26 @@
 # Laboratory comparison / 真实实验对照
 
+## Continuous calls · 0.8.5
+
+The same 1,000 immediate simulated position reads, in order, through local HTTP with SQLite FULL recording. All calling patterns use 0.8.5 source. Each measurement starts with a new service directory. External patterns reserve the device until the experiment ends. Batch size: 25.
+
+| Pattern | Elapsed | HTTP requests | Experiment records | Database bytes | Run-file bytes |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| standalone | 4.4729 s | 6674 | 1000 | 4792320 | 2737000 |
+| continuous | 1.0969 s | 1002 | 1 | 1777664 | 2392 |
+| batch | 0.9230 s | 42 | 1 | 1953792 | 2392 |
+
+`standalone` creates one workflow per call; `continuous` reuses one external experiment; `batch` sends 25 steps per request. All three retain 1,000 operation records. Results are one local run per pattern, not physical instrument throughput or a measured speedup of the original laboratory experiment. Source and environment: [calls-0.8.5.json](calls-0.8.5.json).
+
+同样的 1,000 次即时模拟读取，连续实验把实验记录从 1,000 个降为 1 个；每批 25 步时，HTTP 请求降为 42 次。三种方式都保留全部操作记录。这里比较软件调用方式，不代表真实仪器采样率，也不替代原实验的复测。
+
+```sh
+PYTHONPATH=src python scripts/benchmark_iop_calls.py --operations 1000 --batch-size 25
+```
+
+A separate scheduler-only run completed 5,000 immediate operations across 128 simulated devices and 64 workers in 0.6236 s after submission. This excludes HTTP and describes scheduling plus local recording only: [parallel-0.8.5.json](parallel-0.8.5.json). It is not directly comparable to the HTTP table above.
+
+
 IOP Runtime 0.8.4 and direct scripts controlling a CETC 3672B VNA and GW Instek GPP-4323 power supply on Windows 11: twelve tasks, 514 paired spectra. The analysis separates task duration, command workload, measurement differences and experiment/data linkage. [English](../../docs/laboratory/2026-11-05/README.md) · [中文](../../docs/laboratory/2026-11-05/README.zh-CN.md).
 
 The software-only scheduling measurements below use simulated operations and describe a different workload.

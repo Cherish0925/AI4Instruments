@@ -218,6 +218,7 @@ const requirementNames = {
   control_interface: ["控制接口", "Control interface"],
   model_operations: ["型号专用操作", "Model-specific operations"],
   instrument_profile: ["选择型号说明", "Choose a model description"],
+  identity_format: ["身份回复格式", "Identity reply format"],
 };
 function identificationLabel(report) {
   const labels = {
@@ -226,6 +227,11 @@ function identificationLabel(report) {
     identifying: ["正在读取身份", "Reading identity"],
     not_seen: ["本次未发现", "Not seen this scan"],
     needs_configuration: ["待配置", "Needs setup"],
+    released: ["连接已释放", "Connection released"],
+    identity_unparsed: [
+      "已收到回复，格式待确认",
+      "Reply received; format unrecognized",
+    ],
   };
   return esc(
     t(...(labels[report?.status] || ["接口已发现", "Interface found"])),
@@ -262,7 +268,7 @@ function inspectConnection(candidate) {
   const connected = report.device_ids || candidate.device_ids || [];
   const body = modal(
     candidate.name || candidate.address,
-    `<div class="section-title"><span class="badge">${identificationLabel(report)}</span><code>${esc(candidate.transport)}</code></div>${identityHTML(report)}<p class="discovery-address">${esc(candidate.address)}</p>${requirements.length ? `<p class="inline-note">${t("待补充：", "To complete: ")}${esc(requirements.join(" · "))}</p>` : ""}${report.error ? `<p class="error-text">${esc(report.error)}</p>` : ""}<div class="actions">${connected.length > 1 ? connected.map((id) => `<button class="button" data-connected-device="${esc(id)}">${esc(state.devices.find((d) => d.id === id)?.name || id)}${icon("arrow")}</button>`).join("") : report.device_id || candidate.id ? `<button class="button primary" id="connection-open">${t("打开仪器", "Open instrument")}${icon("arrow")}</button>` : `<button class="button primary" id="connection-configure">${t("填写仪器说明", "Configure instrument")}</button>`}<button class="button" id="connection-retry">${icon("refresh")}${t("重新识别", "Identify again")}</button></div>${jsonDetails(details, t("计算机与接口信息", "Computer and interface information"))}${report.first_seen ? `<p class="inline-note">${t("首次发现", "First seen")} · ${esc(new Date(report.first_seen).toLocaleString())}</p>` : ""}`,
+    `<div class="section-title"><span class="badge">${identificationLabel(report)}</span><code>${esc(candidate.transport)}</code></div>${identityHTML(report)}<p class="discovery-address">${esc(candidate.address)}</p>${requirements.length ? `<p class="inline-note">${t("待补充：", "To complete: ")}${esc(requirements.join(" · "))}</p>` : ""}${report.identity_response ? jsonDetails(report.identity_response, t("仪器原始回复", "Instrument reply")) : ""}${report.error ? `<p class="error-text">${esc(report.error)}</p>` : ""}<div class="actions">${connected.length > 1 ? connected.map((id) => `<button class="button" data-connected-device="${esc(id)}">${esc(state.devices.find((d) => d.id === id)?.name || id)}${icon("arrow")}</button>`).join("") : report.device_id || candidate.id ? `<button class="button primary" id="connection-open">${t("打开仪器", "Open instrument")}${icon("arrow")}</button>` : `<button class="button primary" id="connection-configure">${t("填写仪器说明", "Configure instrument")}</button>`}<button class="button" id="connection-retry">${icon("refresh")}${t("重新识别", "Identify again")}</button></div>${jsonDetails(details, t("计算机与接口信息", "Computer and interface information"))}${report.first_seen ? `<p class="inline-note">${t("首次发现", "First seen")} · ${esc(new Date(report.first_seen).toLocaleString())}</p>` : ""}`,
     t("连接详情", "Connection details"),
   );
   $$("[data-connected-device]", body).forEach(
@@ -595,19 +601,19 @@ const operationName = (name) =>
     read_output: t("读取输出状态", "Read output state"),
     set_output: t("设置输出状态", "Set output state"),
   })[name] || name;
-export function inspectDevice(id) {
-  const d = state.devices.find((v) => v.id === id);
+export async function inspectDevice(id) {
+  const d = await api("devices/" + encodeURIComponent(id));
   if (!d) return;
   const body = modal(
     d.name || d.id,
-    `<div class="run-summary"><div><small>ID</small><code>${esc(d.id)}</code></div><div><small>${t("接口", "Interface")}</small>${esc(d.transport || d.driver)}</div><div><small>${t("地址", "Address")}</small>${esc(connectionAddress(d) || "—")}</div></div>${identityHTML(d)}<div class="form-stack">${field(
+    `<div class="run-summary"><div><small>ID</small><code>${esc(d.id)}</code></div><div><small>${t("接口", "Interface")}</small>${esc(d.transport || d.driver)}</div><div><small>${t("地址", "Address")}</small>${esc(connectionAddress(d) || "—")}</div></div>${identityHTML(d)}<p id="device-connection-state" class="inline-note">${d.status?.state === "released" ? t("连接已释放，可由其他软件使用。", "Connection released for another application.") : ""}</p><div class="form-stack">${field(
       t("仪器操作", "Instrument operation"),
       `<select id="device-operation">${Object.keys(d.operations)
         .map(
           (k) => `<option value="${esc(k)}">${esc(operationName(k))}</option>`,
         )
         .join("")}</select>`,
-    )}<p id="operation-description" class="inline-note"></p><div id="operation-parameters" class="form-grid"></div><button class="button primary" id="device-invoke">${icon("play")}${t("执行操作", "Run operation")}</button></div><section id="device-response" class="device-response" aria-live="polite"><h3>${t("返回内容", "Response")}</h3><p class="inline-note">${t("执行后显示仪器返回内容", "The instrument response appears here after execution")}</p></section><div class="actions"><button class="button small" id="device-reconnect">${icon("refresh")}${t("重新连接", "Reconnect")}</button><button class="button small" id="device-edit">${t("编辑说明", "Edit configuration")}</button><button class="button small" id="device-export">${icon("download")}${t("导出说明", "Export description")}</button></div>${d.driver === "scpi" && d.identity?.model ? `<button class="button small" id="model-description">${t("补充型号操作", "Add model operations")}</button>` : ""}${jsonDetails(d, t("完整仪器说明", "Full instrument description"))}`,
+    )}<p id="operation-description" class="inline-note"></p><div id="operation-parameters" class="form-grid"></div><button class="button primary" id="device-invoke">${icon("play")}${t("执行操作", "Run operation")}</button></div><section id="device-response" class="device-response" aria-live="polite"><h3>${t("返回内容", "Response")}</h3><p class="inline-note">${t("执行后显示仪器返回内容", "The instrument response appears here after execution")}</p></section><div class="actions"><button class="button small" id="device-reconnect">${icon("refresh")}${t("重新连接", "Reconnect")}</button><button class="button small" id="device-release">${t("释放连接", "Release connection")}</button><button class="button small" id="device-edit">${t("编辑说明", "Edit configuration")}</button><button class="button small" id="device-export">${icon("download")}${t("导出说明", "Export description")}</button></div>${d.driver === "scpi" && d.identity?.model ? `<button class="button small" id="model-description">${t("补充型号操作", "Add model operations")}</button>` : ""}${jsonDetails(d, t("完整仪器说明", "Full instrument description"))}`,
     t("仪器说明", "Instrument description"),
   );
   $("#modal").classList.add("inspector");
@@ -625,9 +631,23 @@ export function inspectDevice(id) {
   }
   renderOperation();
   $("#device-operation").onchange = renderOperation;
+  $("#device-invoke").disabled = d.status?.state === "released";
+  $("#device-release").onclick = (e) =>
+    busy(e.currentTarget, async () => {
+      const result = await api(
+        "devices/" + encodeURIComponent(id) + "/release",
+        {},
+      );
+      $("#device-invoke").disabled = true;
+      $("#device-connection-state").textContent =
+        t("连接已释放：", "Connections released: ") + result.devices.join(", ");
+      emit("refresh");
+    });
   $("#device-reconnect").onclick = (e) =>
     busy(e.currentTarget, async () => {
       await api("devices/" + encodeURIComponent(id) + "/reconnect", {});
+      $("#device-invoke").disabled = false;
+      $("#device-connection-state").textContent = "";
       toast(t("驱动已重新连接", "Driver reconnected"));
       emit("refresh");
     });
@@ -710,6 +730,7 @@ async function editConfiguration(id) {
     const labels = {
       name: t("名称", "Name"),
       host: t("主机", "Host"),
+      source_address: t("本机网卡地址", "Local interface address"),
       port: t("端口", "Port"),
       resource: t("VISA 地址", "VISA resource"),
       timeout: t("响应时间（秒）", "Response timeout (s)"),

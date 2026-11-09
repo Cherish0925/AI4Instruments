@@ -1,5 +1,7 @@
 IOP Runtime 0.8.5 keeps an adaptive experiment, its instrument operations and acquired data together across client connections.
 
+Includes IOP Connect 1.0.1 with updated continuous-experiment guidance for agent hosts. The connector and Runtime can be upgraded separately.
+
 - Begin one external experiment from Python, TypeScript, MCP or CLI. Reservations span successive calls; explicit finish releases them. Reconnect through the same run ID and continue from saved progress after a service interruption.
 - Submit operation batches with sequential defaults, explicit parallel branches, dependency joins and result bindings. Each operation retains its own result and configuration revision. Identical batch request IDs return existing operations.
 - Save an acquisition directly from completed operations, their instrument configuration versions, declared conditions and analysis. Saving does not trigger a new measurement.

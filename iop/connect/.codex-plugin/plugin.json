@@ -1,1 +1,1 @@
-{"name":"iop-lab","version":"1.0.0","description":"Operate instruments and retrieve experiments from IOP Runtime.","skills":"./skills/","mcpServers":"./.mcp.json"}
+{"name":"iop-lab","version":"1.0.1","description":"Operate instruments and retrieve experiments from IOP Runtime.","skills":"./skills/","mcpServers":"./.mcp.json"}

@@ -20,7 +20,7 @@ Download and extract the matching IOP 0.8.5 archive. For a native desktop window
 | --- | --- |
 | Linux x86_64 / arm64 | Ubuntu 22.04 or compatible, glibc 2.35+ |
 | Windows x86_64 / arm64 | Matching 64-bit Windows |
-| macOS arm64 | Apple Silicon, macOS 14+ |
+| macOS arm64 | Apple Silicon, macOS 15+ |
 | macOS x86_64 | Intel, macOS 15+ |
 | Other OS / CPU combinations | [Install from source](../docs/runtime/README.md) and build the Rust component for that system. |
 

@@ -141,6 +141,8 @@ class SCPI(Driver):
             raise ValueError('Baud rate must be positive')
         if 'source_address' in self.config:
             import ipaddress
+            if not isinstance(self.config['source_address'], str):
+                raise ValueError('source_address must be a local IP address string')
             ipaddress.ip_address(self.config['source_address'])
 
     def describe(self):

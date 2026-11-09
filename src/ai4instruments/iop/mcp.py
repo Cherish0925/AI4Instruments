@@ -22,6 +22,7 @@ def create_server(client, *, http=False):
     options = {'stateless_http': True, 'json_response': True} if http and sys.version_info < (3, 11) else {}
     server = Server('IOP Runtime', **options, instructions=(
         'Read lab_context first. Reuse saved instrument and platform descriptions. '
+        'Continuous experiments, batches and acquisitions require service version 0.8.5; use workflows or packages on older services. '
         'Ask for physical wiring and sample details only when missing. '
         'Read describe_instrument before choosing operations and arguments. '
         'Saving platform configuration does not execute initialization. '

@@ -232,6 +232,9 @@ class ContinuityCase(unittest.TestCase):
         self.assertEqual(server.commands, ['*IDN?'])
 
     def test_scpi_source_address_is_used_and_serial_settings_are_discoverable(self):
+        for address in (123, 'not-an-address'):
+            with self.assertRaises(ValueError):
+                SCPI('network', {'host':'192.0.2.2','source_address':address}, {})
         driver = SCPI('network', {'host':'192.0.2.2','source_address':'192.0.2.1'}, {})
         with patch('socket.create_connection') as connect:
             driver.connect()

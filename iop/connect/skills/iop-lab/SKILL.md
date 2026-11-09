@@ -5,6 +5,8 @@ description: Use IOP to operate instruments or scientific software, submit exper
 
 # Operate a laboratory
 
+Use the service version and tools reported by the selected connection. Continuous experiment, batch and acquisition APIs require IOP 0.8.5; older services use workflow and program submissions until upgraded while idle.
+
 Read `lab_context` on the selected connection. Keep its name alongside the run ID: IDs belong to the service that issued them. Reuse the saved platform. Read `describe_instrument` for operation names, arguments and units. A discovered port alone does not identify an instrument, a sample or its wiring.
 
 When building a platform, use the manufacturer's device description and the observed connections. Ask the operator only for information that cannot be read or a physical change that cannot be performed remotely. Preview and save the platform definition; run its initialization procedure separately if the experiment needs it.

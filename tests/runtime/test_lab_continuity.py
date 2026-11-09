@@ -263,3 +263,34 @@ class ContinuityCase(unittest.TestCase):
         self.assertEqual(call('finish', run.id)['state'], 'completed')
         self.assertEqual(call('release', 'stage')['state'], 'released')
         self.assertEqual(call('reconnect', 'stage')['state'], 'connected')
+
+    def test_released_instrument_cannot_be_reserved_or_resumed_until_reconnected(self):
+        run = self.client.start_experiment(resources=['stage'])
+        run.invoke('stage','position'); run.cancel(); run.wait(3)
+        self.client.release('stage')
+        with self.assertRaises(IOPError):
+            self.client.start_experiment(resources=['stage'])
+        with self.assertRaises(IOPError):
+            run.resume('resume-after-release')
+        self.assertNotIn(run.id, self.engine.runs)
+        self.client.reconnect('stage')
+        run.resume('resume-after-release')
+        run.invoke('stage','position'); run.finish()
+
+    def test_discovery_does_not_rebind_a_released_instrument_to_another_address(self):
+        first, row1 = self.instrument()
+        second, row2 = self.instrument()
+        device = self.scan([row1])['instruments'][0]['device_id']
+        self.client.release(device)
+        result = self.scan([row2])
+        self.assertEqual(self.engine.device_records[device]['config']['port'], first.server_address[1])
+        self.assertEqual(next(r for r in result['instruments'] if r['address']==row2['address'])['status'], 'released')
+        self.assertIn(device, self.engine.released)
+
+    def test_failed_connection_release_is_not_reported_as_ready(self):
+        with patch.object(self.engine.devices['stage'], 'close', side_effect=RuntimeError('SDK did not close')):
+            with self.assertRaises(IOPError):
+                self.client.release('stage')
+        self.assertEqual(self.client.request('/v1/devices/stage')['status']['state'], 'offline')
+        self.client.reconnect('stage')
+        self.assertEqual(self.client.request('/v1/devices/stage')['status']['state'], 'ready')

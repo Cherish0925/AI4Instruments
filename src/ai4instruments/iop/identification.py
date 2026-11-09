@@ -253,6 +253,9 @@ class Enrollment:
             record = description(identity, config, catalog)
             device = self.adopt(record, key, visible, available)
             report.update(device_id=device['id'], status='ready' if record.get('instrument_profile') else 'identified')
+            if device['id'] in engine.released:
+                report.update(status='released', required=[])
+                return report
             report['required'] = [] if record.get('instrument_profile') else ['model_operations']
             if record.get('profile_candidates'):
                 report.update(profile_candidates=record['profile_candidates'], required=['instrument_profile'])
@@ -337,6 +340,8 @@ class Enrollment:
                 existing = next((d for d in engine.device_records.values()
                     if stable and identity_key(d.get('identity', {})) == stable), None)
             if existing:
+                if existing['id'] in engine.released:
+                    return engine.descriptions[existing['id']]
                 old_key = device_connection(existing)
                 with self.lock:
                     previous = self.records.get(old_key, {})

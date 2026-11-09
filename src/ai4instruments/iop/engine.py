@@ -253,6 +253,9 @@ class Engine:
             if not isinstance(value, str) or not value:
                 raise ValueError("Resources must be nonempty names")
             if value in self.devices:
+                if value in self.released:
+                    from .errors import RequestError
+                    raise RequestError('device_released', 'Reconnect this instrument before reserving it.', device_id=value)
                 if value in self.reconnecting or value in self.offline:
                     raise ValueError('Device needs reconnection: ' + value)
                 resources.add("device:" + value)
@@ -1047,6 +1050,10 @@ class Engine:
                     with self.store.transaction():
                         self.store.event('devices.released', devices=sorted(affected))
                 return {'devices': sorted(affected), 'state': 'released'}
+            except Exception as error:
+                with self.lock:
+                    self.offline.update({name: str(error) for name in affected})
+                raise
             finally:
                 with self.lock:
                     self.reconnecting.difference_update(affected)

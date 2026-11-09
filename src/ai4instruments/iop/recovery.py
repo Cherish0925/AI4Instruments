@@ -44,7 +44,7 @@ def resume(engine, run_id, request_id):
                        {k: v for k, v in description.items() if k != 'revision'}) or
                    (name in run.get('device_configurations', {}) and
                     engine.device_records.get(name) != run['device_configurations'][name]) or
-                   name in engine.offline or name in engine.reconnecting]
+                   name in engine.offline or name in engine.reconnecting or name in engine.released]
         if changed:
             raise RequestError('instruments_changed', 'Restore the program’s instrument descriptions before continuing.', devices=changed)
         if run.get('platform') and engine.platforms.get(run['platform']['id'], {}).get('definition') != run['platform']['definition']:

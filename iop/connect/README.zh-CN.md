@@ -4,6 +4,17 @@ IOP Runtime 常驻在操纵仪器的计算机上。插件把选定的实验室�
 
 [English](README.md) · [图解与安装（HTML）](guide.zh-CN.html) · [下载 IOP](https://github.com/Cherish0925/AI4Instruments/releases/latest) · [服务接口](../../docs/runtime/http-api.md)
 
+## 从插件市场安装
+
+在 Agentic Research OS 打开 **Extensions → Plugins → Add from link**，
+填写 `https://github.com/Cherish0925/AI4Instruments`，选择 **iop-lab**，安装并激活。
+仪器电脑先安装 [IOP Runtime 0.8.5](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.8.5)。
+直接从 GitHub 安装的插件使用工具执行端 PATH 中的 `iop`；需要指定完整路径或远端实验室时，使用下面的具名连接，导入返回的 `research_os` 目录。
+
+Codex：`codex plugin marketplace add Cherish0925/AI4Instruments`，再执行 `codex plugin add iop-lab@ai4instruments`。
+Claude Code：`claude plugin marketplace add Cherish0925/AI4Instruments`，再执行 `claude plugin install iop-lab@ai4instruments`。
+这是项目维护的 GitHub 插件源；插件与 Runtime 分别更新。
+
 ## 选择实验室
 
 在实验室电脑安装 Runtime。在**执行 Agent 工具的那台电脑**上使用 IOP 0.8.4 的命令；如果终端找不到 `iop`，用安装器显示的完整路径。

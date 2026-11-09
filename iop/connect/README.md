@@ -4,6 +4,24 @@ IOP Runtime runs on the computer that operates the instruments. An agent host co
 
 [中文](README.zh-CN.md) · [Installation guide (HTML)](guide.en.html) · [Download IOP](https://github.com/Cherish0925/AI4Instruments/releases/latest) · [Tool and service API](../../docs/runtime/http-api.md)
 
+## Install from a marketplace
+
+In Agentic Research OS, open **Extensions → Plugins → Add from link** and enter
+`https://github.com/Cherish0925/AI4Instruments`. Select **iop-lab**, install it and
+activate the installed revision. Its Skill and MCP server connect to the IOP
+Runtime selected on the tool host. Install the [Runtime release](https://github.com/Cherish0925/AI4Instruments/releases/tag/iop-v0.8.5)
+on the instrument computer first. The direct GitHub plugin requires `iop` on the
+tool host's PATH. For an absolute executable path or a remote laboratory, use the
+named connection below and import the returned `research_os` directory.
+
+Codex: `codex plugin marketplace add Cherish0925/AI4Instruments`, then
+`codex plugin add iop-lab@ai4instruments`.
+Claude Code: `claude plugin marketplace add Cherish0925/AI4Instruments`, then
+`claude plugin install iop-lab@ai4instruments`.
+
+The GitHub marketplace is published by this project. Plugin updates and Runtime
+updates are separate; the plugin does not replace drivers or laboratory data.
+
 ## Install one connection
 
 Install the release on the lab computer. From IOP 0.8.4, run the following on the **agent execution host**. Use the full IOP executable printed by the installer when a desktop application does not inherit the terminal PATH.

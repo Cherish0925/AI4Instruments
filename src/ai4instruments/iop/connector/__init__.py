@@ -17,7 +17,7 @@ import sys
 import tempfile
 from urllib.parse import urlsplit
 
-VERSION = "1.0.0"
+VERSION = "1.0.1"
 HERE = Path(__file__).parent
 
 

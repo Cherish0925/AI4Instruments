@@ -20,7 +20,7 @@ IOP 是仪器操作协议；IOP Runtime 是实现其运行功能的软件。[实
 | --- | --- |
 | Linux x86_64 / arm64 | 服务：glibc 2.35+；ARM64 桌面：glibc 2.39+ |
 | Windows x86_64 / arm64 | 对应架构的 64 位 Windows |
-| macOS arm64 | Apple Silicon，macOS 14+ |
+| macOS arm64 | Apple Silicon，macOS 15+ |
 | macOS x86_64 | Intel，macOS 15+ |
 | 其他 CPU / 系统组合 | 使用[源码安装](../docs/runtime/README.zh-CN.md)，按当地系统编译 Rust 组件 |
 

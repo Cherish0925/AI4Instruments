@@ -33,7 +33,9 @@ class InstallCase(unittest.TestCase):
             self.assertEqual(connector.install(args(root)), first)
             with self.assertRaisesRegex(ValueError, "different connection"):
                 connector.install(args(root, "--ssh", "another-bench"))
-            with patch.object(connector, "VERSION", "1.0.1"):
+            major, minor, patch_version = map(int, connector.VERSION.split('.'))
+            next_version = f'{major}.{minor}.{patch_version + 1}'
+            with patch.object(connector, "VERSION", next_version):
                 replacement = connector.install(args(root))
             self.assertNotEqual(first["revision"], replacement["revision"])
             self.assertTrue(Path(first["mcp"]).is_file())
@@ -44,7 +46,7 @@ class InstallCase(unittest.TestCase):
             f = Path(replacement["research_os"]) / "bridge.py"
             f.write_bytes(b"local edit")
             with (
-                patch.object(connector, "VERSION", "1.0.1"),
+                patch.object(connector, "VERSION", next_version),
                 self.assertRaisesRegex(ValueError, "edited"),
             ):
                 connector.install(args(root))

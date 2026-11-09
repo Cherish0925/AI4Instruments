@@ -4,6 +4,7 @@ import base64
 import hmac
 import json
 import shutil
+import socket
 import socketserver
 import threading
 import time
@@ -36,14 +37,41 @@ class Server(ThreadingHTTPServer):
 
     def __init__(self, address, engine):
         self.engine = engine
+        self.connections = set()
+        self.connection_lock = threading.Lock()
         self.started = time.monotonic()
         super().__init__(address, Handler)
         host, port = self.server_address[:2]
         engine.endpoint = f"http://{'127.0.0.1' if host == '0.0.0.0' else host}:{port}"
 
+    def get_request(self):
+        connection, address = super().get_request()
+        with self.connection_lock:
+            self.connections.add(connection)
+        return connection, address
+
+    def shutdown_request(self, request):
+        with self.connection_lock:
+            self.connections.discard(request)
+        super().shutdown_request(request)
+
+    def server_close(self):
+        super().server_close()
+        with self.connection_lock:
+            for connection in self.connections:
+                try:
+                    connection.shutdown(socket.SHUT_RDWR)
+                except OSError:
+                    pass
+                connection.close()
+            self.connections.clear()
+
 
 class Handler(BaseHTTPRequestHandler):
     server_version = "IOP/" + VERSION
+    protocol_version = 'HTTP/1.1'
+    timeout = 60
+    disable_nagle_algorithm = True
 
     def log_message(self, *_):
         pass
@@ -54,6 +82,8 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header('Content-Type', media_type or 'application/json; charset=utf-8')
         self.send_header('Content-Length', str(len(payload)))
         self.send_header('Cache-Control', 'no-store')
+        if self.close_connection:
+            self.send_header('Connection', 'close')
         self.end_headers()
         self.wfile.write(payload)
 
@@ -80,6 +110,7 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send({'service':'IOP', 'version':VERSION})
             expected = 'Bearer ' + engine.config['token']
             if not hmac.compare_digest(self.headers.get('Authorization', ''), expected):
+                self.close_connection = True
                 return self._send({'error':'A service token is required', 'code':'authentication_required'}, 401)
             body = {}
             if method == 'POST':
@@ -166,6 +197,8 @@ class Handler(BaseHTTPRequestHandler):
                     result = engine.device_records[parts[2]]
             elif len(parts) == 4 and parts[:2] == ['v1', 'devices'] and parts[3] == 'reconnect' and method == 'POST':
                 result = engine.reconnect(parts[2])
+            elif len(parts) == 4 and parts[:2] == ['v1', 'devices'] and parts[3] == 'release' and method == 'POST':
+                result = engine.release_device(parts[2])
             elif len(parts) == 4 and parts[:2] == ['v1', 'devices'] and parts[3] == 'identify' and method == 'POST':
                 result = engine.identify(parts[2], body.get('request_id'))
             elif parts == ['v1', 'discovery', 'retry'] and method == 'POST':
@@ -197,9 +230,28 @@ class Handler(BaseHTTPRequestHandler):
             elif len(parts) == 4 and parts[:2] == ['v1','runs']:
                 run_id, action = parts[2:]
                 if action == 'operations' and method == 'POST':
+                    wait = float(query.get('wait', 0))
+                    if not 0 <= wait <= 25:
+                        raise ValueError('Operation wait must be between 0 and 25 seconds')
                     result = engine.invoke(run_id, body)
+                    if wait:
+                        result = engine.store.wait_operation(result['id'], wait)
                 elif action == 'operations' and method == 'GET':
                     result = engine.store.operation_page(run_id, query.get('after', 0), query.get('limit', 200))
+                elif action == 'batches':
+                    from . import batches
+                    wait = float(query.get('wait', 0))
+                    if not 0 <= wait <= 25:
+                        raise ValueError('Batch wait must be between 0 and 25 seconds')
+                    if method == 'POST':
+                        result = batches.submit(engine, run_id, body['steps'], body.get('request_id'))
+                        if wait:
+                            result = batches.describe(engine, run_id, body['request_id'], wait)
+                    else:
+                        result = batches.describe(engine, run_id, query['request_id'], wait)
+                elif action == 'acquisitions' and method == 'POST':
+                    from .acquisitions import save
+                    result = save(engine, run_id, body['name'], body['operation_ids'], body.get('conditions', {}), body.get('analysis', {}))
                 elif action == 'cancel' and method == 'POST':
                     result = engine.cancel(run_id)
                 elif action == 'finish' and method == 'POST':
@@ -238,14 +290,19 @@ class Handler(BaseHTTPRequestHandler):
                 raise KeyError(url.path)
             self._send(result)
         except RequestError as error:
+            self.close_connection = True
             self._send(error.response(), error.status)
         except QueueFull as error:
+            self.close_connection = True
             self._send({'error':str(error), 'code':'queue_full', 'retry_after':1}, 503)
         except KeyError as error:
+            self.close_connection = True
             self._send({'error':'Not found: ' + str(error), 'code':'not_found'}, 404)
         except (ValueError, TypeError, FileNotFoundError) as error:
+            self.close_connection = True
             self._send({'error':str(error), 'code':'invalid_request'}, 400)
         except (BrokenPipeError, ConnectionResetError):
             pass
         except Exception as error:
+            self.close_connection = True
             self._send({'error':type(error).__name__ + ': ' + str(error)}, 500)

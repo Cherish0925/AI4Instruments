@@ -4,7 +4,7 @@
 
 [中文](README.zh-CN.md) · [Architecture](architecture.md) · [HTTP API](http-api.md) · [Device drivers](drivers.md) · [Source](../../src/ai4instruments/iop)
 
-[External experiment programs](external-experiments.md) explains the source APIs added after 0.8.4: one run across successive calls, reconnecting clients and linked measurement files.
+[External experiment programs](external-experiments.md) describes continuous calls, dependency batches, reconnecting clients and acquisitions in 0.8.5.
 
 0.8.3 improves shared buses and adds independently installed [model descriptions](../../iop/instrument-packages.md). [Continuing experiments](../../iop/continuity.md) explains the full sequence. [Agent integration](../../iop/agent-setup.md) uses the same saved laboratory configuration. [Application interfaces and system support](../../iop/product.md).
 

@@ -102,6 +102,7 @@ def parser():
     sub.add_parser('mcp-config', help='Print the MCP launcher configuration for this installation')
     p = sub.add_parser('register'); p.add_argument('file')
     p = sub.add_parser('reconnect'); p.add_argument('device')
+    p = sub.add_parser('release', help='Release an idle instrument connection'); p.add_argument('device')
     p = sub.add_parser('device-config', help='Read saved versions or update an idle instrument')
     p.add_argument('device'); p.add_argument('--file'); p.add_argument('--revision', type=int)
     p = sub.add_parser('resume', help='Continue a program from its saved progress')
@@ -117,6 +118,11 @@ def parser():
     p = sub.add_parser('begin', help='Start an externally driven experiment')
     p.add_argument('--name', default='Experiment'); p.add_argument('--request-id', required=True)
     p.add_argument('--resources', nargs='*', default=[]); p.add_argument('--platform')
+    p = sub.add_parser('batch', help='Submit a sequence or dependency graph in an existing experiment')
+    p.add_argument('run_id'); p.add_argument('file'); p.add_argument('--request-id', required=True); p.add_argument('--wait', action='store_true')
+    p = sub.add_parser('acquisition', help='Save completed measurements and their settings as JSON')
+    p.add_argument('run_id'); p.add_argument('name'); p.add_argument('operation_ids', nargs='+')
+    p.add_argument('--conditions', default='{}'); p.add_argument('--analysis', default='{}')
     p = sub.add_parser('package'); p.add_argument('path'); p.add_argument('--resources', nargs='*', default=[]); p.add_argument('--requirements', default='{}'); p.add_argument('--parameters', default='{}'); p.add_argument('--project'); p.add_argument('--platform'); p.add_argument('--wait', action='store_true')
     p = sub.add_parser('platform', help='Configure and initialize experimental platforms')
     ps = p.add_subparsers(dest='platform_action', required=True)
@@ -193,6 +199,8 @@ def main():
             output(client.adapters())
         elif args.command == 'reconnect':
             output(client.reconnect(args.device))
+        elif args.command == 'release':
+            output(client.release(args.device))
         elif args.command == 'device-config':
             output(client.configure_device(args.device, json.loads(Path(args.file).read_text(encoding='utf-8')), args.revision)
                    if args.file else client.device_history(args.device))
@@ -226,6 +234,13 @@ def main():
         elif args.command == 'package':
             run = client.submit_package(args.path, resources=args.resources, parameters=json.loads(args.parameters), project=args.project, platform=args.platform, requirements=json.loads(args.requirements))
             output(run.result() if args.wait else {'run_id':run.id})
+        elif args.command == 'batch':
+            steps = json.loads(Path(args.file).read_text(encoding='utf-8'))
+            output(client.run(args.run_id).batch(steps, request_id=args.request_id) if args.wait else
+                   client.request('/v1/runs/'+args.run_id+'/batches', {'steps':steps, 'request_id':args.request_id}))
+        elif args.command == 'acquisition':
+            output(client.run(args.run_id).save_acquisition(args.name, args.operation_ids,
+                conditions=json.loads(args.conditions), analysis=json.loads(args.analysis)))
         elif args.command == 'platform':
             action = args.platform_action
             if action == 'list': output(client.platforms())

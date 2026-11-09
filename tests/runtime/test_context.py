@@ -164,7 +164,18 @@ class MCPCase(unittest.TestCase):
                 saved = call('save_experiment_file', {'run_id':external['id'], 'name':'point.json',
                              'text':json.dumps(completed_op['result']), 'operation_ids':[completed_op['id']]})
                 self.assertEqual(saved['operation_ids'], [completed_op['id']])
+                batch_steps = [{'id':'first','device':'stage','operation':'position'},
+                               {'id':'second','device':'stage','operation':'position'}]
+                submitted = call('submit_operations', {'run_id':external['id'], 'steps':batch_steps, 'request_id':'mcp-batch'})
+                batch = self.client.run(external['id']).batch(batch_steps, request_id='mcp-batch')
+                self.assertEqual(submitted['operations'][0]['id'], batch[0]['id'])
+                acquired = call('save_acquisition', {'run_id':external['id'], 'name':'acquisition.json',
+                    'operation_ids':[batch[-1]['id']], 'analysis':{'accepted':True}})
+                self.assertEqual(acquired['operation_ids'], [batch[-1]['id']])
+                self.assertIn('connection_parameters', call('available_adapters', {})['adapters'][0])
                 self.assertEqual(call('finish_experiment', {'run_id':external['id']})['state'], 'completed')
+                self.assertEqual(call('release_instrument', {'device':'stage'})['state'], 'released')
+                self.assertEqual(call('reconnect_instrument', {'device':'stage'})['state'], 'connected')
                 accepted = call('submit_experiment', {'steps':[{'id':'wait', 'device':'aux', 'operation':'wait',
                                  'arguments':{'duration':0.5}}], 'request_id':'continue-after-agent'})
                 process.stdin.close()

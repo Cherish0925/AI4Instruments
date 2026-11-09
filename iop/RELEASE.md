@@ -1,10 +1,15 @@
-IOP Runtime 0.8.4 connects research hosts to a named laboratory. The same instrument service owns experiments, configuration and data after the host disconnects or a connector is updated.
+IOP Runtime 0.8.5 keeps an adaptive experiment, its instrument operations and acquired data together across client connections.
 
-- Run `iop connect --name bench --local` to prepare Codex and Claude Code marketplaces, a Research OS plugin, a Qiushi command package, and direct MCP settings. Use `--ssh` for a remote lab, or `--remote` plus a host credential reference for a REST bridge.
-- For clients that accept only MCP over HTTP, `iop mcp-http` serves Streamable HTTP at `/mcp` on loopback. Set `IOP_MCP_TOKEN`; use an HTTPS proxy for clients on another machine.
-- The separate IOP Connect ZIP supports existing 0.8.3 stdio installations. Generating a connector does not stop an experiment or change a driver. Upgrade the service itself when it is idle.
-- Windows, macOS and Linux archives still include the runtime Python and Agent dependencies for x86_64 and ARM64.
+- Begin one external experiment from Python, TypeScript, MCP or CLI. Reservations span successive calls; explicit finish releases them. Reconnect through the same run ID and continue from saved progress after a service interruption.
+- Submit operation batches with sequential defaults, explicit parallel branches, dependency joins and result bindings. Each operation retains its own result and configuration revision. Identical batch request IDs return existing operations.
+- Save an acquisition directly from completed operations, their instrument configuration versions, declared conditions and analysis. Saving does not trigger a new measurement.
+- Reuse HTTP connections and return short operations in the submission response. Dense programs need fewer client round trips.
+- Read whole-quoted SCPI identity replies. Preserve unfamiliar replies without repeatedly treating them as communication failures.
+- Release idle connections for another application, including shared SDK workers. Released devices remain released across discovery and service restarts. Reconnect from SDK, MCP, CLI or the instrument panel.
+- Select a local TCP source address and query SCPI serial/VISA connection parameters through the adapter interface.
 
-中文：0.8.4 可按实验室名称生成四种宿主的安装包与通用 MCP 设置。更新连接器不重启仪器服务。云端宿主可通过单独的 HTTP MCP 网关接入。
+中文：连续实验共用一个编号；批量操作按依赖串并行；判断和保存引用同一次采集；仪器连接可以明确交接给其他软件。具体变化来自真实实验记录中的调用、数据关联、身份识别和连接反馈。
 
-[中文安装说明](https://github.com/Cherish0925/AI4Instruments/blob/main/iop/connect/README.zh-CN.md) · [Installation guide](https://github.com/Cherish0925/AI4Instruments/blob/main/iop/connect/README.md)
+[中文使用说明](https://github.com/Cherish0925/AI4Instruments/blob/main/docs/runtime/external-experiments.zh-CN.md) · [Usage guide](https://github.com/Cherish0925/AI4Instruments/blob/main/docs/runtime/external-experiments.md) · [Calling-pattern measurements](https://github.com/Cherish0925/AI4Instruments/blob/main/iop/performance/README.md)
+
+The software checks use simulated drivers and protocol servers. The original laboratory comparison has not been rerun with this release.

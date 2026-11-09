@@ -51,6 +51,7 @@ class Engine:
         self.endpoint = ""
         self.devices, self.descriptions, self.device_records = {}, {}, {}
         self.reconnecting, self.offline = set(), {}
+        self.released = set(config.get('released_devices', []))
         self.communication = {}
         self.runs, self.operations, self.futures, self.processes = {}, {}, {}, {}
         self.allocation = Allocator()
@@ -239,6 +240,7 @@ class Engine:
                 'last_seen': seen.get(device_connection(record), {}).get('last_seen'),
                 'communication': dict(self.communication.get(device, {})),
                 'state': 'reconnecting' if device in self.reconnecting else
+                         'released' if device in self.released else
                          'offline' if device in self.offline else
                          'busy' if self.allocation.used['device:' + device] else 'ready',
                 'error': self.offline.get(device)} for device, record in self.device_records.items()}
@@ -331,7 +333,8 @@ class Engine:
         for op in ops:
             if op['state'] != 'queued':
                 continue
-            parents = [by_step[step] for step in op['after'] if by_step[step]['state'] != 'completed']
+            parents = ([self.operations[oid] for oid in op['after_ids'] if self.operations[oid]['state'] != 'completed']
+                       if 'after_ids' in op else [by_step[step] for step in op['after'] if by_step[step]['state'] != 'completed'])
             self.remaining_dependencies[op['id']] = len(parents)
             for parent in parents:
                 self.dependents.setdefault(parent['id'], []).append(op['id'])
@@ -340,9 +343,13 @@ class Engine:
 
     def _operation_ended(self, op):
         self.ready[op['run_id']].pop(op['id'], None)
+        self.remaining_dependencies.pop(op['id'], None)
         self.remaining[op['run_id']] -= 1
+        children = self.dependents.pop(op['id'], [])
         if op['state'] == 'completed':
-            for child in self.dependents.pop(op['id'], []):
+            for child in children:
+                if self.operations[child]['state'] != 'queued':
+                    continue
                 self.remaining_dependencies[child] -= 1
                 if self.remaining_dependencies[child] == 0 and self.operations[child]['state'] == 'queued':
                     self.ready[op['run_id']][child] = None
@@ -433,7 +440,12 @@ class Engine:
                 for old in self.device_records.values():
                     if connection_conflict(record, old):
                         raise ValueError("This instrument address already belongs to " + old["id"])
-            driver = make_driver(record, self.devices)
+            saved_release = self.config.get('released_devices', {}).get(device_id)
+            if saved_release:
+                from .drivers import Released
+                driver = Released(saved_release['description'])
+            else:
+                driver = make_driver(record, self.devices)
             try:
                 description = driver.describe()
                 if not isinstance(description.get("operations"), dict) or not description["operations"]:
@@ -586,6 +598,8 @@ class Engine:
             raise ValueError("Device is not registered: " + device_id)
         if device_id in self.reconnecting or device_id in self.offline:
             raise ValueError('Device needs reconnection: ' + device_id)
+        if device_id in self.released:
+            raise RequestError('device_released', 'Reconnect this instrument before submitting operations.', device_id=device_id)
         specs = self.descriptions[device_id]["operations"]
         if name not in specs:
             raise ValueError("Unknown operation: " + device_id + "." + name)
@@ -972,6 +986,7 @@ class Engine:
                 worker = getattr(driver, 'worker', None)
                 affected = {name for name, other in self.devices.items()
                             if name == device_id or (worker is not None and getattr(other, 'worker', None) is worker)}
+                affected.update(self.config.get('released_devices', {}).get(device_id, {}).get('group', []))
                 if any(o['device'] in affected and o['state'] not in TERMINAL for o in self.operations.values()):
                     raise ValueError('Wait for or cancel device operations before reconnecting')
                 if any(self.allocation.used['device:' + name] for name in affected):
@@ -990,6 +1005,10 @@ class Engine:
                     self.devices.update(created)
                     for name in affected:
                         self.offline.pop(name, None)
+                    self.released.difference_update(affected)
+                    for name in affected:
+                        self.config.get('released_devices', {}).pop(name, None)
+                    save_json(self.home / 'config.json', self.config)
                     with self.store.transaction():
                         self.store.event('devices.reconnected', devices=sorted(affected))
                 return {'devices': sorted(affected), 'state': 'connected'}
@@ -999,6 +1018,35 @@ class Engine:
                 with self.lock:
                     self.offline.update({name: str(error) for name in affected})
                 raise
+            finally:
+                with self.lock:
+                    self.reconnecting.difference_update(affected)
+
+    def release_device(self, device_id):
+        """Release an idle connection and keep it released until explicit reconnection."""
+        from .errors import RequestError
+        with self.registration_lock:
+            with self.lock:
+                driver = self.devices[device_id]
+                worker = getattr(driver, 'worker', None)
+                affected = {name for name, other in self.devices.items()
+                            if name == device_id or worker is not None and getattr(other, 'worker', None) is worker}
+                affected.update(self.config.get('released_devices', {}).get(device_id, {}).get('group', []))
+                if (any(o['device'] in affected and o['state'] not in TERMINAL for o in self.operations.values()) or
+                        any(self.allocation.used['device:' + name] for name in affected)):
+                    raise RequestError('device_busy', 'Finish or cancel accepted operations before releasing this connection.')
+                snapshots = {name: {'description': self.devices[name].describe(), 'group': sorted(affected)} for name in affected}
+                self.reconnecting.update(affected)
+            try:
+                for name in affected:
+                    self.devices[name].close()
+                with self.lock:
+                    self.released.update(affected)
+                    self.config.setdefault('released_devices', {}).update(snapshots)
+                    save_json(self.home / 'config.json', self.config)
+                    with self.store.transaction():
+                        self.store.event('devices.released', devices=sorted(affected))
+                return {'devices': sorted(affected), 'state': 'released'}
             finally:
                 with self.lock:
                     self.reconnecting.difference_update(affected)
@@ -1171,7 +1219,8 @@ class Engine:
                 if op.get('bindings'):
                     args = dict(op['arguments'])
                     for name, binding in op['bindings'].items():
-                        value = self.operations[self.step_ids[rid][binding['step']]]['result']
+                        source = op.get('binding_ids', {}).get(name) or self.step_ids[rid][binding['step']]
+                        value = (self.operations.get(source) or self.store.get('operations', source))['result']
                         for key in binding.get('path', []):
                             value = value[key]
                         args[name] = value

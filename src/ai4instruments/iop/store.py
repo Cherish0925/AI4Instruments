@@ -29,6 +29,8 @@ class Store:
           CREATE TABLE IF NOT EXISTS operations(id TEXT PRIMARY KEY, run_id TEXT NOT NULL, state TEXT NOT NULL,
             created TEXT NOT NULL, request_id TEXT UNIQUE, body TEXT NOT NULL);
           CREATE INDEX IF NOT EXISTS operations_run ON operations(run_id);
+          CREATE TABLE IF NOT EXISTS operation_batches(
+            request_id TEXT PRIMARY KEY, run_id TEXT NOT NULL, body TEXT NOT NULL);
           CREATE TABLE IF NOT EXISTS events(sequence INTEGER PRIMARY KEY AUTOINCREMENT, time TEXT NOT NULL,
             run_id TEXT, kind TEXT NOT NULL, body TEXT NOT NULL);
           CREATE INDEX IF NOT EXISTS events_run ON events(run_id,sequence);

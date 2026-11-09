@@ -9,9 +9,9 @@ import time
 import uuid
 import zipfile
 from pathlib import Path
-from urllib.request import Request, build_opener, ProxyHandler, HTTPRedirectHandler
+from urllib.request import Request, build_opener, ProxyHandler, HTTPRedirectHandler, getproxies, proxy_bypass
 from urllib.error import HTTPError
-from urllib.parse import urlencode, urlparse
+from urllib.parse import urlencode, urlparse, urljoin
 from .config import home_path
 from .engine import TERMINAL
 
@@ -52,6 +52,17 @@ class Client:
         if urlparse(self.endpoint).hostname in {'127.0.0.1','localhost','::1'}:
             handlers.append(ProxyHandler({}))
         self._open = build_opener(*handlers).open
+        from .transport import Connections
+        self._connections = Connections()
+
+    def close(self):
+        self._connections.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
+        self.close()
 
     @classmethod
     def connect(cls, endpoint=None, **kwargs):
@@ -61,6 +72,28 @@ class Client:
         data = json.dumps(body, allow_nan=False).encode() if body is not None else None
         request = Request(self.endpoint + path, data=data, headers={'Authorization':'Bearer '+self.token,
                           'Content-Type':'application/json'})
+        target = urlparse(self.endpoint)
+        direct = target.hostname in {'127.0.0.1', 'localhost', '::1'} or proxy_bypass(target.hostname or '') or not getproxies().get(target.scheme)
+        if direct:
+            url = request.full_url
+            for _ in range(5):
+                status, payload, location = self._connections.request(url, data, dict(request.header_items()), self.timeout)
+                if status in (301, 302, 303, 307, 308) and location:
+                    redirected = urljoin(url, location)
+                    if origin(redirected) != origin(self.endpoint):
+                        raise IOPError('The configured service redirected to another address.', status)
+                    if data is not None:
+                        raise IOPError('Use the service endpoint directly for instrument submissions.', status)
+                    url = redirected
+                    continue
+                if status >= 400:
+                    try:
+                        details = json.loads(payload)
+                    except ValueError:
+                        details = {'error': payload.decode('utf-8', errors='replace')}
+                    raise IOPError(details.get('error', str(status)), status, details)
+                return payload if binary else json.loads(payload)
+            raise IOPError('Too many service redirects.')
         try:
             with self._open(request, timeout=self.timeout) as response:
                 data = response.read()
@@ -136,6 +169,9 @@ class Client:
     def reconnect(self, device):
         return self.request('/v1/devices/' + device + '/reconnect', {})
 
+    def release(self, device):
+        return self.request('/v1/devices/' + device + '/release', {})
+
     def adapters(self):
         return self.request('/v1/adapters')
 
@@ -210,6 +246,18 @@ class Run:
     def info(self, details=True):
         return self.client.request('/v1/runs/'+self.id + ('' if details else '?details=false'))
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, kind, value, traceback):
+        if kind is None:
+            self.finish()
+        else:
+            try:
+                self.cancel()
+            except Exception:
+                pass  # Preserve the experiment's original exception.
+
     def wait(self, timeout=None, interval=0.1, details=True):
         deadline = time.monotonic() + timeout if timeout is not None else None
         cursor = 0
@@ -258,9 +306,10 @@ class Run:
 
     def invoke_record(self, device, operation, arguments=None, timeout=None, request_id=None):
         """Return the completed operation, including its ID, configuration revision and result."""
-        op = self.client.request('/v1/runs/'+self.id+'/operations', {'device':device, 'operation':operation,
-                                 'arguments':arguments or {}, 'request_id':request_id or str(uuid.uuid4())})
+        wait = min(25, max(0, self.client.timeout - 1), timeout if timeout is not None else 25)
         deadline = time.monotonic() + timeout if timeout is not None else None
+        op = self.client.request('/v1/runs/'+self.id+'/operations?' + urlencode({'wait': wait}), {'device':device, 'operation':operation,
+                                 'arguments':arguments or {}, 'request_id':request_id or str(uuid.uuid4())})
         while op['state'] not in TERMINAL:
             if deadline is not None and time.monotonic() >= deadline:
                 raise TimeoutError('Operation is still running: '+op['id'])
@@ -270,6 +319,28 @@ class Run:
         if op['state'] != 'completed':
             raise IOPError(op.get('error', op['state']))
         return op
+
+    def batch(self, steps, *, request_id=None, timeout=None):
+        """Run a sequence or dependency graph inside this experiment; return operation records."""
+        request_id = request_id or uuid.uuid4().hex
+        deadline = time.monotonic() + timeout if timeout is not None else None
+        wait = min(25, max(0, self.client.timeout - 1), timeout if timeout is not None else 25)
+        result = self.client.request('/v1/runs/'+self.id+'/batches?' + urlencode({'wait':wait}),
+                                     {'steps':steps, 'request_id':request_id})
+        while not result['complete']:
+            remaining = deadline - time.monotonic() if deadline is not None else 25
+            if remaining <= 0:
+                raise TimeoutError('Batch is still running: ' + request_id)
+            result = self.client.request('/v1/runs/'+self.id+'/batches?' +
+                urlencode({'request_id':request_id, 'wait':min(wait, remaining)}))
+        if any(op['state'] != 'completed' for op in result['operations']):
+            raise IOPError('Operation batch did not complete', details=result)
+        return result['operations']
+
+    def save_acquisition(self, name, operation_ids, *, conditions=None, analysis=None):
+        """Save already acquired results, their device configurations and analysis together."""
+        return self.client.request('/v1/runs/'+self.id+'/acquisitions', {'name':name,
+            'operation_ids':list(operation_ids), 'conditions':conditions or {}, 'analysis':analysis or {}})
 
     def save_result(self, result):
         return self.client.request('/v1/runs/'+self.id+'/result', {'result':result})

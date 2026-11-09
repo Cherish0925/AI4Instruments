@@ -1,0 +1,14 @@
+{
+  "version": "0.8.5",
+  "system": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "python": "3.12.14",
+  "cpu_count": 9,
+  "pattern": "parallel",
+  "steps": 5000,
+  "devices": 128,
+  "workers": 64,
+  "submission_seconds": 0.247,
+  "execution_seconds": 0.6236,
+  "operations_per_second": 8017.7,
+  "scope": "Simulated immediate operations with local SQLite recording; not hardware throughput"
+}

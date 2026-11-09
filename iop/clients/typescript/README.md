@@ -1,6 +1,6 @@
 # IOP TypeScript client
 
-Requires Node.js 20+ or a browser with Fetch, AbortSignal.timeout and crypto.randomUUID. Build from source with `npm ci && npm run build`; install a release archive with `npm install ./ai4instruments-iop-0.8.3.tgz`.
+Requires Node.js 20+ or a browser with Fetch, AbortSignal.timeout and crypto.randomUUID. Build from source with `npm ci && npm run build`; install a release archive with `npm install ./ai4instruments-iop-0.8.5.tgz`.
 
 ```typescript
 import { IOP } from '@ai4instruments/iop';
@@ -17,3 +17,5 @@ console.log(await run.result());
 `lab.configureResources({cpu:16, solver:2})` sets capacities; a workflow step or submission can declare `requirements`. Steps can use `bindings` to transfer a previous result into an argument. `lab.adapters()` lists installed drivers and `lab.reconnect(device)` reconnects an idle device.
 
 The integration test uploads a Node.js experiment package to an actual IOP service, calls an instrument operation, uploads a binary file and reads its result and events.
+
+For adaptive experiments, use `startExperiment`, `run.batch`, `run.saveAcquisition`, then `run.finish`. See [continuous experiments](../../../docs/runtime/external-experiments.md). `lab.release(device)` hands an idle connection to another application; `lab.reconnect(device)` restores it.

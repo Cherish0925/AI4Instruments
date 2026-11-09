@@ -59,6 +59,11 @@ def laboratory(engine, refresh=False, detail='summary'):
                                     'errors': len(engine.instrument_catalog.errors), 'details': '/v1/instrument-catalog'})
     for instrument in inventory.get('instruments', []):
         if instrument.get('required') and instrument.get('present') is not False and instrument.get('transport') != 'usb':
+            if instrument['required'] == ['identity_format']:
+                result['next_steps'].append({'action':'read_identity_reply', 'connection':instrument['key'],
+                    'device_id':instrument.get('device_id'), 'reply':instrument.get('identity_response'),
+                    'communication':instrument.get('communication'), 'details':'/v1/discovery?cached=true'})
+                continue
             if instrument['required'] == ['instrument_profile']:
                 from urllib.parse import urlencode
                 result['next_steps'].append({'action': 'select_instrument_profile', 'device_id': instrument.get('device_id'),
@@ -81,6 +86,8 @@ def laboratory(engine, refresh=False, detail='summary'):
     result['operation'] = {
         'device_description': '/v1/devices/{id}',
         'submission': '/v1/runs', 'program_submission': '/v1/packages',
+        'continuous_experiment': 'Start with kind=external; submit operations or batches to that run; finish after saving results.',
+        'batch': '/v1/runs/{id}/batches', 'acquisition': '/v1/runs/{id}/acquisitions',
         'configuration_executes_actions': False,
         'client_disconnect': 'Accepted experiments continue while the service remains running.',
         'service_restart': 'Queued work is restored. Started work is recorded as interrupted; programs declaring resume:true can continue from saved progress through /v1/runs/{id}/resume.',

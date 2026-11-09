@@ -123,6 +123,12 @@ try {
   assert.ok(
     (await page.locator("#device-response").innerText()).includes("1.25"),
   );
+  await page.click("#device-release");
+  await page.waitForFunction(() => document.querySelector("#device-invoke")?.disabled);
+  assert.equal((await api("devices/" + identified.id)).status.state, "released");
+  await page.click("#device-reconnect");
+  await page.waitForFunction(() => !document.querySelector("#device-invoke")?.disabled);
+  assert.equal((await api("devices/" + identified.id)).status.state, "ready");
   if (images)
     await page.screenshot({
       path: join(images, "instrument-identified.png"),

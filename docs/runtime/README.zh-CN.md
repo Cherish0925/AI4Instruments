@@ -4,7 +4,7 @@
 
 [English](README.md) · [服务架构](architecture.zh-CN.md) · [HTTP 接口](http-api.md) · [仪器驱动](drivers.md) · [源码](../../src/ai4instruments/iop)
 
-[外部实验程序](external-experiments.zh-CN.md)说明 0.8.4 之后新增的源码接口：同一实验下连续调用、客户端重连，以及测量文件与操作的直接关联。
+[外部实验程序](external-experiments.zh-CN.md)说明 0.8.5 的连续调用、批量依赖、客户端重连和采集结果归档。
 
 0.8.3 改进共享总线并支持独立安装的[型号说明包](../../iop/instrument-packages.zh-CN.md)。[持续实验](../../iop/continuity.zh-CN.md)说明完整使用流程。[Agent 接入](../../iop/agent-setup.zh-CN.md)复用同一套实验室配置。[软件形态与系统支持](../../iop/product.zh-CN.md)。
 

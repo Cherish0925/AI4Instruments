@@ -1,0 +1,39 @@
+{
+  "version": "0.8.5",
+  "system": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "python": "3.12.14",
+  "batch_size": 25,
+  "results": [
+    {
+      "pattern": "standalone",
+      "operations": 1000,
+      "seconds": 4.4729,
+      "operations_per_second": 223.6,
+      "http_requests": 6674,
+      "runs": 1000,
+      "database_bytes": 4792320,
+      "run_files_bytes": 2737000
+    },
+    {
+      "pattern": "continuous",
+      "operations": 1000,
+      "seconds": 1.0969,
+      "operations_per_second": 911.7,
+      "http_requests": 1002,
+      "runs": 1,
+      "database_bytes": 1777664,
+      "run_files_bytes": 2392
+    },
+    {
+      "pattern": "batch",
+      "operations": 1000,
+      "seconds": 0.923,
+      "operations_per_second": 1083.5,
+      "http_requests": 42,
+      "runs": 1,
+      "database_bytes": 1953792,
+      "run_files_bytes": 2392
+    }
+  ],
+  "scope": "Same immediate simulated position reads, sequential, local HTTP and SQLite FULL. All three patterns use this source version. No physical instrument timing."
+}

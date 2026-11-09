@@ -10,6 +10,7 @@ export type PlatformDefinition = {
 export type Platform = { id: string; revision: number; updated: string; definition: PlatformDefinition; active_runs?: string[]; missing_devices?: string[] };
 export type RunRecord = { id: string; state: string; result?: unknown; error?: string; platform?: Platform; [key: string]: unknown };
 export type OperationRecord = RunRecord & { run_id: string; device: string; operation: string; device_revision?: number };
+export type BatchRecord = { request_id: string; run_id: string; complete: boolean; operations: OperationRecord[] };
 export type ArtifactRecord = { id: string; run_id: string; name: string; size: number; media_type: string; created: string; operation_ids?: string[] };
 export type Event = { sequence: number; kind: string; run_id?: string; [key: string]: unknown };
 export type Submission = { name?: string; project?: string; experiment?: string; platform?: string; resources?: string[]; requirements?: Record<string, number>; parameters?: Record<string, unknown>; request_id?: string };
@@ -64,6 +65,7 @@ export class IOP {
   resources() { return this.request('/v1/resources'); }
   configureResources(capacities: Record<string, number>) { return this.request('/v1/resources', { capacities }); }
   reconnect(device: string) { return this.request('/v1/devices/' + encodeURIComponent(device) + '/reconnect', {}); }
+  release(device: string) { return this.request('/v1/devices/' + encodeURIComponent(device) + '/release', {}); }
   platforms() { return this.request<Platform[]>('/v1/platforms'); }
   platform(id: string) { return this.request<Platform>('/v1/platforms/' + encodeURIComponent(id)); }
   configurePlatform(definition: PlatformDefinition, expectedRevision = 0) {
@@ -129,15 +131,29 @@ export class Run {
   files() { return this.client.request<ArtifactRecord[]>(`/v1/runs/${encodeURIComponent(this.id)}/artifacts`); }
   operations(after = 0, limit = 200) { return this.client.request<{ operations: OperationRecord[]; cursor: number }>(`/v1/runs/${encodeURIComponent(this.id)}/operations?` + new URLSearchParams({after:String(after),limit:String(limit)})); }
   saveResult(result: unknown) { return this.client.request(`/v1/runs/${encodeURIComponent(this.id)}/result`, { result }); }
+  saveAcquisition(name: string, operationIds: string[], conditions: Record<string, unknown> = {}, analysis: Record<string, unknown> = {}) {
+    return this.client.request<ArtifactRecord>(`/v1/runs/${encodeURIComponent(this.id)}/acquisitions`, { name, operation_ids: operationIds, conditions, analysis });
+  }
+  async batch(steps: Step[], options: { requestId?: string; signal?: AbortSignal } = {}): Promise<OperationRecord[]> {
+    const requestId = options.requestId ?? crypto.randomUUID();
+    const wait = Math.min(25, Math.max(0, this.client.timeout / 1000 - 1));
+    const path = `/v1/runs/${encodeURIComponent(this.id)}/batches`;
+    let batch = await this.client.request<BatchRecord>(path + '?wait=' + wait, { steps, request_id: requestId }, options.signal);
+    while (!batch.complete) {
+      batch = await this.client.request<BatchRecord>(path + '?' + new URLSearchParams({request_id: requestId, wait: String(wait)}), undefined, options.signal);
+    }
+    if (batch.operations.some(op => op.state !== 'completed')) throw new IOPError('Operation batch did not complete', 0, batch);
+    return batch.operations;
+  }
   async invoke(device: string, operation: string, args: Record<string, unknown> = {}, options: { requestId?: string; signal?: AbortSignal } = {}) {
     return (await this.invokeRecord(device, operation, args, options)).result;
   }
   async invokeRecord(device: string, operation: string, args: Record<string, unknown> = {}, options: { requestId?: string; signal?: AbortSignal } = {}): Promise<OperationRecord> {
-    let record = await this.client.request<OperationRecord>(`/v1/runs/${encodeURIComponent(this.id)}/operations`, {
+    const wait = Math.min(25, Math.max(0, this.client.timeout / 1000 - 1));
+    let record = await this.client.request<OperationRecord>(`/v1/runs/${encodeURIComponent(this.id)}/operations?wait=${wait}`, {
       device, operation, arguments: args, request_id: options.requestId ?? crypto.randomUUID()
     }, options.signal);
     while (!terminal.has(record.state)) {
-      const wait = Math.min(25, Math.max(0, this.client.timeout / 1000 - 1));
       record = await this.client.request<OperationRecord>('/v1/operations/' + encodeURIComponent(record.id) + '?wait=' + wait, undefined, options.signal);
     }
     if (record.state !== 'completed') throw new IOPError(record.error ?? record.state, 0);

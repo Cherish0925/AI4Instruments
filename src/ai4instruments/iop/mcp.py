@@ -26,7 +26,8 @@ def create_server(client, *, http=False):
         'Read describe_instrument before choosing operations and arguments. '
         'Saving platform configuration does not execute initialization. '
         'Submit experiments or programs once, retain the returned ID and inspect them later. '
-        'For adaptive work, start_experiment, invoke_operation within that run, then finish_experiment. '
+        'For adaptive work, start_experiment, submit_operations within that run, then finish_experiment. '
+        'Batch known sequences and parallel branches. Save acquired results by operation ID without reading the instruments again. '
         'Reuse request_id after a connection failure; the runtime schedules devices and retains results.'))
 
     @server.tool()
@@ -137,6 +138,23 @@ def create_server(client, *, http=False):
         return client.run(run_id).finish()
 
     @server.tool()
+    def submit_operations(run_id: str, steps: list[dict], request_id: str) -> dict:
+        """Submit a batch within an existing experiment. Steps run in order by default. after=[] starts an independent branch; after=[IDs] joins branches. All steps are accepted together. Returns immediately; read experiment for results."""
+        return client.request('/v1/runs/' + quote(run_id, safe='') + '/batches',
+                              {'steps':steps, 'request_id':request_id})
+
+    @server.tool()
+    def save_acquisition(run_id: str, name: str, operation_ids: list[str],
+                         conditions: dict | None = None, analysis: dict | None = None) -> dict:
+        """Save completed operation results and their device configurations as JSON. Conditions are caller-supplied; include actual setting readbacks among operation_ids. Analysis must refer to these same acquired results. No instrument commands are sent."""
+        return client.run(run_id).save_acquisition(name, operation_ids, conditions=conditions, analysis=analysis)
+
+    @server.tool(annotations=read_only)
+    def available_adapters() -> dict:
+        """Read installed adapters and connection parameters before configuring an instrument."""
+        return {'adapters':client.adapters()}
+
+    @server.tool()
     def save_experiment_file(run_id: str, name: str, text: str, operation_ids: list[str] | None = None) -> dict:
         """Save a UTF-8 result or analysis file, optionally linked to completed operations in this experiment. Use the SDK's binary upload for large measurement arrays."""
         return client.run(run_id).save_file(name, text, operation_ids=operation_ids or [])
@@ -176,6 +194,11 @@ def create_server(client, *, http=False):
     def reconnect_instrument(device: str) -> dict:
         """Reconnect a registered instrument or SDK worker after its accepted operations have ended."""
         return client.reconnect(device)
+
+    @server.tool()
+    def release_instrument(device: str) -> dict:
+        """Close an idle device connection for use by another application. Shared SDK workers release their devices together. Discovery leaves them released until reconnect_instrument."""
+        return client.release(device)
 
     @server.tool()
     def resolve_resources(resources: list[str], observation: str) -> dict:

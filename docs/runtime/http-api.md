@@ -1,4 +1,4 @@
-# IOP HTTP API · 0.8.2
+# IOP HTTP API · 0.8.5
 
 [中文安装](README.zh-CN.md) · [Installation](README.md)
 
@@ -33,8 +33,12 @@ Base URL: `http://127.0.0.1:8765`. API bodies are JSON objects. Requests to `/v1
 | GET | `/v1/runs` | `limit=100&details=false` for compact summaries | Most recent runs first |
 | GET | `/v1/runs/{run_id}` | `details=false` for a compact state | Run; detailed response includes recent `operation_records` |
 | GET | `/v1/runs/{run_id}/operations` | `after=0&limit=200` | `{"operations":[...],"cursor":N}`; ordered operation history |
-| POST | `/v1/runs/{run_id}/operations` | Operation below | Operation in an external experiment or running package; identical request IDs return existing operations |
-| GET | `/v1/operations/{operation_id}` | — | State, times, result or error |
+| POST | `/v1/runs/{run_id}/operations` | Operation below; optional `wait=0..25` query | Operation in an external experiment or running package; identical request IDs return existing operations |
+| GET | `/v1/operations/{operation_id}` | `wait=0..25` | State, times, result or error |
+| POST | `/v1/runs/{run_id}/batches` | `{"steps":[...],"request_id":"..."}`; optional `wait=0..25` | Batch receipt, completion flag and operation records |
+| GET | `/v1/runs/{run_id}/batches` | `request_id=...&wait=0..25` | Previously accepted batch and current operations |
+| POST | `/v1/runs/{run_id}/acquisitions` | `{"name":"point.json","operation_ids":["op_..."],"conditions":{},"analysis":{}}` | Artifact containing stored results and configuration versions; no new acquisition |
+| POST | `/v1/devices/{device_id}/release` | `{}` | Release idle connections; retain descriptions until explicit reconnection |
 | POST | `/v1/runs/{run_id}/cancel` | `{}` | Current run, cancellation requested |
 | POST | `/v1/runs/{run_id}/finish` | `{}` | Finish an external experiment with no pending operations; release its reservation |
 | GET | `/v1/runs/{run_id}/result` | — | Saved result without operation history |
@@ -48,11 +52,13 @@ Base URL: `http://127.0.0.1:8765`. API bodies are JSON objects. Requests to `/v1
 
 `after` is an exclusive event sequence number. Poll using the returned `cursor`; an empty page means no new events. Omit `run_id` for events across the platform. The optional `wait` (0–25 seconds) waits for new events; a terminal run returns immediately. Python and TypeScript watch iterators resume from the returned cursor.
 
-## External experiments (source after 0.8.4)
+## Continuous experiments
 
 [Python, TypeScript, MCP and CLI usage](external-experiments.md) · [中文](external-experiments.zh-CN.md)
 
-An external run starts without a steps array and stays open between calls. Use `POST /v1/runs` with `kind: "external"` and a stable submission `request_id`, retain the run ID, invoke operations, save outputs and finish explicitly. Checkpoints and explicit continuation after service interruption share the existing endpoints. This path does not start a process in the service. The released 0.8.4 binaries do not include it.
+An external run starts without a steps array and stays open between calls. Use `POST /v1/runs` with `kind: "external"` and a stable submission `request_id`, retain the run ID, invoke operations, save outputs and finish explicitly. Checkpoints and explicit continuation after service interruption share the existing endpoints. This path does not start a process in the service.
+
+Batches default to input order. An explicit `after=[]` starts an independent branch. All steps are recorded before execution; physical actions already completed are not rolled back. Reserve related devices for continuity across steps and batches. Reusing the same request ID and normalized steps returns the existing batch.
 
 ## Workflow
 

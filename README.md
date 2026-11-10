@@ -2,7 +2,7 @@
   <img src="assets/readme-header.png" alt="From Instruments4AI to AI4Instruments — AI design and implementation + AI development and use." width="1280">
 </p>
 
-**[Connect a research host to IOP](iop/connect/README.md)** · [English field guide](iop/connect/guide.en.html) · [中文图解](iop/connect/guide.zh-CN.html). 0.8.5 adds continuous experiments, operation batches and saved acquisitions.
+**IOP software is now developed in [Cherish0925/IOP](https://github.com/Cherish0925/IOP).** [Download IOP 0.8.6](https://github.com/Cherish0925/IOP/releases/tag/iop-v0.8.6). This repository retains the research framework, ecosystem material, laboratory feedback and original implementation history. Existing package names, commands and laboratory data locations remain compatible.
 
 [Read the paper](paper/manuscript.md) · [PDF](paper/AI4Instruments.pdf) · [Operations](docs/operations.md) · [Try the example](examples/README.md) · [Discuss](https://github.com/Cherish0925/AI4Instruments/discussions/1) · [中文](README.zh-CN.md)
 

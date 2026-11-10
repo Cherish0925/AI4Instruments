@@ -2,7 +2,7 @@
   <img src="assets/readme-header.png" alt="From Instruments4AI to AI4Instruments — AI design and implementation + AI development and use." width="1280">
 </p>
 
-**[把研究系统接入 IOP](iop/connect/README.zh-CN.md)** · [中文操作图解](iop/connect/guide.zh-CN.html) · [English guide](iop/connect/guide.en.html)。0.8.5 支持连续实验、批量操作和采集结果归档。
+**IOP 软件已迁入独立仓库 [Cherish0925/IOP](https://github.com/Cherish0925/IOP)。** [下载 IOP 0.8.6](https://github.com/Cherish0925/IOP/releases/tag/iop-v0.8.6)。本仓库保留研究框架、生态资料、实验室反馈和原实现历史。现有软件包名、命令及实验室数据目录保持兼容。
 
 [阅读论文](paper/manuscript.md) · [PDF](paper/AI4Instruments.pdf) · [Operations](docs/operations.md) · [运行示例](examples/README.md) · [参与讨论](https://github.com/Cherish0925/AI4Instruments/discussions/1) · [English](README.md)
 
